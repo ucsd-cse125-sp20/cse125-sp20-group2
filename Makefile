@@ -1,20 +1,33 @@
 # https://stackoverflow.com/questions/3774568/makefile-issue-smart-way-to-scan-directory-tree-for-c-files
+# https://www.gnu.org/software/make/manual/html_node/Automatic-Variables.html
 # Notes:
-# 	$(LIB) must be last after list of objects
+# 	$(LIB) must be last after list of objects when building
 
-OUT = ggee
+OUT = gg
 SRC_DIR = src
 HDR_DIR = src
+OUT_DIR = build
+BIN_DIR = bin
 
 CC = g++
-LIB = -lws2_32 -lwsock32 
+FLAG = -Wall
+LIBS = -lws2_32 -lwsock32 
 SRC := $(shell find $(SRC_DIR) -name "*.cpp")
 HDR := $(shell find $(HDR_DIR) -name "*.h")
+OBJ := $(SRC:$(SRC_DIR)/%.cpp=$(OUT_DIR)/%.o) # Replace variables src/%.cpp to out/%.o in SRC variable
 
-all: $(SRC)
-	$(CC) $(SRC) -o $(OUT) $(LIB)
+BINARY := $(OUT_DIR)/$(OUT)
 
-# client: client.cpp
-# 	g++ -lwsock32 client.cpp -lws2_32 -o client.exe
-# server: server.cpp
-# 	g++ -lwsock32 server.cpp -lws2_32 -o server.exe
+default: $(BINARY)
+
+$(BINARY): $(OBJ)
+	mkdir -p $(shell dirname $@)
+	$(CC) $(FLAG) $^ -o $@ $(LIBS)
+
+# $(OBJ): $(SRC) -- $< only refers to first class in this case
+$(OUT_DIR)/%.o: $(SRC_DIR)/%.cpp
+	mkdir -p $(shell dirname $@)
+	$(CC) $(FLAG) -c $< -o $@
+
+clean:
+	rm -rf $(OUT_DIR) $(BIN_DIR)
