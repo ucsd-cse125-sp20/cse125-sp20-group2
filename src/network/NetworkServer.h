@@ -1,5 +1,7 @@
 #include "NetworkService.h"
 #include <map>
+#include <unordered_map>
+#include <vector>
 
 class ServerNetwork
 {
@@ -8,26 +10,24 @@ public:
     ServerNetwork(int port);
     ~ServerNetwork();
     
-    // send();
+    void send(unsigned int clientID, std::string msg);
 
-    // sendToAll();
+    void sendToAll(std::string msg);
 
+    std::unordered_map<unsigned int, std::vector<std::string>> readAllMessages();
 private:
-    SOCKET ListenSocket;
+    SOCKET listenSocket;
+
+    std::thread threadAccept;
 
     char network_data[DEFAULT_BUFLEN];
 
-    int port;
-    
-    int next_id = 0;
-
-    void setup();
+    unsigned int nextID = 0;
 
     std::map<unsigned int, SOCKET> sessions;
 
-    int getNextID();
+    unsigned int getNextID();
 
     void startAccepting();
 
-    void readAllMessages();
 };

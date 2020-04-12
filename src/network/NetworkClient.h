@@ -1,11 +1,4 @@
 #include "NetworkService.h"
-/**
- * connect
- * is_connected
- * send
- * read
- * client id 
- */
 
 class NetworkClient
 {
@@ -14,16 +7,10 @@ public:
     NetworkClient(char* host, int port);
     ~NetworkClient();
     
-    // send();
+    void send(std::string);
 
-    // read();
+    std::string read();
 
 private:
-    char* host;
-
-    int port;
-
-    void setup();
-
     char network_data[DEFAULT_BUFLEN];
 };
