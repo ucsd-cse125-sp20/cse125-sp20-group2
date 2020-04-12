@@ -2,9 +2,8 @@
 #include <iostream>
 #include <chrono>
 #include <thread>
-#include "NetworkServer.h"
-#include "NetworkClient.h"
-
+#include "./network/NetworkServer.h"
+#include "./network/NetworkClient.h"
 
 // ./game [client / server]
 int main(int argc, char * argv[])
