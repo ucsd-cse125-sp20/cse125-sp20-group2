@@ -16,7 +16,7 @@ SRC := $(shell find $(SRC_DIR) -name "*.cpp")
 HDR := $(shell find $(HDR_DIR) -name "*.h")
 OBJ := $(SRC:$(SRC_DIR)/%.cpp=$(OUT_DIR)/%.o) # Replace variables src/%.cpp to out/%.o in SRC variable
 
-BINARY := $(OUT_DIR)/$(OUT)
+BINARY := $(BIN_DIR)/$(OUT)
 
 default: $(BINARY)
 
