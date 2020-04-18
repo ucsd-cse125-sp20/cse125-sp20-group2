@@ -12,23 +12,12 @@ const char* vertexShaderSource = "#version 330 core\n"
 	"{\n"
 	"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
 	"}\0";
-const char* fragmentShaderSource1 = "#version 330 core\n"	// Top is blue
+const char* fragmentShaderSource = "#version 330 core\n"
 	"out vec4 FragColor;\n"
+	"uniform vec4 inColor;\n"
 	"void main()\n"
 	"{\n"
-	"   FragColor = vec4(0.0f, 0.0f, 0.5f, 1.0f);\n"
-	"}\n\0";
-const char* fragmentShaderSource2 = "#version 330 core\n"	// Front is green
-	"out vec4 FragColor;\n"
-	"void main()\n"
-	"{\n"
-	"   FragColor = vec4(0.0f, 0.5f, 0.0f, 1.0f);\n"		
-	"}\n\0";
-const char* fragmentShaderSource3 = "#version 330 core\n"	// Back is red
-	"out vec4 FragColor;\n"
-	"void main()\n"
-	"{\n"
-	"   FragColor = vec4(0.5f, 0.0f, 0.0f, 1.0f);\n"
+	"   FragColor = inColor;\n"
 	"}\n\0";
 
 int main()
@@ -77,71 +66,39 @@ int main()
 	}
 
 	// Fragment shader
-	unsigned int fragmentShader1;
-	unsigned int fragmentShader2;
-	unsigned int fragmentShader3;
-	fragmentShader1 = glCreateShader(GL_FRAGMENT_SHADER);
-	fragmentShader2 = glCreateShader(GL_FRAGMENT_SHADER);
-	fragmentShader3 = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentShader1, 1, &fragmentShaderSource1, NULL);	// Used for top face
-	glShaderSource(fragmentShader2, 1, &fragmentShaderSource2, NULL);	// Used for front face
-	glShaderSource(fragmentShader3, 1, &fragmentShaderSource3, NULL);	// Used for back face
-	glCompileShader(fragmentShader1);
-	glCompileShader(fragmentShader2);
-	glCompileShader(fragmentShader3);
+	unsigned int fragmentShader;
+	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+	glCompileShader(fragmentShader);
 
 	// Checking if fragment shader compilation failed
-	glGetShaderiv(fragmentShader1, GL_COMPILE_STATUS, &success);
+	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
 	if (!success)
 	{
-		glGetShaderInfoLog(fragmentShader1, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
-	}
-	glGetShaderiv(fragmentShader2, GL_COMPILE_STATUS, &success);
-	if (!success)
-	{
-		glGetShaderInfoLog(fragmentShader1, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
-	}
-	glGetShaderiv(fragmentShader3, GL_COMPILE_STATUS, &success);
-	if (!success)
-	{
-		glGetShaderInfoLog(fragmentShader1, 512, NULL, infoLog);
+		glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
 		std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
 	}
 
 	// Create shader program
-	unsigned int shaderProgram1;		// Used for top face
-	unsigned int shaderProgram2;		// Used for front face
-	unsigned int shaderProgram3;		// Used for back face
-	shaderProgram1 = glCreateProgram();
-	shaderProgram2 = glCreateProgram();
-	shaderProgram3 = glCreateProgram();
+	unsigned int shaderProgram;
+	shaderProgram = glCreateProgram();
 
 	// link shaders to shader programs
-	glAttachShader(shaderProgram1, vertexShader);
-	glAttachShader(shaderProgram2, vertexShader);
-	glAttachShader(shaderProgram3, vertexShader);
-	glAttachShader(shaderProgram1, fragmentShader1);
-	glAttachShader(shaderProgram2, fragmentShader2);
-	glAttachShader(shaderProgram3, fragmentShader3);
-	glLinkProgram(shaderProgram1);
-	glLinkProgram(shaderProgram2);
-	glLinkProgram(shaderProgram3);
+	glAttachShader(shaderProgram, vertexShader);
+	glAttachShader(shaderProgram, fragmentShader);
+	glLinkProgram(shaderProgram);
 
 
 	// check for linking errors
-	glGetProgramiv(shaderProgram1, GL_LINK_STATUS, &success);
+	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
 	if (!success) {
-		glGetProgramInfoLog(shaderProgram1, 512, NULL, infoLog);
+		glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
 		std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
 	}
 
 	// We can delete these objects after linking them to the program.
 	glDeleteShader(vertexShader);
-	glDeleteShader(fragmentShader1);
-	glDeleteShader(fragmentShader2);
-	glDeleteShader(fragmentShader3);
+	glDeleteShader(fragmentShader);
 
 	// // //
 	// Defining geometry
@@ -263,16 +220,28 @@ int main()
 		glClearColor(0.1f, 0.1f, 0.2f, 0.4f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		// Draw top triangle
-		glUseProgram(shaderProgram1);
+		// Setup uniform input color for vertex shader (blinking colors based on time)
+		float timeValue = glfwGetTime();
+		float redValue = sin(timeValue + 1) / 2.0f + 0.5f;
+		float greenValue = sin(timeValue + 2) / 2.0f + 0.5f;
+		float blueValue = sin(timeValue + 3) / 2.0f + 0.5f;
+		int vertexColorLocation = glGetUniformLocation(shaderProgram, "inColor"); 
+
+		// Use our shader program
+		glUseProgram(shaderProgram);
+
+		// Draw top face (blue)
+		glUniform4f(vertexColorLocation, 0.0f, 0.0f, blueValue, 1.0f);
 		glBindVertexArray(VAOs[0]);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-		glUseProgram(shaderProgram2);
+		// Draw front face (green)
+		glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
 		glBindVertexArray(VAOs[1]);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		
-		glUseProgram(shaderProgram3);
+		// Draw back face (red)
+		glUniform4f(vertexColorLocation, redValue, 0.0f, 0.0f, 1.0f);
 		glBindVertexArray(VAOs[2]);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
