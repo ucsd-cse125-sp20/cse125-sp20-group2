@@ -17,8 +17,8 @@ Header Format
 
 [ Length | PB Data ]
 
-Length - sizeof(size_t) 32b or 64b depending on respective 32/64 bit architecture
-Data - Representation of message as char array
+* Length - sizeof(size_t) 32b or 64b depending on respective 32/64 bit architecture
+* Data - Representation of message as char array
 
 ## Sender 
 
@@ -32,3 +32,34 @@ Data - Representation of message as char array
 2. Read length number of bytes to get the char representation of the message.
 3. Convert char array to the correct message.
 
+## Usage
+
+### NetworkClient
+
+NetworkClient has two main methods, send and read. Send is used to send
+data over to the server, and read is used to read data coming in from the
+server into storage (you can access this storage via the member variable
+"messages")
+    
+
+### ServerNetwork
+
+This is the underlying server that will handle incoming connections and data.
+
+### Data
+
+The client will send events to the server and the server will send states back.
+The client and server will receive and accept qualified messages -- ServerMessage and ClientMessage.
+The Server/Client message will be an umbrella for all valid messages that each can receive.
+
+#### ServerMessage
+
+The message that the server passes to the client. 
+
+TODO: This is still being designed
+
+#### ClientMessage
+
+The message that the client passes to the server.
+
+TODO: This is still being designed
