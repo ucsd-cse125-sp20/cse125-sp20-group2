@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "NetworkClient.h"
+#include <network/NetworkClient.h>
 
 NetworkClient::NetworkClient(std::string host, int port)
 {

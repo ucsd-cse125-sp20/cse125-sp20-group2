@@ -1,4 +1,4 @@
-#include "NetworkService.h"
+#include <network/NetworkService.h>
 #include <string>
 #include <schema/Game.pb.h>
 #include <deque>
