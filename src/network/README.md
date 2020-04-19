@@ -17,18 +17,18 @@ Header Format
 
 [ Length | PB Data ]
 
-Length - 2 bytes unsigned int
+Length - sizeof(size_t) 32b or 64b depending on respective 32/64 bit architecture
 Data - Representation of message as char array
 
 ## Sender 
 
-1. Get the sizeof(struct), set to 2 byte unsigned int, prefix to beginning.
+1. Get the sizeof(struct), set to size_t bytes and prefix to beginning.
 2. Convert message to char ptr, append after length.
 3. Send formatted data over the network.
 
 ## Receiver
 
-1. Read first 2 bytes to figure out the Length (struct bytes).
+1. Read first size_t bytes to figure out the Length (struct).
 2. Read length number of bytes to get the char representation of the message.
 3. Convert char array to the correct message.
 
