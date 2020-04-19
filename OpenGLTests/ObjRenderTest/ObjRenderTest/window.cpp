@@ -7,9 +7,10 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/string_cast.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include "Mesh.h"
+#include "Mesh.cpp"
 #include "Shader.h"
 #include "Camera.cpp"
+#include "Model.cpp"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
@@ -39,7 +40,6 @@ float lastFrame = 0.0f;
 
 int main()
 {
-
 	// // //
 	// Setup
 
@@ -83,134 +83,8 @@ int main()
 	glEnable(GL_DEPTH_TEST);
 
 	// // //
-	// Geometry
-
-	// Cube
-	float vertices[] = {
-	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-	 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-	-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-
-	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
-	};
-
-	// Defining cube positions.
-	glm::vec3 cubePositions[] = {
-	  glm::vec3(0.0f,  0.0f,  0.0f),
-	  glm::vec3(2.0f,  5.0f, -15.0f),
-	  glm::vec3(-1.5f, -2.2f, -2.5f),
-	  glm::vec3(-3.8f, -2.0f, -12.3f),
-	  glm::vec3(2.4f, -0.4f, -3.5f),
-	  glm::vec3(-1.7f,  3.0f, -7.5f),
-	  glm::vec3(1.3f, -2.0f, -2.5f),
-	  glm::vec3(1.5f,  2.0f, -2.5f),
-	  glm::vec3(1.5f,  0.2f, -1.5f),
-	  glm::vec3(-1.3f,  1.0f, -1.5f)
-	};
-
-	// Defining vertex buffer, vertex array, and element buffer objects
-	unsigned int VBO, VAO;
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
-
-	glBindVertexArray(VAO);
-
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-	// position attribute
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-	// texture coord attribute
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
-
-	// // //
-	// Textures
-
-	// Texture definition and binding (1) - NOTE: Should be done prior to shader use.
-	unsigned int texture1ID;
-	glGenTextures(1, &texture1ID);
-	glBindTexture(GL_TEXTURE_2D, texture1ID);
-
-	// set the texture wrapping/filtering options (on the currently bound texture object)
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	// load and generate the texture
-	int width, height, nrChannels;
-	stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
-	unsigned char* data = stbi_load("../../../assets/textures/container.jpg", &width, &height, &nrChannels, 0);
-	if (data)
-	{
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-	} else
-	{
-		std::cout << "Failed to load texture" << std::endl;
-	}
-	stbi_image_free(data);
-
-	// Texture definition and binding (2) - NOTE: Should be done prior to shader use.
-	unsigned int texture2ID;
-	glGenTextures(1, &texture2ID);
-	glBindTexture(GL_TEXTURE_2D, texture2ID);
-
-	// set the texture wrapping/filtering options (on the currently bound texture object)
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	// load and generate the texture
-	data = stbi_load("../../../assets/textures/awesomeface.png", &width, &height, &nrChannels, 0);
-	if (data)
-	{
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-	} else
-	{
-		std::cout << "Failed to load texture" << std::endl;
-	}
-	stbi_image_free(data);
+	// Models
+	Model ourModel("C:/Users/JQ124/Desktop/CompSci/CSE125/cse125-sp20-group2/assets/nanosuit/nanosuit.obj");
 
 	// // //
 	// Shaders
@@ -218,18 +92,6 @@ int main()
 	// Shader definition
 	Shader shader = Shader("shaders/vert_shader.glsl", "shaders/frag_shader.glsl");
 	shader.use();
-
-	// Set texture units (aka texture location values) in the shader
-	// (this sets uniform values, so shader still needs to remain active before this step)
-	shader.setInt("texture1", 0);
-	shader.setInt("texture2", 1);
-
-	// Model matrices (10 objects) + initial translations
-	glm::mat4 model[10];
-	for (int j = 0; j < 10; j++) {
-		model[j] = glm::mat4(1.0f);
-		model[j] = glm::translate(model[j], cubePositions[j]);
-	}
 
 	// // //
 	// The render loop
@@ -244,6 +106,15 @@ int main()
 		// // //
 		// Input
 		processInput(window);
+
+		// // //
+		// Rendering stuff
+
+		// Make BG light gray
+		glClearColor(0.8f, 0.8f, 0.8f, 0.8f);
+
+		// Clear color + depth buffers
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		// // //
 		// View + perspective projection matrices
@@ -258,36 +129,13 @@ int main()
 		// pass transformation matrices to the shader
 		shader.setMat4("projection", projection); // note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
 		shader.setMat4("view", view);
-
-		// // //
-		// Textures
-
-		// Texture bindings
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, texture1ID);
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, texture2ID);
-
-		// // //
-		// Rendering stuff
-
-		// Make BG dark blue
-		glClearColor(0.1f, 0.1f, 0.2f, 0.4f);
 		
-		// Clear color + depth buffers
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		// Draw cubes
-		glBindVertexArray(VAO);
-		for (unsigned int i = 0; i < 10; i++)
-		{
-			float angle = 1.0f * i;
-			model[i] = glm::rotate(model[i], glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-
-			shader.setMat4("model", model[i]);
-
-			glDrawArrays(GL_TRIANGLES, 0, 36);
-		}
+		// render the loaded model
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(0.0f, -1.75f, 0.0f)); // translate it down so it's at the center of the scene
+		model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));	// it's a bit too big for our scene, so scale it down
+		shader.setMat4("model", model);
+		ourModel.draw(shader);
 
 		// // //
 		// GLFW stuff

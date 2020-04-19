@@ -132,10 +132,11 @@
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="glad.c" />
+    <ClCompile Include="Model.cpp" />
     <ClCompile Include="window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\include\Mesh.h" />
+    <ClInclude Include="..\..\..\include\Mesh.cpp" />
     <ClInclude Include="..\..\..\include\Shader.h" />
     <ClInclude Include="..\..\..\include\stb_image.h" />
   </ItemGroup>
