@@ -2,6 +2,7 @@
 # https://www.gnu.org/software/make/manual/html_node/Automatic-Variables.html
 # Notes:
 # 	$(LIB) must be last after list of objects when building
+# 	When modifying header files, be sure to make clean
 
 OUT = gg
 SRC_DIR = src

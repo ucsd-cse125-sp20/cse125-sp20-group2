@@ -1,6 +1,7 @@
 #include "NetworkService.h"
 #include <string>
 #include <schema/Game.pb.h>
+#include <deque>
 
 class NetworkClient
 {
@@ -12,10 +13,9 @@ public:
     void send(Game::ClientMessage clientMessage);
 
     // Reads server messages into a data structure
-    // TODO: may want to queue up reads
     void read();
 
-    std::vector<Game::ServerMessage> messages;
+    std::deque<Game::ServerMessage> messages;
 
 private:
     char network_data[DEFAULT_BUFLEN];

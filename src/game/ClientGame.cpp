@@ -2,7 +2,7 @@
 #include <chrono>
 #include <thread>
 
-#define CLIENT_DELAY 
+#define CLIENT_DELAY 100
 
 ClientGame::ClientGame(std::string IP, int port) : client(IP, port)
 {
@@ -44,9 +44,14 @@ void ClientGame::receiveUpdates()
 
 void ClientGame::updateGameState()
 {
+    // while (!client.messages.empty()) {
+    //     PrintUtil::print(client.messages.front());
+    //     client.messages.pop_front();
+    // }
     for (Game::ServerMessage currMessage : client.messages) {
         PrintUtil::print(currMessage);
     }
+    client.messages.clear();
 }
 
 void ClientGame::renderWorld()

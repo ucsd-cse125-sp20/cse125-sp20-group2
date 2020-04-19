@@ -3,7 +3,7 @@
 #include <thread>
 #include <chrono>
 
-#define TICK 30
+#define TICK 1000
 
 ServerGame::ServerGame(int port) : server(port)
 {
