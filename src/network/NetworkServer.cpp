@@ -81,6 +81,7 @@ std::unordered_map<unsigned int, std::vector<Game::ClientMessage>> ServerNetwork
         std::vector<char> & buffer = buffers[clientId];
         bool success = true;
         while (success) {
+            // If the buffer size is less than a size of expected int we are reading
             if (buffer.size() <= sizeof(size_t)) {
                 success = false;
                 continue;
@@ -126,11 +127,15 @@ std::unordered_map<unsigned int, std::vector<Game::ClientMessage>> ServerNetwork
     return map;
 }
 
-void ServerNetwork::send(unsigned int clientID, Game::ServerMessage message)
+void ServerNetwork::send(unsigned int clientId, Game::ServerMessage message)
 {
-    // TODO: Fix
-    // SOCKET clientSocket = this->sessions[clientID];
-    // NetworkService::sendMessage(clientSocket, msg.c_str(), msg.size()); 
+    size_t msgSize = message.ByteSizeLong();
+    size_t bufSize = msgSize + sizeof(size_t);
+    char buf[bufSize];
+    memcpy(buf, &msgSize, sizeof(size_t));
+    message.SerializeToArray(buf + sizeof(size_t), msgSize);
+
+    NetworkService::sendMessage(this->sessions[clientId], buf, bufSize);
 }
 
 void ServerNetwork::sendToAll(Game::ServerMessage message) 

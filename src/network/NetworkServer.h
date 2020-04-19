@@ -10,7 +10,7 @@ public:
     ServerNetwork(int port);
     ~ServerNetwork();
     
-    void send(unsigned int clientID, Game::ServerMessage msg);
+    void send(unsigned int clientId, Game::ServerMessage msg);
 
     void sendToAll(Game::ServerMessage msg);
 

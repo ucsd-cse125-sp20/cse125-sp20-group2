@@ -142,6 +142,19 @@ SOCKET NetworkService::createClientSocket(char* host, int port)
             ConnectSocket = INVALID_SOCKET;
             continue;
         }
+        
+        // Set the socket I/O mode: In this case FIONBIO
+        // enables or disables the blocking mode for the 
+        // socket based on the numerical value of iMode.
+        // If iMode = 0, blocking is enabled; 
+        // If iMode != 0, non-blocking mode is enabled.
+        u_long iMode = 1;
+        res = ioctlsocket(ConnectSocket, FIONBIO, &iMode);
+        if (res != NO_ERROR) {
+            std::cout << "failed to set nonblocking " << WSAGetLastError() << std::endl;
+            WSACleanup();
+            return INVALID_SOCKET;
+        }
         break;
     }
     freeaddrinfo(result);

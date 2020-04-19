@@ -10,9 +10,14 @@ public:
     
     void send(Game::ClientMessage clientMessage);
 
-    // TODO: Fix
-    std::string read();
+    // Reads server messages into a data structure
+    // TODO: may want to queue up reads
+    void read();
+
+    std::vector<Game::ServerMessage> messages;
 
 private:
     char network_data[DEFAULT_BUFLEN];
+
+    std::vector<char> buffer;
 };

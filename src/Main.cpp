@@ -24,6 +24,10 @@ int main(int argc, char * argv[])
 		while (1) {
 			std::unordered_map<unsigned int, std::vector<Game::ClientMessage>> stuff = server.readAllMessages();
 			for (auto iter = stuff.begin(); iter != stuff.end(); iter++) {
+				Game::ServerMessage serverMessage;
+				serverMessage.set_net(Game::Net::PING);
+				server.send(iter->first, serverMessage);
+				
 				for (auto clientMessage: iter->second) {
 		            switch (clientMessage.event_case()) {
 		                case Game::ClientMessage::EventCase::kDirection:
@@ -59,6 +63,17 @@ int main(int argc, char * argv[])
 				// Client sends a clientMessage now
 				client.send(clientMessage);
 			}
+
+			client.read();
+
+			for (auto serverMessage: client.messages) {
+				switch (serverMessage.event_case()) {
+					case Game::ServerMessage::EventCase::kNet:
+						std::cout << "Net " << serverMessage.net() << std::endl;
+						break;
+				}
+			}
+
 			std::this_thread::sleep_for(std::chrono::milliseconds(2000));
 		}
 	}
