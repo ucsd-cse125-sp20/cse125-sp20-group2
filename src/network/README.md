@@ -45,6 +45,9 @@ server into storage (you can access this storage via the member variable
 ### ServerNetwork
 
 This is the underlying server that will handle incoming connections and data.
+The class has 3 main methods, send, sendToAll, and readAllMessages(). send
+simply sends to a specific client, sendToAll sends to all clients, and
+readAllMessages reads all incoming messages from all the clients.
 
 ### Data
 
