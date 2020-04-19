@@ -2,19 +2,19 @@
 #include <map>
 #include <unordered_map>
 #include <vector>
+#include <schema/Game.pb.h>
 
 class ServerNetwork
 {
 public:
-
     ServerNetwork(int port);
     ~ServerNetwork();
     
-    void send(unsigned int clientID, std::string msg);
+    void send(unsigned int clientID, Game::ServerMessage msg);
 
-    void sendToAll(std::string msg);
+    void sendToAll(Game::ServerMessage msg);
 
-    std::unordered_map<unsigned int, std::vector<std::string>> readAllMessages();
+    std::unordered_map<unsigned int, std::vector<Game::ClientMessage>> readAllMessages();
 private:
     SOCKET listenSocket;
 
@@ -22,11 +22,13 @@ private:
 
     char network_data[DEFAULT_BUFLEN];
 
-    unsigned int nextID = 0;
+    unsigned int nextId = 0;
 
     std::map<unsigned int, SOCKET> sessions;
 
-    unsigned int getNextID();
+    std::map<unsigned int, std::vector<char>> buffers;
+
+    unsigned int getNextId();
 
     void startAccepting();
 

@@ -5,7 +5,6 @@
 
 int NetworkService::sendMessage(SOCKET socket, const char* message, int messageSize)
 {
-    std::cout << message << std::endl;
     return send(socket, message, messageSize, 0);
 }
 

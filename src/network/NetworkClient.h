@@ -1,4 +1,5 @@
 #include "NetworkService.h"
+#include <schema/Game.pb.h>
 
 class NetworkClient
 {
@@ -7,8 +8,9 @@ public:
     NetworkClient(char* host, int port);
     ~NetworkClient();
     
-    void send(std::string);
+    void send(Game::ClientMessage clientMessage);
 
+    // TODO: Fix
     std::string read();
 
 private:

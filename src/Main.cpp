@@ -1,4 +1,5 @@
 
+#include "./schema/Game.pb.h"
 #include <iostream>
 #include <chrono>
 #include <thread>
@@ -21,33 +22,45 @@ int main(int argc, char * argv[])
 		ServerNetwork server (9000);
 		
 		while (1) {
-			std::unordered_map<unsigned int, std::vector<std::string>> stuff = server.readAllMessages();
-			std::unordered_map<unsigned int, std::vector<std::string>>::iterator iter;
-			for (iter = stuff.begin(); iter != stuff.end(); iter++) {
-				for (std::string data : iter->second) {
-					std::cout << iter->first << ". msg: " << data << std::endl;
-					server.send(iter->first, std::string ("i gotchu:") + data);
+			std::unordered_map<unsigned int, std::vector<Game::ClientMessage>> stuff = server.readAllMessages();
+			for (auto iter = stuff.begin(); iter != stuff.end(); iter++) {
+				for (auto clientMessage: iter->second) {
+		            switch (clientMessage.event_case()) {
+		                case Game::ClientMessage::EventCase::kDirection:
+		                    std::cout << "Direction: " << clientMessage.direction() << std::endl;
+		                break;
+		                case Game::ClientMessage::EventCase::kNet:
+		                    std::cout << "Net: " << clientMessage.net() << std::endl;
+		                break;
+		                case Game::ClientMessage::EVENT_NOT_SET:
+		                    std::cout << "undefined" << std::endl;
+		                break;
+		            }
 				}
-				
 			}
 			std::cout << "sleep" << std::endl;
+
 			std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 		}
 	}
 	else if (option == "client")
 	{   
 		NetworkClient client("localhost", 9000);
-		int i = 0;
-		while (i < 100) {
-			std::string s ("msg:");
-			s += std::to_string(i++);
-			client.send(s);
-			std::cout << "Sent message: " << s << std::endl;
-			std::string rec = client.read();
-			std::cout << "Recv message: " << rec << std::endl;
-			std::this_thread::sleep_for(std::chrono::milliseconds(100));
+
+		while (true) {
+			// Construct clientMessage
+			for (int i = 0; i < 4; i++) {
+				Game::ClientMessage clientMessage;
+
+				// Sets the clientMessage to send up msg
+				// clientMessage.set_direction(Game::Direction::DOWN);
+				clientMessage.set_direction(static_cast<Game::Direction>(i));
+
+				// Client sends a clientMessage now
+				client.send(clientMessage);
+			}
+			std::this_thread::sleep_for(std::chrono::milliseconds(2000));
 		}
-		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 	}
 }
 
