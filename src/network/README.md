@@ -15,23 +15,20 @@ into parts without knowing the length of the individual parts on the server side
 
 Header Format
 
-[ Length | ID | Data ]
+[ Length | PB Data ]
 
 Length - 2 bytes unsigned int
-ID - 1 byte unsigned int
-Data - Representation of struct as char array
+Data - Representation of message as char array
 
 ## Sender 
 
 1. Get the sizeof(struct), set to 2 byte unsigned int, prefix to beginning.
-2. Retrieve ID of struct, set to 1 byte unsigned int, append after Length.
-3. Convert struct to char ptr, append after ID.
-4. Send formatted data over network.
+2. Convert message to char ptr, append after length.
+3. Send formatted data over the network.
 
 ## Receiver
 
 1. Read first 2 bytes to figure out the Length (struct bytes).
-2. Read next byte after first 2 bytes to figure out type of struct.
-3. Read Length number of bytes to get the char representation of the struct.
-4. Convert that char representation to the correct struct.
+2. Read length number of bytes to get the char representation of the message.
+3. Convert char array to the correct message.
 
