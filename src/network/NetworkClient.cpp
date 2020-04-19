@@ -1,10 +1,9 @@
 #include <stdio.h>
-#include <string>
 #include "NetworkClient.h"
 
-NetworkClient::NetworkClient(char* host, int port)
+NetworkClient::NetworkClient(std::string host, int port)
 {
-    this->ConnectSocket = NetworkService::createClientSocket(host, port);
+    this->ConnectSocket = NetworkService::createClientSocket((char *) host.c_str(), port);
     if (this->ConnectSocket == INVALID_SOCKET) {
         exit(ERROR);
     }
@@ -35,7 +34,6 @@ void NetworkClient::read()
     int receivedBytes = 1;
 
     while (receivedBytes > 0) {
-        std::cout << "In read of client " << receivedBytes << std::endl;
         // Update receivedBytes
         receivedBytes = NetworkService::receiveMessage(this->ConnectSocket, network_data, DEFAULT_BUFLEN);
 
@@ -49,7 +47,6 @@ void NetworkClient::read()
     bool success = true;
     while(success) {
 
-        std::cout << "success " << buffer.size() << std::endl;
          // If the buffer size is less than a size of expected int we are reading
         if (buffer.size() <= sizeof(size_t)) {
             success = false;

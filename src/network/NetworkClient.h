@@ -1,11 +1,12 @@
 #include "NetworkService.h"
+#include <string>
 #include <schema/Game.pb.h>
 
 class NetworkClient
 {
 public:
     SOCKET ConnectSocket;
-    NetworkClient(char* host, int port);
+    NetworkClient(std::string host, int port);
     ~NetworkClient();
     
     void send(Game::ClientMessage clientMessage);

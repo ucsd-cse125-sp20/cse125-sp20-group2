@@ -2,8 +2,7 @@
 #include <stdlib.h>
 #include <ws2tcpip.h>
 #include <string>
-#include <thread>
-#include "NetworkServer.h"
+#include "ServerNetwork.h"
 
 // TODO:
 //  Handle clientSocket disconnection
