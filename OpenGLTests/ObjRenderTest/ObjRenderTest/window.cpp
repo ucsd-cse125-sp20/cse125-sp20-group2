@@ -1,6 +1,6 @@
 
-#include <glad/glad.h>		// Include this...
-#include <GLFW/glfw3.h>		// ...before this.
+#include <glad/glad.h>	// Include this...
+#include <GLFW/glfw3.h> // ...before this.
 #include <iostream>
 #include <assimp/config.h>
 #include <glm/glm.hpp>
@@ -28,15 +28,20 @@ const float WIN_HEIGHT = 1600;
 
 // Initial mouse positions
 float lastX = WIN_WIDTH / 2, lastY = WIN_HEIGHT / 2;
+const float RUN_SPEED = 1, TURN_SPEED = 1;
+float currentSpeed = 0.0f, currentTurnSpeed = 0.0f;
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void processInput(GLFWwindow* window);
-void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+void framebuffer_size_callback(GLFWwindow *window, int width, int height);
+void processInput(GLFWwindow *window);
+void mouse_callback(GLFWwindow *window, double xpos, double ypos);
+void scroll_callback(GLFWwindow *window, double xoffset, double yoffset);
 
 // timing
-float deltaTime = 0.0f;	// time between current frame and last frame
+float deltaTime = 0.0f; // time between current frame and last frame
 float lastFrame = 0.0f;
+
+glm::vec3 modelPos;
+float modelRotationX;
 
 int main()
 {
@@ -47,12 +52,12 @@ int main()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);		
-	GLFWwindow* window = glfwCreateWindow((int)WIN_WIDTH, (int)WIN_HEIGHT, "LearnOpenGL", NULL, NULL);
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+	GLFWwindow *window = glfwCreateWindow((int)WIN_WIDTH, (int)WIN_HEIGHT, "LearnOpenGL", NULL, NULL);
 
 	// Capture mouse
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-	
+
 	// Mouse centering
 	glfwSetCursorPos(window, lastX, lastY);
 
@@ -84,7 +89,7 @@ int main()
 
 	// // //
 	// Models
-	Model ourModel("C:/Users/JQ124/Desktop/CompSci/CSE125/cse125-sp20-group2/assets/nanosuit/nanosuit.obj");
+	Model ourModel("../../../assets/models/Basic_Character_Model.obj");
 
 	// // //
 	// Shaders
@@ -115,7 +120,7 @@ int main()
 
 		// Clear color + depth buffers
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		
+
 		// // //
 		// View + perspective projection matrices
 
@@ -129,11 +134,21 @@ int main()
 		// pass transformation matrices to the shader
 		shader.setMat4("projection", projection); // note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
 		shader.setMat4("view", view);
-		
+
+		// Calculate distance and rotation
+		modelRotationX += currentTurnSpeed * deltaTime;
+		float distance = currentSpeed * deltaTime;
+		float dx = distance * sin(modelRotationX);
+		float dz = distance * cos(modelRotationX );
+		modelPos.x += dx;
+		modelPos.z += dz;
+
 		// render the loaded model
 		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(0.0f, -1.75f, 0.0f)); // translate it down so it's at the center of the scene
+		model = glm::translate(model, modelPos); // translate it down so it's at the center of the scene
+		model = glm::rotate(model, modelRotationX , glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));	// it's a bit too big for our scene, so scale it down
+		
 		shader.setMat4("model", model);
 		ourModel.draw(shader);
 
@@ -149,33 +164,41 @@ int main()
 }
 
 // Handle user input
-void processInput(GLFWwindow* window)
+void processInput(GLFWwindow *window)
 {
 	// Exit application.
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
 
-	// Camera movement (depends on framerate)
-	float cameraSpeed = 2.5 * deltaTime;
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		cam.processKeyMovement(FORWARD, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		cam.processKeyMovement(BACKWARD, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		cam.processKeyMovement(LEFT, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		cam.processKeyMovement(RIGHT, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
 		cam.toggleFreeCam();
+
+	float velocity = 2.5 * deltaTime;
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+		currentSpeed = RUN_SPEED;
+	else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+		currentSpeed = -RUN_SPEED;
+	else
+		currentSpeed = 0;
+	
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+		currentTurnSpeed = -TURN_SPEED;
+	else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+		currentTurnSpeed = TURN_SPEED;
+	else
+		currentTurnSpeed = 0;
+
+	
 }
 
 // A callback function to resize the rendering window when the window is resized
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+void framebuffer_size_callback(GLFWwindow *window, int width, int height)
 {
 	glViewport(0, 0, width, height);
 }
 
-void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
+void mouse_callback(GLFWwindow *window, double xpos, double ypos)
+{
 
 	// Calculate offset based on previous position of the mouse
 	float xoffset = xpos - lastX;
@@ -187,7 +210,7 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
 }
 
 // Zoom callback for when mouse wheel is scrolled
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+void scroll_callback(GLFWwindow *window, double xoffset, double yoffset)
 {
 	cam.processMouseScroll(yoffset);
 }
