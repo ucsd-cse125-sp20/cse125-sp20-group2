@@ -1,0 +1,35 @@
+// #include "Game.pb.h"
+// #include <winsock2.h>
+
+// void read(std::string buf) {
+//     Game::ClientMessage message;
+//     if (!message.ParseFromString(buf)) {
+//         std::cout << "Parse failed" << std::endl;
+//         return;
+//     }
+    
+//     switch (message.event_case()) {
+//         case Game::ClientMessage::EventCase::kDirection:
+//             std::cout << "Direction: " << message.direction() << std::endl;
+//         break;
+//         case Game::ClientMessage::EventCase::kNet:
+//             std::cout << "Net: " << message.net() << std::endl;
+//         break;
+//         case Game::ClientMessage::EVENT_NOT_SET:
+//             std::cout << "undefined" << std::endl;
+//         break;
+//     }
+// }
+
+// int main() {
+//     Game::ClientMessage message;
+//     message.set_direction(Game::Direction::DOWN);
+
+//     // Serialize
+//     std::string buf = message.SerializeAsString();
+//     std::cout << buf.size() << std::endl;
+//     // Write to buf
+
+//     // emulate Client ---> Server here
+//     read(buf);
+// }

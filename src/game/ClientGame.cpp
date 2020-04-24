@@ -2,7 +2,7 @@
 #include <chrono>
 #include <thread>
 
-#define CLIENT_DELAY 100
+#define CLIENT_DELAY 1000
 
 ClientGame::ClientGame(std::string IP, int port) : client(IP, port)
 {

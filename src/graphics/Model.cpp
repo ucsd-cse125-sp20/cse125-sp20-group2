@@ -10,7 +10,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 // Textures
-#include "SOIL2.h"
+#include <SOIL/SOIL.h>
 
 // ASSIMP
 #include <assimp/Importer.hpp>

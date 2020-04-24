@@ -7,14 +7,14 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/string_cast.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include "_obj/Mesh.h"
-#include "_obj/Shader.h"
+#include <graphics/_obj/Mesh.h>
+#include <graphics/_obj/Shader.h>
 #include "Camera.cpp"
 #include "Model.cpp"
 #include "GameObject.cpp"
 #include "_options/graphics_vars.h"
 
-// Camera at desiginated position
+//// Camera at desiginated position
 Camera cam(INITIAL_CAM_POS);
 
 // Initial mouse positions
@@ -203,6 +203,6 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 	cam.processMouseScroll(yoffset);
 }
 
-int main() {
-	return render();
-}
+//// int main() {
+//// 	return render();
+//// }
