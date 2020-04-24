@@ -7,28 +7,20 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/string_cast.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include "Mesh.cpp"
-#include "Shader.h"
+#include "_obj/Mesh.h"
+#include "_obj/Shader.h"
 #include "Camera.cpp"
 #include "Model.cpp"
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+#include "GameObject.cpp"
+#include "_options/graphics_vars.h"
 
-// Camera + lookat vectors + euler angles
-Camera cam(glm::vec3(0.0f, 0.0f, 3.0f));
-glm::vec3 pos = glm::vec3(0, 0, 3);
-glm::vec3 up = glm::vec3(0, 1, 0);
-glm::vec3 front = glm::vec3(0, 0, -1);
-//float yaw = -90.0f;
-//float pitch = 0.0f;
-
-// Width and height (TEMP - FIXME)
-const float WIN_WIDTH = 1800;
-const float WIN_HEIGHT = 1600;
+// Camera at desiginated position
+Camera cam(INITIAL_CAM_POS);
 
 // Initial mouse positions
 float lastX = WIN_WIDTH / 2, lastY = WIN_HEIGHT / 2;
 
+// Function prototypes
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -38,7 +30,7 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 float deltaTime = 0.0f;	// time between current frame and last frame
 float lastFrame = 0.0f;
 
-int main()
+int render()
 {
 	// // //
 	// Setup
@@ -83,8 +75,9 @@ int main()
 	glEnable(GL_DEPTH_TEST);
 
 	// // //
-	// Models
-	Model ourModel("../../../assets/models/cube.obj");
+	// Objects
+	GameObject nanosuit(std::string("../../../assets/nanosuit/nanosuit.obj"), glm::vec3(0.0f, -1.75f, 0.0f), 0.2f);
+	//Model ourModel("../../../assets/models/cube.obj");
 
 	// // //
 	// Shaders
@@ -115,6 +108,15 @@ int main()
 
 		// Clear color + depth buffers
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		// Apply lighting options
+		shader.setVec3("lightColor", glm::vec3(1.0, 1.0, 1.0f));
+		shader.setFloat("ambientStrength", ambientStrength);
+		shader.setVec3("lightPos", lightPos);
+		shader.setVec3("defaultObjColor", defaultObjColor);
+		shader.setFloat("noColorPrecision", noColorPrecision);
+		shader.setFloat("specularStrength", specularStrength);
+		shader.setVec3("viewPos", cam.pos);
 		
 		// // //
 		// View + perspective projection matrices
@@ -129,13 +131,22 @@ int main()
 		// pass transformation matrices to the shader
 		shader.setMat4("projection", projection); // note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
 		shader.setMat4("view", view);
-		
-		// render the loaded model
-		glm::mat4 model = glm::mat4(1.0f);
-		//model = glm::translate(model, glm::vec3(0.0f, -1.75f, 0.0f)); // translate it down so it's at the center of the scene
-		//model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));	// it's a bit too big for our scene, so scale it down
-		shader.setMat4("model", model);
-		ourModel.draw(shader);
+
+		// // //
+		// Render each GameObject
+
+		// Model matrix of each object, with its respective model matrix
+		shader.setMat4("model", nanosuit.modelMatrix);
+
+		// Used to convert normal vectors to world space coordinates, without applying translations to them
+		glm::mat4 normalMatrix = glm::mat3(transpose(inverse(nanosuit.modelMatrix)));
+		shader.setMat4("normalMatrix", normalMatrix);
+
+		// Draw the model
+		nanosuit.draw(shader);
+
+		// GameObject-specific code goes above
+		// // //
 
 		// // //
 		// GLFW stuff
@@ -190,4 +201,8 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
 	cam.processMouseScroll(yoffset);
+}
+
+int main() {
+	return render();
 }
