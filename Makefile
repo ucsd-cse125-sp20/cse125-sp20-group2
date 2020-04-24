@@ -20,7 +20,10 @@ OBJ := $(SRC:$(SRC_DIR)/%.cpp=$(OUT_DIR)/%.o) # Replace variables src/%.cpp to o
 
 BINARY := $(BIN_DIR)/$(OUT)
 
-default: $(BINARY)
+default: PROTO $(BINARY)
+
+PROTO:
+	cd src/schema/ && $(MAKE)
 
 $(BINARY): $(OBJ)
 	mkdir -p $(shell dirname $@)
