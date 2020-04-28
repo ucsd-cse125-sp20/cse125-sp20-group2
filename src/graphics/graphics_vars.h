@@ -16,3 +16,5 @@ const glm::vec3 INITIAL_CAM_POS = glm::vec3(0, 0, 3);
 
 // Other
 const glm::vec3 UP = glm::vec3(0.0f, 1.0f, 0.0f);
+
+// GameObject count

@@ -42,6 +42,9 @@ void ServerGame::run()
 
 void ServerGame::process() 
 {
+    // Somewhere in here, update the objects
+
+
     // TODO: We should have some sort of GameLogic handling class.
     // GameState should not be handling the modification of the data. It should hold the data.
     // A GameLogic handler will take in these messages and calculate what needs to be done.

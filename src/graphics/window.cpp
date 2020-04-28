@@ -13,6 +13,7 @@
 #include "Model.cpp"
 #include "GameObject.cpp"
 #include "_options/graphics_vars.h"
+#include "window.h"
 
 //// Camera at desiginated position
 Camera cam(INITIAL_CAM_POS);
@@ -30,7 +31,20 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 float deltaTime = 0.0f;	// time between current frame and last frame
 float lastFrame = 0.0f;
 
-int render()
+Window::Window(int width = WIN_WIDTH, int height = WIN_HEIGHT) : objNum (0) {
+	this->width = width;
+	this->height = height;
+}
+
+bool Window::addObject(unsigned int id, GameObject object) {
+	this->objectsToRender[id] = object;
+}
+
+bool Window::removeObject(unsigned int index) {
+	this->objectsToRender.erase(index);
+}
+
+int Window::render()
 {
 	// // //
 	// Setup
@@ -75,15 +89,10 @@ int render()
 	glEnable(GL_DEPTH_TEST);
 
 	// // //
-	// Objects
-	GameObject nanosuit(std::string("../../assets/nanosuit/nanosuit.obj"), glm::vec3(0.0f, -1.75f, 0.0f), 0.2f);
-	//GameObject cube("../../assets/models/cube.obj", glm::vec3(0.0f), 1.0f);
-
-	// // //
 	// Shaders
 
 	// Shader definition
-	Shader shader = Shader("shaders/vert_shader.glsl", "shaders/frag_shader.glsl");
+	Shader shader = Shader("C:\\Users\\wix003\\Documents\\Project\\cse125\\src\\graphics\\shaders\\vert_shader.glsl", "C:\\Users\\wix003\\Documents\\Project\\cse125\\src\\graphics\\shaders\\frag_shader.glsl");
 	shader.use();
 
 	// // //

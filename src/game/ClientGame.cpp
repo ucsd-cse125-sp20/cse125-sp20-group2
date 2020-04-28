@@ -1,12 +1,14 @@
 #include <game/ClientGame.h>
 #include <chrono>
 #include <thread>
+#include <graphics/window.h>
 
 #define CLIENT_DELAY 1000
 
 ClientGame::ClientGame(std::string IP, int port) : client(IP, port)
 {
-    runGame();
+    render();
+    // runGame();
 }
 
 ClientGame::~ClientGame()
