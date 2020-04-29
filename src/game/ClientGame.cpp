@@ -7,7 +7,7 @@
 
 ClientGame::ClientGame(std::string IP, int port) : client(IP, port)
 {
-    render();
+    //render();
     // runGame();
 }
 

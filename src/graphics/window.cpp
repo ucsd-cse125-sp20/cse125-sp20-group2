@@ -12,7 +12,7 @@
 #include "Camera.cpp"
 #include "Model.cpp"
 #include "GameObject.cpp"
-#include "_options/graphics_vars.h"
+#include <graphics/_options/graphics_vars.h>
 #include "window.h"
 
 //// Camera at desiginated position
@@ -34,18 +34,21 @@ float lastFrame = 0.0f;
 Window::Window(int width = WIN_WIDTH, int height = WIN_HEIGHT) : objNum (0) {
 	this->width = width;
 	this->height = height;
+	this->setupWindow();
+
+	// FIXME - HARDCODED ABSOLUTE PATH
+	this->shader = new Shader("C:\\Users\\wix003\\Documents\\Project\\cse125\\src\\graphics\\shaders\\vert_shader.glsl", "C:\\Users\\wix003\\Documents\\Project\\cse125\\src\\graphics\\shaders\\frag_shader.glsl");
 }
 
-bool Window::addObject(unsigned int id, GameObject object) {
-	this->objectsToRender[id] = object;
+void Window::addObject(unsigned int id, GameObject object) {
+	this->objectsToRender.insert({id, object});
 }
 
-bool Window::removeObject(unsigned int index) {
+void Window::removeObject(unsigned int index) {
 	this->objectsToRender.erase(index);
 }
 
-int Window::render()
-{
+void Window::setupWindow() {
 	// // //
 	// Setup
 
@@ -66,7 +69,6 @@ int Window::render()
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
 		glfwTerminate();
-		return -1;
 	}
 
 	// Current context is window
@@ -80,7 +82,6 @@ int Window::render()
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
 		std::cout << "Failed to initialize GLAD" << std::endl;
-		return -1;
 	}
 
 	// Enable depth testing
@@ -88,84 +89,89 @@ int Window::render()
 	// surface is obscured by another surface (i.e. in 3D objects).
 	glEnable(GL_DEPTH_TEST);
 
-	// // //
-	// Shaders
+	// Set window var
+	this->window = window;
+}
 
-	// Shader definition
-	Shader shader = Shader("C:\\Users\\wix003\\Documents\\Project\\cse125\\src\\graphics\\shaders\\vert_shader.glsl", "C:\\Users\\wix003\\Documents\\Project\\cse125\\src\\graphics\\shaders\\frag_shader.glsl");
-	shader.use();
-
-	// // //
-	// The render loop
-	while (!glfwWindowShouldClose(window))
-	{
-		// // //
-		// per-frame time logic
-		float currentFrame = glfwGetTime();
-		deltaTime = currentFrame - lastFrame;
-		lastFrame = currentFrame;
-
-		// // //
-		// Input
-		processInput(window);
-
-		// // //
-		// Rendering stuff
-
-		// Make BG light gray
-		glClearColor(0.8f, 0.8f, 0.8f, 0.8f);
-
-		// Clear color + depth buffers
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		// Apply lighting options
-		shader.setVec3("lightColor", glm::vec3(1.0, 1.0, 1.0f));
-		shader.setFloat("ambientStrength", ambientStrength);
-		shader.setVec3("lightPos", lightPos);
-		shader.setVec3("defaultObjColor", defaultObjColor);
-		shader.setFloat("noColorPrecision", noColorPrecision);
-		shader.setFloat("specularStrength", specularStrength);
-		shader.setVec3("viewPos", cam.pos);
-		
-		// // //
-		// View + perspective projection matrices
-
-		// camera view transformation (related to xy axis rotations)
-		glm::mat4 view = cam.getViewMatrix();
-
-		// camera projection transformation (related to zooms)
-		glm::mat4 projection = glm::mat4(1.0f);
-		projection = glm::perspective(glm::radians(cam.zoom), (float)WIN_WIDTH / (float)WIN_HEIGHT, 0.1f, 100.0f);
-
-		// pass transformation matrices to the shader
-		shader.setMat4("projection", projection); // note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
-		shader.setMat4("view", view);
-
-		// // //
-		// Render each GameObject
-
-		// Model matrix of each object, with its respective model matrix
-		shader.setMat4("model", nanosuit.modelMatrix);
-
-		// Used to convert normal vectors to world space coordinates, without applying translations to them
-		glm::mat4 normalMatrix = glm::mat3(transpose(inverse(nanosuit.modelMatrix)));
-		shader.setMat4("normalMatrix", normalMatrix);
-
-		// Draw the model
-		nanosuit.draw(shader);
-
-		// GameObject-specific code goes above
-		// // //
-
-		// // //
-		// GLFW stuff
-		glfwSwapBuffers(window);
-		glfwPollEvents();
+void Window::render()
+{
+	if (window == NULL) {
+		std::cerr << "ERROR: No window!" << std::endl;
 	}
 
+	// // //
+	// User shader program
+	shader->use();
+
+	// // //
+	// The render operations
+
+	// // //
+	// per-frame time logic
+	float currentFrame = glfwGetTime();
+	deltaTime = currentFrame - lastFrame;
+	lastFrame = currentFrame;
+
+	// // //
+	// Input
+	processInput(window);
+
+	// // //
+	// Rendering stuff
+
+	// Make BG light gray
+	glClearColor(0.8f, 0.8f, 0.8f, 0.8f);
+
+	// Clear color + depth buffers
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	// Apply lighting options
+	shader->setVec3("lightColor", glm::vec3(1.0, 1.0, 1.0f));
+	shader->setFloat("ambientStrength", ambientStrength);
+	shader->setVec3("lightPos", lightPos);
+	shader->setVec3("defaultObjColor", defaultObjColor);
+	shader->setFloat("noColorPrecision", noColorPrecision);
+	shader->setFloat("specularStrength", specularStrength);
+	shader->setVec3("viewPos", cam.pos);
+	
+	// // //
+	// View + perspective projection matrices
+
+	// camera view transformation (related to xy axis rotations)
+	glm::mat4 view = cam.getViewMatrix();
+
+	// camera projection transformation (related to zooms)
+	glm::mat4 projection = glm::mat4(1.0f);
+	projection = glm::perspective(glm::radians(cam.zoom), (float)WIN_WIDTH / (float)WIN_HEIGHT, 0.1f, 100.0f);
+
+	// pass transformation matrices to the shader
+	shader->setMat4("projection", projection); // note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
+	shader->setMat4("view", view);
+
+	// // //
+	// Render each GameObject
+	for (unsigned int i = 0; i < objNum; i++) {
+		
+		GameObject obj = objectsToRender.at(i);
+
+		// Respective model matrix of each object
+		shader->setMat4("model", obj.modelMatrix);
+
+		// Used to convert normal vectors to world space coordinates, without applying translations to them
+		glm::mat4 normalMatrix = glm::mat3(glm::transpose(glm::inverse(obj.modelMatrix)));
+		shader->setMat4("normalMatrix", normalMatrix);
+
+		// Draw the model
+		obj.draw(*shader);
+	}
+
+	// // //
+	// GLFW stuff
+	glfwSwapBuffers(window);
+	glfwPollEvents();
+
 	// Call terminate to cleanup GLFW resources.
-	glfwTerminate();
-	return 0;
+	// glfwTerminate(); FIXME: please terminate this elsewhere when done rendering
 }
 
 // Handle user input
@@ -176,7 +182,7 @@ void processInput(GLFWwindow* window)
 		glfwSetWindowShouldClose(window, true);
 
 	// Camera movement (depends on framerate)
-	float cameraSpeed = 2.5 * deltaTime;
+	cam.moveSpeed = 2.5 * deltaTime;
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 		cam.processKeyMovement(FORWARD, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)

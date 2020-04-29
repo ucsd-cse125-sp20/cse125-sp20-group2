@@ -1,5 +1,7 @@
+#include <glad/glad.h>		// Include this...
+#include <GLFW/glfw3.h>		// ...before this.
 #include "GameObject.cpp"
-#include "graphics_vars.h"
+#include <graphics/_options/graphics_vars.h>
 #include <unordered_map>
 
 class Window
@@ -8,22 +10,20 @@ public:
     Window(int width, int height);
 
     std::unordered_map<unsigned int, GameObject> objectsToRender;
-
-    int render();
+    void render();
 
     /**
      * @param object the game object to add to the map of objects
-     * @return boolean indicating whether or not object was successfully added
      * */
-    bool addObject(unsigned int, GameObject object);
+    void addObject(unsigned int id, GameObject object);
     
-    bool removeObject(unsigned int index);
+    void removeObject(unsigned int index);
 
 private:
-    // Increment when get response back from server
-    unsigned int objNum;
-
+    Shader* shader;
+    void setupWindow();
+    GLFWwindow* window;
+    unsigned int objNum;        // Increment when get response back from server
     int width;
-    
     int height;
 };
