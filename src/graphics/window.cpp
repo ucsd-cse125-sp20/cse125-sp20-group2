@@ -37,7 +37,7 @@ Window::Window(int width = WIN_WIDTH, int height = WIN_HEIGHT) : objNum (0) {
 	this->setupWindow();
 
 	// FIXME - HARDCODED ABSOLUTE PATH
-	this->shader = new Shader("C:\\Users\\wix003\\Documents\\Project\\cse125\\src\\graphics\\shaders\\vert_shader.glsl", "C:\\Users\\wix003\\Documents\\Project\\cse125\\src\\graphics\\shaders\\frag_shader.glsl");
+	this->shader = new Shader("C:\\Users\\JQ124\\Desktop\\CompSci\\cse125\\src\\graphics\\shaders\\vert_shader.glsl", "C:\\Users\\JQ124\\Desktop\\CompSci\\cse125\\src\\graphics\\shaders\\frag_shader.glsl");
 }
 
 void Window::addObject(unsigned int id, GameObject object) {
@@ -57,10 +57,10 @@ void Window::setupWindow() {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);		
-	GLFWwindow* window = glfwCreateWindow((int)WIN_WIDTH, (int)WIN_HEIGHT, "LearnOpenGL", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow((int)WIN_WIDTH, (int)WIN_HEIGHT, "Comrade's Kitchen", NULL, NULL);
 
 	// Capture mouse
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	
 	// Mouse centering
 	glfwSetCursorPos(window, lastX, lastY);
@@ -164,6 +164,11 @@ void Window::render()
 		// Draw the model
 		obj.draw(*shader);
 	}
+
+	glBegin(GL_LINES);
+	glVertex(10, 0, 0);
+	glVertex(-10, 0, 0);
+	glEnd();
 
 	// // //
 	// GLFW stuff

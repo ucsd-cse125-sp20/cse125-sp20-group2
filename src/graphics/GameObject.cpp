@@ -38,7 +38,9 @@ public:
 	void setID(int ID) {
 		this->ID = ID;
 	}
+	
 private:
+
 	// Update the world position and move the model matrix
 	void moveTo(glm::vec3 loc) {
 		worldPos = loc;

@@ -1,14 +1,13 @@
 #include <game/ClientGame.h>
 #include <chrono>
 #include <thread>
-#include <graphics/window.h>
 
 #define CLIENT_DELAY 1000
 
-ClientGame::ClientGame(std::string IP, int port) : client(IP, port)
+ClientGame::ClientGame(std::string IP, int port) : client(IP, port), window(WIN_WIDTH, WIN_HEIGHT)
 {
     //render();
-    // runGame();
+    runGame();
 }
 
 ClientGame::~ClientGame()
@@ -20,13 +19,14 @@ void ClientGame::runGame()
 {
     while(1) {
         // Send input to server
-        sendMsgs();
+        //sendMsgs();
         // Receive updated state from server
-        receiveUpdates();
+        //receiveUpdates();
         // Update local game state
-        updateGameState();
+        //updateGameState();
         // Render world
-        renderWorld();
+        window.render();
+        //renderWorld();
         // Sleep
         std::this_thread::sleep_for(std::chrono::milliseconds(CLIENT_DELAY));
     }
