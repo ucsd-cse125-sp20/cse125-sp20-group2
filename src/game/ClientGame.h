@@ -1,3 +1,5 @@
+#pragma once
+
 #include <network/NetworkClient.h>
 #include <iostream>
 #include <util/PrintUtil.h>

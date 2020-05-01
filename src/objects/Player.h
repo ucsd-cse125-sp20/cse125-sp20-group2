@@ -1,16 +1,12 @@
 #pragma once
 
-#include <objects/GameObject.cpp>
+#include <objects/GameObject.h>
 #include <unordered_map>
 
 class Player : public GameObject 
 {
 public:
-    // Constructors
-    Player(std::string modelPath, glm::vec3 worldPos, float uniformScale);
-	Player(std::string modelPath, glm::vec3 worldPos, glm::vec3 scaleVec);
-	Player(std::string modelPath, float x, float y, float z, float uniformScale);
-	Player(std::string modelPath, float x, float y, float z, float sX, float sY, float sZ);
+    Player(int ID);
 
     std::unordered_map<int, GameObject> inventory;
     int score;

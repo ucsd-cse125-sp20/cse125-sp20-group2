@@ -9,7 +9,7 @@ GameState::~GameState() {
 
 }
 
-void GameState::addPlayer(unsigned int clientId) {
+int GameState::addPlayer(unsigned int clientId) {
     std::cout << "Called add user in GameState w/ clientID: " << clientId << std::endl;
 
     int id = addObject(Game::ObjectType::PLAYER);
@@ -23,9 +23,10 @@ int GameState::addObject(Game::ObjectType objectType)
         // Create player object, add to map
         case Game::ObjectType::PLAYER:
         {
-            Player* newPlayer = new Player("assets\\models\\Basic_Character_Model.obj", glm::vec3(0, -1, 0), 0.2);
+            std::cout << "Creating a player object on the server side" << std::endl;
             int objId = this->objCounter++;
-            this->gameObjects[objId] = newPlayer;
+            Player* player = new Player(objId);
+            this->gameObjects[objId] = player;
             return objId;
         }
         // Create fruit object, add to map TODO
@@ -38,7 +39,31 @@ int GameState::addObject(Game::ObjectType objectType)
     }
 }
 
+GameObject* GameState::getPlayerObject(unsigned int clientId)
+{
+    int objId = this->clientIdToGameObjId[clientId];
+    return this->gameObjects[objId];
+}
 
+GameObject* GameState::getGameObject(unsigned int objId) 
+{
+    return this->gameObjects[objId];
+}
 
+void GameState::removeObject(unsigned int objId)
+{
+    GameObject* object = this->gameObjects[objId];
+    free(object);
+    this->gameObjects.erase(objId);
+}
 
+void GameState::removePlayer(unsigned int clientId)
+{
+    int objId = this->clientIdToGameObjId[clientId];
 
+    GameObject* object = this->gameObjects[objId];
+    free(object);
+
+    this->clientIdToGameObjId.erase(clientId);
+    this->gameObjects.erase(objId);
+}

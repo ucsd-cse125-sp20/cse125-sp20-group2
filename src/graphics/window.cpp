@@ -105,9 +105,9 @@ void Window::setupWindow() {
 
 
 	// FIXME: GRID STUFF
-	GameObject* grid = new GameObject("assets\\models\\grid_square.obj", glm::vec3(0.5, -1.25, 0.5), 0.2);
+	/*GameObject* grid = new GameObject("assets\\models\\grid_square.obj", glm::vec3(0.5, -1.25, 0.5), 0.2);
 	this->addObject(0, grid);
-	objNum++;
+	objNum++;*/
 }
 
 void Window::close() {
@@ -180,12 +180,10 @@ void Window::render()
 	float distance = currentSpeed * deltaTime;
 	float dx = distance * sin(modelRotationX);
 	float dz = distance * cos(modelRotationX);
-	modelPos.x += dx;
-	modelPos.z += dz;
-	player->modelMatrix = glm::mat4(1.0f);
-	player->modelMatrix = glm::translate(player->modelMatrix, modelPos); // translate it down so it's at the center of the scene
-	player->modelMatrix = glm::rotate(player->modelMatrix, modelRotationX , glm::vec3(0.0f, 1.0f, 0.0f));
-	player->modelMatrix = glm::scale(player->modelMatrix, glm::vec3(0.2f, 0.2f, 0.2f));	// it's a bit too big for our scene, so scale it down
+	glm::vec3 pos = player->getWorldPos();
+	pos.x += dx; pos.z += dz;
+	player->moveTo(pos);
+	player->rotate(modelRotationX, UP);
 
 	// // //
 	// Render each GameObject
@@ -193,12 +191,21 @@ void Window::render()
 	for (auto it = objectsToRender.begin(); it != objectsToRender.end(); ++it) {
 		GameObject* obj = it->second;
 
-		// Respective model matrix of each object
-		shader->setMat4("model", obj->modelMatrix);
+		// Set respective model matrix for each object and send it to the shader.
+		shader->setMat4("model", obj->getModelMatrix());
 
 		// Used to convert normal vectors to world space coordinates, without applying translations to them
-		glm::mat4 normalMatrix = glm::mat3(glm::transpose(glm::inverse(obj->modelMatrix)));
-		shader->setMat4("normalMatrix", normalMatrix);
+		shader->setMat4("normalMatrix", obj->getNormalMatrix());
+
+
+
+
+
+
+
+
+
+
 
 		// Draw the model
 		obj->draw(*shader);

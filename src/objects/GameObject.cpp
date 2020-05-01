@@ -1,58 +1,59 @@
-#pragma once
+#include <objects/GameObject.h>
 
-#include <graphics/_obj/Shader.h>
-#include <graphics/Model.cpp>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <graphics/_options/graphics_vars.h>
+GameObject::GameObject(int id) {
+	this->ID = id;
+}
 
-class GameObject {
-public:
-	Model model;
-	glm::vec3 worldPos;
-	glm::mat4 modelMatrix = glm::mat4(1.0f);
-	glm::vec3 scaleVec;
-	int ID;
+void GameObject::draw(Shader shader) {
+	this->model->draw(shader);
+}
 
-	GameObject(std::string modelPath, glm::vec3 worldPos, float uniformScale) : model(modelPath) {
-		moveTo(worldPos);
-		applyScale(glm::vec3(uniformScale));
-	}
-	GameObject(std::string modelPath, glm::vec3 worldPos, glm::vec3 scaleVec) : model(modelPath) {
-		moveTo(worldPos);
-		applyScale(scaleVec);
-	}
-	GameObject(std::string modelPath, float x, float y, float z, float uniformScale) : model(modelPath) {
-		moveTo(glm::vec3(x, y, z));
-		applyScale(glm::vec3(uniformScale));
-	}
-	GameObject(std::string modelPath, float x, float y, float z, float sX, float sY, float sZ) : model(modelPath) {
-		moveTo(glm::vec3(x, y, z));
-		applyScale(glm::vec3(sX, sY, sZ));
-	}
+void GameObject::setID(int ID) {
+	this->ID = ID;
+}
 
-	void draw(Shader shader) {
-		model.draw(shader);
-	}
+int GameObject::getID() {
+	return this->ID;
+}
 
-	void setRenderID(int ID) {
-		this->ID = ID;
-	}
+void GameObject::setModel(std::string path) {
+	this->model = new Model(path);
+}
 
-	// Update the world position and move the model matrix
-	void moveTo(glm::vec3 loc) {
-		worldPos = loc;
-		modelMatrix = glm::translate(modelMatrix, loc);
-	}
-protected:
-	// Apply scaling to the model.
-	void applyScale(glm::vec3 scale) {
-		scaleVec = scale;
-		modelMatrix = glm::scale(modelMatrix, scale);
-	}
+// Update the world position and move the model matrix
+void GameObject::moveTo(glm::vec3 loc) {
+	this->worldPos = loc;
+	this->modelMatrix = glm::translate(modelMatrix, loc);
+}
 
-	// Rotate the model.
-	void rotate(float rotation) {
-		modelMatrix = glm::rotate(modelMatrix, rotation, UP);
-	}
-};
+// Apply scaling to the model.
+void GameObject::applyScale(glm::vec3 scale) {
+	this->scaleVec = scale;
+	this->modelMatrix = glm::scale(modelMatrix, scale);
+}
+
+// Rotate the model.
+void GameObject::rotate(float rotation, glm::vec3 axis = UP) {
+	this->modelMatrix = glm::rotate(modelMatrix, rotation, axis);
+}
+
+glm::vec3 GameObject::getWorldPos() {
+	return this->worldPos;
+}
+
+glm::mat4 GameObject::getModelMatrix() {
+	return this->modelMatrix;
+}
+
+glm::mat4 GameObject::getNormalMatrix() {
+	return glm::mat3(glm::transpose(glm::inverse(this->modelMatrix)));
+}
+
+float GameObject::getRotation() {
+	return this->rotation;
+}
+
+// Set rotation and rotate the model to the new angle.
+void GameObject::setRotation(float rot) {
+	this->rotation = rot;
+}

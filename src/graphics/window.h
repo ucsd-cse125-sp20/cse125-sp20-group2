@@ -1,6 +1,6 @@
 #include <glad/glad.h>		// Include this...
 #include <GLFW/glfw3.h>		// ...before this.
-#include <objects/GameObject.cpp>
+#include <objects/GameObject.h>
 #include <graphics/_options/graphics_vars.h>
 #include <unordered_map>
 #include <objects/Player.h>

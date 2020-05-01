@@ -8,9 +8,9 @@
 ClientGame::ClientGame(std::string IP, int port) : client(IP, port), window(WIN_WIDTH, WIN_HEIGHT)
 {
     // TODO: fix hardcoded player values and hardcoded window insertion
-    Player* player = new Player("assets\\models\\Basic_Character_Model.obj", glm::vec3(1, -1, 0), 0.2);
-    window.player = player;
-    window.addObject(1, player);
+//    Player* player = new Player("assets\\models\\Basic_Character_Model.obj", glm::vec3(1, -1, 0), 0.2);
+//    window.player = player;
+//    window.addObject(1, player);
 
     runGame();
 }
@@ -60,6 +60,8 @@ void ClientGame::updateGameState()
     //     PrintUtil::print(client.messages.front());
     //     client.messages.pop_front();
     // }
+
+    
     for (Game::ServerMessage currMessage : client.messages) {
         PrintUtil::print(currMessage);
     }
