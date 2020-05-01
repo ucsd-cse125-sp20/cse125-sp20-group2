@@ -44,7 +44,7 @@ public:
 		worldPos = loc;
 		modelMatrix = glm::translate(modelMatrix, loc);
 	}
-private:
+protected:
 	// Apply scaling to the model.
 	void applyScale(glm::vec3 scale) {
 		scaleVec = scale;

@@ -17,9 +17,11 @@
 //// Camera at desiginated position
 Camera cam(INITIAL_CAM_POS);
 
-/*// Player movement options (FIXME)
+// Player movement options (FIXME)
 const float RUN_SPEED = 1, TURN_SPEED = 1;
-float currentSpeed = 0.0f, currentTurnSpeed = 0.0f;*/
+float currentSpeed = 0.0f, currentTurnSpeed = 0.0f;
+float modelRotationX;
+glm::vec3 modelPos;
 
 // Initial mouse positions
 float lastX = WIN_WIDTH / 2, lastY = WIN_HEIGHT / 2;
@@ -39,12 +41,10 @@ Window::Window(int width = WIN_WIDTH, int height = WIN_HEIGHT) : objNum (0) {
 	this->width = width;
 	this->height = height;
 	this->setupWindow();
-
-	// FIXME - HARDCODED ABSOLUTE PATH
-	this->shader = new Shader("..\\src\\graphics\\shaders\\vert_shader.glsl", "..\\src\\graphics\\shaders\\frag_shader.glsl");
+	this->shader = new Shader("src\\graphics\\shaders\\vert_shader.glsl", "src\\graphics\\shaders\\frag_shader.glsl");
 }
 
-void Window::addObject(unsigned int id, GameObject object) {
+void Window::addObject(unsigned int id, GameObject* object) {
 	this->objectsToRender.insert({id, object});
 	objNum++;
 }
@@ -55,6 +55,8 @@ void Window::removeObject(unsigned int index) {
 }
 
 void Window::setupWindow() {
+
+	modelPos = glm::vec3(0);
 	// // //
 	// Setup
 
@@ -103,7 +105,7 @@ void Window::setupWindow() {
 
 
 	// FIXME: GRID STUFF
-	GameObject grid = GameObject("..\\assets\\models\\grid_square.obj", glm::vec3(0.5, -1.25, 0.5), 0.2);
+	GameObject* grid = new GameObject("assets\\models\\grid_square.obj", glm::vec3(0.5, -1.25, 0.5), 0.2);
 	this->addObject(0, grid);
 	objNum++;
 }
@@ -172,21 +174,34 @@ void Window::render()
 	shader->setMat4("projection", projection); // note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
 	shader->setMat4("view", view);
 
+	// FIXME - MOVE TO SERVER IN THE FUTURE
+	// Calculate distance and rotation
+	modelRotationX += currentTurnSpeed * deltaTime;
+	float distance = currentSpeed * deltaTime;
+	float dx = distance * sin(modelRotationX);
+	float dz = distance * cos(modelRotationX);
+	modelPos.x += dx;
+	modelPos.z += dz;
+	player->modelMatrix = glm::mat4(1.0f);
+	player->modelMatrix = glm::translate(player->modelMatrix, modelPos); // translate it down so it's at the center of the scene
+	player->modelMatrix = glm::rotate(player->modelMatrix, modelRotationX , glm::vec3(0.0f, 1.0f, 0.0f));
+	player->modelMatrix = glm::scale(player->modelMatrix, glm::vec3(0.2f, 0.2f, 0.2f));	// it's a bit too big for our scene, so scale it down
+
 	// // //
 	// Render each GameObject
 
 	for (auto it = objectsToRender.begin(); it != objectsToRender.end(); ++it) {
-		GameObject obj = it->second;
+		GameObject* obj = it->second;
 
 		// Respective model matrix of each object
-		shader->setMat4("model", obj.modelMatrix);
+		shader->setMat4("model", obj->modelMatrix);
 
 		// Used to convert normal vectors to world space coordinates, without applying translations to them
-		glm::mat4 normalMatrix = glm::mat3(glm::transpose(glm::inverse(obj.modelMatrix)));
+		glm::mat4 normalMatrix = glm::mat3(glm::transpose(glm::inverse(obj->modelMatrix)));
 		shader->setMat4("normalMatrix", normalMatrix);
 
 		// Draw the model
-		obj.draw(*shader);
+		obj->draw(*shader);
 	}
 
 	// // //
@@ -199,7 +214,7 @@ void Window::render()
 }
 
 // Handle user input
-void processInput(GLFWwindow* glfwViewport)
+void Window::processInput()
 {
 	// Exit application.
 	if (glfwGetKey(glfwViewport, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
@@ -219,8 +234,8 @@ void processInput(GLFWwindow* glfwViewport)
 	if (glfwGetKey(glfwViewport, GLFW_KEY_F) == GLFW_PRESS)
 		cam.toggleFreeCam();
 
-	// Player movement (FIXME)
-	/*if (glfwGetKey(glfwViewport, GLFW_KEY_W) == GLFW_PRESS)
+	// Player movement (FIXME - move to server-side)
+	if (glfwGetKey(glfwViewport, GLFW_KEY_W) == GLFW_PRESS)
 		currentSpeed = RUN_SPEED;
 	else if (glfwGetKey(glfwViewport, GLFW_KEY_S) == GLFW_PRESS)
 		currentSpeed = -RUN_SPEED;
@@ -232,7 +247,7 @@ void processInput(GLFWwindow* glfwViewport)
 	else if (glfwGetKey(glfwViewport, GLFW_KEY_D) == GLFW_PRESS)
 		currentTurnSpeed = TURN_SPEED;
 	else
-		currentTurnSpeed = 0;*/
+		currentTurnSpeed = 0;
 	
 }
 
