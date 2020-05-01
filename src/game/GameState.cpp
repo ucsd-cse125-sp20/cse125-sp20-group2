@@ -14,6 +14,9 @@ int GameState::addPlayer(unsigned int clientId) {
 
     int id = addObject(Game::ObjectType::PLAYER);
     this->clientIdToGameObjId[clientId] = id;
+
+    return id;
+    std::cout << "Returning from add player" << std::endl;
 }
 
 // Adds the object to the object map
@@ -27,6 +30,7 @@ int GameState::addObject(Game::ObjectType objectType)
             int objId = this->objCounter++;
             Player* player = new Player(objId);
             this->gameObjects[objId] = player;
+            std::cout << "Returning the player object id" <<std::endl;
             return objId;
         }
         // Create fruit object, add to map TODO
@@ -37,6 +41,7 @@ int GameState::addObject(Game::ObjectType objectType)
         default:
             break;
     }
+    return -1;
 }
 
 GameObject* GameState::getPlayerObject(unsigned int clientId)

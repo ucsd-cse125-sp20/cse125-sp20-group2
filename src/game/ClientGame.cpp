@@ -8,9 +8,10 @@
 ClientGame::ClientGame(std::string IP, int port) : client(IP, port), window(WIN_WIDTH, WIN_HEIGHT)
 {
     // TODO: fix hardcoded player values and hardcoded window insertion
-//    Player* player = new Player("assets\\models\\Basic_Character_Model.obj", glm::vec3(1, -1, 0), 0.2);
-//    window.player = player;
-//    window.addObject(1, player);
+    GameObject* grid = new GameObject(999999);
+    grid->moveTo(glm::vec3(0, -1, 0));
+    grid->setModel("assets\\models\\grid_square.obj");
+    window.addObject(999999, grid);
 
     runGame();
 }
@@ -28,14 +29,15 @@ void ClientGame::runGame()
 
         // Send input to server
         //sendMsgs();
+
         // Receive updated state from server
-        //receiveUpdates();
+        receiveUpdates();
+
         // Update local game state
-        //updateGameState();
+        updateGameState();
 
         // Render world
         window.render();
-
 
         // Sleep
         //std::this_thread::sleep_for(std::chrono::milliseconds(CLIENT_DELAY));
@@ -56,13 +58,21 @@ void ClientGame::receiveUpdates()
 
 void ClientGame::updateGameState()
 {
-    // while (!client.messages.empty()) {
-    //     PrintUtil::print(client.messages.front());
-    //     client.messages.pop_front();
-    // }
-
-    
+    // TODO: Assume only object for now. Update GameObject to respective type
     for (Game::ServerMessage currMessage : client.messages) {
+
+        // Convert into object
+        Game::Vector3 location = currMessage.object().worldposition();
+        float rotation = currMessage.object().rotation();
+        uint32_t id = currMessage.object().id();
+        Game::ObjectType type = currMessage.object().type();
+
+        // Insert object into window
+        GameObject* newGameObject = new GameObject(id);
+        newGameObject->setModel("assets\\models\\cube.obj");   // TODO: either read from server or config file which model to use
+        window.addObject(id, newGameObject);
+
+        
         PrintUtil::print(currMessage);
     }
     client.messages.clear();

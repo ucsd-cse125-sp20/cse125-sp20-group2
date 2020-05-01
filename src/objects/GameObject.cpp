@@ -1,7 +1,9 @@
 #include <objects/GameObject.h>
 
+
 GameObject::GameObject(int id) {
 	this->ID = id;
+	this->moveTo(glm::vec3(0, 0, 0));
 }
 
 void GameObject::draw(Shader shader) {
@@ -55,5 +57,34 @@ float GameObject::getRotation() {
 
 // Set rotation and rotate the model to the new angle.
 void GameObject::setRotation(float rot) {
+	// Reset rotation to 0
+	this->rotate(-(this->rotation));
+
+	// Set new rotation
 	this->rotation = rot;
+	this->rotate(rot);
+}
+
+// Will probably be used on item pickup in dungeon phase
+void Player::addItem(int index, GameObject item) {
+    inventory.insert({index, item});
+}
+
+// Will probably be used on item placement in cooking phase
+void Player::removeItem(int index) {
+    inventory.erase(index);
+}
+
+// Will probably be used on item prep in cooking phase
+void Player::replaceItem(int index, GameObject item) {
+    inventory.erase(index);
+    inventory.insert({index, item});
+}
+
+bool isPassable() {
+
+}
+
+void setPassable(bool passable) {
+
 }

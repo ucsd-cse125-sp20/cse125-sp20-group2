@@ -22,6 +22,13 @@ private:
 
     // Identifies the rendering ID of the object
 	int ID;
+
+    // Inventory
+    std::unordered_map<int, GameObject> inventory;
+
+    // Passing through object
+    bool passable;
+
 public:
     /**
      * This is a constructor for both the server and client.
@@ -94,4 +101,17 @@ public:
     float getRotation();
 
     void setRotation(float rot);
+    
+    // Will probably be used on item pickup in dungeon phase
+    void addItem(int index, GameObject item);
+
+    // Will probably be used on item placement in cooking phase
+    void removeItem(int index);
+
+    // Will probably be used on item prep in cooking phase
+    void replaceItem(int index, GameObject item);
+
+    bool isPassable();
+
+    void setPassable(bool passable);
 };

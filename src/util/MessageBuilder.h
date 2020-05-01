@@ -14,6 +14,12 @@ public:
      * */
     static Game::ServerMessage* toServerMessage(GameObject* object)
     {
+        std::cout << "wtf" << std::endl;
+
+        if (object == NULL)
+        {
+            std::cout << "gameobject is null :(" << std::endl;
+        }
         // TODO: Check if sending server message deallocates Vector
         Game::Vector3* vector = toVector(object->getWorldPos());
 
@@ -35,10 +41,12 @@ public:
      * */
     static Game::Vector3* toVector(glm::vec3 position)
     {
+        std::cout << "qqq" << std::endl;
         Game::Vector3* vector = new Game::Vector3();
         vector->set_x(position.x);
         vector->set_y(position.y);
         vector->set_z(position.z);
+        std::cout << "dummbbb" << std::endl;
 
         return vector;
     }

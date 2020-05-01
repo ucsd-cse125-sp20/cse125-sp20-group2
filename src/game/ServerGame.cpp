@@ -60,6 +60,7 @@ void ServerGame::process()
             this->server.sendToAll(*message);
             free(message);
 
+            std::cout << "I hate c memory" << std::endl;
         }
         
     }
@@ -70,9 +71,13 @@ void ServerGame::acceptCallback(int clientId)
 {
     int objId = this->gameState.addPlayer(clientId);
     GameObject* object = this->gameState.getGameObject(objId);
+    std::cout << "i hate this" << std::endl;
     Game::ServerMessage* message = MessageBuilder::toServerMessage(object);
     this->server.sendToAll(*message);
+    std::cout << "Gonna free xd" << std::endl;
     free(message);
+    std::cout << "After free xd" << std::endl;
+    std::cout << "Returning from accept callback" << std::endl;
 
     // OK, THIS COVERS SENDING TO ALL. 
     // WE NEED TO COVER THE LIST OF OBJECTS EXISTING
