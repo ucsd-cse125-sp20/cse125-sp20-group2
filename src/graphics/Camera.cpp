@@ -78,7 +78,7 @@ public:
 
 	void toggleFreeCam() {
 		freeCam = !freeCam;
-		if (!freeCam) {
+		/*if (!freeCam) {
 
 			// FIXME - hard-coded reset, should target player
 			pos = glm::vec3(0, 2, 2);
@@ -86,7 +86,7 @@ public:
 			pitch = -45;
 			yaw = -90;
 			updateCameraVectors();
-		}
+		}*/
 	}
 
 	// Returns the view matrix calculated using Euler Angles and the LookAt Matrix

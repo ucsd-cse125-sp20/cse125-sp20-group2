@@ -11,7 +11,6 @@
 #include <graphics/_obj/Shader.h>
 #include "Camera.cpp"
 #include "Model.cpp"
-#include "GameObject.cpp"
 #include <graphics/_options/graphics_vars.h>
 #include "window.h"
 
@@ -32,20 +31,23 @@ float deltaTime = 0.0f;	// time between current frame and last frame
 float lastFrame = 0.0f;
 
 Window::Window(int width = WIN_WIDTH, int height = WIN_HEIGHT) : objNum (0) {
+	this->isClosed = false;
 	this->width = width;
 	this->height = height;
 	this->setupWindow();
 
 	// FIXME - HARDCODED ABSOLUTE PATH
-	this->shader = new Shader("C:\\Users\\JQ124\\Desktop\\CompSci\\cse125\\src\\graphics\\shaders\\vert_shader.glsl", "C:\\Users\\JQ124\\Desktop\\CompSci\\cse125\\src\\graphics\\shaders\\frag_shader.glsl");
+	this->shader = new Shader("C:\\Users\\JQ124\\Desktop\\CompSci\\cse125\\cse125-sp20-group2\\src\\graphics\\shaders\\vert_shader.glsl", "C:\\Users\\JQ124\\Desktop\\CompSci\\cse125\\cse125-sp20-group2\\src\\graphics\\shaders\\frag_shader.glsl");
 }
 
 void Window::addObject(unsigned int id, GameObject object) {
 	this->objectsToRender.insert({id, object});
+	objNum++;
 }
 
 void Window::removeObject(unsigned int index) {
 	this->objectsToRender.erase(index);
+	objNum--;
 }
 
 void Window::setupWindow() {
@@ -74,6 +76,9 @@ void Window::setupWindow() {
 	// Current context is window
 	glfwMakeContextCurrent(window);
 
+	// Capture mouse
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);  
+
 	// Register callback functions
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	glfwSetCursorPosCallback(window, mouse_callback);
@@ -91,6 +96,21 @@ void Window::setupWindow() {
 
 	// Set window var
 	this->window = window;
+
+
+	// FIXME: GRID STUFF
+	GameObject grid = GameObject("C:\\Users\\JQ124\\Desktop\\CompSci\\cse125\\cse125-sp20-group2\\assets\\models\\grid_square.obj", glm::vec3(0.5, -1.25, 0.5), 0.2);
+	this->addObject(0, grid);
+	objNum++;
+}
+
+void Window::close() {
+	if (glfwWindowShouldClose(window))
+	{
+		isClosed = true; 
+		glfwTerminate();
+	}
+	else std::cerr << "UNABLE TO CLOSE WINDOW" << std::endl;
 }
 
 void Window::render()
@@ -150,9 +170,9 @@ void Window::render()
 
 	// // //
 	// Render each GameObject
-	for (unsigned int i = 0; i < objNum; i++) {
-		
-		GameObject obj = objectsToRender.at(i);
+
+	for (auto it = objectsToRender.begin(); it != objectsToRender.end(); ++it) {
+		GameObject obj = it->second;
 
 		// Respective model matrix of each object
 		shader->setMat4("model", obj.modelMatrix);
@@ -165,36 +185,32 @@ void Window::render()
 		obj.draw(*shader);
 	}
 
-	glBegin(GL_LINES);
-	glVertex(10, 0, 0);
-	glVertex(-10, 0, 0);
-	glEnd();
-
 	// // //
 	// GLFW stuff
 	glfwSwapBuffers(window);
 	glfwPollEvents();
 
-	// Call terminate to cleanup GLFW resources.
-	// glfwTerminate(); FIXME: please terminate this elsewhere when done rendering
+	// TEMP FIXME
+	if (glfwWindowShouldClose(window)) close();
 }
 
 // Handle user input
 void processInput(GLFWwindow* window)
 {
 	// Exit application.
-	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 		glfwSetWindowShouldClose(window, true);
+	}
 
 	// Camera movement (depends on framerate)
-	cam.moveSpeed = 2.5 * deltaTime;
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+	cam.moveSpeed = 50 * deltaTime;
+	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
 		cam.processKeyMovement(FORWARD, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
 		cam.processKeyMovement(BACKWARD, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
 		cam.processKeyMovement(LEFT, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
 		cam.processKeyMovement(RIGHT, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
 		cam.toggleFreeCam();

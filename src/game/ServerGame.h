@@ -1,7 +1,7 @@
 #include <network/ServerNetwork.h>
 #include <game/GameState.h>
 #include <unordered_map>
-#include <graphics/GameObject.cpp>
+#include <objects/GameObject.cpp>
 
 class ServerGame
 {
