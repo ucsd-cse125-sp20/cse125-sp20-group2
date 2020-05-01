@@ -17,6 +17,10 @@
 //// Camera at desiginated position
 Camera cam(INITIAL_CAM_POS);
 
+/*// Player movement options (FIXME)
+const float RUN_SPEED = 1, TURN_SPEED = 1;
+float currentSpeed = 0.0f, currentTurnSpeed = 0.0f;*/
+
 // Initial mouse positions
 float lastX = WIN_WIDTH / 2, lastY = WIN_HEIGHT / 2;
 
@@ -214,6 +218,22 @@ void processInput(GLFWwindow* window)
 		cam.processKeyMovement(RIGHT, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
 		cam.toggleFreeCam();
+
+	// Player movement (FIXME)
+	/*if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+		currentSpeed = RUN_SPEED;
+	else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+		currentSpeed = -RUN_SPEED;
+	else
+		currentSpeed = 0;
+	
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+		currentTurnSpeed = -TURN_SPEED;
+	else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+		currentTurnSpeed = TURN_SPEED;
+	else
+		currentTurnSpeed = 0;*/
+	
 }
 
 // A callback function to resize the rendering window when the window is resized

@@ -21,11 +21,11 @@ public:
     void removeObject(unsigned int index);
 
     void close();
-
+    GLFWwindow* window; //FIXME 
 private:
     Shader* shader;
     void setupWindow();
-    GLFWwindow* window;
+    
     unsigned int objNum;        // Increment when get response back from server
     int width;
     int height;
