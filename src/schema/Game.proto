@@ -18,14 +18,32 @@ message ClientMessage {
     oneof event {
         Net net = 1;
         Direction direction = 2;
+        // need to request an object
     }
 }
 
 message ServerMessage {
     oneof event {
         Net net = 1;
-        Vector3 vector = 2;
+        Object object = 2;
+        Score score = 3;
     }
+}
+
+enum ObjectType {
+    PLAYER = 0;
+    FRUITY = 1;
+}
+
+message Object {
+    required Vector3 worldPosition = 1; 
+    required float rotation = 2;
+    required uint32 id = 3;
+    required ObjectType type = 4;
+}
+
+message Score {
+    
 }
 
 message Vector3 {

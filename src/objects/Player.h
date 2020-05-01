@@ -6,13 +6,7 @@
 class Player : public GameObject 
 {
 public:
-    Player(std::string modelPath, glm::vec3 worldPos, float uniformScale, int clientID);
-    Player(std::string modelPath, glm::vec3 worldPos, glm::vec3 scaleVec, int clientID);
-    Player(std::string modelPath, float x, float y, float z, float uniformScale, int clientID);
-    Player(std::string modelPath, float x, float y, float z, float sX, float sY, float sZ, int clientID);
-
     std::unordered_map<int, GameObject> inventory;
-    int clientID;
     int score;
 
     // Will probably be used on item pickup in dungeon phase

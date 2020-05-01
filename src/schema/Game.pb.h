@@ -48,7 +48,7 @@ struct TableStruct_Game_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[3]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[5]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -59,6 +59,12 @@ namespace Game {
 class ClientMessage;
 class ClientMessageDefaultTypeInternal;
 extern ClientMessageDefaultTypeInternal _ClientMessage_default_instance_;
+class Object;
+class ObjectDefaultTypeInternal;
+extern ObjectDefaultTypeInternal _Object_default_instance_;
+class Score;
+class ScoreDefaultTypeInternal;
+extern ScoreDefaultTypeInternal _Score_default_instance_;
 class ServerMessage;
 class ServerMessageDefaultTypeInternal;
 extern ServerMessageDefaultTypeInternal _ServerMessage_default_instance_;
@@ -68,6 +74,8 @@ extern Vector3DefaultTypeInternal _Vector3_default_instance_;
 }  // namespace Game
 PROTOBUF_NAMESPACE_OPEN
 template<> ::Game::ClientMessage* Arena::CreateMaybeMessage<::Game::ClientMessage>(Arena*);
+template<> ::Game::Object* Arena::CreateMaybeMessage<::Game::Object>(Arena*);
+template<> ::Game::Score* Arena::CreateMaybeMessage<::Game::Score>(Arena*);
 template<> ::Game::ServerMessage* Arena::CreateMaybeMessage<::Game::ServerMessage>(Arena*);
 template<> ::Game::Vector3* Arena::CreateMaybeMessage<::Game::Vector3>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
@@ -120,6 +128,29 @@ inline bool Direction_Parse(
     const std::string& name, Direction* value) {
   return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<Direction>(
     Direction_descriptor(), name, value);
+}
+enum ObjectType : int {
+  PLAYER = 0,
+  FRUITY = 1
+};
+bool ObjectType_IsValid(int value);
+constexpr ObjectType ObjectType_MIN = PLAYER;
+constexpr ObjectType ObjectType_MAX = FRUITY;
+constexpr int ObjectType_ARRAYSIZE = ObjectType_MAX + 1;
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ObjectType_descriptor();
+template<typename T>
+inline const std::string& ObjectType_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, ObjectType>::value ||
+    ::std::is_integral<T>::value,
+    "Incorrect type passed to function ObjectType_Name.");
+  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
+    ObjectType_descriptor(), enum_t_value);
+}
+inline bool ObjectType_Parse(
+    const std::string& name, ObjectType* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<ObjectType>(
+    ObjectType_descriptor(), name, value);
 }
 // ===================================================================
 
@@ -341,7 +372,8 @@ class ServerMessage :
 
   enum EventCase {
     kNet = 1,
-    kVector = 2,
+    kObject = 2,
+    kScore = 3,
     EVENT_NOT_SET = 0,
   };
 
@@ -416,7 +448,8 @@ class ServerMessage :
 
   enum : int {
     kNetFieldNumber = 1,
-    kVectorFieldNumber = 2,
+    kObjectFieldNumber = 2,
+    kScoreFieldNumber = 3,
   };
   // optional .Game.Net net = 1;
   bool has_net() const;
@@ -431,19 +464,34 @@ class ServerMessage :
   void _internal_set_net(::Game::Net value);
   public:
 
-  // optional .Game.Vector3 vector = 2;
-  bool has_vector() const;
+  // optional .Game.Object object = 2;
+  bool has_object() const;
   private:
-  bool _internal_has_vector() const;
+  bool _internal_has_object() const;
   public:
-  void clear_vector();
-  const ::Game::Vector3& vector() const;
-  ::Game::Vector3* release_vector();
-  ::Game::Vector3* mutable_vector();
-  void set_allocated_vector(::Game::Vector3* vector);
+  void clear_object();
+  const ::Game::Object& object() const;
+  ::Game::Object* release_object();
+  ::Game::Object* mutable_object();
+  void set_allocated_object(::Game::Object* object);
   private:
-  const ::Game::Vector3& _internal_vector() const;
-  ::Game::Vector3* _internal_mutable_vector();
+  const ::Game::Object& _internal_object() const;
+  ::Game::Object* _internal_mutable_object();
+  public:
+
+  // optional .Game.Score score = 3;
+  bool has_score() const;
+  private:
+  bool _internal_has_score() const;
+  public:
+  void clear_score();
+  const ::Game::Score& score() const;
+  ::Game::Score* release_score();
+  ::Game::Score* mutable_score();
+  void set_allocated_score(::Game::Score* score);
+  private:
+  const ::Game::Score& _internal_score() const;
+  ::Game::Score* _internal_mutable_score();
   public:
 
   void clear_event();
@@ -452,7 +500,8 @@ class ServerMessage :
  private:
   class _Internal;
   void set_has_net();
-  void set_has_vector();
+  void set_has_object();
+  void set_has_score();
 
   inline bool has_event() const;
   inline void clear_has_event();
@@ -463,10 +512,324 @@ class ServerMessage :
   union EventUnion {
     EventUnion() {}
     int net_;
-    ::Game::Vector3* vector_;
+    ::Game::Object* object_;
+    ::Game::Score* score_;
   } event_;
   ::PROTOBUF_NAMESPACE_ID::uint32 _oneof_case_[1];
 
+  friend struct ::TableStruct_Game_2eproto;
+};
+// -------------------------------------------------------------------
+
+class Object :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Game.Object) */ {
+ public:
+  Object();
+  virtual ~Object();
+
+  Object(const Object& from);
+  Object(Object&& from) noexcept
+    : Object() {
+    *this = ::std::move(from);
+  }
+
+  inline Object& operator=(const Object& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline Object& operator=(Object&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields();
+  }
+  inline ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields();
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const Object& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const Object* internal_default_instance() {
+    return reinterpret_cast<const Object*>(
+               &_Object_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    2;
+
+  friend void swap(Object& a, Object& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(Object* other) {
+    if (other == this) return;
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline Object* New() const final {
+    return CreateMaybeMessage<Object>(nullptr);
+  }
+
+  Object* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<Object>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const Object& from);
+  void MergeFrom(const Object& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(Object* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Game.Object";
+  }
+  private:
+  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_Game_2eproto);
+    return ::descriptor_table_Game_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kWorldPositionFieldNumber = 1,
+    kRotationFieldNumber = 2,
+    kIdFieldNumber = 3,
+    kTypeFieldNumber = 4,
+  };
+  // required .Game.Vector3 worldPosition = 1;
+  bool has_worldposition() const;
+  private:
+  bool _internal_has_worldposition() const;
+  public:
+  void clear_worldposition();
+  const ::Game::Vector3& worldposition() const;
+  ::Game::Vector3* release_worldposition();
+  ::Game::Vector3* mutable_worldposition();
+  void set_allocated_worldposition(::Game::Vector3* worldposition);
+  private:
+  const ::Game::Vector3& _internal_worldposition() const;
+  ::Game::Vector3* _internal_mutable_worldposition();
+  public:
+
+  // required float rotation = 2;
+  bool has_rotation() const;
+  private:
+  bool _internal_has_rotation() const;
+  public:
+  void clear_rotation();
+  float rotation() const;
+  void set_rotation(float value);
+  private:
+  float _internal_rotation() const;
+  void _internal_set_rotation(float value);
+  public:
+
+  // required uint32 id = 3;
+  bool has_id() const;
+  private:
+  bool _internal_has_id() const;
+  public:
+  void clear_id();
+  ::PROTOBUF_NAMESPACE_ID::uint32 id() const;
+  void set_id(::PROTOBUF_NAMESPACE_ID::uint32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::uint32 _internal_id() const;
+  void _internal_set_id(::PROTOBUF_NAMESPACE_ID::uint32 value);
+  public:
+
+  // required .Game.ObjectType type = 4;
+  bool has_type() const;
+  private:
+  bool _internal_has_type() const;
+  public:
+  void clear_type();
+  ::Game::ObjectType type() const;
+  void set_type(::Game::ObjectType value);
+  private:
+  ::Game::ObjectType _internal_type() const;
+  void _internal_set_type(::Game::ObjectType value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:Game.Object)
+ private:
+  class _Internal;
+
+  // helper for ByteSizeLong()
+  size_t RequiredFieldsByteSizeFallback() const;
+
+  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  ::Game::Vector3* worldposition_;
+  float rotation_;
+  ::PROTOBUF_NAMESPACE_ID::uint32 id_;
+  int type_;
+  friend struct ::TableStruct_Game_2eproto;
+};
+// -------------------------------------------------------------------
+
+class Score :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Game.Score) */ {
+ public:
+  Score();
+  virtual ~Score();
+
+  Score(const Score& from);
+  Score(Score&& from) noexcept
+    : Score() {
+    *this = ::std::move(from);
+  }
+
+  inline Score& operator=(const Score& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline Score& operator=(Score&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields();
+  }
+  inline ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields();
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const Score& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const Score* internal_default_instance() {
+    return reinterpret_cast<const Score*>(
+               &_Score_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    3;
+
+  friend void swap(Score& a, Score& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(Score* other) {
+    if (other == this) return;
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline Score* New() const final {
+    return CreateMaybeMessage<Score>(nullptr);
+  }
+
+  Score* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<Score>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const Score& from);
+  void MergeFrom(const Score& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(Score* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Game.Score";
+  }
+  private:
+  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_Game_2eproto);
+    return ::descriptor_table_Game_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:Game.Score)
+ private:
+  class _Internal;
+
+  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_Game_2eproto;
 };
 // -------------------------------------------------------------------
@@ -520,7 +883,7 @@ class Vector3 :
                &_Vector3_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    2;
+    4;
 
   friend void swap(Vector3& a, Vector3& b) {
     a.Swap(&b);
@@ -783,54 +1146,104 @@ inline void ServerMessage::set_net(::Game::Net value) {
   _internal_set_net(value);
 }
 
-// optional .Game.Vector3 vector = 2;
-inline bool ServerMessage::_internal_has_vector() const {
-  return event_case() == kVector;
+// optional .Game.Object object = 2;
+inline bool ServerMessage::_internal_has_object() const {
+  return event_case() == kObject;
 }
-inline bool ServerMessage::has_vector() const {
-  return _internal_has_vector();
+inline bool ServerMessage::has_object() const {
+  return _internal_has_object();
 }
-inline void ServerMessage::set_has_vector() {
-  _oneof_case_[0] = kVector;
+inline void ServerMessage::set_has_object() {
+  _oneof_case_[0] = kObject;
 }
-inline void ServerMessage::clear_vector() {
-  if (_internal_has_vector()) {
-    delete event_.vector_;
+inline void ServerMessage::clear_object() {
+  if (_internal_has_object()) {
+    delete event_.object_;
     clear_has_event();
   }
 }
-inline ::Game::Vector3* ServerMessage::release_vector() {
-  // @@protoc_insertion_point(field_release:Game.ServerMessage.vector)
-  if (_internal_has_vector()) {
+inline ::Game::Object* ServerMessage::release_object() {
+  // @@protoc_insertion_point(field_release:Game.ServerMessage.object)
+  if (_internal_has_object()) {
     clear_has_event();
-      ::Game::Vector3* temp = event_.vector_;
-    event_.vector_ = nullptr;
+      ::Game::Object* temp = event_.object_;
+    event_.object_ = nullptr;
     return temp;
   } else {
     return nullptr;
   }
 }
-inline const ::Game::Vector3& ServerMessage::_internal_vector() const {
-  return _internal_has_vector()
-      ? *event_.vector_
-      : *reinterpret_cast< ::Game::Vector3*>(&::Game::_Vector3_default_instance_);
+inline const ::Game::Object& ServerMessage::_internal_object() const {
+  return _internal_has_object()
+      ? *event_.object_
+      : *reinterpret_cast< ::Game::Object*>(&::Game::_Object_default_instance_);
 }
-inline const ::Game::Vector3& ServerMessage::vector() const {
-  // @@protoc_insertion_point(field_get:Game.ServerMessage.vector)
-  return _internal_vector();
+inline const ::Game::Object& ServerMessage::object() const {
+  // @@protoc_insertion_point(field_get:Game.ServerMessage.object)
+  return _internal_object();
 }
-inline ::Game::Vector3* ServerMessage::_internal_mutable_vector() {
-  if (!_internal_has_vector()) {
+inline ::Game::Object* ServerMessage::_internal_mutable_object() {
+  if (!_internal_has_object()) {
     clear_event();
-    set_has_vector();
-    event_.vector_ = CreateMaybeMessage< ::Game::Vector3 >(
+    set_has_object();
+    event_.object_ = CreateMaybeMessage< ::Game::Object >(
         GetArenaNoVirtual());
   }
-  return event_.vector_;
+  return event_.object_;
 }
-inline ::Game::Vector3* ServerMessage::mutable_vector() {
-  // @@protoc_insertion_point(field_mutable:Game.ServerMessage.vector)
-  return _internal_mutable_vector();
+inline ::Game::Object* ServerMessage::mutable_object() {
+  // @@protoc_insertion_point(field_mutable:Game.ServerMessage.object)
+  return _internal_mutable_object();
+}
+
+// optional .Game.Score score = 3;
+inline bool ServerMessage::_internal_has_score() const {
+  return event_case() == kScore;
+}
+inline bool ServerMessage::has_score() const {
+  return _internal_has_score();
+}
+inline void ServerMessage::set_has_score() {
+  _oneof_case_[0] = kScore;
+}
+inline void ServerMessage::clear_score() {
+  if (_internal_has_score()) {
+    delete event_.score_;
+    clear_has_event();
+  }
+}
+inline ::Game::Score* ServerMessage::release_score() {
+  // @@protoc_insertion_point(field_release:Game.ServerMessage.score)
+  if (_internal_has_score()) {
+    clear_has_event();
+      ::Game::Score* temp = event_.score_;
+    event_.score_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::Game::Score& ServerMessage::_internal_score() const {
+  return _internal_has_score()
+      ? *event_.score_
+      : *reinterpret_cast< ::Game::Score*>(&::Game::_Score_default_instance_);
+}
+inline const ::Game::Score& ServerMessage::score() const {
+  // @@protoc_insertion_point(field_get:Game.ServerMessage.score)
+  return _internal_score();
+}
+inline ::Game::Score* ServerMessage::_internal_mutable_score() {
+  if (!_internal_has_score()) {
+    clear_event();
+    set_has_score();
+    event_.score_ = CreateMaybeMessage< ::Game::Score >(
+        GetArenaNoVirtual());
+  }
+  return event_.score_;
+}
+inline ::Game::Score* ServerMessage::mutable_score() {
+  // @@protoc_insertion_point(field_mutable:Game.ServerMessage.score)
+  return _internal_mutable_score();
 }
 
 inline bool ServerMessage::has_event() const {
@@ -842,6 +1255,159 @@ inline void ServerMessage::clear_has_event() {
 inline ServerMessage::EventCase ServerMessage::event_case() const {
   return ServerMessage::EventCase(_oneof_case_[0]);
 }
+// -------------------------------------------------------------------
+
+// Object
+
+// required .Game.Vector3 worldPosition = 1;
+inline bool Object::_internal_has_worldposition() const {
+  bool value = (_has_bits_[0] & 0x00000001u) != 0;
+  PROTOBUF_ASSUME(!value || worldposition_ != nullptr);
+  return value;
+}
+inline bool Object::has_worldposition() const {
+  return _internal_has_worldposition();
+}
+inline void Object::clear_worldposition() {
+  if (worldposition_ != nullptr) worldposition_->Clear();
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline const ::Game::Vector3& Object::_internal_worldposition() const {
+  const ::Game::Vector3* p = worldposition_;
+  return p != nullptr ? *p : *reinterpret_cast<const ::Game::Vector3*>(
+      &::Game::_Vector3_default_instance_);
+}
+inline const ::Game::Vector3& Object::worldposition() const {
+  // @@protoc_insertion_point(field_get:Game.Object.worldPosition)
+  return _internal_worldposition();
+}
+inline ::Game::Vector3* Object::release_worldposition() {
+  // @@protoc_insertion_point(field_release:Game.Object.worldPosition)
+  _has_bits_[0] &= ~0x00000001u;
+  ::Game::Vector3* temp = worldposition_;
+  worldposition_ = nullptr;
+  return temp;
+}
+inline ::Game::Vector3* Object::_internal_mutable_worldposition() {
+  _has_bits_[0] |= 0x00000001u;
+  if (worldposition_ == nullptr) {
+    auto* p = CreateMaybeMessage<::Game::Vector3>(GetArenaNoVirtual());
+    worldposition_ = p;
+  }
+  return worldposition_;
+}
+inline ::Game::Vector3* Object::mutable_worldposition() {
+  // @@protoc_insertion_point(field_mutable:Game.Object.worldPosition)
+  return _internal_mutable_worldposition();
+}
+inline void Object::set_allocated_worldposition(::Game::Vector3* worldposition) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == nullptr) {
+    delete worldposition_;
+  }
+  if (worldposition) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena = nullptr;
+    if (message_arena != submessage_arena) {
+      worldposition = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, worldposition, submessage_arena);
+    }
+    _has_bits_[0] |= 0x00000001u;
+  } else {
+    _has_bits_[0] &= ~0x00000001u;
+  }
+  worldposition_ = worldposition;
+  // @@protoc_insertion_point(field_set_allocated:Game.Object.worldPosition)
+}
+
+// required float rotation = 2;
+inline bool Object::_internal_has_rotation() const {
+  bool value = (_has_bits_[0] & 0x00000002u) != 0;
+  return value;
+}
+inline bool Object::has_rotation() const {
+  return _internal_has_rotation();
+}
+inline void Object::clear_rotation() {
+  rotation_ = 0;
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline float Object::_internal_rotation() const {
+  return rotation_;
+}
+inline float Object::rotation() const {
+  // @@protoc_insertion_point(field_get:Game.Object.rotation)
+  return _internal_rotation();
+}
+inline void Object::_internal_set_rotation(float value) {
+  _has_bits_[0] |= 0x00000002u;
+  rotation_ = value;
+}
+inline void Object::set_rotation(float value) {
+  _internal_set_rotation(value);
+  // @@protoc_insertion_point(field_set:Game.Object.rotation)
+}
+
+// required uint32 id = 3;
+inline bool Object::_internal_has_id() const {
+  bool value = (_has_bits_[0] & 0x00000004u) != 0;
+  return value;
+}
+inline bool Object::has_id() const {
+  return _internal_has_id();
+}
+inline void Object::clear_id() {
+  id_ = 0u;
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline ::PROTOBUF_NAMESPACE_ID::uint32 Object::_internal_id() const {
+  return id_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::uint32 Object::id() const {
+  // @@protoc_insertion_point(field_get:Game.Object.id)
+  return _internal_id();
+}
+inline void Object::_internal_set_id(::PROTOBUF_NAMESPACE_ID::uint32 value) {
+  _has_bits_[0] |= 0x00000004u;
+  id_ = value;
+}
+inline void Object::set_id(::PROTOBUF_NAMESPACE_ID::uint32 value) {
+  _internal_set_id(value);
+  // @@protoc_insertion_point(field_set:Game.Object.id)
+}
+
+// required .Game.ObjectType type = 4;
+inline bool Object::_internal_has_type() const {
+  bool value = (_has_bits_[0] & 0x00000008u) != 0;
+  return value;
+}
+inline bool Object::has_type() const {
+  return _internal_has_type();
+}
+inline void Object::clear_type() {
+  type_ = 0;
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline ::Game::ObjectType Object::_internal_type() const {
+  return static_cast< ::Game::ObjectType >(type_);
+}
+inline ::Game::ObjectType Object::type() const {
+  // @@protoc_insertion_point(field_get:Game.Object.type)
+  return _internal_type();
+}
+inline void Object::_internal_set_type(::Game::ObjectType value) {
+  assert(::Game::ObjectType_IsValid(value));
+  _has_bits_[0] |= 0x00000008u;
+  type_ = value;
+}
+inline void Object::set_type(::Game::ObjectType value) {
+  _internal_set_type(value);
+  // @@protoc_insertion_point(field_set:Game.Object.type)
+}
+
+// -------------------------------------------------------------------
+
+// Score
+
 // -------------------------------------------------------------------
 
 // Vector3
@@ -937,6 +1503,10 @@ inline void Vector3::set_z(float value) {
 
 // -------------------------------------------------------------------
 
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 
 // @@protoc_insertion_point(namespace_scope)
 
@@ -953,6 +1523,11 @@ template <> struct is_proto_enum< ::Game::Direction> : ::std::true_type {};
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::Game::Direction>() {
   return ::Game::Direction_descriptor();
+}
+template <> struct is_proto_enum< ::Game::ObjectType> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::Game::ObjectType>() {
+  return ::Game::ObjectType_descriptor();
 }
 
 PROTOBUF_NAMESPACE_CLOSE

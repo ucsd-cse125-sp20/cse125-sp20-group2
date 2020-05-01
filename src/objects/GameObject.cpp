@@ -12,7 +12,7 @@ public:
 	glm::vec3 worldPos;
 	glm::mat4 modelMatrix = glm::mat4(1.0f);
 	glm::vec3 scaleVec;
-	int renderID;
+	int ID;
 
 	GameObject(std::string modelPath, glm::vec3 worldPos, float uniformScale) : model(modelPath) {
 		moveTo(worldPos);
@@ -36,7 +36,7 @@ public:
 	}
 
 	void setRenderID(int ID) {
-		this->renderID = ID;
+		this->ID = ID;
 	}
 
 	// Update the world position and move the model matrix

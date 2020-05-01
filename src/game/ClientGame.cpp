@@ -5,11 +5,11 @@
 
 #define CLIENT_DELAY 1000
 
-ClientGame::ClientGame(std::string IP, int port) : client(IP, port), window(WIN_WIDTH, WIN_HEIGHT), clientID(0)
+ClientGame::ClientGame(std::string IP, int port) : client(IP, port), window(WIN_WIDTH, WIN_HEIGHT)
 {
     // TODO: fix hardcoded player values and hardcoded window insertion
     
-    Player player = Player("C:\\Users\\JQ124\\Desktop\\CompSci\\cse125\\cse125-sp20-group2\\assets\\models\\cube.obj", glm::vec3(1, -1, 0), 0.2, 0); // FIXME FIXME TODO HARDCODED CLIENTID
+    Player player = GameObject("..\\assets\\models\\cube.obj", glm::vec3(1, -1, 0), 0.2); 
     window.addObject(1, player);
 
     runGame();
@@ -24,7 +24,7 @@ void ClientGame::runGame()
 {
     while(!window.isClosed) {
         // Take local input
-        processInput();
+        processInput(window.glfwViewport);
 
         // Send input to server
         //sendMsgs();
@@ -35,6 +35,7 @@ void ClientGame::runGame()
 
         // Render world
         window.render();
+
 
         // Sleep
         //std::this_thread::sleep_for(std::chrono::milliseconds(CLIENT_DELAY));

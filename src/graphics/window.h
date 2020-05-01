@@ -21,7 +21,7 @@ public:
     void removeObject(unsigned int index);
 
     void close();
-    GLFWwindow* window; //FIXME 
+    GLFWwindow* glfwViewport;
 private:
     Shader* shader;
     void setupWindow();

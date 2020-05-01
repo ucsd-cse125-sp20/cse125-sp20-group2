@@ -8,8 +8,8 @@
 ServerGame::ServerGame(int port) : server(port)
 {
     // std::function<void(int)> test = std::bind(&ServerGame::acall, this)
-    std::function<void(int)> test = std::bind(&ServerGame::acceptCallback, this, std::placeholders::_1);
-    this->server.setAcceptCallback(test);
+    std::function<void(int)> notifyClients = std::bind(&ServerGame::acceptCallback, this, std::placeholders::_1);
+    this->server.setAcceptCallback(notifyClients);
 
     run();
 }
@@ -102,7 +102,26 @@ void ServerGame::process()
     }
 }
 
+// ASSUMES THERE IS ONLY ONE PLAYER
 void ServerGame::acceptCallback(int clientId) 
 {
     this->gameState.addUser(clientId);
+
+    // Create player object for this client
+    // Send to all clients currently connected
+    
+    // Create the vector
+    Game::Vector3 vector;
+    vector.set_x(0);
+    vector.set_y(0);
+    vector.set_z(0);
+
+    // Create the gameobject
+    Game::Object object;
+    object.set_allocated_worldposition(vector);
+    object.set_rotation(0);
+    // object.
+
+    // Game::ServerMessage serverMessage;
+    // serverMessage.set_allocated_object()
 }

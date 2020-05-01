@@ -25,10 +25,10 @@ float currentSpeed = 0.0f, currentTurnSpeed = 0.0f;*/
 float lastX = WIN_WIDTH / 2, lastY = WIN_HEIGHT / 2;
 
 // Function prototypes
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void processInput(GLFWwindow* window);
-void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+void framebuffer_size_callback(GLFWwindow* glfwViewport, int width, int height);
+void processInput(GLFWwindow* glfwViewport);
+void mouse_callback(GLFWwindow* glfwViewport, double xpos, double ypos);
+void scroll_callback(GLFWwindow* glfwViewport, double xoffset, double yoffset);
 
 // timing
 float deltaTime = 0.0f;	// time between current frame and last frame
@@ -41,7 +41,7 @@ Window::Window(int width = WIN_WIDTH, int height = WIN_HEIGHT) : objNum (0) {
 	this->setupWindow();
 
 	// FIXME - HARDCODED ABSOLUTE PATH
-	this->shader = new Shader("C:\\Users\\JQ124\\Desktop\\CompSci\\cse125\\cse125-sp20-group2\\src\\graphics\\shaders\\vert_shader.glsl", "C:\\Users\\JQ124\\Desktop\\CompSci\\cse125\\cse125-sp20-group2\\src\\graphics\\shaders\\frag_shader.glsl");
+	this->shader = new Shader("..\\src\\graphics\\shaders\\vert_shader.glsl", "..\\src\\graphics\\shaders\\frag_shader.glsl");
 }
 
 void Window::addObject(unsigned int id, GameObject object) {
@@ -63,34 +63,34 @@ void Window::setupWindow() {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);		
-	GLFWwindow* window = glfwCreateWindow((int)WIN_WIDTH, (int)WIN_HEIGHT, "Comrade's Kitchen", NULL, NULL);
+	GLFWwindow* glfwViewport = glfwCreateWindow((int)WIN_WIDTH, (int)WIN_HEIGHT, "Comrade's Kitchen", NULL, NULL);
 
 	// Capture mouse
 	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	
 	// Mouse centering
-	glfwSetCursorPos(window, lastX, lastY);
+	glfwSetCursorPos(glfwViewport, lastX, lastY);
 
-	if (window == NULL)
+	if (glfwViewport == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
 		glfwTerminate();
 	}
 
 	// Current context is window
-	glfwMakeContextCurrent(window);
+	glfwMakeContextCurrent(glfwViewport);
 
 	// Capture mouse
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);  
+	glfwSetInputMode(glfwViewport, GLFW_CURSOR, GLFW_CURSOR_DISABLED);  
 
 	// Register callback functions
-	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-	glfwSetCursorPosCallback(window, mouse_callback);
-	glfwSetScrollCallback(window, scroll_callback);
+	glfwSetFramebufferSizeCallback(glfwViewport, framebuffer_size_callback);
+	glfwSetCursorPosCallback(glfwViewport, mouse_callback);
+	glfwSetScrollCallback(glfwViewport, scroll_callback);
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
-		std::cout << "Failed to initialize GLAD" << std::endl;
+		std::cout << "Failed to load GLAD" << std::endl;
 	}
 
 	// Enable depth testing
@@ -99,27 +99,27 @@ void Window::setupWindow() {
 	glEnable(GL_DEPTH_TEST);
 
 	// Set window var
-	this->window = window;
+	this->glfwViewport = glfwViewport;
 
 
 	// FIXME: GRID STUFF
-	GameObject grid = GameObject("C:\\Users\\JQ124\\Desktop\\CompSci\\cse125\\cse125-sp20-group2\\assets\\models\\grid_square.obj", glm::vec3(0.5, -1.25, 0.5), 0.2);
+	GameObject grid = GameObject("..\\assets\\models\\grid_square.obj", glm::vec3(0.5, -1.25, 0.5), 0.2);
 	this->addObject(0, grid);
 	objNum++;
 }
 
 void Window::close() {
-	if (glfwWindowShouldClose(window))
+	if (glfwWindowShouldClose(glfwViewport))
 	{
 		isClosed = true; 
 		glfwTerminate();
 	}
-	else std::cerr << "UNABLE TO CLOSE WINDOW" << std::endl;
+	else std::cerr << "ERROR: Unable to close window!" << std::endl;
 }
 
 void Window::render()
 {
-	if (window == NULL) {
+	if (glfwViewport == NULL) {
 		std::cerr << "ERROR: No window!" << std::endl;
 	}
 
@@ -138,7 +138,7 @@ void Window::render()
 
 	// // //
 	// Input
-	processInput(window);
+	//processInput(glfwViewport);
 
 	// // //
 	// Rendering stuff
@@ -191,45 +191,45 @@ void Window::render()
 
 	// // //
 	// GLFW stuff
-	glfwSwapBuffers(window);
+	glfwSwapBuffers(glfwViewport);
 	glfwPollEvents();
 
-	// TEMP FIXME
-	if (glfwWindowShouldClose(window)) close();
+	// Close the window when appropriate.
+	if (glfwWindowShouldClose(glfwViewport)) close();
 }
 
 // Handle user input
-void processInput(GLFWwindow* window)
+void processInput(GLFWwindow* glfwViewport)
 {
 	// Exit application.
-	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-		glfwSetWindowShouldClose(window, true);
+	if (glfwGetKey(glfwViewport, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+		glfwSetWindowShouldClose(glfwViewport, true);
 	}
 
 	// Camera movement (depends on framerate)
 	cam.moveSpeed = 50 * deltaTime;
-	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+	if (glfwGetKey(glfwViewport, GLFW_KEY_UP) == GLFW_PRESS)
 		cam.processKeyMovement(FORWARD, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+    if (glfwGetKey(glfwViewport, GLFW_KEY_DOWN) == GLFW_PRESS)
 		cam.processKeyMovement(BACKWARD, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+    if (glfwGetKey(glfwViewport, GLFW_KEY_LEFT) == GLFW_PRESS)
 		cam.processKeyMovement(LEFT, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+    if (glfwGetKey(glfwViewport, GLFW_KEY_RIGHT) == GLFW_PRESS)
 		cam.processKeyMovement(RIGHT, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
+	if (glfwGetKey(glfwViewport, GLFW_KEY_F) == GLFW_PRESS)
 		cam.toggleFreeCam();
 
 	// Player movement (FIXME)
-	/*if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+	/*if (glfwGetKey(glfwViewport, GLFW_KEY_W) == GLFW_PRESS)
 		currentSpeed = RUN_SPEED;
-	else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+	else if (glfwGetKey(glfwViewport, GLFW_KEY_S) == GLFW_PRESS)
 		currentSpeed = -RUN_SPEED;
 	else
 		currentSpeed = 0;
 	
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+	if (glfwGetKey(glfwViewport, GLFW_KEY_A) == GLFW_PRESS)
 		currentTurnSpeed = -TURN_SPEED;
-	else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+	else if (glfwGetKey(glfwViewport, GLFW_KEY_D) == GLFW_PRESS)
 		currentTurnSpeed = TURN_SPEED;
 	else
 		currentTurnSpeed = 0;*/
@@ -237,12 +237,12 @@ void processInput(GLFWwindow* window)
 }
 
 // A callback function to resize the rendering window when the window is resized
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+void framebuffer_size_callback(GLFWwindow* glfwViewport, int width, int height)
 {
 	glViewport(0, 0, width, height);
 }
 
-void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
+void mouse_callback(GLFWwindow* glfwViewport, double xpos, double ypos) {
 
 	// Calculate offset based on previous position of the mouse
 	float xoffset = xpos - lastX;
@@ -254,7 +254,7 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
 }
 
 // Zoom callback for when mouse wheel is scrolled
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+void scroll_callback(GLFWwindow* glfwViewport, double xoffset, double yoffset)
 {
 	cam.processMouseScroll(yoffset);
 }
