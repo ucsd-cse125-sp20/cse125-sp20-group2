@@ -11,13 +11,7 @@ public:
 
     ~ServerGame();
 
-    // map of all objects in the game currently
-    std::unordered_map<unsigned int, GameObject> objects;
-
 private:
-    // count of all objects
-    unsigned int objNum;
-
     ServerNetwork server;
 
     GameState gameState;

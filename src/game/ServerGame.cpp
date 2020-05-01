@@ -120,8 +120,16 @@ void ServerGame::acceptCallback(int clientId)
     Game::Object object;
     object.set_allocated_worldposition(vector);
     object.set_rotation(0);
-    // object.
+    object.set_id(clientId); // TODO: We need a unique set of IDs that the client uses to map to render. clientId is NOT what we use to map to objects.
+    object.set_type(Game::ObjectType::PLAYER);
 
-    // Game::ServerMessage serverMessage;
-    // serverMessage.set_allocated_object()
+    Game::ServerMessage serverMessage;
+    serverMessage.set_allocated_object(object);
+
+    // Sent of the message to the client
+    this->server.sendToAll(serverMessage);
+
+    // OK, THIS COVERS SENDING TO ALL. 
+    // WE NEED TO COVER THE LIST OF OBJECTS EXISTING
+    // SHOULD BE SIMPLE RIGHT
 }
