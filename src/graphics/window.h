@@ -1,8 +1,33 @@
+#pragma once
+
+// OpenGL function pointers
 #include <glad/glad.h>		// Include this...
 #include <GLFW/glfw3.h>		// ...before this.
-#include <objects/GameObject.h>
-#include <graphics/_options/graphics_vars.h>
+
+// Std library packages
+#include <iostream>
 #include <unordered_map>
+
+// ASSIMP
+#include <assimp/config.h>
+
+// Matrix operations and values
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/string_cast.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
+// Rendering classes
+#include <graphics/render/Mesh.h>
+#include <graphics/render/Shader.h>
+#include <graphics/render/Camera.h>
+#include <graphics/render/Model.h>
+
+// Etc
+#include <graphics/_options/graphics_vars.h>
+
+// Objects
+#include <objects/GameObject.h>
 #include <objects/Player.h>
 
 class Window
@@ -24,7 +49,6 @@ public:
     void close();
     GLFWwindow* glfwViewport;
     Player* player;     // FIXME - IN THE FUTURE, WINDOW SHOULD NOT KNOW ABOUT THE PLAYER
-    //void processInput();
 private:
     Shader* shader;
     void setupWindow();

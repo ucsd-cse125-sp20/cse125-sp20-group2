@@ -1,17 +1,3 @@
-
-#include <glad/glad.h>		// Include this...
-#include <GLFW/glfw3.h>		// ...before this.
-#include <iostream>
-#include <assimp/config.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtx/string_cast.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <graphics/_obj/Mesh.h>
-#include <graphics/_obj/Shader.h>
-#include "Camera.cpp"
-#include "Model.cpp"
-#include <graphics/_options/graphics_vars.h>
 #include "window.h"
 
 //// Camera at desiginated position
@@ -75,7 +61,7 @@ void Window::setupWindow() {
 
 	if (glfwViewport == NULL)
 	{
-		std::cout << "Failed to create GLFW window" << std::endl;
+		std::cerr << "Failed to create GLFW window" << std::endl;
 		glfwTerminate();
 	}
 
@@ -92,7 +78,7 @@ void Window::setupWindow() {
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
-		std::cout << "Failed to load GLAD" << std::endl;
+		std::cerr << "Failed to load GLAD" << std::endl;
 	}
 
 	// Enable depth testing
@@ -102,12 +88,6 @@ void Window::setupWindow() {
 
 	// Set window var
 	this->glfwViewport = glfwViewport;
-
-
-	// FIXME: GRID STUFF
-	/*GameObject* grid = new GameObject("assets\\models\\grid_square.obj", glm::vec3(0.5, -1.25, 0.5), 0.2);
-	this->addObject(0, grid);
-	objNum++;*/
 }
 
 void Window::close() {
@@ -192,9 +172,6 @@ void Window::render()
 	// Close the window when appropriate.
 	if (glfwWindowShouldClose(glfwViewport)) close();
 }
-
-// Handle user input
-
 
 // A callback function to resize the rendering window when the window is resized
 void framebuffer_size_callback(GLFWwindow* glfwViewport, int width, int height)
