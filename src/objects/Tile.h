@@ -1,9 +1,11 @@
+#include <objects/GameObject.h>
+
 /**
  * todo basically extend game object and make this passable.
  * */
-class Tile
+class Tile : public GameObject
 {
-private:
-public:
-
-}
+    private:
+    public:
+        Tile(int Id);
+};

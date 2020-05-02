@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <graphics/_options/graphics_vars.h>
+#include <unordered_map>
 
 class GameObject
 {
@@ -16,7 +17,6 @@ private:
 	glm::vec3 worldPos;
 
     // Used to determine transformations of object
-	glm::mat4 modelMatrix = glm::mat4(1.0f);
 	glm::vec3 scaleVec;
     float rotation;
 
@@ -24,10 +24,10 @@ private:
 	int ID;
 
     // Inventory
-    std::unordered_map<int, GameObject> inventory;
+    std::unordered_map<unsigned int, GameObject*> inventory;
 
     // Passing through object
-    bool passable;
+    bool passable = false;
 
 public:
     /**
@@ -51,16 +51,9 @@ public:
      * */
     void draw(Shader shader);
 
-    /**
-     * Sets the rendering ID to be used by a Window object.
-     * 
-     * @param ID - The rendering ID identifying the object.
-     * */
-    void setID(int ID);
-
     int getID();
 
-    /**
+    /** TODO: change to getPosition ...
      * Get the world position of the object
      * */
     glm::vec3 getWorldPos();
@@ -70,7 +63,7 @@ public:
      * 
      * @param loc - The new location of the object.
      * */
-    void moveTo(glm::vec3 loc);
+    void setPosition(glm::vec3 loc);
 
     /**
      * The scale vector (x, y, z scaling) to be applied to the object.
@@ -79,37 +72,19 @@ public:
      * */
     void applyScale(glm::vec3 scale);
 
-    /**
-     * The rotation angle and axis to be applied to the object. Default
-     * is y-axis.
-     * 
-     * @param rotation - The angle of rotation to be applied.
-     * @param axis - The 3D axis to rotate the object on.
-     * */
-    void rotate(float rotation, glm::vec3 axis);
-
-    /**
-     * Get the model matrix
-     * */
-    glm::mat4 getModelMatrix();
-
-    /**
-     * Get the normal matrix
-     * */
-    glm::mat4 getNormalMatrix();
+    glm::vec3 getScaleVec();
 
     float getRotation();
 
     void setRotation(float rot);
     
+    GameObject* getItem(int index);
+    
     // Will probably be used on item pickup in dungeon phase
-    void addItem(int index, GameObject item);
+    void setItem(int index, GameObject* item);
 
     // Will probably be used on item placement in cooking phase
     void removeItem(int index);
-
-    // Will probably be used on item prep in cooking phase
-    void replaceItem(int index, GameObject item);
 
     bool isPassable();
 

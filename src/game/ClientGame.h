@@ -12,7 +12,6 @@ class ClientGame {
         ~ClientGame();
         void runGame();
         int clientID;
-        //Player player;      // TODO: decide permanent location of player object
     private:
         Window window;
         NetworkClient client;

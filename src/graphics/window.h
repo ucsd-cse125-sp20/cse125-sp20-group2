@@ -24,7 +24,7 @@ public:
     void close();
     GLFWwindow* glfwViewport;
     Player* player;     // FIXME - IN THE FUTURE, WINDOW SHOULD NOT KNOW ABOUT THE PLAYER
-    void processInput();
+    //void processInput();
 private:
     Shader* shader;
     void setupWindow();

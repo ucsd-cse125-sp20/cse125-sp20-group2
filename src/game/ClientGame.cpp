@@ -1,4 +1,5 @@
 #include <game/ClientGame.h>
+#include <glm/gtx/string_cast.hpp>
 #include <objects/Player.h>
 #include <chrono>
 #include <thread>
@@ -9,7 +10,7 @@ ClientGame::ClientGame(std::string IP, int port) : client(IP, port), window(WIN_
 {
     // TODO: fix hardcoded player values and hardcoded window insertion
     GameObject* grid = new GameObject(999999);
-    grid->moveTo(glm::vec3(0, -1, 0));
+    grid->setPosition(glm::vec3(0, -1, 0));
     grid->setModel("assets\\models\\grid_square.obj");
     window.addObject(999999, grid);
 
@@ -24,9 +25,12 @@ ClientGame::~ClientGame()
 void ClientGame::runGame() 
 {
     while(!window.isClosed) {
+        
         // Take local input
-        window.processInput();
+        // Send to the server
+        processInput();
 
+        // may not need this
         // Send input to server
         //sendMsgs();
 
@@ -67,19 +71,56 @@ void ClientGame::updateGameState()
         uint32_t id = currMessage.object().id();
         Game::ObjectType type = currMessage.object().type();
 
-        // Insert object into window
-        GameObject* newGameObject = new GameObject(id);
-        newGameObject->setModel("assets\\models\\cube.obj");   // TODO: either read from server or config file which model to use
-        window.addObject(id, newGameObject);
-
+        if (window.objectsToRender.count(id) > 0) {
+            GameObject* obj = window.objectsToRender[id];
+            obj->setRotation(rotation);
+            obj->setPosition(glm::vec3(location.x(), location.y(), location.z()));
+            std::cerr << glm::to_string(obj->getWorldPos()) << std::endl;
+        } else {
+            // Insert object into window
+            GameObject* newGameObject = new GameObject(id);
+            newGameObject->setModel("assets\\models\\cube.obj");   // TODO: either read from server or config file which model to use
+            window.addObject(id, newGameObject);
+        }
         
         PrintUtil::print(currMessage);
     }
     client.messages.clear();
 }
 
-// FIXME - SHOULD SEND MESSAGES TO SERVER BEFORE DOING THIS
+/**
+ * Take in input from the viewport window.
+ * */
 void ClientGame::processInput()
 {
-    //if (GetAsyncKeyState(0x57)) std::cerr << "W" <<std::endl;
+	// Exit application.
+	if (glfwGetKey(window.glfwViewport, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+		glfwSetWindowShouldClose(window.glfwViewport, true);
+	}
+
+    // Message to send
+    Game::ClientMessage msg;
+
+    // Get key inputs and set direction of message
+	if (glfwGetKey(window.glfwViewport, GLFW_KEY_W) == GLFW_PRESS)
+    {
+        msg.set_direction(Game::Direction::UP);  
+    }
+	else if (glfwGetKey(window.glfwViewport, GLFW_KEY_S) == GLFW_PRESS) 
+    {
+        msg.set_direction(Game::Direction::DOWN); 
+    }
+	if (glfwGetKey(window.glfwViewport, GLFW_KEY_A) == GLFW_PRESS)
+    {
+        msg.set_direction(Game::Direction::LEFT); 
+    }
+	else if (glfwGetKey(window.glfwViewport, GLFW_KEY_D) == GLFW_PRESS)
+    {
+        msg.set_direction(Game::Direction::RIGHT); 
+    }
+    
+    // Send message only if it has a direction associated with it
+    if (msg.has_direction()) {
+        this->client.send(msg);
+    }
 }

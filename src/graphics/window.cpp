@@ -130,20 +130,10 @@ void Window::render()
 	shader->use();
 
 	// // //
-	// The render operations
-
-	// // //
 	// per-frame time logic
 	float currentFrame = glfwGetTime();
 	deltaTime = currentFrame - lastFrame;
 	lastFrame = currentFrame;
-
-	// // //
-	// Input
-	//processInput(glfwViewport);
-
-	// // //
-	// Rendering stuff
 
 	// Make BG light gray
 	glClearColor(0.8f, 0.8f, 0.8f, 0.8f);
@@ -174,17 +164,6 @@ void Window::render()
 	shader->setMat4("projection", projection); // note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
 	shader->setMat4("view", view);
 
-	// FIXME - MOVE TO SERVER IN THE FUTURE
-	// Calculate distance and rotation
-	modelRotationX += currentTurnSpeed * deltaTime;
-	float distance = currentSpeed * deltaTime;
-	float dx = distance * sin(modelRotationX);
-	float dz = distance * cos(modelRotationX);
-	glm::vec3 pos = player->getWorldPos();
-	pos.x += dx; pos.z += dz;
-	player->moveTo(pos);
-	player->rotate(modelRotationX, UP);
-
 	// // //
 	// Render each GameObject
 
@@ -192,20 +171,14 @@ void Window::render()
 		GameObject* obj = it->second;
 
 		// Set respective model matrix for each object and send it to the shader.
-		shader->setMat4("model", obj->getModelMatrix());
+		glm::mat4 mat = glm::mat4(1.0);
+		mat = glm::translate(mat, obj->getWorldPos());
+		mat = glm::scale(mat, obj->getScaleVec());
+		mat = glm::rotate(mat, obj->getRotation(), UP);
+		shader->setMat4("model", mat);
 
 		// Used to convert normal vectors to world space coordinates, without applying translations to them
-		shader->setMat4("normalMatrix", obj->getNormalMatrix());
-
-
-
-
-
-
-
-
-
-
+		shader->setMat4("normalMatrix", glm::transpose(glm::inverse(mat)));
 
 		// Draw the model
 		obj->draw(*shader);
@@ -221,42 +194,7 @@ void Window::render()
 }
 
 // Handle user input
-void Window::processInput()
-{
-	// Exit application.
-	if (glfwGetKey(glfwViewport, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-		glfwSetWindowShouldClose(glfwViewport, true);
-	}
 
-	// Camera movement (depends on framerate)
-	cam.moveSpeed = 50 * deltaTime;
-	if (glfwGetKey(glfwViewport, GLFW_KEY_UP) == GLFW_PRESS)
-		cam.processKeyMovement(FORWARD, deltaTime);
-    if (glfwGetKey(glfwViewport, GLFW_KEY_DOWN) == GLFW_PRESS)
-		cam.processKeyMovement(BACKWARD, deltaTime);
-    if (glfwGetKey(glfwViewport, GLFW_KEY_LEFT) == GLFW_PRESS)
-		cam.processKeyMovement(LEFT, deltaTime);
-    if (glfwGetKey(glfwViewport, GLFW_KEY_RIGHT) == GLFW_PRESS)
-		cam.processKeyMovement(RIGHT, deltaTime);
-	if (glfwGetKey(glfwViewport, GLFW_KEY_F) == GLFW_PRESS)
-		cam.toggleFreeCam();
-
-	// Player movement (FIXME - move to server-side)
-	if (glfwGetKey(glfwViewport, GLFW_KEY_W) == GLFW_PRESS)
-		currentSpeed = RUN_SPEED;
-	else if (glfwGetKey(glfwViewport, GLFW_KEY_S) == GLFW_PRESS)
-		currentSpeed = -RUN_SPEED;
-	else
-		currentSpeed = 0;
-	
-	if (glfwGetKey(glfwViewport, GLFW_KEY_A) == GLFW_PRESS)
-		currentTurnSpeed = -TURN_SPEED;
-	else if (glfwGetKey(glfwViewport, GLFW_KEY_D) == GLFW_PRESS)
-		currentTurnSpeed = TURN_SPEED;
-	else
-		currentTurnSpeed = 0;
-	
-}
 
 // A callback function to resize the rendering window when the window is resized
 void framebuffer_size_callback(GLFWwindow* glfwViewport, int width, int height)
@@ -280,7 +218,3 @@ void scroll_callback(GLFWwindow* glfwViewport, double xoffset, double yoffset)
 {
 	cam.processMouseScroll(yoffset);
 }
-
-//// int main() {
-//// 	return render();
-//// }

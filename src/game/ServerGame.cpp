@@ -4,7 +4,7 @@
 #include <thread>
 #include <chrono>
 
-#define TICK 1000
+#define TICK 200
 
 ServerGame::ServerGame(int port) : server(port), processor(&this->gameState)
 {
@@ -54,15 +54,15 @@ void ServerGame::process()
         auto msgs = iter->second;
         for (auto msg: msgs) {
             PrintUtil::print(msg);
-
-            Game::ServerMessage* message = this->processor.messages.front();
-            this->processor.messages.pop_front();
-            this->server.sendToAll(*message);
-            free(message);
-
-            std::cout << "I hate c memory" << std::endl;
+            this->processor.process(clientId, msg);
+            
+            if (this->processor.messages.size() > 0) {
+                Game::ServerMessage* message = this->processor.messages.front();
+                this->processor.messages.pop_front();
+                this->server.sendToAll(*message);
+                free(message);
+            }
         }
-        
     }
 }
 
@@ -71,13 +71,9 @@ void ServerGame::acceptCallback(int clientId)
 {
     int objId = this->gameState.addPlayer(clientId);
     GameObject* object = this->gameState.getGameObject(objId);
-    std::cout << "i hate this" << std::endl;
     Game::ServerMessage* message = MessageBuilder::toServerMessage(object);
     this->server.sendToAll(*message);
-    std::cout << "Gonna free xd" << std::endl;
     free(message);
-    std::cout << "After free xd" << std::endl;
-    std::cout << "Returning from accept callback" << std::endl;
 
     // OK, THIS COVERS SENDING TO ALL. 
     // WE NEED TO COVER THE LIST OF OBJECTS EXISTING
