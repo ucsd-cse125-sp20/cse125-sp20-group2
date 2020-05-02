@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include <vector>
 #include <thread>
+#include <functional>
 #include <schema/Game.pb.h>
 
 class ServerNetwork
@@ -38,6 +39,9 @@ public:
      * @returns a map of clientId to client messages. 
      * */
     std::unordered_map<unsigned int, std::vector<Game::ClientMessage>> readAllMessages();
+
+    void setAcceptCallback(std::function<void(int)> func);
+
 private:
     /**
      * The socket the server binds to.
@@ -79,4 +83,12 @@ private:
      * adds them to "sessions" under its client id.
      * */
     void startAccepting();
+
+    /**
+     * This function is called when a new client is accepted. 
+     * Calls the function with the incoming clientId.
+     * IMPORTANT: This is called on another thread.
+     * */
+    std::function<void(int)> acceptCallback;
+    
 };

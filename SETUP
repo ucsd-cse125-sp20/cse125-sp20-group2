@@ -1,0 +1,9 @@
+# Environment Setup (Windows)
+
+1. Install Msys2 https://www.msys2.org/
+2. Run `pacman -Syu`. It should state terminate and close after running this step.
+3. Run `pacman -S base-devel make git mingw-w64-x86_64-gcc mingw-w64-x86_64-protobuf mingw-w64-x86_64-gmp mingw-w64-x86_64-glm mingw-w64-x86_64-glfw mingw-w64-x86_64-assimp mingw-w64-x86_64-make`
+4. Run `mkdir -p soil && cd soil`
+4. Run `wget https://raw.githubusercontent.com/msys2/MINGW-packages/master/mingw-w64-soil/PKGBUILD`
+5. Run `makepkg -si`
+6. Clone repo and try `make`. Note for the first time, you need to make twice.

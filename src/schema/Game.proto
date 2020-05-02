@@ -1,0 +1,53 @@
+syntax = "proto2";
+
+package Game;
+
+enum Net {
+    PING = 0;
+    PONG = 1;
+}
+
+enum Direction {
+    UP = 0;
+    DOWN = 1;
+    LEFT = 2;
+    RIGHT = 3;
+}
+
+message ClientMessage {
+    oneof event {
+        Net net = 1;
+        Direction direction = 2;
+        // need to request an object
+    }
+}
+
+message ServerMessage {
+    oneof event {
+        Net net = 1;
+        Object object = 2;
+        Score score = 3;
+    }
+}
+
+enum ObjectType {
+    PLAYER = 0;
+    FRUITY = 1;
+}
+
+message Object {
+    required Vector3 worldPosition = 1; 
+    required float rotation = 2;
+    required uint32 id = 3;
+    required ObjectType type = 4;
+}
+
+message Score {
+    
+}
+
+message Vector3 {
+    required float x = 1 [default = 1];
+    required float y = 2 [default = 0];
+    required float z = 3 [default = 1];
+}

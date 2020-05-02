@@ -1,12 +1,17 @@
 #include <game/ServerGame.h>
 #include <util/PrintUtil.h>
+#include <util/MessageBuilder.h>
 #include <thread>
 #include <chrono>
 
-#define TICK 1000
+#define TICK 200
 
-ServerGame::ServerGame(int port) : server(port)
+ServerGame::ServerGame(int port) : server(port), processor(&this->gameState)
 {
+    // std::function<void(int)> test = std::bind(&ServerGame::acall, this)
+    std::function<void(int)> notifyClients = std::bind(&ServerGame::acceptCallback, this, std::placeholders::_1);
+    this->server.setAcceptCallback(notifyClients);
+
     run();
 }
 
@@ -19,21 +24,8 @@ void ServerGame::run()
 {
     while (true) {
         auto start = std::chrono::high_resolution_clock::now();
-        auto map = server.readAllMessages();
-        
-        // TODO: Process 
-        
-        // Go through all clients
-        for (auto iter = map.begin(); iter != map.end(); iter++) {
-            auto msgs = iter->second;
-            for (auto msg: msgs) {
-                PrintUtil::print(msg);
-            }
-        }
 
-        Game::ServerMessage msg;
-        msg.set_net(Game::PING);
-        server.sendToAll(msg);
+        this->process();
 
         auto end = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double> dur = end - start;
@@ -47,4 +39,43 @@ void ServerGame::run()
             std::cout << "Server is behind by: " << dur.count() << " no panic " << std::endl;
         }
     }
+}
+
+void ServerGame::process() 
+{
+    auto map = server.readAllMessages();
+    
+    // preprocess and remove all stuff here
+
+    // Go through all clients
+    // This is just an example. This isn't necessarily the correct logic.
+    for (auto iter = map.begin(); iter != map.end(); iter++) {
+        auto clientId = iter->first;
+        auto msgs = iter->second;
+        for (auto msg: msgs) {
+            PrintUtil::print(msg);
+            this->processor.process(clientId, msg);
+            
+            if (this->processor.messages.size() > 0) {
+                Game::ServerMessage* message = this->processor.messages.front();
+                this->processor.messages.pop_front();
+                this->server.sendToAll(*message);
+                free(message);
+            }
+        }
+    }
+}
+
+// ASSUMES THERE IS ONLY ONE PLAYER
+void ServerGame::acceptCallback(int clientId) 
+{
+    int objId = this->gameState.addPlayer(clientId);
+    GameObject* object = this->gameState.getGameObject(objId);
+    Game::ServerMessage* message = MessageBuilder::toServerMessage(object);
+    this->server.sendToAll(*message);
+    free(message);
+
+    // OK, THIS COVERS SENDING TO ALL. 
+    // WE NEED TO COVER THE LIST OF OBJECTS EXISTING
+    // SHOULD BE SIMPLE RIGHT
 }

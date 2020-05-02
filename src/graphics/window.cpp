@@ -7,31 +7,56 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/string_cast.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include "_obj/Mesh.h"
-#include "_obj/Shader.h"
+#include <graphics/_obj/Mesh.h>
+#include <graphics/_obj/Shader.h>
 #include "Camera.cpp"
 #include "Model.cpp"
-#include "GameObject.cpp"
-#include "_options/graphics_vars.h"
+#include <graphics/_options/graphics_vars.h>
+#include "window.h"
 
-// Camera at desiginated position
+//// Camera at desiginated position
 Camera cam(INITIAL_CAM_POS);
+
+// Player movement options (FIXME)
+const float RUN_SPEED = 1, TURN_SPEED = 1;
+float currentSpeed = 0.0f, currentTurnSpeed = 0.0f;
+float modelRotationX;
+glm::vec3 modelPos;
 
 // Initial mouse positions
 float lastX = WIN_WIDTH / 2, lastY = WIN_HEIGHT / 2;
 
 // Function prototypes
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void processInput(GLFWwindow* window);
-void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+void framebuffer_size_callback(GLFWwindow* glfwViewport, int width, int height);
+void processInput(GLFWwindow* glfwViewport);
+void mouse_callback(GLFWwindow* glfwViewport, double xpos, double ypos);
+void scroll_callback(GLFWwindow* glfwViewport, double xoffset, double yoffset);
 
 // timing
 float deltaTime = 0.0f;	// time between current frame and last frame
 float lastFrame = 0.0f;
 
-int render()
-{
+Window::Window(int width = WIN_WIDTH, int height = WIN_HEIGHT) : objNum (0) {
+	this->isClosed = false;
+	this->width = width;
+	this->height = height;
+	this->setupWindow();
+	this->shader = new Shader("src\\graphics\\shaders\\vert_shader.glsl", "src\\graphics\\shaders\\frag_shader.glsl");
+}
+
+void Window::addObject(unsigned int id, GameObject* object) {
+	this->objectsToRender.insert({id, object});
+	objNum++;
+}
+
+void Window::removeObject(unsigned int index) {
+	this->objectsToRender.erase(index);
+	objNum--;
+}
+
+void Window::setupWindow() {
+
+	modelPos = glm::vec3(0);
 	// // //
 	// Setup
 
@@ -40,33 +65,34 @@ int render()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);		
-	GLFWwindow* window = glfwCreateWindow((int)WIN_WIDTH, (int)WIN_HEIGHT, "LearnOpenGL", NULL, NULL);
+	GLFWwindow* glfwViewport = glfwCreateWindow((int)WIN_WIDTH, (int)WIN_HEIGHT, "Comrade's Kitchen", NULL, NULL);
 
 	// Capture mouse
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	
 	// Mouse centering
-	glfwSetCursorPos(window, lastX, lastY);
+	glfwSetCursorPos(glfwViewport, lastX, lastY);
 
-	if (window == NULL)
+	if (glfwViewport == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
 		glfwTerminate();
-		return -1;
 	}
 
 	// Current context is window
-	glfwMakeContextCurrent(window);
+	glfwMakeContextCurrent(glfwViewport);
+
+	// Capture mouse
+	glfwSetInputMode(glfwViewport, GLFW_CURSOR, GLFW_CURSOR_DISABLED);  
 
 	// Register callback functions
-	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-	glfwSetCursorPosCallback(window, mouse_callback);
-	glfwSetScrollCallback(window, scroll_callback);
+	glfwSetFramebufferSizeCallback(glfwViewport, framebuffer_size_callback);
+	glfwSetCursorPosCallback(glfwViewport, mouse_callback);
+	glfwSetScrollCallback(glfwViewport, scroll_callback);
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
-		std::cout << "Failed to initialize GLAD" << std::endl;
-		return -1;
+		std::cout << "Failed to load GLAD" << std::endl;
 	}
 
 	// Enable depth testing
@@ -74,119 +100,109 @@ int render()
 	// surface is obscured by another surface (i.e. in 3D objects).
 	glEnable(GL_DEPTH_TEST);
 
-	// // //
-	// Objects
-	GameObject nanosuit(std::string("../../assets/nanosuit/nanosuit.obj"), glm::vec3(0.0f, -1.75f, 0.0f), 0.2f);
-	//GameObject cube("../../assets/models/cube.obj", glm::vec3(0.0f), 1.0f);
+	// Set window var
+	this->glfwViewport = glfwViewport;
 
-	// // //
-	// Shaders
 
-	// Shader definition
-	Shader shader = Shader("shaders/vert_shader.glsl", "shaders/frag_shader.glsl");
-	shader.use();
+	// FIXME: GRID STUFF
+	/*GameObject* grid = new GameObject("assets\\models\\grid_square.obj", glm::vec3(0.5, -1.25, 0.5), 0.2);
+	this->addObject(0, grid);
+	objNum++;*/
+}
 
-	// // //
-	// The render loop
-	while (!glfwWindowShouldClose(window))
+void Window::close() {
+	if (glfwWindowShouldClose(glfwViewport))
 	{
-		// // //
-		// per-frame time logic
-		float currentFrame = glfwGetTime();
-		deltaTime = currentFrame - lastFrame;
-		lastFrame = currentFrame;
+		isClosed = true; 
+		glfwTerminate();
+	}
+	else std::cerr << "ERROR: Unable to close window!" << std::endl;
+}
 
-		// // //
-		// Input
-		processInput(window);
-
-		// // //
-		// Rendering stuff
-
-		// Make BG light gray
-		glClearColor(0.8f, 0.8f, 0.8f, 0.8f);
-
-		// Clear color + depth buffers
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		// Apply lighting options
-		shader.setVec3("lightColor", glm::vec3(1.0, 1.0, 1.0f));
-		shader.setFloat("ambientStrength", ambientStrength);
-		shader.setVec3("lightPos", lightPos);
-		shader.setVec3("defaultObjColor", defaultObjColor);
-		shader.setFloat("noColorPrecision", noColorPrecision);
-		shader.setFloat("specularStrength", specularStrength);
-		shader.setVec3("viewPos", cam.pos);
-		
-		// // //
-		// View + perspective projection matrices
-
-		// camera view transformation (related to xy axis rotations)
-		glm::mat4 view = cam.getViewMatrix();
-
-		// camera projection transformation (related to zooms)
-		glm::mat4 projection = glm::mat4(1.0f);
-		projection = glm::perspective(glm::radians(cam.zoom), (float)WIN_WIDTH / (float)WIN_HEIGHT, 0.1f, 100.0f);
-
-		// pass transformation matrices to the shader
-		shader.setMat4("projection", projection); // note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
-		shader.setMat4("view", view);
-
-		// // //
-		// Render each GameObject
-
-		// Model matrix of each object, with its respective model matrix
-		shader.setMat4("model", nanosuit.modelMatrix);
-
-		// Used to convert normal vectors to world space coordinates, without applying translations to them
-		glm::mat4 normalMatrix = glm::mat3(transpose(inverse(nanosuit.modelMatrix)));
-		shader.setMat4("normalMatrix", normalMatrix);
-
-		// Draw the model
-		nanosuit.draw(shader);
-
-		// GameObject-specific code goes above
-		// // //
-
-		// // //
-		// GLFW stuff
-		glfwSwapBuffers(window);
-		glfwPollEvents();
+void Window::render()
+{
+	if (glfwViewport == NULL) {
+		std::cerr << "ERROR: No window!" << std::endl;
 	}
 
-	// Call terminate to cleanup GLFW resources.
-	glfwTerminate();
-	return 0;
+	// // //
+	// User shader program
+	shader->use();
+
+	// // //
+	// per-frame time logic
+	float currentFrame = glfwGetTime();
+	deltaTime = currentFrame - lastFrame;
+	lastFrame = currentFrame;
+
+	// Make BG light gray
+	glClearColor(0.8f, 0.8f, 0.8f, 0.8f);
+
+	// Clear color + depth buffers
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	// Apply lighting options
+	shader->setVec3("lightColor", glm::vec3(1.0, 1.0, 1.0f));
+	shader->setFloat("ambientStrength", ambientStrength);
+	shader->setVec3("lightPos", lightPos);
+	shader->setVec3("defaultObjColor", defaultObjColor);
+	shader->setFloat("noColorPrecision", noColorPrecision);
+	shader->setFloat("specularStrength", specularStrength);
+	shader->setVec3("viewPos", cam.pos);
+	
+	// // //
+	// View + perspective projection matrices
+
+	// camera view transformation (related to xy axis rotations)
+	glm::mat4 view = cam.getViewMatrix();
+
+	// camera projection transformation (related to zooms)
+	glm::mat4 projection = glm::mat4(1.0f);
+	projection = glm::perspective(glm::radians(cam.zoom), (float)WIN_WIDTH / (float)WIN_HEIGHT, 0.1f, 100.0f);
+
+	// pass transformation matrices to the shader
+	shader->setMat4("projection", projection); // note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
+	shader->setMat4("view", view);
+
+	// // //
+	// Render each GameObject
+
+	for (auto it = objectsToRender.begin(); it != objectsToRender.end(); ++it) {
+		GameObject* obj = it->second;
+
+		// Set respective model matrix for each object and send it to the shader.
+		glm::mat4 mat = glm::mat4(1.0);
+		mat = glm::translate(mat, obj->getPosition());
+		mat = glm::scale(mat, obj->getScaleVec());
+		mat = glm::rotate(mat, obj->getRotation(), UP);
+		shader->setMat4("model", mat);
+
+		// Used to convert normal vectors to world space coordinates, without applying translations to them
+		shader->setMat4("normalMatrix", glm::transpose(glm::inverse(mat)));
+
+		// Draw the model
+		obj->draw(*shader);
+	}
+
+	// // //
+	// GLFW stuff
+	glfwSwapBuffers(glfwViewport);
+	glfwPollEvents();
+
+	// Close the window when appropriate.
+	if (glfwWindowShouldClose(glfwViewport)) close();
 }
 
 // Handle user input
-void processInput(GLFWwindow* window)
-{
-	// Exit application.
-	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, true);
 
-	// Camera movement (depends on framerate)
-	float cameraSpeed = 2.5 * deltaTime;
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		cam.processKeyMovement(FORWARD, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		cam.processKeyMovement(BACKWARD, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		cam.processKeyMovement(LEFT, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		cam.processKeyMovement(RIGHT, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
-		cam.toggleFreeCam();
-}
 
 // A callback function to resize the rendering window when the window is resized
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+void framebuffer_size_callback(GLFWwindow* glfwViewport, int width, int height)
 {
 	glViewport(0, 0, width, height);
 }
 
-void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
+void mouse_callback(GLFWwindow* glfwViewport, double xpos, double ypos) {
 
 	// Calculate offset based on previous position of the mouse
 	float xoffset = xpos - lastX;
@@ -198,11 +214,7 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
 }
 
 // Zoom callback for when mouse wheel is scrolled
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+void scroll_callback(GLFWwindow* glfwViewport, double xoffset, double yoffset)
 {
 	cam.processMouseScroll(yoffset);
-}
-
-int main() {
-	return render();
 }
