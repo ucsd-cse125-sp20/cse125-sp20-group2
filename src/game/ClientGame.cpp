@@ -75,7 +75,6 @@ void ClientGame::updateGameState()
             GameObject* obj = window.objectsToRender[id];
             obj->setRotation(rotation);
             obj->setPosition(glm::vec3(location.x(), location.y(), location.z()));
-            std::cerr << glm::to_string(obj->getWorldPos()) << std::endl;
         } else {
             // Insert object into window
             GameObject* newGameObject = new GameObject(id);
