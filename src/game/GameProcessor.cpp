@@ -20,7 +20,7 @@ void GameProcessor::process(unsigned int clientId, Game::ClientMessage clientMsg
     case Game::ClientMessage::EventCase::kDirection:
     {
         GameObject* gameObject = this->state->getPlayerObject(clientId);
-        glm::vec3 initialPos = gameObject->getWorldPos();
+        glm::vec3 initialPos = gameObject->getPosition();
 
         switch (clientMsg.direction())
         {

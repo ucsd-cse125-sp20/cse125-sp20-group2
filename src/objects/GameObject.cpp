@@ -23,7 +23,7 @@ void GameObject::setModel(std::string path) {
 
 // Update the world position and move the model matrix
 void GameObject::setPosition(glm::vec3 loc) {
-	this->worldPos = loc;
+	this->pos = loc;
 }
 
 // Apply scaling to the model.
@@ -31,8 +31,8 @@ void GameObject::applyScale(glm::vec3 scale) {
 	this->scaleVec = scale;
 }
 
-glm::vec3 GameObject::getWorldPos() {
-	return this->worldPos;
+glm::vec3 GameObject::getPosition() {
+	return this->pos;
 }
 
 float GameObject::getRotation() {

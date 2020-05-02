@@ -172,7 +172,7 @@ void Window::render()
 
 		// Set respective model matrix for each object and send it to the shader.
 		glm::mat4 mat = glm::mat4(1.0);
-		mat = glm::translate(mat, obj->getWorldPos());
+		mat = glm::translate(mat, obj->getPosition());
 		mat = glm::scale(mat, obj->getScaleVec());
 		mat = glm::rotate(mat, obj->getRotation(), UP);
 		shader->setMat4("model", mat);

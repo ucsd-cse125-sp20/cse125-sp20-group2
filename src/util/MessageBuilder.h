@@ -22,7 +22,7 @@ public:
             exit(1);
         }
         // TODO: Check if sending server message deallocates Vector
-        Game::Vector3* vector = toVector(object->getWorldPos());
+        Game::Vector3* vector = toVector(object->getPosition());
 
         Game::Object* msgObj = new Game::Object();
         msgObj->set_id(object->getID());

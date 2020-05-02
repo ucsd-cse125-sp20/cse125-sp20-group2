@@ -16,7 +16,7 @@ void Grid::createTiles() {
 
             Tile* tile = new Tile(ID);
             this->setItem(ID, tile);
-            tile->setPosition(this->getWorldPos() + glm::vec3(i, 0, j));
+            tile->setPosition(this->getPosition() + glm::vec3(i, 0, j));
         }
     }
 }

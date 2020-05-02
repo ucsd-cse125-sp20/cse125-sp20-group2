@@ -14,7 +14,7 @@ private:
     Model* model;
 
     // Position in the world
-	glm::vec3 worldPos;
+	glm::vec3 pos;
 
     // Used to determine transformations of object
 	glm::vec3 scaleVec;
@@ -53,10 +53,10 @@ public:
 
     int getID();
 
-    /** TODO: change to getPosition ...
+    /**
      * Get the world position of the object
      * */
-    glm::vec3 getWorldPos();
+    glm::vec3 getPosition();
 
     /**
      * Moves the object and sets the world position.
