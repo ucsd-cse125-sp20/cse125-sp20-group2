@@ -51,6 +51,12 @@ public:
     GameObject* getGameObject(unsigned int);
 
     /**
+     * Returns all game objects
+     * TODO: This currently returns a copy
+     * */
+    const std::unordered_map<unsigned int, GameObject*>& getObjects();
+
+    /**
      * Removes a player object using the client id
      * */
     void removePlayer(unsigned int);

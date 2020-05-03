@@ -29,6 +29,7 @@ int GameState::addObject(Game::ObjectType objectType)
             std::cout << "Creating a player object on the server side" << std::endl;
             int objId = this->objCounter++;
             Player* player = new Player(objId);
+            player->getBoundingBox()->setRadius( 0.25 );
             this->gameObjects[objId] = player;
             std::cout << "Returning the player object id" <<std::endl;
             return objId;
@@ -43,6 +44,16 @@ int GameState::addObject(Game::ObjectType objectType)
     }
     return -1;
 }
+
+const std::unordered_map<unsigned int, GameObject*>& GameState::getObjects()
+{
+    // the class contains a unordered map called this->gameObjects
+    return this->gameObjects;
+}
+
+// If I called this, and assigned it to the following, what would happen?
+//std::unordered_map<unsigned int, GameObject*> myMap = getObjects() (copy?)
+//std::unordered_map<unsigned int, GameObject*>& myMap = getObjects() (reference?)
 
 GameObject* GameState::getPlayerObject(unsigned int clientId)
 {

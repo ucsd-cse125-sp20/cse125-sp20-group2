@@ -33,7 +33,7 @@ void ServerGame::run()
         std::chrono::duration<double> sleepTime = std::chrono::milliseconds(TICK) - dur;
 
         if (sleepTime.count() >= 0) {
-            std::cout << "Time to process: " << dur.count() << " Sleeping for: " << sleepTime.count() << std::endl;
+            // std::cout << "Time to process: " << dur.count() << " Sleeping for: " << sleepTime.count() << std::endl;
             std::this_thread::sleep_for(sleepTime);
         } else {
             std::cout << "Server is behind by: " << dur.count() << " no panic " << std::endl;

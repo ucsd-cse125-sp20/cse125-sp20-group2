@@ -20,35 +20,56 @@ void GameProcessor::process(unsigned int clientId, Game::ClientMessage clientMsg
     case Game::ClientMessage::EventCase::kDirection:
     {
         GameObject* gameObject = this->state->getPlayerObject(clientId);
-        glm::vec3 initialPos = gameObject->getPosition();
+        glm::vec3 originalPos = gameObject->getPosition();
+        glm::vec3 newPos = gameObject->getPosition();
 
         switch (clientMsg.direction())
         {
             case Game::Direction::UP:
             {
-                initialPos.x += 0.01;
+                newPos.x += 0.01;
                 break;
             }
             case Game::Direction::DOWN:
             {
-                initialPos.x -= 0.01;
+                newPos.x -= 0.01;
                 break;
             }
             case Game::Direction::LEFT:
             {
-                initialPos.z += 0.01;
+                newPos.z += 0.01;
                 break;
             }
             case Game::Direction::RIGHT:
             {
-                initialPos.z -= 0.01;
+                newPos.z -= 0.01;
                 break;
             }
             default:
                 break;
         }
 
-        gameObject->setPosition(initialPos);
+        // Temporarily set the new position
+        gameObject->setPosition(newPos);
+
+        // Get all objects, see if colliding with any
+        const std::unordered_map<unsigned int, GameObject*>& gameObjects = this->state->getObjects();
+        for (auto currObjectPair : gameObjects)
+        {
+            GameObject* currObject = currObjectPair.second;
+            if (gameObject == currObject)
+            {
+                continue;
+            }
+            // Check for collision
+            if (gameObject->isColliding(currObject))
+            {
+                std::cout << "Detecting a collision"<< std::endl;
+                // Revert movement
+                gameObject->setPosition(originalPos);
+                break;
+            }
+        }
 
         // Create serverMessage from vector
         Game::ServerMessage* newServerMsg = MessageBuilder::toServerMessage(gameObject);

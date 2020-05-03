@@ -1,12 +1,13 @@
 #include <objects/GameObject.h>
 
-
 GameObject::GameObject(int id) {
 	this->ID = id;
 	this->setPosition(glm::vec3(0, 0, 0));
 	this->setRotation(0);
 	this->applyScale(glm::vec3(0.2));
 	this->setPassable(false);
+	// TODO: Assume it is a sphere for now
+	this->box = new BoundingBox(this); 
 }
 
 void GameObject::draw(Shader shader) {
@@ -15,6 +16,10 @@ void GameObject::draw(Shader shader) {
 
 int GameObject::getID() {
 	return this->ID;
+}
+
+BoundingBox* GameObject::getBoundingBox() {
+	return box;
 }
 
 void GameObject::setModel(std::string path) {
@@ -68,4 +73,8 @@ void GameObject::setPassable(bool passable) {
 
 glm::vec3 GameObject::getScaleVec() {
     return this->scaleVec;
+}
+
+bool GameObject::isColliding(GameObject* obj) {
+	return this->box->isIntersecting(obj->box);
 }
