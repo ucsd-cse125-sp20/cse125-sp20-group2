@@ -6,26 +6,41 @@
 
 class GameObject;
 
-class BoundingBox 
-{   
-public:
+class BoundingBox
+{
+protected:
     GameObject *obj;
     float radius;
     float minX, minZ, maxX, maxZ;
     int height, width;
     bool isCircle;
 
-    BoundingBox(GameObject* obj);
+    bool isAABBIntersecting(BoundingBox *rbb);
+
+    bool isCircleRectangleIntersecting(BoundingBox *cbb);
+
+    bool isCircleIntersecting(BoundingBox *bb);
+
+private:
+    BoundingBox(GameObject *obj);
     ~BoundingBox();
 
-    bool isIntersecting(BoundingBox* bb);
+    bool isIntersecting(BoundingBox *bb);
 
     void updateCorners();
 
+    bool isCircle();
+
     void setRadius(float radius);
 
+    void setCircleBoundingBox();
+
+    void setWidth(float width);
+
+    void setHeight(float height);
+
     // virtual bool isIntersecting(CircleBoundingBox*) {
-    //     return false;
+    //    return false;
     // }
 
     // virtual bool isIntersecting(RectangleBoundingBox*) {
