@@ -3,6 +3,7 @@
 #include <schema/Game.pb.h> 
 #include <objects/GameObject.h>
 #include <unordered_map>
+#include <objects/Player.h>
 
 /**
  * This class holds the game state.
@@ -15,8 +16,13 @@ private:
     // This is used to increment the counter
     unsigned int objCounter = 0;
 
+    // No longer used remove TODO
     // This is a mapping of clientId to gameObjId
     std::unordered_map<unsigned int, unsigned int> clientIdToGameObjId;
+
+    // This is a mapping of clientId to Player objects
+    // TODO: Map from team id to allow instructor to quickly access their team's player
+    std::unordered_map<unsigned int, Player*> playerObjects;
 
     // This is a mapping of gameObjId to gameObjects
     std::unordered_map<unsigned int, GameObject*> gameObjects;
@@ -43,7 +49,7 @@ public:
     /**
      * Gets a player object from the client id
      * */
-    GameObject* getPlayerObject(unsigned int);
+    Player* getPlayerObject(unsigned int);
 
     /**
      * Return the reference game object
@@ -55,6 +61,12 @@ public:
      * TODO: This currently returns a copy
      * */
     const std::unordered_map<unsigned int, GameObject*>& getObjects();
+
+    /**
+     * Returns all player objects
+     * TODO: This currently returns a copy
+     * */
+    const std::unordered_map<unsigned int, Player*>& getPlayerObjects();
 
     /**
      * Removes a player object using the client id

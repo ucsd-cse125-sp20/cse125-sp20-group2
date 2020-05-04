@@ -12,67 +12,58 @@ GameProcessor::~GameProcessor()
     
 }
 
-void GameProcessor::process(unsigned int clientId, Game::ClientMessage clientMsg)
+void GameProcessor::process(unsigned int clientId, Game::ClientMessage clientMsg, int tickCount)
 {
     switch (clientMsg.event_case())
     {
     // Modify gameState direction
     case Game::ClientMessage::EventCase::kDirection:
     {
-        GameObject* gameObject = this->state->getPlayerObject(clientId);
-        glm::vec3 originalPos = gameObject->getPosition();
-        glm::vec3 newPos = gameObject->getPosition();
+        Player* player = this->state->getPlayerObject(clientId);
+        glm::vec3 originalPos = player->getPosition();
+        MovementProcessor* mp = new MovementProcessor();
+        mp->processMovement(player, clientMsg.direction(), tickCount);
 
-        switch (clientMsg.direction())
-        {
-            case Game::Direction::UP:
-            {
-                newPos.x += 0.01;
-                break;
-            }
-            case Game::Direction::DOWN:
-            {
-                newPos.x -= 0.01;
-                break;
-            }
-            case Game::Direction::LEFT:
-            {
-                newPos.z += 0.01;
-                break;
-            }
-            case Game::Direction::RIGHT:
-            {
-                newPos.z -= 0.01;
-                break;
-            }
-            default:
-                break;
-        }
+        glm::vec3 newPos = player->getPosition();
 
-        // Temporarily set the new position
-        gameObject->setPosition(newPos);
-
-        // Get all objects, see if colliding with any
+        // See if colliding with any objects
         const std::unordered_map<unsigned int, GameObject*>& gameObjects = this->state->getObjects();
         for (auto currObjectPair : gameObjects)
         {
             GameObject* currObject = currObjectPair.second;
-            if (gameObject == currObject)
+            // Check for collision
+            if (player->isColliding(currObject))
+            {
+                std::cout << "Detecting a collision" << std::endl;
+                // Revert movement
+                player->setPosition(originalPos);
+                player->setRunSpeed(0);
+                break;
+            }
+        }
+
+        // See if colliding with any players
+        const std::unordered_map<unsigned int, Player*>& playerObjects = this->state->getPlayerObjects();
+        for (auto currPlayerPair : playerObjects)
+        {
+            Player* currPlayer = currPlayerPair.second;
+            if (player == currPlayer)
             {
                 continue;
             }
-            // Check for collision
-            if (gameObject->isColliding(currObject))
+            // Check for collisions
+            if(player->isColliding(currPlayer))
             {
-                std::cout << "Detecting a collision"<< std::endl;
-                // Revert movement
-                gameObject->setPosition(originalPos);
+                // Revert the movement
+                std::cout << "Detecting collision with another player" << std::endl;
+                player->setPosition(originalPos);
+                player->setRunSpeed(0);
                 break;
             }
         }
 
         // Create serverMessage from vector
-        Game::ServerMessage* newServerMsg = MessageBuilder::toServerMessage(gameObject);
+        Game::ServerMessage* newServerMsg = MessageBuilder::toServerMessage(player);
         messages.push_back(newServerMsg);
 
         // Do cool math stuff to movement (LATER)

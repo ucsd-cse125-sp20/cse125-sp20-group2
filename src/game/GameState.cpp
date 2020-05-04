@@ -12,10 +12,25 @@ GameState::~GameState() {
 int GameState::addPlayer(unsigned int clientId) {
     std::cout << "Called add user in GameState w/ clientID: " << clientId << std::endl;
 
-    int id = addObject(Game::ObjectType::PLAYER);
-    this->clientIdToGameObjId[clientId] = id;
+    // First, create player w/ id
+    int objId = this->objCounter++;
+    Player* newPlayerObject = new Player(objId);
+    newPlayerObject->getBoundingBox()->setRadius(0.15);
 
-    return id;
+    // Next, add player to map
+    this->playerObjects[clientId] = newPlayerObject;
+
+    // Placeholder, just returns client id
+    return clientId;
+
+    // OLD CODE
+    // Which id should be used to refer to the player
+    // (Can we just use clientId to refer to player object)?
+    // int id = addObject(Game::ObjectType::PLAYER);
+    // this->clientIdToGameObjId[clientId] = id;
+
+    // return id;
+
     std::cout << "Returning from add player" << std::endl;
 }
 
@@ -29,7 +44,7 @@ int GameState::addObject(Game::ObjectType objectType)
             std::cout << "Creating a player object on the server side" << std::endl;
             int objId = this->objCounter++;
             Player* player = new Player(objId);
-            player->getBoundingBox()->setRadius( 0.25 );
+            player->getBoundingBox()->setRadius( 0.05 );
             this->gameObjects[objId] = player;
             std::cout << "Returning the player object id" <<std::endl;
             return objId;
@@ -51,14 +66,22 @@ const std::unordered_map<unsigned int, GameObject*>& GameState::getObjects()
     return this->gameObjects;
 }
 
+const std::unordered_map<unsigned int, Player*>& GameState::getPlayerObjects()
+{
+    return this->playerObjects;
+}
+
 // If I called this, and assigned it to the following, what would happen?
 //std::unordered_map<unsigned int, GameObject*> myMap = getObjects() (copy?)
 //std::unordered_map<unsigned int, GameObject*>& myMap = getObjects() (reference?)
 
-GameObject* GameState::getPlayerObject(unsigned int clientId)
+Player* GameState::getPlayerObject(unsigned int clientId)
 {
-    int objId = this->clientIdToGameObjId[clientId];
-    return this->gameObjects[objId];
+    return this->playerObjects[clientId];
+
+    // OLD CODE
+    // int objId = this->clientIdToGameObjId[clientId];
+    // return this->gameObjects[objId];
 }
 
 GameObject* GameState::getGameObject(unsigned int objId) 
@@ -75,11 +98,17 @@ void GameState::removeObject(unsigned int objId)
 
 void GameState::removePlayer(unsigned int clientId)
 {
-    int objId = this->clientIdToGameObjId[clientId];
+    // Free player object, remove from player map
+    Player* playerObject = this->playerObjects[clientId];
+    free(playerObject);
+    this->playerObjects.erase(clientId);
 
-    GameObject* object = this->gameObjects[objId];
-    free(object);
+    // OLD CODE
+    // int objId = this->clientIdToGameObjId[clientId];
 
-    this->clientIdToGameObjId.erase(clientId);
-    this->gameObjects.erase(objId);
+    // GameObject* object = this->gameObjects[objId];
+    // free(object);
+
+    // this->clientIdToGameObjId.erase(clientId);
+    // this->gameObjects.erase(objId);
 }

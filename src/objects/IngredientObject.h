@@ -1,6 +1,7 @@
 #pragma once
 
 #include <objects/GameObject.h>
+#include <string>
 
 enum class IngredientStatus
 {
@@ -12,7 +13,7 @@ enum class IngredientStatus
 class IngredientObject : public GameObject
 {
 protected:
-    String name;
+    std::string name;
 
     IngredientStatus status;
 
@@ -20,11 +21,11 @@ protected:
 public:
     IngredientObject(int ID);
 
-    void setName(string name);
+    void setName(std::string name);
 
     void setStatus(IngredientStatus status);
 
-    string getName();
+    std::string getName();
 
     IngredientStatus getStatus();
 };

@@ -10,15 +10,15 @@ BoundingBox::~BoundingBox()
 {
 }
 
-bool isAABBIntersecting(BoundingBox *rbb)
+bool BoundingBox::isAABBIntersecting(BoundingBox *rbb)
 {
     updateCorners();
-    bb->updateCorners();
+    rbb->updateCorners();
     return (this->minX <= rbb->maxX && this->maxX >= rbb->minX) &&
            (this->minZ <= rbb->maxZ && this->maxZ >= rbb->minZ);
 }
 
-bool isCircleRectangleIntersecting(BoundingBox *cbb)
+bool BoundingBox::isCircleRectangleIntersecting(BoundingBox *cbb)
 {
     updateCorners();
     glm::vec3 circlePos = cbb->obj->getPosition();
@@ -31,13 +31,13 @@ bool isCircleRectangleIntersecting(BoundingBox *cbb)
     return distance < cbb->radius;
 }
 
-bool isCircleIntersecting(BoundingBox *bb)
+bool BoundingBox::isCircleIntersecting(BoundingBox *bb)
 {
-    glm::vec3 circlePos1 = obj->getPosition();
+    glm::vec3 circlePos1 = this->obj->getPosition();
     glm::vec3 circlePos2 = bb->obj->getPosition();
     float distance = sqrt((circlePos1.x - circlePos2.x) * (circlePos1.x - circlePos2.x) +
                           (circlePos1.z - circlePos2.z) * (circlePos1.z - circlePos2.z));
-    return distance < (radius + bb->radius);
+    return distance < (this->radius + bb->radius);
 }
 
 void BoundingBox::setCircleBoundingBox() { this->isCircle = true; }
@@ -50,11 +50,11 @@ void BoundingBox::setWidth(float width)
 
 void BoundingBox::setHeight(float height)
 {
-    this->isCirlce = false;
+    this->isCircle = false;
     this->height = height;
 }
 
-void BoundingBox::isCircle()
+bool BoundingBox::isCircleBoundingBox()
 {
     return this->isCircle;
 }

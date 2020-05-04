@@ -4,7 +4,7 @@
 #include <thread>
 #include <chrono>
 
-#define TICK 200
+#define TICK 30
 
 ServerGame::ServerGame(int port) : server(port), processor(&this->gameState)
 {
@@ -54,13 +54,14 @@ void ServerGame::process()
         auto msgs = iter->second;
         for (auto msg: msgs) {
             PrintUtil::print(msg);
-            this->processor.process(clientId, msg);
+            this->processor.process(clientId, msg, TICK);
             
             if (this->processor.messages.size() > 0) {
                 Game::ServerMessage* message = this->processor.messages.front();
                 this->processor.messages.pop_front();
                 this->server.sendToAll(*message);
                 free(message);
+                break; // TODO: Remove, this preprocesses messages s.t. only one is from each player per tick
             }
         }
     }
@@ -69,11 +70,24 @@ void ServerGame::process()
 // ASSUMES THERE IS ONLY ONE PLAYER
 void ServerGame::acceptCallback(int clientId) 
 {
-    int objId = this->gameState.addPlayer(clientId);
-    GameObject* object = this->gameState.getGameObject(objId);
-    Game::ServerMessage* message = MessageBuilder::toServerMessage(object);
+    int clientIdReturn = this->gameState.addPlayer(clientId);
+
+    // Grab player object
+    GameObject* playerObject = this->gameState.getPlayerObject(clientIdReturn);
+
+    // Build a message
+    Game::ServerMessage* message = MessageBuilder::toServerMessage(playerObject);
+
+    // Send out, then free
     this->server.sendToAll(*message);
     free(message);
+
+    // OLD CODE
+    // int objId = this->gameState.addPlayer(clientId);
+    // GameObject* object = this->gameState.getGameObject(objId);
+    // Game::ServerMessage* message = MessageBuilder::toServerMessage(object);
+    // this->server.sendToAll(*message);
+    // free(message);
 
     // OK, THIS COVERS SENDING TO ALL. 
     // WE NEED TO COVER THE LIST OF OBJECTS EXISTING

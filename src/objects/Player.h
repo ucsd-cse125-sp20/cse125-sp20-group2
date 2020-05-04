@@ -3,6 +3,7 @@
 #include <objects/GameObject.h>
 #include <objects/IngredientObject.h>
 #include <unordered_map>
+#include <string>
 
 class Player : public GameObject 
 {
@@ -11,17 +12,31 @@ protected:
 
     int score  = 0;
 
-    int teamName;
+    std::string teamName;
 
-    unordered_map<string, IngredientObject*> inventory;
+    float runSpeed = 0, turnSpeed = 0;
+
+    std::unordered_map<int, IngredientObject*> inventory;
 public:
     Player(int ID);
     
     void setTeamID( int teamID );
 
-    void setTeamName( String teamName );
+    void setTeamName( std::string teamName );
 
-    void setScore(int newScore)
+    int getTeamID();
+
+    void setRunSpeed( float newRunSpeed );
+
+    void setTurnSpeed( float newTurnSpeed );
+
+    float getRunSpeed();
+
+    float getTurnSpeed();
+
+    std::string getTeamName();
+
+    void setScore(int newScore);
 
     void addToScore( int addition );
 

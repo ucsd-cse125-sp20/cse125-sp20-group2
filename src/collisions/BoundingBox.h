@@ -21,17 +21,17 @@ protected:
 
     bool isCircleIntersecting(BoundingBox *bb);
 
-private:
+public:
     BoundingBox(GameObject *obj);
     ~BoundingBox();
+
+    void setRadius(float radius);
 
     bool isIntersecting(BoundingBox *bb);
 
     void updateCorners();
 
-    bool isCircle();
-
-    void setRadius(float radius);
+    bool isCircleBoundingBox();
 
     void setCircleBoundingBox();
 
