@@ -53,14 +53,15 @@ void ServerGame::process()
         auto clientId = iter->first;
         auto msgs = iter->second;
         for (auto msg: msgs) {
-            PrintUtil::print(msg);
+            // PrintUtil::print(msg);
             this->processor.process(clientId, msg, TICK);
             
             if (this->processor.messages.size() > 0) {
                 Game::ServerMessage* message = this->processor.messages.front();
                 this->processor.messages.pop_front();
                 this->server.sendToAll(*message);
-                free(message);
+                delete message;
+                // free(message);
                 break; // TODO: Remove, this preprocesses messages s.t. only one is from each player per tick
             }
         }
@@ -80,7 +81,8 @@ void ServerGame::acceptCallback(int clientId)
 
     // Send out, then free
     this->server.sendToAll(*message);
-    free(message);
+    // free(message);
+    delete message;
 
     // OLD CODE
     // int objId = this->gameState.addPlayer(clientId);
@@ -92,4 +94,24 @@ void ServerGame::acceptCallback(int clientId)
     // OK, THIS COVERS SENDING TO ALL. 
     // WE NEED TO COVER THE LIST OF OBJECTS EXISTING
     // SHOULD BE SIMPLE RIGHT
+
+    // First, send all game objects
+    for (auto objectPair : this->gameState.getObjects())
+    {
+        auto objectPtr = objectPair.second;
+        Game::ServerMessage* message = MessageBuilder::toServerMessage(objectPtr);
+        this->server.sendToAll(*message);
+        // free(message);
+        delete message;
+    }
+
+    // Next, send all existing players
+    for (auto playerObjectPair : this->gameState.getPlayerObjects())
+    {
+        auto playerPtr = playerObjectPair.second;
+        Game::ServerMessage* message = MessageBuilder::toServerMessage(playerPtr);
+        this->server.sendToAll(*message);
+        // free(message);
+        delete message;
+    }
 }

@@ -3,6 +3,7 @@
 #include <objects/Player.h>
 #include <chrono>
 #include <thread>
+#include <util/MessageBuilder.h>
 
 #define CLIENT_DELAY 1000
 
@@ -62,30 +63,27 @@ void ClientGame::receiveUpdates()
 
 void ClientGame::updateGameState()
 {
+
+
     // TODO: Assume only object for now. Update GameObject to respective type
     for (Game::ServerMessage currMessage : client.messages) {
-
-        // Convert into object
         Game::Vector3 location = currMessage.object().worldposition();
         float rotation = currMessage.object().rotation();
         uint32_t id = currMessage.object().id();
         Game::ObjectType type = currMessage.object().type();
 
-        std::cout << "new x location: " << location.x() << std::endl;
-        std::cout << "new y location: " << location.y() << std::endl;
-        std::cout << "new z location: " << location.z() << std::endl;
-
+        GameObject* obj = NULL;
         // Update object state
         if (window.objectsToRender.count(id) > 0) {
-            GameObject* obj = window.objectsToRender[id];
-            obj->setRotation(rotation);
-            obj->setPosition(glm::vec3(location.x(), location.y(), location.z()));
+            obj = window.objectsToRender[id];
         } else {
             // Insert object into window
-            GameObject* newGameObject = new GameObject(id);
-            newGameObject->setModel("assets\\models\\Basic_Character_Model.obj");   // TODO: either read from server or config file which model to use
-            window.addObject(id, newGameObject);
+            obj = new GameObject(id);
+            obj->setModel("assets\\models\\Basic_Character_Model.obj");   // TODO: either read from server or config file which model to use
+            window.addObject(id, obj);
         }
+        obj->setRotation(rotation);
+        obj->setPosition(glm::vec3(location.x(), location.y(), location.z()));
         
         PrintUtil::print(currMessage);
     }

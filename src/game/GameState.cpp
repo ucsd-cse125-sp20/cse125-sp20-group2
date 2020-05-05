@@ -6,7 +6,14 @@ GameState::GameState() {
 }
 
 GameState::~GameState() {
-
+    for (auto gameObjectPair : this->gameObjects)
+    {
+        delete gameObjectPair.second;
+    }
+    for (auto playerObjectPair : this->playerObjects)
+    {
+        delete playerObjectPair.second;
+    }
 }
 
 int GameState::addPlayer(unsigned int clientId) {
@@ -92,7 +99,7 @@ GameObject* GameState::getGameObject(unsigned int objId)
 void GameState::removeObject(unsigned int objId)
 {
     GameObject* object = this->gameObjects[objId];
-    free(object);
+    delete object;
     this->gameObjects.erase(objId);
 }
 
@@ -100,7 +107,7 @@ void GameState::removePlayer(unsigned int clientId)
 {
     // Free player object, remove from player map
     Player* playerObject = this->playerObjects[clientId];
-    free(playerObject);
+    delete playerObject;
     this->playerObjects.erase(clientId);
 
     // OLD CODE

@@ -21,8 +21,7 @@ void GameProcessor::process(unsigned int clientId, Game::ClientMessage clientMsg
     {
         Player* player = this->state->getPlayerObject(clientId);
         glm::vec3 originalPos = player->getPosition();
-        MovementProcessor* mp = new MovementProcessor();
-        mp->processMovement(player, clientMsg.direction(), tickCount);
+        MovementProcessor::processMovement(player, clientMsg.direction(), tickCount);
 
         glm::vec3 newPos = player->getPosition();
 

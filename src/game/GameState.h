@@ -16,10 +16,6 @@ private:
     // This is used to increment the counter
     unsigned int objCounter = 0;
 
-    // No longer used remove TODO
-    // This is a mapping of clientId to gameObjId
-    std::unordered_map<unsigned int, unsigned int> clientIdToGameObjId;
-
     // This is a mapping of clientId to Player objects
     // TODO: Map from team id to allow instructor to quickly access their team's player
     std::unordered_map<unsigned int, Player*> playerObjects;
