@@ -116,6 +116,11 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 
 unsigned int Model::TextureFromFile(const char* path, const std::string& directory, bool gamma)
 {
+	std::cout << "Using directory:  " << directory << std::endl;
+
+	// Debug
+	if (std::string(path) == std::string("") || path == NULL) std::cerr << "Model loading error: No texture path given!" << std::endl;
+
 	//Generate texture ID and load texture data
 	std::string filename = std::string(path);
 	filename = directory + '/' + filename;
@@ -125,6 +130,12 @@ unsigned int Model::TextureFromFile(const char* path, const std::string& directo
 	int width, height;
 
 	unsigned char* image = SOIL_load_image(filename.c_str(), &width, &height, 0, SOIL_LOAD_RGB);
+	
+	if (image == NULL)  {
+		std::cerr << "Model loading error: Texture image not found!" << std::endl;
+		std::cerr << "Path given:" << std::endl;
+		std::cerr << std::string(path) << std::endl;
+	}
 
 	// Assign texture to ID
 	glBindTexture(GL_TEXTURE_2D, textureID);
@@ -144,6 +155,7 @@ unsigned int Model::TextureFromFile(const char* path, const std::string& directo
 
 std::vector<Texture> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName)
 {
+
 	std::vector<Texture> textures;
 	for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
 	{

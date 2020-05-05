@@ -24,7 +24,7 @@
 #include <graphics/render/Model.h>
 
 // Etc
-#include <graphics/_options/graphics_vars.h>
+#include <config/graphics_vars.h>
 
 // Objects
 #include <objects/GameObject.h>

@@ -11,8 +11,38 @@ ClientGame::ClientGame(std::string IP, int port) : client(IP, port), window(WIN_
     // TODO: fix hardcoded player values and hardcoded window insertion
     GameObject* grid = new GameObject(999999);
     grid->setPosition(glm::vec3(0, -1, 0));
-    grid->setModel("assets\\models\\grid_square.obj");
+    grid->setModel("assets/models/grid_square.obj");
     window.addObject(999999, grid);
+
+    GameObject* tomato = new GameObject(2);
+    tomato->setPosition(glm::vec3(0, 0.5, -2));
+    tomato->setModel("assets/models/tomato.obj");
+    window.addObject(2, tomato);
+
+    GameObject* lettuce = new GameObject(3);
+    lettuce->setPosition(glm::vec3(-1, 0.5, -2));
+    lettuce->setModel("assets/models/Lettuce.obj");
+    window.addObject(3, lettuce);
+
+    GameObject* cheese = new GameObject(4);
+    cheese->setPosition(glm::vec3(1, 0.5, -2));
+    cheese->setModel("assets/models/Cheese.obj");
+    window.addObject(4, cheese);
+
+    GameObject* onion = new GameObject(5);
+    onion->setPosition(glm::vec3(2, 0.5, -2));
+    onion->setModel("assets/models/Onion.obj");
+    window.addObject(5, onion);
+
+    GameObject* meat = new GameObject(6);
+    meat->setPosition(glm::vec3(-2, 0.5, -2));
+    meat->setModel("assets/models/meat.obj");
+    window.addObject(6, meat);
+
+    GameObject* nanosuit = new GameObject(7);
+    nanosuit->setPosition(glm::vec3(0, -2, -6));
+    nanosuit->setModel("assets/nanosuit/nanosuit.obj");
+    window.addObject(7, nanosuit);
 
     runGame();
 }
@@ -78,7 +108,7 @@ void ClientGame::updateGameState()
         } else {
             // Insert object into window
             GameObject* newGameObject = new GameObject(id);
-            newGameObject->setModel("assets\\models\\cube.obj");   // TODO: either read from server or config file which model to use
+            newGameObject->setModel("assets/models/cube.obj");   // TODO: either read from server or config file which model to use
             window.addObject(id, newGameObject);
         }
         
