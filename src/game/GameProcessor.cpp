@@ -26,22 +26,22 @@ void GameProcessor::process(unsigned int clientId, Game::ClientMessage clientMsg
         {
             case Game::Direction::UP:
             {
-                initialPos.x += 0.1;
+                initialPos.x += 0.01;
                 break;
             }
             case Game::Direction::DOWN:
             {
-                initialPos.x -= 0.1;
+                initialPos.x -= 0.01;
                 break;
             }
             case Game::Direction::LEFT:
             {
-                initialPos.z += 0.1;
+                initialPos.z += 0.01;
                 break;
             }
             case Game::Direction::RIGHT:
             {
-                initialPos.z -= 0.1;
+                initialPos.z -= 0.01;
                 break;
             }
             default:
