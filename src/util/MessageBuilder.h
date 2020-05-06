@@ -8,8 +8,6 @@ class MessageBuilder
 {
 public:
 
-    
-
     /**
      * Converts a game object to a server message
      * It is up to the caller to determine whether this is freed.

@@ -6,7 +6,11 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <config/graphics_vars.h>
 #include <unordered_map>
+#include <collisions/BoundingBox.h>
 
+class BoundingBox;
+
+// is intersecting(GameObject) -> return boundingBox.isIntersecting
 class GameObject
 {
 private:
@@ -28,6 +32,10 @@ private:
 
     // Passing through object
     bool passable = false;
+
+protected:
+    // The bounding box for this game object
+    BoundingBox* box;
 
 public:
     /**
@@ -76,6 +84,8 @@ public:
 
     float getRotation();
 
+    BoundingBox* getBoundingBox();
+
     void setRotation(float rot);
     
     GameObject* getItem(int index);
@@ -89,4 +99,6 @@ public:
     bool isPassable();
 
     void setPassable(bool passable);
+    
+    bool isColliding(GameObject*);
 };

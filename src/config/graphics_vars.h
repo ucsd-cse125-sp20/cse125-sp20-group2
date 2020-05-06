@@ -12,7 +12,7 @@ const float WIN_WIDTH = 1800;
 const float WIN_HEIGHT = 1600;
 
 // Initial camera position
-const glm::vec3 INITIAL_CAM_POS = glm::vec3(0, 0, 3);
+const glm::vec3 INITIAL_CAM_POS = glm::vec3(0, 1, 3);
 
 // Other
 const glm::vec3 UP = glm::vec3(0.0f, 1.0f, 0.0f);

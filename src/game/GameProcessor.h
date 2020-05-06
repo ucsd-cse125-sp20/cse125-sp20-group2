@@ -2,6 +2,7 @@
 
 #include <schema/Game.pb.h>
 #include <game/GameState.h>
+#include <game/MovementProcessor.h>
 #include <deque>
 
 /**
@@ -26,7 +27,7 @@ public:
      * This processes a client message for a client id.
      * This will modify GameState.
      * */
-    void process(unsigned int, Game::ClientMessage);
+    void process(unsigned int, Game::ClientMessage, int);
     
     std::deque<Game::ServerMessage*> messages;
 };

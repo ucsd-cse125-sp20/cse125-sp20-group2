@@ -3,12 +3,6 @@
 //// Camera at desiginated position
 Camera cam(INITIAL_CAM_POS);
 
-// Player movement options (FIXME)
-const float RUN_SPEED = 1, TURN_SPEED = 1;
-float currentSpeed = 0.0f, currentTurnSpeed = 0.0f;
-float modelRotationX;
-glm::vec3 modelPos;
-
 // Initial mouse positions
 float lastX = WIN_WIDTH / 2, lastY = WIN_HEIGHT / 2;
 
@@ -42,7 +36,6 @@ void Window::removeObject(unsigned int index) {
 
 void Window::setupWindow() {
 
-	modelPos = glm::vec3(0);
 	// // //
 	// Setup
 
