@@ -1,10 +1,10 @@
 #pragma once
 
-#include <graphics/_obj/Shader.h>
-#include <graphics/Model.cpp>
+#include <graphics/render/Shader.h>
+#include <graphics/render/Model.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <graphics/_options/graphics_vars.h>
+#include <config/graphics_vars.h>
 #include <unordered_map>
 
 class GameObject
