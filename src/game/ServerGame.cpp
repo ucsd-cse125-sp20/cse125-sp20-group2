@@ -4,7 +4,7 @@
 #include <thread>
 #include <chrono>
 
-#define TICK 10
+#define TICK 200
 
 ServerGame::ServerGame(int port) : server(port), processor(&this->gameState)
 {
