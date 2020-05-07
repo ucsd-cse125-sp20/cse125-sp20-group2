@@ -14,6 +14,7 @@
 #include <google/protobuf/wire_format.h>
 // @@protoc_insertion_point(includes)
 #include <google/protobuf/port_def.inc>
+extern PROTOBUF_INTERNAL_EXPORT_Game_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Inventory_Game_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_Game_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_Object_Game_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_Game_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Score_Game_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_Game_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Vector3_Game_2eproto;
@@ -30,6 +31,7 @@ class ServerMessageDefaultTypeInternal {
   int net_;
   const ::Game::Object* object_;
   const ::Game::Score* score_;
+  const ::Game::Inventory* inventory_;
 } _ServerMessage_default_instance_;
 class ObjectDefaultTypeInternal {
  public:
@@ -43,6 +45,10 @@ class Vector3DefaultTypeInternal {
  public:
   ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<Vector3> _instance;
 } _Vector3_default_instance_;
+class InventoryDefaultTypeInternal {
+ public:
+  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<Inventory> _instance;
+} _Inventory_default_instance_;
 }  // namespace Game
 static void InitDefaultsscc_info_ClientMessage_Game_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -57,6 +63,20 @@ static void InitDefaultsscc_info_ClientMessage_Game_2eproto() {
 
 ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_ClientMessage_Game_2eproto =
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_ClientMessage_Game_2eproto}, {}};
+
+static void InitDefaultsscc_info_Inventory_Game_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::Game::_Inventory_default_instance_;
+    new (ptr) ::Game::Inventory();
+    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::Game::Inventory::InitAsDefaultInstance();
+}
+
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Inventory_Game_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_Inventory_Game_2eproto}, {}};
 
 static void InitDefaultsscc_info_Object_Game_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -98,10 +118,11 @@ static void InitDefaultsscc_info_ServerMessage_Game_2eproto() {
   ::Game::ServerMessage::InitAsDefaultInstance();
 }
 
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<2> scc_info_ServerMessage_Game_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 2, 0, InitDefaultsscc_info_ServerMessage_Game_2eproto}, {
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<3> scc_info_ServerMessage_Game_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 3, 0, InitDefaultsscc_info_ServerMessage_Game_2eproto}, {
       &scc_info_Object_Game_2eproto.base,
-      &scc_info_Score_Game_2eproto.base,}};
+      &scc_info_Score_Game_2eproto.base,
+      &scc_info_Inventory_Game_2eproto.base,}};
 
 static void InitDefaultsscc_info_Vector3_Game_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -117,7 +138,7 @@ static void InitDefaultsscc_info_Vector3_Game_2eproto() {
 ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Vector3_Game_2eproto =
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_Vector3_Game_2eproto}, {}};
 
-static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_Game_2eproto[5];
+static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_Game_2eproto[6];
 static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* file_level_enum_descriptors_Game_2eproto[3];
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_Game_2eproto = nullptr;
 
@@ -140,7 +161,9 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_Game_2eproto::offsets[] PROTOB
   offsetof(::Game::ServerMessageDefaultTypeInternal, net_),
   offsetof(::Game::ServerMessageDefaultTypeInternal, object_),
   offsetof(::Game::ServerMessageDefaultTypeInternal, score_),
+  offsetof(::Game::ServerMessageDefaultTypeInternal, inventory_),
   PROTOBUF_FIELD_OFFSET(::Game::ServerMessage, event_),
+  ~0u,
   ~0u,
   ~0u,
   ~0u,
@@ -173,13 +196,23 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_Game_2eproto::offsets[] PROTOB
   1,
   0,
   2,
+  PROTOBUF_FIELD_OFFSET(::Game::Inventory, _has_bits_),
+  PROTOBUF_FIELD_OFFSET(::Game::Inventory, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::Game::Inventory, objid_),
+  PROTOBUF_FIELD_OFFSET(::Game::Inventory, playerid_),
+  0,
+  1,
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, 8, sizeof(::Game::ClientMessage)},
-  { 10, 19, sizeof(::Game::ServerMessage)},
-  { 22, 31, sizeof(::Game::Object)},
-  { 35, 40, sizeof(::Game::Score)},
-  { 40, 48, sizeof(::Game::Vector3)},
+  { 10, 20, sizeof(::Game::ServerMessage)},
+  { 24, 33, sizeof(::Game::Object)},
+  { 37, 42, sizeof(::Game::Score)},
+  { 42, 50, sizeof(::Game::Vector3)},
+  { 53, 60, sizeof(::Game::Inventory)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -188,27 +221,32 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Game::_Object_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Game::_Score_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Game::_Vector3_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Game::_Inventory_default_instance_),
 };
 
 const char descriptor_table_protodef_Game_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
   "\n\nGame.proto\022\004Game\"X\n\rClientMessage\022\030\n\003n"
   "et\030\001 \001(\0162\t.Game.NetH\000\022$\n\tdirection\030\002 \001(\016"
-  "2\017.Game.DirectionH\000B\007\n\005event\"p\n\rServerMe"
-  "ssage\022\030\n\003net\030\001 \001(\0162\t.Game.NetH\000\022\036\n\006objec"
-  "t\030\002 \001(\0132\014.Game.ObjectH\000\022\034\n\005score\030\003 \001(\0132\013"
-  ".Game.ScoreH\000B\007\n\005event\"l\n\006Object\022$\n\rworl"
-  "dPosition\030\001 \002(\0132\r.Game.Vector3\022\020\n\010rotati"
-  "on\030\002 \002(\002\022\n\n\002id\030\003 \002(\r\022\036\n\004type\030\004 \002(\0162\020.Gam"
-  "e.ObjectType\"\007\n\005Score\"3\n\007Vector3\022\014\n\001x\030\001 "
-  "\002(\002:\0011\022\014\n\001y\030\002 \002(\002:\0010\022\014\n\001z\030\003 \002(\002:\0011*\031\n\003Ne"
-  "t\022\010\n\004PING\020\000\022\010\n\004PONG\020\001*2\n\tDirection\022\006\n\002UP"
-  "\020\000\022\010\n\004DOWN\020\001\022\010\n\004LEFT\020\002\022\t\n\005RIGHT\020\003*$\n\nObj"
-  "ectType\022\n\n\006PLAYER\020\000\022\n\n\006FRUITY\020\001"
+  "2\017.Game.DirectionH\000B\007\n\005event\"\226\001\n\rServerM"
+  "essage\022\030\n\003net\030\001 \001(\0162\t.Game.NetH\000\022\036\n\006obje"
+  "ct\030\002 \001(\0132\014.Game.ObjectH\000\022\034\n\005score\030\003 \001(\0132"
+  "\013.Game.ScoreH\000\022$\n\tinventory\030\004 \001(\0132\017.Game"
+  ".InventoryH\000B\007\n\005event\"l\n\006Object\022$\n\rworld"
+  "Position\030\001 \002(\0132\r.Game.Vector3\022\020\n\010rotatio"
+  "n\030\002 \002(\002\022\n\n\002id\030\003 \002(\r\022\036\n\004type\030\004 \002(\0162\020.Game"
+  ".ObjectType\"\007\n\005Score\"3\n\007Vector3\022\014\n\001x\030\001 \002"
+  "(\002:\0011\022\014\n\001y\030\002 \002(\002:\0010\022\014\n\001z\030\003 \002(\002:\0011\",\n\tInv"
+  "entory\022\r\n\005objId\030\001 \002(\r\022\020\n\010playerId\030\002 \002(\r*"
+  "\031\n\003Net\022\010\n\004PING\020\000\022\010\n\004PONG\020\001*2\n\tDirection\022"
+  "\006\n\002UP\020\000\022\010\n\004DOWN\020\001\022\010\n\004LEFT\020\002\022\t\n\005RIGHT\020\003*B"
+  "\n\nObjectType\022\n\n\006OBJECT\020\000\022\n\n\006PLAYER\020\001\022\016\n\n"
+  "INGREDIENT\020\002\022\014\n\010COOKWARE\020\003"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_Game_2eproto_deps[1] = {
 };
-static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_Game_2eproto_sccs[5] = {
+static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_Game_2eproto_sccs[6] = {
   &scc_info_ClientMessage_Game_2eproto.base,
+  &scc_info_Inventory_Game_2eproto.base,
   &scc_info_Object_Game_2eproto.base,
   &scc_info_Score_Game_2eproto.base,
   &scc_info_ServerMessage_Game_2eproto.base,
@@ -217,10 +255,10 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_Gam
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_Game_2eproto_once;
 static bool descriptor_table_Game_2eproto_initialized = false;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_Game_2eproto = {
-  &descriptor_table_Game_2eproto_initialized, descriptor_table_protodef_Game_2eproto, "Game.proto", 511,
-  &descriptor_table_Game_2eproto_once, descriptor_table_Game_2eproto_sccs, descriptor_table_Game_2eproto_deps, 5, 0,
+  &descriptor_table_Game_2eproto_initialized, descriptor_table_protodef_Game_2eproto, "Game.proto", 626,
+  &descriptor_table_Game_2eproto_once, descriptor_table_Game_2eproto_sccs, descriptor_table_Game_2eproto_deps, 6, 0,
   schemas, file_default_instances, TableStruct_Game_2eproto::offsets,
-  file_level_metadata_Game_2eproto, 5, file_level_enum_descriptors_Game_2eproto, file_level_service_descriptors_Game_2eproto,
+  file_level_metadata_Game_2eproto, 6, file_level_enum_descriptors_Game_2eproto, file_level_service_descriptors_Game_2eproto,
 };
 
 // Force running AddDescriptors() at dynamic initialization time.
@@ -264,6 +302,8 @@ bool ObjectType_IsValid(int value) {
   switch (value) {
     case 0:
     case 1:
+    case 2:
+    case 3:
       return true;
     default:
       return false;
@@ -553,12 +593,15 @@ void ServerMessage::InitAsDefaultInstance() {
       ::Game::Object::internal_default_instance());
   ::Game::_ServerMessage_default_instance_.score_ = const_cast< ::Game::Score*>(
       ::Game::Score::internal_default_instance());
+  ::Game::_ServerMessage_default_instance_.inventory_ = const_cast< ::Game::Inventory*>(
+      ::Game::Inventory::internal_default_instance());
 }
 class ServerMessage::_Internal {
  public:
   using HasBits = decltype(std::declval<ServerMessage>()._has_bits_);
   static const ::Game::Object& object(const ServerMessage* msg);
   static const ::Game::Score& score(const ServerMessage* msg);
+  static const ::Game::Inventory& inventory(const ServerMessage* msg);
 };
 
 const ::Game::Object&
@@ -568,6 +611,10 @@ ServerMessage::_Internal::object(const ServerMessage* msg) {
 const ::Game::Score&
 ServerMessage::_Internal::score(const ServerMessage* msg) {
   return *msg->event_.score_;
+}
+const ::Game::Inventory&
+ServerMessage::_Internal::inventory(const ServerMessage* msg) {
+  return *msg->event_.inventory_;
 }
 void ServerMessage::set_allocated_object(::Game::Object* object) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
@@ -597,6 +644,20 @@ void ServerMessage::set_allocated_score(::Game::Score* score) {
   }
   // @@protoc_insertion_point(field_set_allocated:Game.ServerMessage.score)
 }
+void ServerMessage::set_allocated_inventory(::Game::Inventory* inventory) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
+  clear_event();
+  if (inventory) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena = nullptr;
+    if (message_arena != submessage_arena) {
+      inventory = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, inventory, submessage_arena);
+    }
+    set_has_inventory();
+    event_.inventory_ = inventory;
+  }
+  // @@protoc_insertion_point(field_set_allocated:Game.ServerMessage.inventory)
+}
 ServerMessage::ServerMessage()
   : ::PROTOBUF_NAMESPACE_ID::Message(), _internal_metadata_(nullptr) {
   SharedCtor();
@@ -619,6 +680,10 @@ ServerMessage::ServerMessage(const ServerMessage& from)
     }
     case kScore: {
       _internal_mutable_score()->::Game::Score::MergeFrom(from._internal_score());
+      break;
+    }
+    case kInventory: {
+      _internal_mutable_inventory()->::Game::Inventory::MergeFrom(from._internal_inventory());
       break;
     }
     case EVENT_NOT_SET: {
@@ -666,6 +731,10 @@ void ServerMessage::clear_event() {
     }
     case kScore: {
       delete event_.score_;
+      break;
+    }
+    case kInventory: {
+      delete event_.inventory_;
       break;
     }
     case EVENT_NOT_SET: {
@@ -720,6 +789,13 @@ const char* ServerMessage::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
+      // optional .Game.Inventory inventory = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 34)) {
+          ptr = ctx->ParseMessage(_internal_mutable_inventory(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
       default: {
       handle_unusual:
         if ((tag & 7) == 4 || tag == 0) {
@@ -767,6 +843,13 @@ failure:
           3, _Internal::score(this), target, stream);
       break;
     }
+    case kInventory: {
+      target = stream->EnsureSpace(target);
+      target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+        InternalWriteMessage(
+          4, _Internal::inventory(this), target, stream);
+      break;
+    }
     default: ;
   }
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -804,6 +887,13 @@ size_t ServerMessage::ByteSizeLong() const {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
           *event_.score_);
+      break;
+    }
+    // optional .Game.Inventory inventory = 4;
+    case kInventory: {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *event_.inventory_);
       break;
     }
     case EVENT_NOT_SET: {
@@ -854,6 +944,10 @@ void ServerMessage::MergeFrom(const ServerMessage& from) {
       _internal_mutable_score()->::Game::Score::MergeFrom(from._internal_score());
       break;
     }
+    case kInventory: {
+      _internal_mutable_inventory()->::Game::Inventory::MergeFrom(from._internal_inventory());
+      break;
+    }
     case EVENT_NOT_SET: {
       break;
     }
@@ -886,6 +980,12 @@ bool ServerMessage::IsInitialized() const {
       break;
     }
     case kScore: {
+      break;
+    }
+    case kInventory: {
+      if (has_inventory()) {
+        if (!this->inventory().IsInitialized()) return false;
+      }
       break;
     }
     case EVENT_NOT_SET: {
@@ -1692,6 +1792,265 @@ void Vector3::InternalSwap(Vector3* other) {
 }
 
 
+// ===================================================================
+
+void Inventory::InitAsDefaultInstance() {
+}
+class Inventory::_Internal {
+ public:
+  using HasBits = decltype(std::declval<Inventory>()._has_bits_);
+  static void set_has_objid(HasBits* has_bits) {
+    (*has_bits)[0] |= 1u;
+  }
+  static void set_has_playerid(HasBits* has_bits) {
+    (*has_bits)[0] |= 2u;
+  }
+};
+
+Inventory::Inventory()
+  : ::PROTOBUF_NAMESPACE_ID::Message(), _internal_metadata_(nullptr) {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:Game.Inventory)
+}
+Inventory::Inventory(const Inventory& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      _internal_metadata_(nullptr),
+      _has_bits_(from._has_bits_) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::memcpy(&objid_, &from.objid_,
+    static_cast<size_t>(reinterpret_cast<char*>(&playerid_) -
+    reinterpret_cast<char*>(&objid_)) + sizeof(playerid_));
+  // @@protoc_insertion_point(copy_constructor:Game.Inventory)
+}
+
+void Inventory::SharedCtor() {
+  ::memset(&objid_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&playerid_) -
+      reinterpret_cast<char*>(&objid_)) + sizeof(playerid_));
+}
+
+Inventory::~Inventory() {
+  // @@protoc_insertion_point(destructor:Game.Inventory)
+  SharedDtor();
+}
+
+void Inventory::SharedDtor() {
+}
+
+void Inventory::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const Inventory& Inventory::default_instance() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_Inventory_Game_2eproto.base);
+  return *internal_default_instance();
+}
+
+
+void Inventory::Clear() {
+// @@protoc_insertion_point(message_clear_start:Game.Inventory)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  cached_has_bits = _has_bits_[0];
+  if (cached_has_bits & 0x00000003u) {
+    ::memset(&objid_, 0, static_cast<size_t>(
+        reinterpret_cast<char*>(&playerid_) -
+        reinterpret_cast<char*>(&objid_)) + sizeof(playerid_));
+  }
+  _has_bits_.Clear();
+  _internal_metadata_.Clear();
+}
+
+const char* Inventory::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  _Internal::HasBits has_bits{};
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    CHK_(ptr);
+    switch (tag >> 3) {
+      // required uint32 objId = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
+          _Internal::set_has_objid(&has_bits);
+          objid_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // required uint32 playerId = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 16)) {
+          _Internal::set_has_playerid(&has_bits);
+          playerid_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag & 7) == 4 || tag == 0) {
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag, &_internal_metadata_, ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  _has_bits_.Or(has_bits);
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* Inventory::_InternalSerialize(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:Game.Inventory)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = _has_bits_[0];
+  // required uint32 objId = 1;
+  if (cached_has_bits & 0x00000001u) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt32ToArray(1, this->_internal_objid(), target);
+  }
+
+  // required uint32 playerId = 2;
+  if (cached_has_bits & 0x00000002u) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt32ToArray(2, this->_internal_playerid(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields(), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:Game.Inventory)
+  return target;
+}
+
+size_t Inventory::RequiredFieldsByteSizeFallback() const {
+// @@protoc_insertion_point(required_fields_byte_size_fallback_start:Game.Inventory)
+  size_t total_size = 0;
+
+  if (_internal_has_objid()) {
+    // required uint32 objId = 1;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt32Size(
+        this->_internal_objid());
+  }
+
+  if (_internal_has_playerid()) {
+    // required uint32 playerId = 2;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt32Size(
+        this->_internal_playerid());
+  }
+
+  return total_size;
+}
+size_t Inventory::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:Game.Inventory)
+  size_t total_size = 0;
+
+  if (((_has_bits_[0] & 0x00000003) ^ 0x00000003) == 0) {  // All required fields are present.
+    // required uint32 objId = 1;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt32Size(
+        this->_internal_objid());
+
+    // required uint32 playerId = 2;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt32Size(
+        this->_internal_playerid());
+
+  } else {
+    total_size += RequiredFieldsByteSizeFallback();
+  }
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+        _internal_metadata_, total_size, &_cached_size_);
+  }
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void Inventory::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:Game.Inventory)
+  GOOGLE_DCHECK_NE(&from, this);
+  const Inventory* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<Inventory>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:Game.Inventory)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:Game.Inventory)
+    MergeFrom(*source);
+  }
+}
+
+void Inventory::MergeFrom(const Inventory& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:Game.Inventory)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = from._has_bits_[0];
+  if (cached_has_bits & 0x00000003u) {
+    if (cached_has_bits & 0x00000001u) {
+      objid_ = from.objid_;
+    }
+    if (cached_has_bits & 0x00000002u) {
+      playerid_ = from.playerid_;
+    }
+    _has_bits_[0] |= cached_has_bits;
+  }
+}
+
+void Inventory::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:Game.Inventory)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void Inventory::CopyFrom(const Inventory& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:Game.Inventory)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool Inventory::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000003) != 0x00000003) return false;
+  return true;
+}
+
+void Inventory::InternalSwap(Inventory* other) {
+  using std::swap;
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_has_bits_[0], other->_has_bits_[0]);
+  swap(objid_, other->objid_);
+  swap(playerid_, other->playerid_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata Inventory::GetMetadata() const {
+  return GetMetadataStatic();
+}
+
+
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace Game
 PROTOBUF_NAMESPACE_OPEN
@@ -1709,6 +2068,9 @@ template<> PROTOBUF_NOINLINE ::Game::Score* Arena::CreateMaybeMessage< ::Game::S
 }
 template<> PROTOBUF_NOINLINE ::Game::Vector3* Arena::CreateMaybeMessage< ::Game::Vector3 >(Arena* arena) {
   return Arena::CreateInternal< ::Game::Vector3 >(arena);
+}
+template<> PROTOBUF_NOINLINE ::Game::Inventory* Arena::CreateMaybeMessage< ::Game::Inventory >(Arena* arena) {
+  return Arena::CreateInternal< ::Game::Inventory >(arena);
 }
 PROTOBUF_NAMESPACE_CLOSE
 

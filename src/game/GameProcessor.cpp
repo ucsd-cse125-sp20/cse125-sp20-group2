@@ -30,6 +30,7 @@ void GameProcessor::process(unsigned int clientId, Game::ClientMessage clientMsg
         for (auto currObjectPair : gameObjects)
         {
             GameObject* currObject = currObjectPair.second;
+
             // Check for collision
             if (player->isColliding(currObject))
             {
@@ -38,6 +39,22 @@ void GameProcessor::process(unsigned int clientId, Game::ClientMessage clientMsg
                 player->setPosition(originalPos);
                 player->setRunSpeed(0);
                 break;
+            }
+        }
+
+        // Check for collisions for ingredients
+        const std::unordered_map<unsigned int, IngredientObject*>& ingredientObjects = this->state->getIngredientObjects();
+        for (auto currIngredientPair : ingredientObjects)
+        {
+            IngredientObject* currIngredient = currIngredientPair.second;
+
+            // Check for collision
+            if (player->isColliding(currIngredient))
+            {
+                currIngredient->renderInvisible();
+                player->addToInventory(currIngredient);
+                Game::ServerMessage* newServerMsg = MessageBuilder::toServerMessage(currIngredient);
+                messages.push_back(newServerMsg);
             }
         }
 
@@ -65,7 +82,6 @@ void GameProcessor::process(unsigned int clientId, Game::ClientMessage clientMsg
         Game::ServerMessage* newServerMsg = MessageBuilder::toServerMessage(player);
         messages.push_back(newServerMsg);
 
-        // Do cool math stuff to movement (LATER)
         // Reinstate movement into gamestate (may not need to do this)
 
         // gameObject->moveTo() bark bark

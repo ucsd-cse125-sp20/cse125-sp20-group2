@@ -4,6 +4,7 @@
 #include <objects/GameObject.h>
 #include <unordered_map>
 #include <objects/Player.h>
+#include <objects/IngredientObject.h>
 
 /**
  * This class holds the game state.
@@ -22,6 +23,9 @@ private:
 
     // This is a mapping of gameObjId to gameObjects
     std::unordered_map<unsigned int, GameObject*> gameObjects;
+
+    // This is a mapping of gameObjId to ingredient objects
+    std::unordered_map<unsigned int, IngredientObject*> ingredientObjects;
 
     // TODO: Implement
     // This is a mapping of clientId to score
@@ -53,6 +57,11 @@ public:
     GameObject* getGameObject(unsigned int);
 
     /**
+     * Return the reference ingredient object
+     * */
+    IngredientObject* getIngredientObject(unsigned int);
+
+    /**
      * Returns all game objects
      * TODO: This currently returns a copy
      * */
@@ -65,6 +74,12 @@ public:
     const std::unordered_map<unsigned int, Player*>& getPlayerObjects();
 
     /**
+     * Returns all ingredient objects
+     * TODO: This currently returns a copy
+     * */
+    const std::unordered_map<unsigned int, IngredientObject*>& getIngredientObjects();
+
+    /**
      * Removes a player object using the client id
      * */
     void removePlayer(unsigned int);
@@ -73,4 +88,9 @@ public:
      * Remove an object using the object id
      * */
     void removeObject(unsigned int);
+
+    /**
+     * Remove a ingredient object using the object id
+     * */
+    void removeIngredient(unsigned int);
 };

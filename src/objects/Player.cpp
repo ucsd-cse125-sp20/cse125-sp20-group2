@@ -5,6 +5,7 @@ Player::Player(int ID) : GameObject(ID)
     this->runSpeed = 0;
     this->turnSpeed = 0;
     this->score = 0;
+    this->objType = PLAYER;
 }
 
 void Player::setScore(int newScore)

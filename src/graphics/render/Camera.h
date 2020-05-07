@@ -19,7 +19,7 @@ enum Camera_Movement {
 
 // Default euler angles
 const float INIT_YAW = -90.0f;
-const float INIT_PITCH = 0.0f;
+const float INIT_PITCH = -45.0f;
 
 // Default camera movement options
 const float INIT_SPEED = 2.5f;

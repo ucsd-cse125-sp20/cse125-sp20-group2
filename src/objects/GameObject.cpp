@@ -6,8 +6,16 @@ GameObject::GameObject(int id) {
 	this->setRotation(0);
 	this->applyScale(glm::vec3(0.2));
 	this->setPassable(false);
-	// TODO: Assume it is a sphere for now
 	this->box = new BoundingBox(this); 
+	this->setObjectType(OBJECT);
+}
+
+void GameObject::setObjectType(ObjectType newObjType) {
+	this->objType = newObjType;
+}
+
+ObjectType GameObject::getObjectType() {
+	return this->objType;
 }
 
 void GameObject::draw(Shader shader) {
@@ -29,6 +37,12 @@ void GameObject::setModel(std::string path) {
 // Update the world position and move the model matrix
 void GameObject::setPosition(glm::vec3 loc) {
 	this->pos = loc;
+}
+
+void GameObject::renderInvisible() {
+	glm::vec3 originalPos = this->getPosition();
+	glm::vec3 newPos = glm::vec3(originalPos.x, -2, originalPos.z);
+	this->setPosition(newPos);
 }
 
 // Apply scaling to the model.

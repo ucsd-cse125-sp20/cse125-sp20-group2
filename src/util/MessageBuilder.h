@@ -19,16 +19,30 @@ public:
             std::cout << "gameobject is null :(" << std::endl;
             exit(1);
         }
+
+
         // TODO: Check if sending server message deallocates Vector
         Game::Vector3* vector = toVector(object->getPosition());
 
+        // Set position/location/id (universal aspects of all game objects)
         Game::Object* msgObj = new Game::Object();
-        msgObj->set_id(object->getID());
-        msgObj->set_rotation(object->getRotation());
-        // TODO: Assume players only for now
-        msgObj->set_type(Game::ObjectType::PLAYER); 
         msgObj->set_allocated_worldposition(vector);
+        msgObj->set_rotation(object->getRotation());
+        msgObj->set_id(object->getID());
+        
+        // Set type
+        switch (object->getObjectType()) {
+            case 0:
+                msgObj->set_type(Game::ObjectType::OBJECT); break;
+            case 1:
+                msgObj->set_type(Game::ObjectType::PLAYER); break;
+            case 2:
+                msgObj->set_type(Game::ObjectType::INGREDIENT); break;
+            case 3:
+                msgObj->set_type(Game::ObjectType::COOKWARE); break;
+        }
 
+        // Put allocated object into message to be sent
         Game::ServerMessage* message = new Game::ServerMessage();
         message->set_allocated_object(msgObj);
         return message;

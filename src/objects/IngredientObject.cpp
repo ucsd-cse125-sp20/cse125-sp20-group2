@@ -1,7 +1,7 @@
 #include <objects/IngredientObject.h>
 
 IngredientObject::IngredientObject(int ID) : GameObject(ID) {
-
+    this->objType = INGREDIENT;
 }
     
 void IngredientObject::setName(std::string name) {

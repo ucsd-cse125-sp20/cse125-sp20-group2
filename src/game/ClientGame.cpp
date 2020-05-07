@@ -12,7 +12,8 @@ ClientGame::ClientGame(std::string IP, int port) : client(IP, port), window(WIN_
     // TODO: fix hardcoded player values and hardcoded window insertion
     GameObject* grid = new GameObject(999999);
     grid->setPosition(glm::vec3(0, 0, 0));
-    grid->setModel("assets\\models\\grid_square.obj");
+    grid->setModel("assets\\models\\Basic_Dungeon_Map.obj");
+    grid->applyScale(glm::vec3(2, 2, 2));
     window.addObject(999999, grid);
 
     runGame();
@@ -66,6 +67,7 @@ void ClientGame::updateGameState()
 
 
     // TODO: Assume only object for now. Update GameObject to respective type
+    // TODO: switch case based on what kind of messages
     for (Game::ServerMessage currMessage : client.messages) {
         Game::Vector3 location = currMessage.object().worldposition();
         float rotation = currMessage.object().rotation();
@@ -120,6 +122,20 @@ void ClientGame::processInput()
     {
         msg.set_direction(Game::Direction::RIGHT); 
     }
+
+    // Camera movement options (client-side only)
+    // TODO: Remove this in the final release
+    if (glfwGetKey(window.glfwViewport, GLFW_KEY_UP) == GLFW_PRESS)
+		window.camera->processKeyMovement(FORWARD, 0.5);
+    if (glfwGetKey(window.glfwViewport, GLFW_KEY_DOWN) == GLFW_PRESS)
+		window.camera->processKeyMovement(BACKWARD, 0.5);
+    if (glfwGetKey(window.glfwViewport, GLFW_KEY_LEFT) == GLFW_PRESS)
+		window.camera->processKeyMovement(LEFT, 0.5);
+    if (glfwGetKey(window.glfwViewport, GLFW_KEY_RIGHT) == GLFW_PRESS)
+		window.camera->processKeyMovement(RIGHT, 0.5);
+	if (glfwGetKey(window.glfwViewport, GLFW_KEY_F) == GLFW_PRESS)
+		window.camera->toggleFreeCam();
+
     
     // Send message only if it has a direction associated with it
     if (msg.has_direction()) {

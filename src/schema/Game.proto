@@ -27,12 +27,15 @@ message ServerMessage {
         Net net = 1;
         Object object = 2;
         Score score = 3;
+        Inventory inventory = 4;
     }
 }
 
 enum ObjectType {
-    PLAYER = 0;
-    FRUITY = 1;
+    OBJECT = 0;
+    PLAYER = 1;
+    INGREDIENT = 2;
+    COOKWARE = 3;
 }
 
 message Object {
@@ -50,4 +53,10 @@ message Vector3 {
     required float x = 1 [default = 1];
     required float y = 2 [default = 0];
     required float z = 3 [default = 1];
+}
+
+message Inventory {
+    required uint32 objId = 1;
+    required uint32 playerId = 2;
+    // TODO: boolean for add/remove
 }

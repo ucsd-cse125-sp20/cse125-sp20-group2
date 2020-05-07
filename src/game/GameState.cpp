@@ -1,6 +1,8 @@
 #include <game/GameState.h>
 #include <objects/Player.h>
 
+#define PLAYER_RADIUS 0.05
+
 GameState::GameState() {
 
 }
@@ -51,15 +53,21 @@ int GameState::addObject(Game::ObjectType objectType)
             std::cout << "Creating a player object on the server side" << std::endl;
             int objId = this->objCounter++;
             Player* player = new Player(objId);
-            player->getBoundingBox()->setRadius( 0.05 );
+            player->getBoundingBox()->setRadius(PLAYER_RADIUS);
             this->gameObjects[objId] = player;
             std::cout << "Returning the player object id" <<std::endl;
             return objId;
         }
         // Create fruit object, add to map TODO
-        case Game::ObjectType::FRUITY:
+        case Game::ObjectType::INGREDIENT:
         {
-
+            std::cout << "Creating a ingredient object on the server side" << std::endl;
+            int objId = this->objCounter++;
+            IngredientObject* ingredient = new IngredientObject(objId);
+            ingredient->getBoundingBox()->setRadius(PLAYER_RADIUS/2);
+            this->ingredientObjects[objId] = ingredient;
+            std::cout << "Returning the ingredient object id" <<std::endl;
+        
         }
         default:
             break;
@@ -78,6 +86,10 @@ const std::unordered_map<unsigned int, Player*>& GameState::getPlayerObjects()
     return this->playerObjects;
 }
 
+const std::unordered_map<unsigned int, IngredientObject*>& GameState::getIngredientObjects() {
+    return this->ingredientObjects;
+}
+
 // If I called this, and assigned it to the following, what would happen?
 //std::unordered_map<unsigned int, GameObject*> myMap = getObjects() (copy?)
 //std::unordered_map<unsigned int, GameObject*>& myMap = getObjects() (reference?)
@@ -94,6 +106,11 @@ Player* GameState::getPlayerObject(unsigned int clientId)
 GameObject* GameState::getGameObject(unsigned int objId) 
 {
     return this->gameObjects[objId];
+}
+
+IngredientObject* GameState::getIngredientObject(unsigned int ingredientId)
+{
+    return this->ingredientObjects[ingredientId];
 }
 
 void GameState::removeObject(unsigned int objId)
@@ -118,4 +135,11 @@ void GameState::removePlayer(unsigned int clientId)
 
     // this->clientIdToGameObjId.erase(clientId);
     // this->gameObjects.erase(objId);
+}
+
+void GameState::removeIngredient(unsigned int ingredientId)
+{
+    IngredientObject* ingredient = this->ingredientObjects[ingredientId];
+    delete ingredient;
+    this->ingredientObjects.erase(ingredientId);
 }

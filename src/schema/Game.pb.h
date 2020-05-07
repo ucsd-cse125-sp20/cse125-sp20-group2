@@ -48,7 +48,7 @@ struct TableStruct_Game_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[5]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[6]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -59,6 +59,9 @@ namespace Game {
 class ClientMessage;
 class ClientMessageDefaultTypeInternal;
 extern ClientMessageDefaultTypeInternal _ClientMessage_default_instance_;
+class Inventory;
+class InventoryDefaultTypeInternal;
+extern InventoryDefaultTypeInternal _Inventory_default_instance_;
 class Object;
 class ObjectDefaultTypeInternal;
 extern ObjectDefaultTypeInternal _Object_default_instance_;
@@ -74,6 +77,7 @@ extern Vector3DefaultTypeInternal _Vector3_default_instance_;
 }  // namespace Game
 PROTOBUF_NAMESPACE_OPEN
 template<> ::Game::ClientMessage* Arena::CreateMaybeMessage<::Game::ClientMessage>(Arena*);
+template<> ::Game::Inventory* Arena::CreateMaybeMessage<::Game::Inventory>(Arena*);
 template<> ::Game::Object* Arena::CreateMaybeMessage<::Game::Object>(Arena*);
 template<> ::Game::Score* Arena::CreateMaybeMessage<::Game::Score>(Arena*);
 template<> ::Game::ServerMessage* Arena::CreateMaybeMessage<::Game::ServerMessage>(Arena*);
@@ -130,12 +134,14 @@ inline bool Direction_Parse(
     Direction_descriptor(), name, value);
 }
 enum ObjectType : int {
-  PLAYER = 0,
-  FRUITY = 1
+  OBJECT = 0,
+  PLAYER = 1,
+  INGREDIENT = 2,
+  COOKWARE = 3
 };
 bool ObjectType_IsValid(int value);
-constexpr ObjectType ObjectType_MIN = PLAYER;
-constexpr ObjectType ObjectType_MAX = FRUITY;
+constexpr ObjectType ObjectType_MIN = OBJECT;
+constexpr ObjectType ObjectType_MAX = COOKWARE;
 constexpr int ObjectType_ARRAYSIZE = ObjectType_MAX + 1;
 
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ObjectType_descriptor();
@@ -374,6 +380,7 @@ class ServerMessage :
     kNet = 1,
     kObject = 2,
     kScore = 3,
+    kInventory = 4,
     EVENT_NOT_SET = 0,
   };
 
@@ -450,6 +457,7 @@ class ServerMessage :
     kNetFieldNumber = 1,
     kObjectFieldNumber = 2,
     kScoreFieldNumber = 3,
+    kInventoryFieldNumber = 4,
   };
   // optional .Game.Net net = 1;
   bool has_net() const;
@@ -494,6 +502,21 @@ class ServerMessage :
   ::Game::Score* _internal_mutable_score();
   public:
 
+  // optional .Game.Inventory inventory = 4;
+  bool has_inventory() const;
+  private:
+  bool _internal_has_inventory() const;
+  public:
+  void clear_inventory();
+  const ::Game::Inventory& inventory() const;
+  ::Game::Inventory* release_inventory();
+  ::Game::Inventory* mutable_inventory();
+  void set_allocated_inventory(::Game::Inventory* inventory);
+  private:
+  const ::Game::Inventory& _internal_inventory() const;
+  ::Game::Inventory* _internal_mutable_inventory();
+  public:
+
   void clear_event();
   EventCase event_case() const;
   // @@protoc_insertion_point(class_scope:Game.ServerMessage)
@@ -502,6 +525,7 @@ class ServerMessage :
   void set_has_net();
   void set_has_object();
   void set_has_score();
+  void set_has_inventory();
 
   inline bool has_event() const;
   inline void clear_has_event();
@@ -514,6 +538,7 @@ class ServerMessage :
     int net_;
     ::Game::Object* object_;
     ::Game::Score* score_;
+    ::Game::Inventory* inventory_;
   } event_;
   ::PROTOBUF_NAMESPACE_ID::uint32 _oneof_case_[1];
 
@@ -1005,6 +1030,164 @@ class Vector3 :
   float z_;
   friend struct ::TableStruct_Game_2eproto;
 };
+// -------------------------------------------------------------------
+
+class Inventory :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Game.Inventory) */ {
+ public:
+  Inventory();
+  virtual ~Inventory();
+
+  Inventory(const Inventory& from);
+  Inventory(Inventory&& from) noexcept
+    : Inventory() {
+    *this = ::std::move(from);
+  }
+
+  inline Inventory& operator=(const Inventory& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline Inventory& operator=(Inventory&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields();
+  }
+  inline ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields();
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const Inventory& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const Inventory* internal_default_instance() {
+    return reinterpret_cast<const Inventory*>(
+               &_Inventory_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    5;
+
+  friend void swap(Inventory& a, Inventory& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(Inventory* other) {
+    if (other == this) return;
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline Inventory* New() const final {
+    return CreateMaybeMessage<Inventory>(nullptr);
+  }
+
+  Inventory* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<Inventory>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const Inventory& from);
+  void MergeFrom(const Inventory& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(Inventory* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Game.Inventory";
+  }
+  private:
+  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_Game_2eproto);
+    return ::descriptor_table_Game_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kObjIdFieldNumber = 1,
+    kPlayerIdFieldNumber = 2,
+  };
+  // required uint32 objId = 1;
+  bool has_objid() const;
+  private:
+  bool _internal_has_objid() const;
+  public:
+  void clear_objid();
+  ::PROTOBUF_NAMESPACE_ID::uint32 objid() const;
+  void set_objid(::PROTOBUF_NAMESPACE_ID::uint32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::uint32 _internal_objid() const;
+  void _internal_set_objid(::PROTOBUF_NAMESPACE_ID::uint32 value);
+  public:
+
+  // required uint32 playerId = 2;
+  bool has_playerid() const;
+  private:
+  bool _internal_has_playerid() const;
+  public:
+  void clear_playerid();
+  ::PROTOBUF_NAMESPACE_ID::uint32 playerid() const;
+  void set_playerid(::PROTOBUF_NAMESPACE_ID::uint32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::uint32 _internal_playerid() const;
+  void _internal_set_playerid(::PROTOBUF_NAMESPACE_ID::uint32 value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:Game.Inventory)
+ private:
+  class _Internal;
+
+  // helper for ByteSizeLong()
+  size_t RequiredFieldsByteSizeFallback() const;
+
+  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  ::PROTOBUF_NAMESPACE_ID::uint32 objid_;
+  ::PROTOBUF_NAMESPACE_ID::uint32 playerid_;
+  friend struct ::TableStruct_Game_2eproto;
+};
 // ===================================================================
 
 
@@ -1244,6 +1427,56 @@ inline ::Game::Score* ServerMessage::_internal_mutable_score() {
 inline ::Game::Score* ServerMessage::mutable_score() {
   // @@protoc_insertion_point(field_mutable:Game.ServerMessage.score)
   return _internal_mutable_score();
+}
+
+// optional .Game.Inventory inventory = 4;
+inline bool ServerMessage::_internal_has_inventory() const {
+  return event_case() == kInventory;
+}
+inline bool ServerMessage::has_inventory() const {
+  return _internal_has_inventory();
+}
+inline void ServerMessage::set_has_inventory() {
+  _oneof_case_[0] = kInventory;
+}
+inline void ServerMessage::clear_inventory() {
+  if (_internal_has_inventory()) {
+    delete event_.inventory_;
+    clear_has_event();
+  }
+}
+inline ::Game::Inventory* ServerMessage::release_inventory() {
+  // @@protoc_insertion_point(field_release:Game.ServerMessage.inventory)
+  if (_internal_has_inventory()) {
+    clear_has_event();
+      ::Game::Inventory* temp = event_.inventory_;
+    event_.inventory_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::Game::Inventory& ServerMessage::_internal_inventory() const {
+  return _internal_has_inventory()
+      ? *event_.inventory_
+      : *reinterpret_cast< ::Game::Inventory*>(&::Game::_Inventory_default_instance_);
+}
+inline const ::Game::Inventory& ServerMessage::inventory() const {
+  // @@protoc_insertion_point(field_get:Game.ServerMessage.inventory)
+  return _internal_inventory();
+}
+inline ::Game::Inventory* ServerMessage::_internal_mutable_inventory() {
+  if (!_internal_has_inventory()) {
+    clear_event();
+    set_has_inventory();
+    event_.inventory_ = CreateMaybeMessage< ::Game::Inventory >(
+        GetArenaNoVirtual());
+  }
+  return event_.inventory_;
+}
+inline ::Game::Inventory* ServerMessage::mutable_inventory() {
+  // @@protoc_insertion_point(field_mutable:Game.ServerMessage.inventory)
+  return _internal_mutable_inventory();
 }
 
 inline bool ServerMessage::has_event() const {
@@ -1496,9 +1729,71 @@ inline void Vector3::set_z(float value) {
   // @@protoc_insertion_point(field_set:Game.Vector3.z)
 }
 
+// -------------------------------------------------------------------
+
+// Inventory
+
+// required uint32 objId = 1;
+inline bool Inventory::_internal_has_objid() const {
+  bool value = (_has_bits_[0] & 0x00000001u) != 0;
+  return value;
+}
+inline bool Inventory::has_objid() const {
+  return _internal_has_objid();
+}
+inline void Inventory::clear_objid() {
+  objid_ = 0u;
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline ::PROTOBUF_NAMESPACE_ID::uint32 Inventory::_internal_objid() const {
+  return objid_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::uint32 Inventory::objid() const {
+  // @@protoc_insertion_point(field_get:Game.Inventory.objId)
+  return _internal_objid();
+}
+inline void Inventory::_internal_set_objid(::PROTOBUF_NAMESPACE_ID::uint32 value) {
+  _has_bits_[0] |= 0x00000001u;
+  objid_ = value;
+}
+inline void Inventory::set_objid(::PROTOBUF_NAMESPACE_ID::uint32 value) {
+  _internal_set_objid(value);
+  // @@protoc_insertion_point(field_set:Game.Inventory.objId)
+}
+
+// required uint32 playerId = 2;
+inline bool Inventory::_internal_has_playerid() const {
+  bool value = (_has_bits_[0] & 0x00000002u) != 0;
+  return value;
+}
+inline bool Inventory::has_playerid() const {
+  return _internal_has_playerid();
+}
+inline void Inventory::clear_playerid() {
+  playerid_ = 0u;
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline ::PROTOBUF_NAMESPACE_ID::uint32 Inventory::_internal_playerid() const {
+  return playerid_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::uint32 Inventory::playerid() const {
+  // @@protoc_insertion_point(field_get:Game.Inventory.playerId)
+  return _internal_playerid();
+}
+inline void Inventory::_internal_set_playerid(::PROTOBUF_NAMESPACE_ID::uint32 value) {
+  _has_bits_[0] |= 0x00000002u;
+  playerid_ = value;
+}
+inline void Inventory::set_playerid(::PROTOBUF_NAMESPACE_ID::uint32 value) {
+  _internal_set_playerid(value);
+  // @@protoc_insertion_point(field_set:Game.Inventory.playerId)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

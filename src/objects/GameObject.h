@@ -4,11 +4,19 @@
 #include <graphics/render/Model.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <config/graphics_vars.h>
+#include <constants/graphics_vars.h>
 #include <unordered_map>
 #include <collisions/BoundingBox.h>
 
 class BoundingBox;
+
+enum ObjectType
+{
+    OBJECT = 0, // GameObject
+    PLAYER = 1, // Player
+    INGREDIENT = 2, // IngredientObject
+    COOKWARE = 3  // CookwareObject
+};
 
 // is intersecting(GameObject) -> return boundingBox.isIntersecting
 class GameObject
@@ -37,6 +45,8 @@ protected:
     // The bounding box for this game object
     BoundingBox* box;
 
+    ObjectType objType;
+
 public:
     /**
      * This is a constructor for both the server and client.
@@ -44,6 +54,10 @@ public:
      * @param id - This is the id of the game object
      * */
     GameObject(int id);
+
+    ObjectType getObjectType();
+
+    void setObjectType(ObjectType newObjType);
 
     /**
      * Sets the model of the object based on a given string.
@@ -72,6 +86,11 @@ public:
      * @param loc - The new location of the object.
      * */
     void setPosition(glm::vec3 loc);
+
+    /**
+     * Moves the object below the floor, rendering it invisible to players
+     * */
+    void renderInvisible();
 
     /**
      * The scale vector (x, y, z scaling) to be applied to the object.

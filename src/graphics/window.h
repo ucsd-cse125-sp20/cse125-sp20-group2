@@ -24,7 +24,7 @@
 #include <graphics/render/Model.h>
 
 // Etc
-#include <config/graphics_vars.h>
+#include <constants/graphics_vars.h>
 
 // Objects
 #include <objects/GameObject.h>
@@ -49,6 +49,7 @@ public:
     void close();
     GLFWwindow* glfwViewport;
     Player* player;     // FIXME - IN THE FUTURE, WINDOW SHOULD NOT KNOW ABOUT THE PLAYER
+    Camera* camera;
 private:
     Shader* shader;
     void setupWindow();

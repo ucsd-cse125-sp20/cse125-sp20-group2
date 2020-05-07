@@ -22,6 +22,7 @@ Window::Window(int width = WIN_WIDTH, int height = WIN_HEIGHT) : objNum (0) {
 	this->height = height;
 	this->setupWindow();
 	this->shader = new Shader("src\\graphics\\shaders\\vert_shader.glsl", "src\\graphics\\shaders\\frag_shader.glsl");
+	//this->camera = new Camera(INITIAL_CAM_POS);
 }
 
 void Window::addObject(unsigned int id, GameObject* object) {

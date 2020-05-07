@@ -68,7 +68,7 @@ void ServerGame::process()
     }
 }
 
-// ASSUMES THERE IS ONLY ONE PLAYER
+// Only called from server network when it accepts a new client
 void ServerGame::acceptCallback(int clientId) 
 {
     int clientIdReturn = this->gameState.addPlayer(clientId);
@@ -100,6 +100,16 @@ void ServerGame::acceptCallback(int clientId)
     {
         auto objectPtr = objectPair.second;
         Game::ServerMessage* message = MessageBuilder::toServerMessage(objectPtr);
+        this->server.sendToAll(*message);
+        // free(message);
+        delete message;
+    }
+
+    // Then, send all ingredients on the map (if applicable)
+    for (auto ingredientObjectPair : this->gameState.getIngredientObjects())
+    {
+        auto ingredientPtr = ingredientObjectPair.second;
+        Game::ServerMessage* message = MessageBuilder::toServerMessage(ingredientPtr);
         this->server.sendToAll(*message);
         // free(message);
         delete message;
