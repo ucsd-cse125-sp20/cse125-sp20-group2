@@ -3,7 +3,7 @@
 #include <winsock2.h>
 #include <windows.h>
 
-#define DEFAULT_BUFLEN 512
+#define DEFAULT_BUFLEN 2048
 
 /**
  * C++ wrapper for C socket

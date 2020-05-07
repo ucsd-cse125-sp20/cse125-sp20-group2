@@ -663,6 +663,7 @@ class Object :
     kRotationFieldNumber = 2,
     kIdFieldNumber = 3,
     kTypeFieldNumber = 4,
+    kRenderFieldNumber = 5,
   };
   // required .Game.Vector3 worldPosition = 1;
   bool has_worldposition() const;
@@ -718,6 +719,19 @@ class Object :
   void _internal_set_type(::Game::ObjectType value);
   public:
 
+  // required bool render = 5 [default = true];
+  bool has_render() const;
+  private:
+  bool _internal_has_render() const;
+  public:
+  void clear_render();
+  bool render() const;
+  void set_render(bool value);
+  private:
+  bool _internal_render() const;
+  void _internal_set_render(bool value);
+  public:
+
   // @@protoc_insertion_point(class_scope:Game.Object)
  private:
   class _Internal;
@@ -732,6 +746,7 @@ class Object :
   float rotation_;
   ::PROTOBUF_NAMESPACE_ID::uint32 id_;
   int type_;
+  bool render_;
   friend struct ::TableStruct_Game_2eproto;
 };
 // -------------------------------------------------------------------
@@ -1145,33 +1160,33 @@ class Inventory :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kObjIdFieldNumber = 1,
-    kPlayerIdFieldNumber = 2,
+    kIdFieldNumber = 1,
+    kAddFieldNumber = 2,
   };
-  // required uint32 objId = 1;
-  bool has_objid() const;
+  // required uint32 id = 1;
+  bool has_id() const;
   private:
-  bool _internal_has_objid() const;
+  bool _internal_has_id() const;
   public:
-  void clear_objid();
-  ::PROTOBUF_NAMESPACE_ID::uint32 objid() const;
-  void set_objid(::PROTOBUF_NAMESPACE_ID::uint32 value);
+  void clear_id();
+  ::PROTOBUF_NAMESPACE_ID::uint32 id() const;
+  void set_id(::PROTOBUF_NAMESPACE_ID::uint32 value);
   private:
-  ::PROTOBUF_NAMESPACE_ID::uint32 _internal_objid() const;
-  void _internal_set_objid(::PROTOBUF_NAMESPACE_ID::uint32 value);
+  ::PROTOBUF_NAMESPACE_ID::uint32 _internal_id() const;
+  void _internal_set_id(::PROTOBUF_NAMESPACE_ID::uint32 value);
   public:
 
-  // required uint32 playerId = 2;
-  bool has_playerid() const;
+  // required bool add = 2 [default = true];
+  bool has_add() const;
   private:
-  bool _internal_has_playerid() const;
+  bool _internal_has_add() const;
   public:
-  void clear_playerid();
-  ::PROTOBUF_NAMESPACE_ID::uint32 playerid() const;
-  void set_playerid(::PROTOBUF_NAMESPACE_ID::uint32 value);
+  void clear_add();
+  bool add() const;
+  void set_add(bool value);
   private:
-  ::PROTOBUF_NAMESPACE_ID::uint32 _internal_playerid() const;
-  void _internal_set_playerid(::PROTOBUF_NAMESPACE_ID::uint32 value);
+  bool _internal_add() const;
+  void _internal_set_add(bool value);
   public:
 
   // @@protoc_insertion_point(class_scope:Game.Inventory)
@@ -1184,8 +1199,8 @@ class Inventory :
   ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
   ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-  ::PROTOBUF_NAMESPACE_ID::uint32 objid_;
-  ::PROTOBUF_NAMESPACE_ID::uint32 playerid_;
+  ::PROTOBUF_NAMESPACE_ID::uint32 id_;
+  bool add_;
   friend struct ::TableStruct_Game_2eproto;
 };
 // ===================================================================
@@ -1637,6 +1652,34 @@ inline void Object::set_type(::Game::ObjectType value) {
   // @@protoc_insertion_point(field_set:Game.Object.type)
 }
 
+// required bool render = 5 [default = true];
+inline bool Object::_internal_has_render() const {
+  bool value = (_has_bits_[0] & 0x00000010u) != 0;
+  return value;
+}
+inline bool Object::has_render() const {
+  return _internal_has_render();
+}
+inline void Object::clear_render() {
+  render_ = true;
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline bool Object::_internal_render() const {
+  return render_;
+}
+inline bool Object::render() const {
+  // @@protoc_insertion_point(field_get:Game.Object.render)
+  return _internal_render();
+}
+inline void Object::_internal_set_render(bool value) {
+  _has_bits_[0] |= 0x00000010u;
+  render_ = value;
+}
+inline void Object::set_render(bool value) {
+  _internal_set_render(value);
+  // @@protoc_insertion_point(field_set:Game.Object.render)
+}
+
 // -------------------------------------------------------------------
 
 // Score
@@ -1733,60 +1776,60 @@ inline void Vector3::set_z(float value) {
 
 // Inventory
 
-// required uint32 objId = 1;
-inline bool Inventory::_internal_has_objid() const {
+// required uint32 id = 1;
+inline bool Inventory::_internal_has_id() const {
   bool value = (_has_bits_[0] & 0x00000001u) != 0;
   return value;
 }
-inline bool Inventory::has_objid() const {
-  return _internal_has_objid();
+inline bool Inventory::has_id() const {
+  return _internal_has_id();
 }
-inline void Inventory::clear_objid() {
-  objid_ = 0u;
+inline void Inventory::clear_id() {
+  id_ = 0u;
   _has_bits_[0] &= ~0x00000001u;
 }
-inline ::PROTOBUF_NAMESPACE_ID::uint32 Inventory::_internal_objid() const {
-  return objid_;
+inline ::PROTOBUF_NAMESPACE_ID::uint32 Inventory::_internal_id() const {
+  return id_;
 }
-inline ::PROTOBUF_NAMESPACE_ID::uint32 Inventory::objid() const {
-  // @@protoc_insertion_point(field_get:Game.Inventory.objId)
-  return _internal_objid();
+inline ::PROTOBUF_NAMESPACE_ID::uint32 Inventory::id() const {
+  // @@protoc_insertion_point(field_get:Game.Inventory.id)
+  return _internal_id();
 }
-inline void Inventory::_internal_set_objid(::PROTOBUF_NAMESPACE_ID::uint32 value) {
+inline void Inventory::_internal_set_id(::PROTOBUF_NAMESPACE_ID::uint32 value) {
   _has_bits_[0] |= 0x00000001u;
-  objid_ = value;
+  id_ = value;
 }
-inline void Inventory::set_objid(::PROTOBUF_NAMESPACE_ID::uint32 value) {
-  _internal_set_objid(value);
-  // @@protoc_insertion_point(field_set:Game.Inventory.objId)
+inline void Inventory::set_id(::PROTOBUF_NAMESPACE_ID::uint32 value) {
+  _internal_set_id(value);
+  // @@protoc_insertion_point(field_set:Game.Inventory.id)
 }
 
-// required uint32 playerId = 2;
-inline bool Inventory::_internal_has_playerid() const {
+// required bool add = 2 [default = true];
+inline bool Inventory::_internal_has_add() const {
   bool value = (_has_bits_[0] & 0x00000002u) != 0;
   return value;
 }
-inline bool Inventory::has_playerid() const {
-  return _internal_has_playerid();
+inline bool Inventory::has_add() const {
+  return _internal_has_add();
 }
-inline void Inventory::clear_playerid() {
-  playerid_ = 0u;
+inline void Inventory::clear_add() {
+  add_ = true;
   _has_bits_[0] &= ~0x00000002u;
 }
-inline ::PROTOBUF_NAMESPACE_ID::uint32 Inventory::_internal_playerid() const {
-  return playerid_;
+inline bool Inventory::_internal_add() const {
+  return add_;
 }
-inline ::PROTOBUF_NAMESPACE_ID::uint32 Inventory::playerid() const {
-  // @@protoc_insertion_point(field_get:Game.Inventory.playerId)
-  return _internal_playerid();
+inline bool Inventory::add() const {
+  // @@protoc_insertion_point(field_get:Game.Inventory.add)
+  return _internal_add();
 }
-inline void Inventory::_internal_set_playerid(::PROTOBUF_NAMESPACE_ID::uint32 value) {
+inline void Inventory::_internal_set_add(bool value) {
   _has_bits_[0] |= 0x00000002u;
-  playerid_ = value;
+  add_ = value;
 }
-inline void Inventory::set_playerid(::PROTOBUF_NAMESPACE_ID::uint32 value) {
-  _internal_set_playerid(value);
-  // @@protoc_insertion_point(field_set:Game.Inventory.playerId)
+inline void Inventory::set_add(bool value) {
+  _internal_set_add(value);
+  // @@protoc_insertion_point(field_set:Game.Inventory.add)
 }
 
 #ifdef __GNUC__

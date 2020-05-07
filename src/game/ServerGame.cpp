@@ -64,6 +64,13 @@ void ServerGame::process()
                 // free(message);
                 break; // TODO: Remove, this preprocesses messages s.t. only one is from each player per tick
             }
+
+            if (this->processor.specificMessages[clientId].size() > 0) {
+                Game::ServerMessage* message = this->processor.specificMessages[clientId].front();
+                this->processor.specificMessages[clientId].pop_front();
+                this->server.send(clientId, *message);
+                delete message;
+            }
         }
     }
 }

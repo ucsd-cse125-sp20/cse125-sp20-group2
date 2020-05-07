@@ -29,5 +29,10 @@ public:
      * */
     void process(unsigned int, Game::ClientMessage, int);
     
+    // These are messages send to everyone
     std::deque<Game::ServerMessage*> messages;
+
+    // These are messages sent to specific clients
+    std::unordered_map<unsigned int, std::deque<Game::ServerMessage*>> specificMessages;
+    
 };

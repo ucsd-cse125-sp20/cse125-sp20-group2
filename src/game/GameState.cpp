@@ -4,7 +4,8 @@
 #define PLAYER_RADIUS 0.05
 
 GameState::GameState() {
-
+    // TODO, implement timer logic
+    this->timer = 30;
 }
 
 GameState::~GameState() {

@@ -20,7 +20,6 @@ public:
             exit(1);
         }
 
-
         // TODO: Check if sending server message deallocates Vector
         Game::Vector3* vector = toVector(object->getPosition());
 
@@ -29,6 +28,7 @@ public:
         msgObj->set_allocated_worldposition(vector);
         msgObj->set_rotation(object->getRotation());
         msgObj->set_id(object->getID());
+        msgObj->set_render(object->getRender());
         
         // Set type
         switch (object->getObjectType()) {
@@ -45,6 +45,18 @@ public:
         // Put allocated object into message to be sent
         Game::ServerMessage* message = new Game::ServerMessage();
         message->set_allocated_object(msgObj);
+        return message;
+    }
+
+    /**
+     * Convert inventory id to message for inventory pickup event
+     * */
+    static Game::ServerMessage* toInventoryServerMessage(int id, bool add) {
+        Game::Inventory* msgObj = new Game::Inventory();
+        msgObj->set_id(id);
+        msgObj->set_add(add);
+        Game::ServerMessage* message = new Game::ServerMessage();
+        message->set_allocated_inventory(msgObj);
         return message;
     }
 

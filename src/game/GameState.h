@@ -31,6 +31,9 @@ private:
     // This is a mapping of clientId to score
     // std::unordered_map<unsigned int, unsigned int> scoreMap;
 
+    // Timer used to dictate the current round
+    int timer;
+
 public:
     GameState();
     ~GameState();

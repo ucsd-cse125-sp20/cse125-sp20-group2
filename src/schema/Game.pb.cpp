@@ -176,10 +176,12 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_Game_2eproto::offsets[] PROTOB
   PROTOBUF_FIELD_OFFSET(::Game::Object, rotation_),
   PROTOBUF_FIELD_OFFSET(::Game::Object, id_),
   PROTOBUF_FIELD_OFFSET(::Game::Object, type_),
+  PROTOBUF_FIELD_OFFSET(::Game::Object, render_),
   0,
   1,
   2,
   3,
+  4,
   PROTOBUF_FIELD_OFFSET(::Game::Score, _has_bits_),
   PROTOBUF_FIELD_OFFSET(::Game::Score, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -201,18 +203,18 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_Game_2eproto::offsets[] PROTOB
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::Game::Inventory, objid_),
-  PROTOBUF_FIELD_OFFSET(::Game::Inventory, playerid_),
+  PROTOBUF_FIELD_OFFSET(::Game::Inventory, id_),
+  PROTOBUF_FIELD_OFFSET(::Game::Inventory, add_),
   0,
   1,
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, 8, sizeof(::Game::ClientMessage)},
   { 10, 20, sizeof(::Game::ServerMessage)},
-  { 24, 33, sizeof(::Game::Object)},
-  { 37, 42, sizeof(::Game::Score)},
-  { 42, 50, sizeof(::Game::Vector3)},
-  { 53, 60, sizeof(::Game::Inventory)},
+  { 24, 34, sizeof(::Game::Object)},
+  { 39, 44, sizeof(::Game::Score)},
+  { 44, 52, sizeof(::Game::Vector3)},
+  { 55, 62, sizeof(::Game::Inventory)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -231,16 +233,17 @@ const char descriptor_table_protodef_Game_2eproto[] PROTOBUF_SECTION_VARIABLE(pr
   "essage\022\030\n\003net\030\001 \001(\0162\t.Game.NetH\000\022\036\n\006obje"
   "ct\030\002 \001(\0132\014.Game.ObjectH\000\022\034\n\005score\030\003 \001(\0132"
   "\013.Game.ScoreH\000\022$\n\tinventory\030\004 \001(\0132\017.Game"
-  ".InventoryH\000B\007\n\005event\"l\n\006Object\022$\n\rworld"
-  "Position\030\001 \002(\0132\r.Game.Vector3\022\020\n\010rotatio"
-  "n\030\002 \002(\002\022\n\n\002id\030\003 \002(\r\022\036\n\004type\030\004 \002(\0162\020.Game"
-  ".ObjectType\"\007\n\005Score\"3\n\007Vector3\022\014\n\001x\030\001 \002"
-  "(\002:\0011\022\014\n\001y\030\002 \002(\002:\0010\022\014\n\001z\030\003 \002(\002:\0011\",\n\tInv"
-  "entory\022\r\n\005objId\030\001 \002(\r\022\020\n\010playerId\030\002 \002(\r*"
-  "\031\n\003Net\022\010\n\004PING\020\000\022\010\n\004PONG\020\001*2\n\tDirection\022"
-  "\006\n\002UP\020\000\022\010\n\004DOWN\020\001\022\010\n\004LEFT\020\002\022\t\n\005RIGHT\020\003*B"
-  "\n\nObjectType\022\n\n\006OBJECT\020\000\022\n\n\006PLAYER\020\001\022\016\n\n"
-  "INGREDIENT\020\002\022\014\n\010COOKWARE\020\003"
+  ".InventoryH\000B\007\n\005event\"\202\001\n\006Object\022$\n\rworl"
+  "dPosition\030\001 \002(\0132\r.Game.Vector3\022\020\n\010rotati"
+  "on\030\002 \002(\002\022\n\n\002id\030\003 \002(\r\022\036\n\004type\030\004 \002(\0162\020.Gam"
+  "e.ObjectType\022\024\n\006render\030\005 \002(\010:\004true\"\007\n\005Sc"
+  "ore\"3\n\007Vector3\022\014\n\001x\030\001 \002(\002:\0011\022\014\n\001y\030\002 \002(\002:"
+  "\0010\022\014\n\001z\030\003 \002(\002:\0011\"*\n\tInventory\022\n\n\002id\030\001 \002("
+  "\r\022\021\n\003add\030\002 \002(\010:\004true*\031\n\003Net\022\010\n\004PING\020\000\022\010\n"
+  "\004PONG\020\001*2\n\tDirection\022\006\n\002UP\020\000\022\010\n\004DOWN\020\001\022\010"
+  "\n\004LEFT\020\002\022\t\n\005RIGHT\020\003*B\n\nObjectType\022\n\n\006OBJ"
+  "ECT\020\000\022\n\n\006PLAYER\020\001\022\016\n\nINGREDIENT\020\002\022\014\n\010COO"
+  "KWARE\020\003"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_Game_2eproto_deps[1] = {
 };
@@ -255,7 +258,7 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_Gam
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_Game_2eproto_once;
 static bool descriptor_table_Game_2eproto_initialized = false;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_Game_2eproto = {
-  &descriptor_table_Game_2eproto_initialized, descriptor_table_protodef_Game_2eproto, "Game.proto", 626,
+  &descriptor_table_Game_2eproto_initialized, descriptor_table_protodef_Game_2eproto, "Game.proto", 647,
   &descriptor_table_Game_2eproto_once, descriptor_table_Game_2eproto_sccs, descriptor_table_Game_2eproto_deps, 6, 0,
   schemas, file_default_instances, TableStruct_Game_2eproto::offsets,
   file_level_metadata_Game_2eproto, 6, file_level_enum_descriptors_Game_2eproto, file_level_service_descriptors_Game_2eproto,
@@ -1030,6 +1033,9 @@ class Object::_Internal {
   static void set_has_type(HasBits* has_bits) {
     (*has_bits)[0] |= 8u;
   }
+  static void set_has_render(HasBits* has_bits) {
+    (*has_bits)[0] |= 16u;
+  }
 };
 
 const ::Game::Vector3&
@@ -1052,8 +1058,8 @@ Object::Object(const Object& from)
     worldposition_ = nullptr;
   }
   ::memcpy(&rotation_, &from.rotation_,
-    static_cast<size_t>(reinterpret_cast<char*>(&type_) -
-    reinterpret_cast<char*>(&rotation_)) + sizeof(type_));
+    static_cast<size_t>(reinterpret_cast<char*>(&render_) -
+    reinterpret_cast<char*>(&rotation_)) + sizeof(render_));
   // @@protoc_insertion_point(copy_constructor:Game.Object)
 }
 
@@ -1062,6 +1068,7 @@ void Object::SharedCtor() {
   ::memset(&worldposition_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&type_) -
       reinterpret_cast<char*>(&worldposition_)) + sizeof(type_));
+  render_ = true;
 }
 
 Object::~Object() {
@@ -1093,10 +1100,11 @@ void Object::Clear() {
     GOOGLE_DCHECK(worldposition_ != nullptr);
     worldposition_->Clear();
   }
-  if (cached_has_bits & 0x0000000eu) {
+  if (cached_has_bits & 0x0000001eu) {
     ::memset(&rotation_, 0, static_cast<size_t>(
         reinterpret_cast<char*>(&type_) -
         reinterpret_cast<char*>(&rotation_)) + sizeof(type_));
+    render_ = true;
   }
   _has_bits_.Clear();
   _internal_metadata_.Clear();
@@ -1143,6 +1151,14 @@ const char* Object::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::int
           } else {
             ::PROTOBUF_NAMESPACE_ID::internal::WriteVarint(4, val, mutable_unknown_fields());
           }
+        } else goto handle_unusual;
+        continue;
+      // required bool render = 5 [default = true];
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 40)) {
+          _Internal::set_has_render(&has_bits);
+          render_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          CHK_(ptr);
         } else goto handle_unusual;
         continue;
       default: {
@@ -1200,6 +1216,12 @@ failure:
       4, this->_internal_type(), target);
   }
 
+  // required bool render = 5 [default = true];
+  if (cached_has_bits & 0x00000010u) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(5, this->_internal_render(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields(), target, stream);
@@ -1237,13 +1259,18 @@ size_t Object::RequiredFieldsByteSizeFallback() const {
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::EnumSize(this->_internal_type());
   }
 
+  if (_internal_has_render()) {
+    // required bool render = 5 [default = true];
+    total_size += 1 + 1;
+  }
+
   return total_size;
 }
 size_t Object::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:Game.Object)
   size_t total_size = 0;
 
-  if (((_has_bits_[0] & 0x0000000f) ^ 0x0000000f) == 0) {  // All required fields are present.
+  if (((_has_bits_[0] & 0x0000001f) ^ 0x0000001f) == 0) {  // All required fields are present.
     // required .Game.Vector3 worldPosition = 1;
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
@@ -1260,6 +1287,9 @@ size_t Object::ByteSizeLong() const {
     // required .Game.ObjectType type = 4;
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::EnumSize(this->_internal_type());
+
+    // required bool render = 5 [default = true];
+    total_size += 1 + 1;
 
   } else {
     total_size += RequiredFieldsByteSizeFallback();
@@ -1300,7 +1330,7 @@ void Object::MergeFrom(const Object& from) {
   (void) cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
-  if (cached_has_bits & 0x0000000fu) {
+  if (cached_has_bits & 0x0000001fu) {
     if (cached_has_bits & 0x00000001u) {
       _internal_mutable_worldposition()->::Game::Vector3::MergeFrom(from._internal_worldposition());
     }
@@ -1312,6 +1342,9 @@ void Object::MergeFrom(const Object& from) {
     }
     if (cached_has_bits & 0x00000008u) {
       type_ = from.type_;
+    }
+    if (cached_has_bits & 0x00000010u) {
+      render_ = from.render_;
     }
     _has_bits_[0] |= cached_has_bits;
   }
@@ -1332,7 +1365,7 @@ void Object::CopyFrom(const Object& from) {
 }
 
 bool Object::IsInitialized() const {
-  if ((_has_bits_[0] & 0x0000000f) != 0x0000000f) return false;
+  if ((_has_bits_[0] & 0x0000001f) != 0x0000001f) return false;
   if (_internal_has_worldposition()) {
     if (!worldposition_->IsInitialized()) return false;
   }
@@ -1347,6 +1380,7 @@ void Object::InternalSwap(Object* other) {
   swap(rotation_, other->rotation_);
   swap(id_, other->id_);
   swap(type_, other->type_);
+  swap(render_, other->render_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata Object::GetMetadata() const {
@@ -1799,10 +1833,10 @@ void Inventory::InitAsDefaultInstance() {
 class Inventory::_Internal {
  public:
   using HasBits = decltype(std::declval<Inventory>()._has_bits_);
-  static void set_has_objid(HasBits* has_bits) {
+  static void set_has_id(HasBits* has_bits) {
     (*has_bits)[0] |= 1u;
   }
-  static void set_has_playerid(HasBits* has_bits) {
+  static void set_has_add(HasBits* has_bits) {
     (*has_bits)[0] |= 2u;
   }
 };
@@ -1817,16 +1851,15 @@ Inventory::Inventory(const Inventory& from)
       _internal_metadata_(nullptr),
       _has_bits_(from._has_bits_) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  ::memcpy(&objid_, &from.objid_,
-    static_cast<size_t>(reinterpret_cast<char*>(&playerid_) -
-    reinterpret_cast<char*>(&objid_)) + sizeof(playerid_));
+  ::memcpy(&id_, &from.id_,
+    static_cast<size_t>(reinterpret_cast<char*>(&add_) -
+    reinterpret_cast<char*>(&id_)) + sizeof(add_));
   // @@protoc_insertion_point(copy_constructor:Game.Inventory)
 }
 
 void Inventory::SharedCtor() {
-  ::memset(&objid_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&playerid_) -
-      reinterpret_cast<char*>(&objid_)) + sizeof(playerid_));
+  id_ = 0u;
+  add_ = true;
 }
 
 Inventory::~Inventory() {
@@ -1854,9 +1887,8 @@ void Inventory::Clear() {
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 0x00000003u) {
-    ::memset(&objid_, 0, static_cast<size_t>(
-        reinterpret_cast<char*>(&playerid_) -
-        reinterpret_cast<char*>(&objid_)) + sizeof(playerid_));
+    id_ = 0u;
+    add_ = true;
   }
   _has_bits_.Clear();
   _internal_metadata_.Clear();
@@ -1870,19 +1902,19 @@ const char* Inventory::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     CHK_(ptr);
     switch (tag >> 3) {
-      // required uint32 objId = 1;
+      // required uint32 id = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
-          _Internal::set_has_objid(&has_bits);
-          objid_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          _Internal::set_has_id(&has_bits);
+          id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // required uint32 playerId = 2;
+      // required bool add = 2 [default = true];
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 16)) {
-          _Internal::set_has_playerid(&has_bits);
-          playerid_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          _Internal::set_has_add(&has_bits);
+          add_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -1914,16 +1946,16 @@ failure:
   (void) cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
-  // required uint32 objId = 1;
+  // required uint32 id = 1;
   if (cached_has_bits & 0x00000001u) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt32ToArray(1, this->_internal_objid(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt32ToArray(1, this->_internal_id(), target);
   }
 
-  // required uint32 playerId = 2;
+  // required bool add = 2 [default = true];
   if (cached_has_bits & 0x00000002u) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt32ToArray(2, this->_internal_playerid(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(2, this->_internal_add(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -1938,18 +1970,16 @@ size_t Inventory::RequiredFieldsByteSizeFallback() const {
 // @@protoc_insertion_point(required_fields_byte_size_fallback_start:Game.Inventory)
   size_t total_size = 0;
 
-  if (_internal_has_objid()) {
-    // required uint32 objId = 1;
+  if (_internal_has_id()) {
+    // required uint32 id = 1;
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt32Size(
-        this->_internal_objid());
+        this->_internal_id());
   }
 
-  if (_internal_has_playerid()) {
-    // required uint32 playerId = 2;
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt32Size(
-        this->_internal_playerid());
+  if (_internal_has_add()) {
+    // required bool add = 2 [default = true];
+    total_size += 1 + 1;
   }
 
   return total_size;
@@ -1959,15 +1989,13 @@ size_t Inventory::ByteSizeLong() const {
   size_t total_size = 0;
 
   if (((_has_bits_[0] & 0x00000003) ^ 0x00000003) == 0) {  // All required fields are present.
-    // required uint32 objId = 1;
+    // required uint32 id = 1;
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt32Size(
-        this->_internal_objid());
+        this->_internal_id());
 
-    // required uint32 playerId = 2;
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt32Size(
-        this->_internal_playerid());
+    // required bool add = 2 [default = true];
+    total_size += 1 + 1;
 
   } else {
     total_size += RequiredFieldsByteSizeFallback();
@@ -2010,10 +2038,10 @@ void Inventory::MergeFrom(const Inventory& from) {
   cached_has_bits = from._has_bits_[0];
   if (cached_has_bits & 0x00000003u) {
     if (cached_has_bits & 0x00000001u) {
-      objid_ = from.objid_;
+      id_ = from.id_;
     }
     if (cached_has_bits & 0x00000002u) {
-      playerid_ = from.playerid_;
+      add_ = from.add_;
     }
     _has_bits_[0] |= cached_has_bits;
   }
@@ -2042,8 +2070,8 @@ void Inventory::InternalSwap(Inventory* other) {
   using std::swap;
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_has_bits_[0], other->_has_bits_[0]);
-  swap(objid_, other->objid_);
-  swap(playerid_, other->playerid_);
+  swap(id_, other->id_);
+  swap(add_, other->add_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata Inventory::GetMetadata() const {

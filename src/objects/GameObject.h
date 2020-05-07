@@ -41,6 +41,8 @@ private:
     // Passing through object
     bool passable = false;
 
+    bool render = true;
+
 protected:
     // The bounding box for this game object
     BoundingBox* box;
@@ -56,6 +58,11 @@ public:
     GameObject(int id);
 
     ObjectType getObjectType();
+    
+    bool getRender();
+
+    void setRender(bool render);
+
 
     void setObjectType(ObjectType newObjType);
 

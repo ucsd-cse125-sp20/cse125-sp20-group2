@@ -13,8 +13,8 @@ class ClientGame {
         void runGame();
         int clientID;
     private:
-        Window window;
         NetworkClient client;
+        Window window;
         void sendMsgs();
         void receiveUpdates();
         void updateGameState();

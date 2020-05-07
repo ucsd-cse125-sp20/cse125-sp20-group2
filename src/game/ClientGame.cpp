@@ -69,10 +69,16 @@ void ClientGame::updateGameState()
     // TODO: Assume only object for now. Update GameObject to respective type
     // TODO: switch case based on what kind of messages
     for (Game::ServerMessage currMessage : client.messages) {
+
+        // switch(currMessage.event_case()) {
+        //     case Game::ServerMessage::EventCase::kInventory:
+        //     {
+
+        //     }
+        // }
         Game::Vector3 location = currMessage.object().worldposition();
         float rotation = currMessage.object().rotation();
         uint32_t id = currMessage.object().id();
-        Game::ObjectType type = currMessage.object().type();
 
         GameObject* obj = NULL;
         // Update object state
