@@ -51,9 +51,9 @@ bool GameObject::getRender() {
 	return this->render;
 }
 
-// TODO: toggle render
-void GameObject::setRender(bool render) {
-	this->render = render;
+// toggle render
+void GameObject::toggleRender() {
+	this->render = !this->render;
 }
 
 // Apply scaling to the model.

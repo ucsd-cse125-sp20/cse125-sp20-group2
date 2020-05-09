@@ -41,6 +41,7 @@ private:
     // Passing through object
     bool passable = false;
 
+    // Rendered in word or not
     bool render = true;
 
 protected:
@@ -61,7 +62,7 @@ public:
     
     bool getRender();
 
-    void setRender(bool render);
+    void toggleRender(render);
 
 
     void setObjectType(ObjectType newObjType);
