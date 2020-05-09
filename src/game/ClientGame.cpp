@@ -8,7 +8,7 @@
 
 #define CLIENT_DELAY 1000
 
-ClientGame::ClientGame(std::string IP, int port) : client(IP, port), window(WIN_WIDTH, WIN_HEIGHT)
+ClientGame::ClientGame(std::string IP, int port) : client(IP, port), window(std::stof(Config::get("Window_Width")), std::stof(Config::get("Window_Height")))
 {
     // TODO: fix hardcoded player values and hardcoded window insertion
     GameObject* grid = new GameObject(999999);
@@ -131,15 +131,14 @@ void ClientGame::processInput()
     }
 
     // Camera movement options (client-side only)
-    // TODO: Remove this in the final release
     if (glfwGetKey(window.glfwViewport, GLFW_KEY_UP) == GLFW_PRESS)
-		window.camera->processKeyMovement(FORWARD, 0.5);
+		window.camera->processKeyMovement(FORWARD);
     if (glfwGetKey(window.glfwViewport, GLFW_KEY_DOWN) == GLFW_PRESS)
-		window.camera->processKeyMovement(BACKWARD, 0.5);
+		window.camera->processKeyMovement(BACKWARD);
     if (glfwGetKey(window.glfwViewport, GLFW_KEY_LEFT) == GLFW_PRESS)
-		window.camera->processKeyMovement(LEFT, 0.5);
+		window.camera->processKeyMovement(LEFT);
     if (glfwGetKey(window.glfwViewport, GLFW_KEY_RIGHT) == GLFW_PRESS)
-		window.camera->processKeyMovement(RIGHT, 0.5);
+		window.camera->processKeyMovement(RIGHT);
 	if (glfwGetKey(window.glfwViewport, GLFW_KEY_F) == GLFW_PRESS)
 		window.camera->toggleFreeCam();
 

@@ -56,7 +56,7 @@ public:
 private:
     Shader* shader;
     void setupWindow();
-    
+    void cameraViewUpdate();
     unsigned int objNum;        // Increment when get response back from server
     int width;
     int height;

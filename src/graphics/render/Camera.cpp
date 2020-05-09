@@ -6,7 +6,7 @@
  * Default values are all defined in graphics/_options/graphics_vars.h .
  * */
 Camera::Camera(glm::vec3 pos, glm::vec3 up, float yaw, float pitch, bool freeCam) 
-	: front(INIT_FRONT), moveSpeed(INIT_SPEED), sensitivity(INIT_SENSITIVITY), zoom(INIT_ZOOM)
+	: front(INIT_FRONT), moveSpeed(std::stof(Config::get("Camera_Speed"))), sensitivity(INIT_SENSITIVITY), zoom(INIT_ZOOM)
 {
 	this->pos = pos;
 	this->worldUp = up;
@@ -18,7 +18,7 @@ Camera::Camera(glm::vec3 pos, glm::vec3 up, float yaw, float pitch, bool freeCam
 
 
 Camera::Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch, bool freeCam)
-	: front(INIT_FRONT), moveSpeed(INIT_SPEED), sensitivity(INIT_SENSITIVITY), zoom(INIT_ZOOM)
+	: front(INIT_FRONT), moveSpeed(std::stof(Config::get("Camera_Speed"))), sensitivity(INIT_SENSITIVITY), zoom(INIT_ZOOM)
 {
 	pos = glm::vec3(posX, posY, posZ);
 	worldUp = glm::vec3(upX, upY, upZ);
@@ -42,19 +42,18 @@ glm::mat4 Camera::getViewMatrix()
 	// Set camera target
 
 // Processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
-void Camera::processKeyMovement(Camera_Movement direction, float deltaTime)
+void Camera::processKeyMovement(Camera_Movement direction)
 {
 	if (!freeCam) return;
 
-	float velocity = moveSpeed * deltaTime;
 	if (direction == FORWARD)
-		pos += front * velocity;
+		pos += front * moveSpeed;
 	if (direction == BACKWARD)
-		pos -= front * velocity;
+		pos -= front * moveSpeed;
 	if (direction == LEFT)
-		pos -= right * velocity;
+		pos -= right * moveSpeed;
 	if (direction == RIGHT)
-		pos += right * velocity;
+		pos += right * moveSpeed;
 }
 
 // Processes input received from a mouse input system. Expects the offset value in both the x and y direction.
