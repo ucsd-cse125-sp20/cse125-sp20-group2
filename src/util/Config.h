@@ -1,3 +1,5 @@
+#pragma once
+
 #include <unordered_map>
 #include <string>
 #include <fstream>
@@ -32,9 +34,6 @@ public:
         {
             // Skip comments and empty lines
             if (line.length() == 0 || line.at(0) == '/') continue;
-
-            // Remove spaces
-            line = line.substr(line.find("="), std::string::npos); 
 
             // Read string
             std::istringstream lineStream(line);

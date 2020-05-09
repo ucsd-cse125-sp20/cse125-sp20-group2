@@ -1,5 +1,7 @@
 #pragma once
 
+#include <util/Config.h>
+
 // Std. library
 #include <iostream>
 
@@ -22,7 +24,6 @@ const float INIT_YAW = -90.0f;
 const float INIT_PITCH = -45.0f;
 
 // Default camera movement options
-const float INIT_SPEED = 2.5f;
 const float INIT_SENSITIVITY = 0.1f;
 const float INIT_ZOOM = 45.0f;
 
@@ -64,7 +65,7 @@ public:
 	glm::mat4 getViewMatrix();
 
 	// Processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
-	void processKeyMovement(Camera_Movement direction, float deltaTime);
+	void processKeyMovement(Camera_Movement direction);
 
 	void processMouseMovement(float xoffset, float yoffset);
 
