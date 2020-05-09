@@ -1,6 +1,6 @@
 #include "window.h"
 
-//// Camera at desiginated position
+// Camera at desiginated position
 Camera cam(INITIAL_CAM_POS);
 
 // Initial mouse positions
@@ -21,7 +21,7 @@ Window::Window(int width = WIN_WIDTH, int height = WIN_HEIGHT) : objNum (0) {
 	this->width = width;
 	this->height = height;
 	this->setupWindow();
-	this->shader = new Shader("src\\graphics\\shaders\\vert_shader.glsl", "src\\graphics\\shaders\\frag_shader.glsl");
+	this->shader = new Shader(Config::get("Vertex_Shader"), Config::get("Fragment_Shader"));
 	//this->camera = new Camera(INITIAL_CAM_POS);
 }
 
@@ -45,7 +45,7 @@ void Window::setupWindow() {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);		
-	GLFWwindow* glfwViewport = glfwCreateWindow((int)WIN_WIDTH, (int)WIN_HEIGHT, "Comrade's Kitchen", NULL, NULL);
+	GLFWwindow* glfwViewport = glfwCreateWindow((int)WIN_WIDTH, (int)WIN_HEIGHT, Config::get("Window_Title").c_str(), NULL, NULL);
 
 	// Capture mouse
 	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -140,6 +140,7 @@ void Window::render()
 
 	// // //
 	// Render each GameObject
+	// TODO: use render boolean
 
 	for (auto it = objectsToRender.begin(); it != objectsToRender.end(); ++it) {
 		GameObject* obj = it->second;

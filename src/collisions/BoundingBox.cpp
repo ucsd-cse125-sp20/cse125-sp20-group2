@@ -1,6 +1,8 @@
 #include <collisions/BoundingBox.h>
 #include <iostream>
 
+// TODO: radius scaling for circle + width/height scaling for rectangle
+
 BoundingBox::BoundingBox(GameObject *gameObject)
 {
     this->obj = gameObject;
@@ -87,6 +89,7 @@ bool BoundingBox::isIntersecting(BoundingBox *bb)
 
 void BoundingBox::updateCorners()
 {
+    // TODO: include scaling in calculations
     glm::vec3 position = obj->getPosition();
     maxX = position.x + width / 2;
     minX = position.x - width / 2;

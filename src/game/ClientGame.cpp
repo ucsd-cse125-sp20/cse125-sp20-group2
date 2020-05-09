@@ -4,6 +4,7 @@
 #include <chrono>
 #include <thread>
 #include <util/MessageBuilder.h>
+#include <util/Config.h>
 
 #define CLIENT_DELAY 1000
 
@@ -12,7 +13,7 @@ ClientGame::ClientGame(std::string IP, int port) : client(IP, port), window(WIN_
     // TODO: fix hardcoded player values and hardcoded window insertion
     GameObject* grid = new GameObject(999999);
     grid->setPosition(glm::vec3(0, 0, 0));
-    grid->setModel("assets\\models\\Basic_Dungeon_Map.obj");
+    grid->setModel(Config::get("Maze_Model"));
     grid->applyScale(glm::vec3(2, 2, 2));
     window.addObject(999999, grid);
 
@@ -87,7 +88,7 @@ void ClientGame::updateGameState()
         } else {
             // Insert object into window
             obj = new GameObject(id);
-            obj->setModel("assets\\models\\Basic_Character_Model.obj");   // TODO: either read from server or config file which model to use
+            obj->setModel(Config::get("Character_Model"));
             window.addObject(id, obj);
         }
         obj->setRotation(rotation);

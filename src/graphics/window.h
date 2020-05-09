@@ -1,5 +1,8 @@
 #pragma once
 
+// Config
+#include <util/Config.h>
+
 // OpenGL function pointers
 #include <glad/glad.h>		// Include this...
 #include <GLFW/glfw3.h>		// ...before this.

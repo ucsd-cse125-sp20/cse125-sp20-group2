@@ -51,6 +51,7 @@ bool GameObject::getRender() {
 	return this->render;
 }
 
+// TODO: toggle render
 void GameObject::setRender(bool render) {
 	this->render = render;
 }
