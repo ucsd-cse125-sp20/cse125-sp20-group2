@@ -177,11 +177,13 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_Game_2eproto::offsets[] PROTOB
   PROTOBUF_FIELD_OFFSET(::Game::Object, id_),
   PROTOBUF_FIELD_OFFSET(::Game::Object, type_),
   PROTOBUF_FIELD_OFFSET(::Game::Object, render_),
-  0,
+  PROTOBUF_FIELD_OFFSET(::Game::Object, modelpath_),
   1,
   2,
   3,
   4,
+  5,
+  0,
   PROTOBUF_FIELD_OFFSET(::Game::Score, _has_bits_),
   PROTOBUF_FIELD_OFFSET(::Game::Score, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -211,10 +213,10 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_Game_2eproto::offsets[] PROTOB
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, 8, sizeof(::Game::ClientMessage)},
   { 10, 20, sizeof(::Game::ServerMessage)},
-  { 24, 34, sizeof(::Game::Object)},
-  { 39, 44, sizeof(::Game::Score)},
-  { 44, 52, sizeof(::Game::Vector3)},
-  { 55, 62, sizeof(::Game::Inventory)},
+  { 24, 35, sizeof(::Game::Object)},
+  { 41, 46, sizeof(::Game::Score)},
+  { 46, 54, sizeof(::Game::Vector3)},
+  { 57, 64, sizeof(::Game::Inventory)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -233,17 +235,17 @@ const char descriptor_table_protodef_Game_2eproto[] PROTOBUF_SECTION_VARIABLE(pr
   "essage\022\030\n\003net\030\001 \001(\0162\t.Game.NetH\000\022\036\n\006obje"
   "ct\030\002 \001(\0132\014.Game.ObjectH\000\022\034\n\005score\030\003 \001(\0132"
   "\013.Game.ScoreH\000\022$\n\tinventory\030\004 \001(\0132\017.Game"
-  ".InventoryH\000B\007\n\005event\"\202\001\n\006Object\022$\n\rworl"
+  ".InventoryH\000B\007\n\005event\"\225\001\n\006Object\022$\n\rworl"
   "dPosition\030\001 \002(\0132\r.Game.Vector3\022\020\n\010rotati"
   "on\030\002 \002(\002\022\n\n\002id\030\003 \002(\r\022\036\n\004type\030\004 \002(\0162\020.Gam"
-  "e.ObjectType\022\024\n\006render\030\005 \002(\010:\004true\"\007\n\005Sc"
-  "ore\"3\n\007Vector3\022\014\n\001x\030\001 \002(\002:\0011\022\014\n\001y\030\002 \002(\002:"
-  "\0010\022\014\n\001z\030\003 \002(\002:\0011\"*\n\tInventory\022\n\n\002id\030\001 \002("
-  "\r\022\021\n\003add\030\002 \002(\010:\004true*\031\n\003Net\022\010\n\004PING\020\000\022\010\n"
-  "\004PONG\020\001*2\n\tDirection\022\006\n\002UP\020\000\022\010\n\004DOWN\020\001\022\010"
-  "\n\004LEFT\020\002\022\t\n\005RIGHT\020\003*B\n\nObjectType\022\n\n\006OBJ"
-  "ECT\020\000\022\n\n\006PLAYER\020\001\022\016\n\nINGREDIENT\020\002\022\014\n\010COO"
-  "KWARE\020\003"
+  "e.ObjectType\022\024\n\006render\030\005 \002(\010:\004true\022\021\n\tmo"
+  "delPath\030\006 \002(\t\"\007\n\005Score\"3\n\007Vector3\022\014\n\001x\030\001"
+  " \002(\002:\0011\022\014\n\001y\030\002 \002(\002:\0010\022\014\n\001z\030\003 \002(\002:\0011\"*\n\tI"
+  "nventory\022\n\n\002id\030\001 \002(\r\022\021\n\003add\030\002 \002(\010:\004true*"
+  "\031\n\003Net\022\010\n\004PING\020\000\022\010\n\004PONG\020\001*2\n\tDirection\022"
+  "\006\n\002UP\020\000\022\010\n\004DOWN\020\001\022\010\n\004LEFT\020\002\022\t\n\005RIGHT\020\003*B"
+  "\n\nObjectType\022\n\n\006OBJECT\020\000\022\n\n\006PLAYER\020\001\022\016\n\n"
+  "INGREDIENT\020\002\022\014\n\010COOKWARE\020\003"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_Game_2eproto_deps[1] = {
 };
@@ -258,7 +260,7 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_Gam
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_Game_2eproto_once;
 static bool descriptor_table_Game_2eproto_initialized = false;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_Game_2eproto = {
-  &descriptor_table_Game_2eproto_initialized, descriptor_table_protodef_Game_2eproto, "Game.proto", 647,
+  &descriptor_table_Game_2eproto_initialized, descriptor_table_protodef_Game_2eproto, "Game.proto", 666,
   &descriptor_table_Game_2eproto_once, descriptor_table_Game_2eproto_sccs, descriptor_table_Game_2eproto_deps, 6, 0,
   schemas, file_default_instances, TableStruct_Game_2eproto::offsets,
   file_level_metadata_Game_2eproto, 6, file_level_enum_descriptors_Game_2eproto, file_level_service_descriptors_Game_2eproto,
@@ -1022,19 +1024,22 @@ class Object::_Internal {
   using HasBits = decltype(std::declval<Object>()._has_bits_);
   static const ::Game::Vector3& worldposition(const Object* msg);
   static void set_has_worldposition(HasBits* has_bits) {
-    (*has_bits)[0] |= 1u;
-  }
-  static void set_has_rotation(HasBits* has_bits) {
     (*has_bits)[0] |= 2u;
   }
-  static void set_has_id(HasBits* has_bits) {
+  static void set_has_rotation(HasBits* has_bits) {
     (*has_bits)[0] |= 4u;
   }
-  static void set_has_type(HasBits* has_bits) {
+  static void set_has_id(HasBits* has_bits) {
     (*has_bits)[0] |= 8u;
   }
-  static void set_has_render(HasBits* has_bits) {
+  static void set_has_type(HasBits* has_bits) {
     (*has_bits)[0] |= 16u;
+  }
+  static void set_has_render(HasBits* has_bits) {
+    (*has_bits)[0] |= 32u;
+  }
+  static void set_has_modelpath(HasBits* has_bits) {
+    (*has_bits)[0] |= 1u;
   }
 };
 
@@ -1052,6 +1057,10 @@ Object::Object(const Object& from)
       _internal_metadata_(nullptr),
       _has_bits_(from._has_bits_) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
+  modelpath_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (from._internal_has_modelpath()) {
+    modelpath_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.modelpath_);
+  }
   if (from._internal_has_worldposition()) {
     worldposition_ = new ::Game::Vector3(*from.worldposition_);
   } else {
@@ -1065,6 +1074,7 @@ Object::Object(const Object& from)
 
 void Object::SharedCtor() {
   ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_Object_Game_2eproto.base);
+  modelpath_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   ::memset(&worldposition_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&type_) -
       reinterpret_cast<char*>(&worldposition_)) + sizeof(type_));
@@ -1077,6 +1087,7 @@ Object::~Object() {
 }
 
 void Object::SharedDtor() {
+  modelpath_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   if (this != internal_default_instance()) delete worldposition_;
 }
 
@@ -1096,11 +1107,16 @@ void Object::Clear() {
   (void) cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
-  if (cached_has_bits & 0x00000001u) {
-    GOOGLE_DCHECK(worldposition_ != nullptr);
-    worldposition_->Clear();
+  if (cached_has_bits & 0x00000003u) {
+    if (cached_has_bits & 0x00000001u) {
+      modelpath_.ClearNonDefaultToEmptyNoArena();
+    }
+    if (cached_has_bits & 0x00000002u) {
+      GOOGLE_DCHECK(worldposition_ != nullptr);
+      worldposition_->Clear();
+    }
   }
-  if (cached_has_bits & 0x0000001eu) {
+  if (cached_has_bits & 0x0000003cu) {
     ::memset(&rotation_, 0, static_cast<size_t>(
         reinterpret_cast<char*>(&type_) -
         reinterpret_cast<char*>(&rotation_)) + sizeof(type_));
@@ -1161,6 +1177,17 @@ const char* Object::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::int
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
+      // required string modelPath = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 50)) {
+          auto str = _internal_mutable_modelpath();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          #ifndef NDEBUG
+          ::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Game.Object.modelPath");
+          #endif  // !NDEBUG
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
       default: {
       handle_unusual:
         if ((tag & 7) == 4 || tag == 0) {
@@ -1190,7 +1217,7 @@ failure:
 
   cached_has_bits = _has_bits_[0];
   // required .Game.Vector3 worldPosition = 1;
-  if (cached_has_bits & 0x00000001u) {
+  if (cached_has_bits & 0x00000002u) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessage(
@@ -1198,28 +1225,38 @@ failure:
   }
 
   // required float rotation = 2;
-  if (cached_has_bits & 0x00000002u) {
+  if (cached_has_bits & 0x00000004u) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(2, this->_internal_rotation(), target);
   }
 
   // required uint32 id = 3;
-  if (cached_has_bits & 0x00000004u) {
+  if (cached_has_bits & 0x00000008u) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt32ToArray(3, this->_internal_id(), target);
   }
 
   // required .Game.ObjectType type = 4;
-  if (cached_has_bits & 0x00000008u) {
+  if (cached_has_bits & 0x00000010u) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteEnumToArray(
       4, this->_internal_type(), target);
   }
 
   // required bool render = 5 [default = true];
-  if (cached_has_bits & 0x00000010u) {
+  if (cached_has_bits & 0x00000020u) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(5, this->_internal_render(), target);
+  }
+
+  // required string modelPath = 6;
+  if (cached_has_bits & 0x00000001u) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->_internal_modelpath().data(), static_cast<int>(this->_internal_modelpath().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SERIALIZE,
+      "Game.Object.modelPath");
+    target = stream->WriteStringMaybeAliased(
+        6, this->_internal_modelpath(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -1233,6 +1270,13 @@ failure:
 size_t Object::RequiredFieldsByteSizeFallback() const {
 // @@protoc_insertion_point(required_fields_byte_size_fallback_start:Game.Object)
   size_t total_size = 0;
+
+  if (_internal_has_modelpath()) {
+    // required string modelPath = 6;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_modelpath());
+  }
 
   if (_internal_has_worldposition()) {
     // required .Game.Vector3 worldPosition = 1;
@@ -1270,7 +1314,12 @@ size_t Object::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:Game.Object)
   size_t total_size = 0;
 
-  if (((_has_bits_[0] & 0x0000001f) ^ 0x0000001f) == 0) {  // All required fields are present.
+  if (((_has_bits_[0] & 0x0000003f) ^ 0x0000003f) == 0) {  // All required fields are present.
+    // required string modelPath = 6;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_modelpath());
+
     // required .Game.Vector3 worldPosition = 1;
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
@@ -1330,20 +1379,24 @@ void Object::MergeFrom(const Object& from) {
   (void) cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
-  if (cached_has_bits & 0x0000001fu) {
+  if (cached_has_bits & 0x0000003fu) {
     if (cached_has_bits & 0x00000001u) {
-      _internal_mutable_worldposition()->::Game::Vector3::MergeFrom(from._internal_worldposition());
+      _has_bits_[0] |= 0x00000001u;
+      modelpath_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.modelpath_);
     }
     if (cached_has_bits & 0x00000002u) {
-      rotation_ = from.rotation_;
+      _internal_mutable_worldposition()->::Game::Vector3::MergeFrom(from._internal_worldposition());
     }
     if (cached_has_bits & 0x00000004u) {
-      id_ = from.id_;
+      rotation_ = from.rotation_;
     }
     if (cached_has_bits & 0x00000008u) {
-      type_ = from.type_;
+      id_ = from.id_;
     }
     if (cached_has_bits & 0x00000010u) {
+      type_ = from.type_;
+    }
+    if (cached_has_bits & 0x00000020u) {
       render_ = from.render_;
     }
     _has_bits_[0] |= cached_has_bits;
@@ -1365,7 +1418,7 @@ void Object::CopyFrom(const Object& from) {
 }
 
 bool Object::IsInitialized() const {
-  if ((_has_bits_[0] & 0x0000001f) != 0x0000001f) return false;
+  if ((_has_bits_[0] & 0x0000003f) != 0x0000003f) return false;
   if (_internal_has_worldposition()) {
     if (!worldposition_->IsInitialized()) return false;
   }
@@ -1376,6 +1429,8 @@ void Object::InternalSwap(Object* other) {
   using std::swap;
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_has_bits_[0], other->_has_bits_[0]);
+  modelpath_.Swap(&other->modelpath_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
   swap(worldposition_, other->worldposition_);
   swap(rotation_, other->rotation_);
   swap(id_, other->id_);

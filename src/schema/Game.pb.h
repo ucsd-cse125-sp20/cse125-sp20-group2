@@ -659,12 +659,33 @@ class Object :
   // accessors -------------------------------------------------------
 
   enum : int {
+    kModelPathFieldNumber = 6,
     kWorldPositionFieldNumber = 1,
     kRotationFieldNumber = 2,
     kIdFieldNumber = 3,
     kTypeFieldNumber = 4,
     kRenderFieldNumber = 5,
   };
+  // required string modelPath = 6;
+  bool has_modelpath() const;
+  private:
+  bool _internal_has_modelpath() const;
+  public:
+  void clear_modelpath();
+  const std::string& modelpath() const;
+  void set_modelpath(const std::string& value);
+  void set_modelpath(std::string&& value);
+  void set_modelpath(const char* value);
+  void set_modelpath(const char* value, size_t size);
+  std::string* mutable_modelpath();
+  std::string* release_modelpath();
+  void set_allocated_modelpath(std::string* modelpath);
+  private:
+  const std::string& _internal_modelpath() const;
+  void _internal_set_modelpath(const std::string& value);
+  std::string* _internal_mutable_modelpath();
+  public:
+
   // required .Game.Vector3 worldPosition = 1;
   bool has_worldposition() const;
   private:
@@ -742,6 +763,7 @@ class Object :
   ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
   ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr modelpath_;
   ::Game::Vector3* worldposition_;
   float rotation_;
   ::PROTOBUF_NAMESPACE_ID::uint32 id_;
@@ -1509,7 +1531,7 @@ inline ServerMessage::EventCase ServerMessage::event_case() const {
 
 // required .Game.Vector3 worldPosition = 1;
 inline bool Object::_internal_has_worldposition() const {
-  bool value = (_has_bits_[0] & 0x00000001u) != 0;
+  bool value = (_has_bits_[0] & 0x00000002u) != 0;
   PROTOBUF_ASSUME(!value || worldposition_ != nullptr);
   return value;
 }
@@ -1518,7 +1540,7 @@ inline bool Object::has_worldposition() const {
 }
 inline void Object::clear_worldposition() {
   if (worldposition_ != nullptr) worldposition_->Clear();
-  _has_bits_[0] &= ~0x00000001u;
+  _has_bits_[0] &= ~0x00000002u;
 }
 inline const ::Game::Vector3& Object::_internal_worldposition() const {
   const ::Game::Vector3* p = worldposition_;
@@ -1531,13 +1553,13 @@ inline const ::Game::Vector3& Object::worldposition() const {
 }
 inline ::Game::Vector3* Object::release_worldposition() {
   // @@protoc_insertion_point(field_release:Game.Object.worldPosition)
-  _has_bits_[0] &= ~0x00000001u;
+  _has_bits_[0] &= ~0x00000002u;
   ::Game::Vector3* temp = worldposition_;
   worldposition_ = nullptr;
   return temp;
 }
 inline ::Game::Vector3* Object::_internal_mutable_worldposition() {
-  _has_bits_[0] |= 0x00000001u;
+  _has_bits_[0] |= 0x00000002u;
   if (worldposition_ == nullptr) {
     auto* p = CreateMaybeMessage<::Game::Vector3>(GetArenaNoVirtual());
     worldposition_ = p;
@@ -1559,9 +1581,9 @@ inline void Object::set_allocated_worldposition(::Game::Vector3* worldposition) 
       worldposition = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, worldposition, submessage_arena);
     }
-    _has_bits_[0] |= 0x00000001u;
+    _has_bits_[0] |= 0x00000002u;
   } else {
-    _has_bits_[0] &= ~0x00000001u;
+    _has_bits_[0] &= ~0x00000002u;
   }
   worldposition_ = worldposition;
   // @@protoc_insertion_point(field_set_allocated:Game.Object.worldPosition)
@@ -1569,7 +1591,7 @@ inline void Object::set_allocated_worldposition(::Game::Vector3* worldposition) 
 
 // required float rotation = 2;
 inline bool Object::_internal_has_rotation() const {
-  bool value = (_has_bits_[0] & 0x00000002u) != 0;
+  bool value = (_has_bits_[0] & 0x00000004u) != 0;
   return value;
 }
 inline bool Object::has_rotation() const {
@@ -1577,7 +1599,7 @@ inline bool Object::has_rotation() const {
 }
 inline void Object::clear_rotation() {
   rotation_ = 0;
-  _has_bits_[0] &= ~0x00000002u;
+  _has_bits_[0] &= ~0x00000004u;
 }
 inline float Object::_internal_rotation() const {
   return rotation_;
@@ -1587,7 +1609,7 @@ inline float Object::rotation() const {
   return _internal_rotation();
 }
 inline void Object::_internal_set_rotation(float value) {
-  _has_bits_[0] |= 0x00000002u;
+  _has_bits_[0] |= 0x00000004u;
   rotation_ = value;
 }
 inline void Object::set_rotation(float value) {
@@ -1597,7 +1619,7 @@ inline void Object::set_rotation(float value) {
 
 // required uint32 id = 3;
 inline bool Object::_internal_has_id() const {
-  bool value = (_has_bits_[0] & 0x00000004u) != 0;
+  bool value = (_has_bits_[0] & 0x00000008u) != 0;
   return value;
 }
 inline bool Object::has_id() const {
@@ -1605,7 +1627,7 @@ inline bool Object::has_id() const {
 }
 inline void Object::clear_id() {
   id_ = 0u;
-  _has_bits_[0] &= ~0x00000004u;
+  _has_bits_[0] &= ~0x00000008u;
 }
 inline ::PROTOBUF_NAMESPACE_ID::uint32 Object::_internal_id() const {
   return id_;
@@ -1615,7 +1637,7 @@ inline ::PROTOBUF_NAMESPACE_ID::uint32 Object::id() const {
   return _internal_id();
 }
 inline void Object::_internal_set_id(::PROTOBUF_NAMESPACE_ID::uint32 value) {
-  _has_bits_[0] |= 0x00000004u;
+  _has_bits_[0] |= 0x00000008u;
   id_ = value;
 }
 inline void Object::set_id(::PROTOBUF_NAMESPACE_ID::uint32 value) {
@@ -1625,7 +1647,7 @@ inline void Object::set_id(::PROTOBUF_NAMESPACE_ID::uint32 value) {
 
 // required .Game.ObjectType type = 4;
 inline bool Object::_internal_has_type() const {
-  bool value = (_has_bits_[0] & 0x00000008u) != 0;
+  bool value = (_has_bits_[0] & 0x00000010u) != 0;
   return value;
 }
 inline bool Object::has_type() const {
@@ -1633,7 +1655,7 @@ inline bool Object::has_type() const {
 }
 inline void Object::clear_type() {
   type_ = 0;
-  _has_bits_[0] &= ~0x00000008u;
+  _has_bits_[0] &= ~0x00000010u;
 }
 inline ::Game::ObjectType Object::_internal_type() const {
   return static_cast< ::Game::ObjectType >(type_);
@@ -1644,7 +1666,7 @@ inline ::Game::ObjectType Object::type() const {
 }
 inline void Object::_internal_set_type(::Game::ObjectType value) {
   assert(::Game::ObjectType_IsValid(value));
-  _has_bits_[0] |= 0x00000008u;
+  _has_bits_[0] |= 0x00000010u;
   type_ = value;
 }
 inline void Object::set_type(::Game::ObjectType value) {
@@ -1654,7 +1676,7 @@ inline void Object::set_type(::Game::ObjectType value) {
 
 // required bool render = 5 [default = true];
 inline bool Object::_internal_has_render() const {
-  bool value = (_has_bits_[0] & 0x00000010u) != 0;
+  bool value = (_has_bits_[0] & 0x00000020u) != 0;
   return value;
 }
 inline bool Object::has_render() const {
@@ -1662,7 +1684,7 @@ inline bool Object::has_render() const {
 }
 inline void Object::clear_render() {
   render_ = true;
-  _has_bits_[0] &= ~0x00000010u;
+  _has_bits_[0] &= ~0x00000020u;
 }
 inline bool Object::_internal_render() const {
   return render_;
@@ -1672,12 +1694,83 @@ inline bool Object::render() const {
   return _internal_render();
 }
 inline void Object::_internal_set_render(bool value) {
-  _has_bits_[0] |= 0x00000010u;
+  _has_bits_[0] |= 0x00000020u;
   render_ = value;
 }
 inline void Object::set_render(bool value) {
   _internal_set_render(value);
   // @@protoc_insertion_point(field_set:Game.Object.render)
+}
+
+// required string modelPath = 6;
+inline bool Object::_internal_has_modelpath() const {
+  bool value = (_has_bits_[0] & 0x00000001u) != 0;
+  return value;
+}
+inline bool Object::has_modelpath() const {
+  return _internal_has_modelpath();
+}
+inline void Object::clear_modelpath() {
+  modelpath_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline const std::string& Object::modelpath() const {
+  // @@protoc_insertion_point(field_get:Game.Object.modelPath)
+  return _internal_modelpath();
+}
+inline void Object::set_modelpath(const std::string& value) {
+  _internal_set_modelpath(value);
+  // @@protoc_insertion_point(field_set:Game.Object.modelPath)
+}
+inline std::string* Object::mutable_modelpath() {
+  // @@protoc_insertion_point(field_mutable:Game.Object.modelPath)
+  return _internal_mutable_modelpath();
+}
+inline const std::string& Object::_internal_modelpath() const {
+  return modelpath_.GetNoArena();
+}
+inline void Object::_internal_set_modelpath(const std::string& value) {
+  _has_bits_[0] |= 0x00000001u;
+  modelpath_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
+}
+inline void Object::set_modelpath(std::string&& value) {
+  _has_bits_[0] |= 0x00000001u;
+  modelpath_.SetNoArena(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:Game.Object.modelPath)
+}
+inline void Object::set_modelpath(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  _has_bits_[0] |= 0x00000001u;
+  modelpath_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:Game.Object.modelPath)
+}
+inline void Object::set_modelpath(const char* value, size_t size) {
+  _has_bits_[0] |= 0x00000001u;
+  modelpath_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:Game.Object.modelPath)
+}
+inline std::string* Object::_internal_mutable_modelpath() {
+  _has_bits_[0] |= 0x00000001u;
+  return modelpath_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline std::string* Object::release_modelpath() {
+  // @@protoc_insertion_point(field_release:Game.Object.modelPath)
+  if (!_internal_has_modelpath()) {
+    return nullptr;
+  }
+  _has_bits_[0] &= ~0x00000001u;
+  return modelpath_.ReleaseNonDefaultNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline void Object::set_allocated_modelpath(std::string* modelpath) {
+  if (modelpath != nullptr) {
+    _has_bits_[0] |= 0x00000001u;
+  } else {
+    _has_bits_[0] &= ~0x00000001u;
+  }
+  modelpath_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), modelpath);
+  // @@protoc_insertion_point(field_set_allocated:Game.Object.modelPath)
 }
 
 // -------------------------------------------------------------------
