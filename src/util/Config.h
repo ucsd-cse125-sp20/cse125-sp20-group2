@@ -4,6 +4,7 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include <glm/glm.hpp>
 
 class Config {
 public:
@@ -16,6 +17,40 @@ public:
      * */
     static std::string get(std::string key) {
         return vars->at(key);
+    }
+
+    static int getInt(std::string key) {
+        return std::stoi(vars->at(key));
+    }
+
+    static float getFloat(std::string key) {
+        return std::stof(vars->at(key));
+    }
+
+    /**
+     * Parses a vec3 from the config file in the format
+     * x,y,z .
+     * */
+    static glm::vec3 getVec3(std::string key) {
+
+        // Get string key
+        std::string str = vars->at(key);
+        
+        // Parse vector coordinate x
+        int pos = str.find(',');
+        float x = std::stof(str.substr(0, pos));
+        str.erase(0, pos + 1);
+
+        // Parse vector coordinate y
+        pos = str.find(',');
+        float y = std::stof(str.substr(0, pos));
+        str.erase(0, pos + 1);
+
+        // Parse remainder of string, assumed to be z
+        float z = std::stof(str);
+
+        // Return the full vector
+        return glm::vec3(x, y, z);
     }
 
     /**

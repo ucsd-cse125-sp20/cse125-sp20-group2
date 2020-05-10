@@ -1,7 +1,7 @@
 #include "window.h"
 
 // Initial mouse positions
-float lastX = WIN_WIDTH / 2, lastY = WIN_HEIGHT / 2;
+float lastX, lastY;
 
 // Function prototypes
 void framebuffer_size_callback(GLFWwindow* glfwViewport, int width, int height);
@@ -11,13 +11,13 @@ void processInput(GLFWwindow* glfwViewport);
 float deltaTime = 0.0f;	// time between current frame and last frame
 float lastFrame = 0.0f;
 
-Window::Window(int width = WIN_WIDTH, int height = WIN_HEIGHT) : objNum (0) {
+Window::Window(int width = Config::getFloat("Window_Width"), int height = Config::getFloat("Window_Height")) : objNum (0) {
 	this->isClosed = false;
 	this->width = width;
 	this->height = height;
 	this->setupWindow();
 	this->shader = new Shader(Config::get("Vertex_Shader"), Config::get("Fragment_Shader"));
-	this->camera = new Camera(INITIAL_CAM_POS);
+	this->camera = new Camera(Config::getVec3("Camera_Location"));
 }
 
 void Window::addObject(unsigned int id, GameObject* object) {
@@ -32,6 +32,9 @@ void Window::removeObject(unsigned int index) {
 
 void Window::setupWindow() {
 
+	// inital mouse positions
+	lastX = Config::getFloat("Window_Width") / 2, lastY = Config::getFloat("Window_Height") / 2;
+
 	// // //
 	// Setup
 
@@ -40,7 +43,7 @@ void Window::setupWindow() {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);		
-	GLFWwindow* glfwViewport = glfwCreateWindow((int)WIN_WIDTH, (int)WIN_HEIGHT, Config::get("Window_Title").c_str(), NULL, NULL);
+	GLFWwindow* glfwViewport = glfwCreateWindow((int)Config::getFloat("Window_Width"), (int)Config::getFloat("Window_Height"), Config::get("Window_Title").c_str(), NULL, NULL);
 
 	// Capture mouse
 	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -125,7 +128,7 @@ void Window::render()
 
 	// camera projection transformation (related to zooms)
 	glm::mat4 projection = glm::mat4(1.0f);
-	projection = glm::perspective(glm::radians(this->camera->zoom), (float)WIN_WIDTH / (float)WIN_HEIGHT, 0.1f, 100.0f);
+	projection = glm::perspective(glm::radians(this->camera->zoom), Config::getFloat("Window_Width") / Config::getFloat("Window_Height"), 0.1f, 100.0f);
 
 	// pass transformation matrices to the shader
 	shader->setMat4("projection", projection); // note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.

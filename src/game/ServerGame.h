@@ -15,6 +15,7 @@ public:
     ~ServerGame();
 
 private:
+    int tick;
     ServerNetwork server;
 
     GameState gameState;
