@@ -17,7 +17,6 @@ protected:
 
     IngredientStatus status;
 
-    // TODO: Add inventory image
 public:
     IngredientObject(int ID);
 

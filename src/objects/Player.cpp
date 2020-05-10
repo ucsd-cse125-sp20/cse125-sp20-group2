@@ -48,3 +48,12 @@ void Player::removeFromInventory(IngredientObject *ingredient)
 int Player::getTeamID() { return this->teamID; };
 
 std::string Player::getTeamName() { return this->teamName; }
+
+std::deque<Instruction*> Player::getCompletedInstructions() {
+    return this->completedInstructions;
+}
+
+void Player::addToCompletedInstructions(Instruction* inst) {
+    this->completedInstructions.push_back(inst);
+    this->addToScore(inst->score);
+}

@@ -31,7 +31,12 @@ BoundingBox* GameObject::getBoundingBox() {
 }
 
 void GameObject::setModel(std::string path) {
+	this->modelPath = path;
 	this->model = new Model(path);
+}
+
+void std::string getModelPath() {
+	return this->modelPath;
 }
 
 // Update the world position and move the model matrix
@@ -51,9 +56,9 @@ bool GameObject::getRender() {
 	return this->render;
 }
 
-// TODO: toggle render
-void GameObject::setRender(bool render) {
-	this->render = render;
+// toggle render
+void GameObject::toggleRender() {
+	this->render = !this->render;
 }
 
 // Apply scaling to the model.

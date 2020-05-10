@@ -17,8 +17,14 @@ protected:
     float runSpeed = 0, turnSpeed = 0;
 
     std::unordered_map<int, IngredientObject*> inventory;
+
+    std::deque<Instruction*> completedInstructions;
 public:
     Player(int ID);
+
+    std::deque<Instruction*> getCompletedInstructions();
+
+    void addToCompletedInstructions(Instruction* inst);
     
     void setTeamID( int teamID );
 

@@ -44,6 +44,7 @@ message Object {
     required uint32 id = 3;
     required ObjectType type = 4;
     required bool render = 5 [default = true];
+    required string modelPath = 6;
 }
 
 message Score {
