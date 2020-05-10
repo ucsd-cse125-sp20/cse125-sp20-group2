@@ -1,7 +1,11 @@
-#include <IngredientObject.h>
+#pragma once
+
+#include <objects/IngredientObject.h>
+#include <util/Instruction.h>
 
 class Recipe {
 public:
     string name;
-    std::deque<Instruction*> instructionList;
+    vector<Instruction*> instructionList;
+    vector<IngredientObject*> ingredientList;
 }
