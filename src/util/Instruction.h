@@ -9,4 +9,5 @@ public:
     IngredientObject* ingredient;
     CookwareObject* cookware;
     string instr;
+    int points;
 }

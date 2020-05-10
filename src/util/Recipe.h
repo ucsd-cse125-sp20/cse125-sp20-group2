@@ -3,5 +3,5 @@
 class Recipe {
 public:
     string name;
-    std::deque<Instruction> instructionList;
+    std::deque<Instruction*> instructionList;
 }
