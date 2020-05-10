@@ -24,5 +24,12 @@ Window_Height=1600
 
 // Controls
 Camera_Speed=0.25
+Camera_Location=0,7,7
 Player_Run_Speed=1
 Player_Turn_Speed=1
+
+// Runtime
+Tick_Rate=30
+
+// Misc Coordinates
+Origin=0,0,0

@@ -8,7 +8,7 @@
 
 #define CLIENT_DELAY 1000
 
-ClientGame::ClientGame(std::string IP, int port) : client(IP, port), window(std::stof(Config::get("Window_Width")), std::stof(Config::get("Window_Height")))
+ClientGame::ClientGame(std::string IP, int port) : client(IP, port), window(Config::getFloat("Window_Width"), Config::getFloat("Window_Height"))
 {
     // TODO: fix hardcoded player values and hardcoded window insertion
     GameObject* grid = new GameObject(999999);

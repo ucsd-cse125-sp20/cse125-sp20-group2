@@ -6,7 +6,7 @@
  * Default values are all defined in graphics/_options/graphics_vars.h .
  * */
 Camera::Camera(glm::vec3 pos, glm::vec3 up, float yaw, float pitch, bool freeCam) 
-	: front(INIT_FRONT), moveSpeed(std::stof(Config::get("Camera_Speed"))), sensitivity(INIT_SENSITIVITY), zoom(INIT_ZOOM)
+	: front(INIT_FRONT), moveSpeed(Config::getFloat("Camera_Speed")), sensitivity(INIT_SENSITIVITY), zoom(INIT_ZOOM)
 {
 	this->pos = pos;
 	this->worldUp = up;
@@ -18,7 +18,7 @@ Camera::Camera(glm::vec3 pos, glm::vec3 up, float yaw, float pitch, bool freeCam
 
 
 Camera::Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch, bool freeCam)
-	: front(INIT_FRONT), moveSpeed(std::stof(Config::get("Camera_Speed"))), sensitivity(INIT_SENSITIVITY), zoom(INIT_ZOOM)
+	: front(INIT_FRONT), moveSpeed(Config::getFloat("Camera_Speed")), sensitivity(INIT_SENSITIVITY), zoom(INIT_ZOOM)
 {
 	pos = glm::vec3(posX, posY, posZ);
 	worldUp = glm::vec3(upX, upY, upZ);

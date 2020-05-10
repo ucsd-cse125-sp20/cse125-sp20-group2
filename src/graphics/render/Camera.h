@@ -27,8 +27,8 @@ const float INIT_PITCH = -45.0f;
 const float INIT_SENSITIVITY = 0.1f;
 const float INIT_ZOOM = 45.0f;
 
-// Default lookAt vectors
-const glm::vec3 INIT_POS = glm::vec3(0, 0, 3);
+// Default lookAt vectors (if not given)
+const glm::vec3 INIT_POS = glm::vec3(0, 0, 0);
 const glm::vec3 INIT_UP = glm::vec3(0, 1, 0);
 const glm::vec3 INIT_FRONT = glm::vec3(0, 0, -1);
 
