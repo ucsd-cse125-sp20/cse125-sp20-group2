@@ -76,6 +76,8 @@ public:
 	// Processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
 	void processKeyMovement(Camera_Movement direction);
 
+	void warpToTarget();
+
 	void processMouseMovement(float xoffset, float yoffset);
 
 	// Processes input received from a mouse scroll-wheel event. Only requires input on the vertical wheel-axis

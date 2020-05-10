@@ -89,10 +89,13 @@ void ClientGame::updateGameState()
         if (window.objectsToRender.count(id) > 0) {
             obj = window.objectsToRender[id];
         } else {
-            // Insert object into window
+            /// Insert object into window (TODO: instantiate player object)
             obj = new GameObject(id);
             obj->setModel(Config::get("Character_Model"));
             window.addObject(id, obj);
+
+            /// TODO: Hardcoded camera target set
+            window.camera->setTarget(obj);
         }
         obj->setRotation(rotation);
         obj->setPosition(glm::vec3(location.x(), location.y(), location.z()));
@@ -150,4 +153,7 @@ void ClientGame::processInput()
     if (msg.has_direction()) {
         this->client.send(msg);
     }
+
+    // Target following
+    if (!window.camera->freeCam) window.camera->warpToTarget();
 }

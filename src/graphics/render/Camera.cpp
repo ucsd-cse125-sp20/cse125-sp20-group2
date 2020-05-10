@@ -32,8 +32,14 @@ Camera::Camera(float posX, float posY, float posZ, float upX, float upY, float u
 	updateCameraVectors();
 }
 
-void Camera::setTarget(GameObject* target) {this->target = target;}
-GameObject* Camera::getTarget() {return target;}
+void Camera::setTarget(GameObject* target)
+{
+	this->target = target;
+}
+GameObject* Camera::getTarget() 
+{
+	return target;
+}
 
 void Camera::toggleFreeCam() {
 	freeCam = !freeCam;
@@ -44,7 +50,7 @@ void Camera::toggleFreeCam() {
 		pitch = INIT_PITCH;
 
 		// Reset position to either target or initalized position
-		if (target) pos = target->getPosition() + staticPos;
+		if (target) warpToTarget();
 		else pos = staticPos;
 	}
 }
@@ -55,13 +61,9 @@ glm::mat4 Camera::getViewMatrix()
 	return glm::lookAt(pos, pos + front, up);
 }
 
-	// Set camera target
-
 // Processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
 void Camera::processKeyMovement(Camera_Movement direction)
 {
-	if (!freeCam) return;
-
 	if (direction == FORWARD)
 		pos += front * moveSpeed;
 	if (direction == BACKWARD)
@@ -70,6 +72,11 @@ void Camera::processKeyMovement(Camera_Movement direction)
 		pos -= right * moveSpeed;
 	if (direction == RIGHT)
 		pos += right * moveSpeed;
+}
+
+void Camera::warpToTarget()
+{
+	if (target) pos = target->getPosition() + staticPos;
 }
 
 // Processes input received from a mouse input system. Expects the offset value in both the x and y direction.
