@@ -1,6 +1,7 @@
 #pragma once
 
 #include <util/Config.h>
+#include <objects/GameObject.h>
 
 // Std. library
 #include <iostream>
@@ -34,7 +35,9 @@ const glm::vec3 INIT_FRONT = glm::vec3(0, 0, -1);
 
 class Camera {
 public:
+
 	// Camera Attributes
+	glm::vec3 staticPos;   // Refers to the position held when freecam is disabled.
 	glm::vec3 pos;
 	glm::vec3 front;
 	glm::vec3 up;
@@ -53,11 +56,17 @@ public:
 	float sensitivity;
 	float zoom;
 
+	// Camera target (if freecam is disabled)
+	GameObject* target;
+
 	// Constructor with vector values
 	Camera(glm::vec3 pos = INIT_POS, glm::vec3 up = INIT_UP, float yaw = INIT_YAW, float pitch = INIT_PITCH, bool freeCam = true);
 
 	// Constructor with scalar values
 	Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch, bool freeCam = true);
+
+	void setTarget(GameObject* target);
+	GameObject* getTarget();
 
 	void toggleFreeCam();
 
