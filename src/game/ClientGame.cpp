@@ -153,7 +153,4 @@ void ClientGame::processInput()
     if (msg.has_direction()) {
         this->client.send(msg);
     }
-
-    // Target following
-    if (!window.camera->freeCam) window.camera->warpToTarget();
 }

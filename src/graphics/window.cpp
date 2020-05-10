@@ -121,6 +121,9 @@ void Window::render()
 	shader->setFloat("specularStrength", specularStrength);
 	shader->setVec3("viewPos", this->camera->pos);
 	
+	// Target following
+    if (!camera->freeCam) camera->warpToTarget();
+
 	// // //
 	// View + perspective projection matrices
 
