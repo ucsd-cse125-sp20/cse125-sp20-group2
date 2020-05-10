@@ -28,6 +28,7 @@ public:
         msgObj->set_allocated_worldposition(vector);
         msgObj->set_rotation(object->getRotation());
         msgObj->set_id(object->getID());
+        msgObj->set_modelpath(object->getModelPath());
         msgObj->set_render(object->getRender());
         
         // Set type

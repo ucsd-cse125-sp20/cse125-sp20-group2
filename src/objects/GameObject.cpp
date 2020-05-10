@@ -31,7 +31,12 @@ BoundingBox* GameObject::getBoundingBox() {
 }
 
 void GameObject::setModel(std::string path) {
+	this->modelPath = path;
 	this->model = new Model(path);
+}
+
+void std::string getModelPath() {
+	return this->modelPath;
 }
 
 // Update the world position and move the model matrix

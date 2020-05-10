@@ -25,6 +25,8 @@ private:
     // Rendered model
     Model* model;
 
+    std::string modelPath;
+
     // Position in the world
 	glm::vec3 pos;
 
@@ -64,6 +66,7 @@ public:
 
     void toggleRender(render);
 
+    std::string getModelPath();
 
     void setObjectType(ObjectType newObjType);
 
