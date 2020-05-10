@@ -4,7 +4,7 @@
 #include <string>
 #include <network/ServerNetwork.h>
 
-// TODO:
+/// TODO:
 //  Handle clientSocket disconnection
 
 ServerNetwork::ServerNetwork(int port)

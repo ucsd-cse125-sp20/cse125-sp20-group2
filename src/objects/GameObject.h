@@ -15,15 +15,24 @@ enum ObjectType
     OBJECT = 0, // GameObject
     PLAYER = 1, // Player
     INGREDIENT = 2, // IngredientObject
-    COOKWARE = 3  // CookwareObject
+    COOKWARE = 3,  // CookwareObject
+    WALL = 4 // Wall
 };
 
 // is intersecting(GameObject) -> return boundingBox.isIntersecting
 class GameObject
 {
+
+/// TODO: remove this later - hardcoded id
+public:
+    static int counter;  
+
 private:
+    // Sizing - may be needed for collisions, depends on model size and scale
+    float width, height, depth;
+
     // Rendered model
-    Model* model;
+    Model* model = NULL;
 
     std::string modelPath;
 
@@ -40,19 +49,22 @@ private:
     // Inventory
     std::unordered_map<unsigned int, GameObject*> inventory;
 
-    // Passing through object
+    // Able to pass through object
     bool passable = false;
 
-    // Rendered in word or not
+    // Rendered in world or not
     bool render = true;
 
 protected:
     // The bounding box for this game object
-    BoundingBox* box;
+    BoundingBox* box = NULL;
 
     ObjectType objType;
 
 public:
+    /// TODO: Remove this later - default ctor gives hardcoded id
+    GameObject();
+
     /**
      * This is a constructor for both the server and client.
      * 
@@ -60,11 +72,13 @@ public:
      * */
     GameObject(int id);
 
+    /*~GameObject();*/
+
     ObjectType getObjectType();
     
     bool getRender();
 
-    void toggleRender(render);
+    void toggleRender();
 
     std::string getModelPath();
 
@@ -76,6 +90,12 @@ public:
      * @param path - This is the file path to the model.
      * */
     void setModel(std::string path);
+
+    /**
+     * Should be called after setting the model or changing the scale.
+     * Should update width/depth accordingly. TODO: Consider if height is needed
+     * */
+    void updateMeasurements();
 
     /**
      * Draw the model using the given shader.
@@ -97,6 +117,8 @@ public:
      * @param loc - The new location of the object.
      * */
     void setPosition(glm::vec3 loc);
+
+    void setPosition(float x, float y, float z);
 
     /**
      * Moves the object below the floor, rendering it invisible to players

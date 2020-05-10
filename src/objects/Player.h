@@ -4,6 +4,8 @@
 #include <objects/IngredientObject.h>
 #include <unordered_map>
 #include <string>
+#include <util/Instruction.h>
+#include <deque>
 
 class Player : public GameObject 
 {
@@ -49,4 +51,6 @@ public:
     void addToInventory( IngredientObject* ingredient );
 
     void removeFromInventory( IngredientObject* ingredient );
+
+    void drawInventory(GLuint shaderProgram);
 };

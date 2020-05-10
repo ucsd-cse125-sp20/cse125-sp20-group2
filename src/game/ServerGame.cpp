@@ -1,8 +1,4 @@
 #include <game/ServerGame.h>
-#include <util/PrintUtil.h>
-#include <util/MessageBuilder.h>
-#include <thread>
-#include <chrono>
 
 //#define TICK 30
 
@@ -22,6 +18,7 @@ ServerGame::~ServerGame()
 
 void ServerGame::run()
 {
+
     while (true) {
         auto start = std::chrono::high_resolution_clock::now();
 
@@ -62,7 +59,7 @@ void ServerGame::process()
                 this->server.sendToAll(*message);
                 delete message;
                 // free(message);
-                break; // TODO: Remove, this preprocesses messages s.t. only one is from each player per tick
+                break; /// TODO: Remove, this preprocesses messages s.t. only one is from each player per tick
             }
 
             if (this->processor.specificMessages[clientId].size() > 0) {

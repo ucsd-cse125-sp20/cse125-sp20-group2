@@ -1,10 +1,9 @@
 #include <game/GameState.h>
-#include <objects/Player.h>
 
 #define PLAYER_RADIUS 0.05
 
 GameState::GameState() {
-    // TODO, implement timer logic
+    /// TODO, implement timer logic
     this->timer = 30;
 }
 
@@ -42,6 +41,16 @@ int GameState::addPlayer(unsigned int clientId) {
     // return id;
 
     std::cout << "Returning from add player" << std::endl;
+}
+
+void GameState::addMap(Map *map) {
+    for(auto it = map->wallList.begin(); it!= map->wallList.end(); it++) {
+        this->gameObjects[(*it)->getID()] = *it;
+    }
+
+    for(auto it = map->ingredients.begin(); it != map->ingredients.end(); it++) {
+        this->gameObjects[(*it)->getID()] = *it;
+    }
 }
 
 // Adds the object to the object map

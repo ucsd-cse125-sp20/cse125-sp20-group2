@@ -11,7 +11,7 @@ void Grid::createTiles() {
     for (int i = 0; i < x; i++) {
         for (int j = 0; j < z; j++) {
 
-            // TODO: HARDCODED VALUE
+            /// TODO: HARDCODED VALUE
             int ID = 99999 + i + j;
 
             Tile* tile = new Tile(ID);

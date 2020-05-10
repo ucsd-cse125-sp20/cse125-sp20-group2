@@ -235,17 +235,17 @@ const char descriptor_table_protodef_Game_2eproto[] PROTOBUF_SECTION_VARIABLE(pr
   "essage\022\030\n\003net\030\001 \001(\0162\t.Game.NetH\000\022\036\n\006obje"
   "ct\030\002 \001(\0132\014.Game.ObjectH\000\022\034\n\005score\030\003 \001(\0132"
   "\013.Game.ScoreH\000\022$\n\tinventory\030\004 \001(\0132\017.Game"
-  ".InventoryH\000B\007\n\005event\"\225\001\n\006Object\022$\n\rworl"
+  ".InventoryH\000B\007\n\005event\"\227\001\n\006Object\022$\n\rworl"
   "dPosition\030\001 \002(\0132\r.Game.Vector3\022\020\n\010rotati"
   "on\030\002 \002(\002\022\n\n\002id\030\003 \002(\r\022\036\n\004type\030\004 \002(\0162\020.Gam"
-  "e.ObjectType\022\024\n\006render\030\005 \002(\010:\004true\022\021\n\tmo"
-  "delPath\030\006 \002(\t\"\007\n\005Score\"3\n\007Vector3\022\014\n\001x\030\001"
-  " \002(\002:\0011\022\014\n\001y\030\002 \002(\002:\0010\022\014\n\001z\030\003 \002(\002:\0011\"*\n\tI"
-  "nventory\022\n\n\002id\030\001 \002(\r\022\021\n\003add\030\002 \002(\010:\004true*"
-  "\031\n\003Net\022\010\n\004PING\020\000\022\010\n\004PONG\020\001*2\n\tDirection\022"
-  "\006\n\002UP\020\000\022\010\n\004DOWN\020\001\022\010\n\004LEFT\020\002\022\t\n\005RIGHT\020\003*B"
-  "\n\nObjectType\022\n\n\006OBJECT\020\000\022\n\n\006PLAYER\020\001\022\016\n\n"
-  "INGREDIENT\020\002\022\014\n\010COOKWARE\020\003"
+  "e.ObjectType\022\024\n\006render\030\005 \002(\010:\004true\022\023\n\tmo"
+  "delPath\030\006 \002(\t:\000\"\007\n\005Score\"3\n\007Vector3\022\014\n\001x"
+  "\030\001 \002(\002:\0011\022\014\n\001y\030\002 \002(\002:\0010\022\014\n\001z\030\003 \002(\002:\0011\"*\n"
+  "\tInventory\022\n\n\002id\030\001 \002(\r\022\021\n\003add\030\002 \002(\010:\004tru"
+  "e*\031\n\003Net\022\010\n\004PING\020\000\022\010\n\004PONG\020\001*2\n\tDirectio"
+  "n\022\006\n\002UP\020\000\022\010\n\004DOWN\020\001\022\010\n\004LEFT\020\002\022\t\n\005RIGHT\020\003"
+  "*L\n\nObjectType\022\n\n\006OBJECT\020\000\022\n\n\006PLAYER\020\001\022\016"
+  "\n\nINGREDIENT\020\002\022\014\n\010COOKWARE\020\003\022\010\n\004WALL\020\004"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_Game_2eproto_deps[1] = {
 };
@@ -260,7 +260,7 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_Gam
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_Game_2eproto_once;
 static bool descriptor_table_Game_2eproto_initialized = false;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_Game_2eproto = {
-  &descriptor_table_Game_2eproto_initialized, descriptor_table_protodef_Game_2eproto, "Game.proto", 666,
+  &descriptor_table_Game_2eproto_initialized, descriptor_table_protodef_Game_2eproto, "Game.proto", 678,
   &descriptor_table_Game_2eproto_once, descriptor_table_Game_2eproto_sccs, descriptor_table_Game_2eproto_deps, 6, 0,
   schemas, file_default_instances, TableStruct_Game_2eproto::offsets,
   file_level_metadata_Game_2eproto, 6, file_level_enum_descriptors_Game_2eproto, file_level_service_descriptors_Game_2eproto,
@@ -309,6 +309,7 @@ bool ObjectType_IsValid(int value) {
     case 1:
     case 2:
     case 3:
+    case 4:
       return true;
     default:
       return false;
@@ -1177,7 +1178,7 @@ const char* Object::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::int
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // required string modelPath = 6;
+      // required string modelPath = 6 [default = ""];
       case 6:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 50)) {
           auto str = _internal_mutable_modelpath();
@@ -1249,7 +1250,7 @@ failure:
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(5, this->_internal_render(), target);
   }
 
-  // required string modelPath = 6;
+  // required string modelPath = 6 [default = ""];
   if (cached_has_bits & 0x00000001u) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
       this->_internal_modelpath().data(), static_cast<int>(this->_internal_modelpath().length()),
@@ -1272,7 +1273,7 @@ size_t Object::RequiredFieldsByteSizeFallback() const {
   size_t total_size = 0;
 
   if (_internal_has_modelpath()) {
-    // required string modelPath = 6;
+    // required string modelPath = 6 [default = ""];
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
         this->_internal_modelpath());
@@ -1315,7 +1316,7 @@ size_t Object::ByteSizeLong() const {
   size_t total_size = 0;
 
   if (((_has_bits_[0] & 0x0000003f) ^ 0x0000003f) == 0) {  // All required fields are present.
-    // required string modelPath = 6;
+    // required string modelPath = 6 [default = ""];
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
         this->_internal_modelpath());

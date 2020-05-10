@@ -1,3 +1,5 @@
+#pragma once 
+
 #include <schema/Game.pb.h>
 #include <objects/GameObject.h>
 
@@ -20,7 +22,7 @@ public:
             exit(1);
         }
 
-        // TODO: Check if sending server message deallocates Vector
+        /// TODO: Check if sending server message deallocates Vector
         Game::Vector3* vector = toVector(object->getPosition());
 
         // Set position/location/id (universal aspects of all game objects)
@@ -28,7 +30,7 @@ public:
         msgObj->set_allocated_worldposition(vector);
         msgObj->set_rotation(object->getRotation());
         msgObj->set_id(object->getID());
-        // msgObj->set_modelpath(object->getModelPath());
+        msgObj->set_allocated_modelpath(new std::string(object->getModelPath()));
         msgObj->set_render(object->getRender());
         
         // Set type
@@ -41,6 +43,8 @@ public:
                 msgObj->set_type(Game::ObjectType::INGREDIENT); break;
             case 3:
                 msgObj->set_type(Game::ObjectType::COOKWARE); break;
+            case 4:
+                msgObj->set_type(Game::ObjectType::WALL); break;
         }
 
         // Put allocated object into message to be sent

@@ -55,5 +55,18 @@ std::deque<Instruction*> Player::getCompletedInstructions() {
 
 void Player::addToCompletedInstructions(Instruction* inst) {
     this->completedInstructions.push_back(inst);
-    this->addToScore(inst->score);
+    this->addToScore(inst->points);
+}
+
+// pass in uishader->ID as parameter
+void Player::drawInventory(GLuint shaderProgram) {
+    glDisable(GL_DEPTH_TEST);
+    glUseProgram(shaderProgram);
+
+    std::unordered_map<int, IngredientObject*>::iterator it = inventory.begin();
+
+    while (it != inventory.end()) {
+        it->second->draw();
+        it++;
+    }
 }

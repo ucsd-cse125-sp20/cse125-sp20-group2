@@ -42,6 +42,9 @@ public:
 	// Draw all the meshes in the file
 	void draw(Shader shader);
 
+	/// Sizing (TODO: modelHeight unused)
+	float modelWidth, modelHeight, modelDepth;
+
 private:
 	/*  Functions   */
 	void loadModel(std::string path);

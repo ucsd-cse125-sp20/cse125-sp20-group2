@@ -137,11 +137,12 @@ enum ObjectType : int {
   OBJECT = 0,
   PLAYER = 1,
   INGREDIENT = 2,
-  COOKWARE = 3
+  COOKWARE = 3,
+  WALL = 4
 };
 bool ObjectType_IsValid(int value);
 constexpr ObjectType ObjectType_MIN = OBJECT;
-constexpr ObjectType ObjectType_MAX = COOKWARE;
+constexpr ObjectType ObjectType_MAX = WALL;
 constexpr int ObjectType_ARRAYSIZE = ObjectType_MAX + 1;
 
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ObjectType_descriptor();
@@ -666,7 +667,7 @@ class Object :
     kTypeFieldNumber = 4,
     kRenderFieldNumber = 5,
   };
-  // required string modelPath = 6;
+  // required string modelPath = 6 [default = ""];
   bool has_modelpath() const;
   private:
   bool _internal_has_modelpath() const;
@@ -1702,7 +1703,7 @@ inline void Object::set_render(bool value) {
   // @@protoc_insertion_point(field_set:Game.Object.render)
 }
 
-// required string modelPath = 6;
+// required string modelPath = 6 [default = ""];
 inline bool Object::_internal_has_modelpath() const {
   bool value = (_has_bits_[0] & 0x00000001u) != 0;
   return value;

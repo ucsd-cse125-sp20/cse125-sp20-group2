@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <objects/Player.h>
 #include <objects/IngredientObject.h>
+#include <objects/Map.h>
 
 /**
  * This class holds the game state.
@@ -18,7 +19,7 @@ private:
     unsigned int objCounter = 0;
 
     // This is a mapping of clientId to Player objects
-    // TODO: Map from team id to allow instructor to quickly access their team's player
+    /// TODO: Map from team id to allow instructor to quickly access their team's player
     std::unordered_map<unsigned int, Player*> playerObjects;
 
     // This is a mapping of gameObjId to gameObjects
@@ -27,7 +28,7 @@ private:
     // This is a mapping of gameObjId to ingredient objects
     std::unordered_map<unsigned int, IngredientObject*> ingredientObjects;
 
-    // TODO: Implement
+    /// TODO: Implement
     // This is a mapping of clientId to score
     // std::unordered_map<unsigned int, unsigned int> scoreMap;
 
@@ -63,6 +64,11 @@ public:
      * Return the reference ingredient object
      * */
     IngredientObject* getIngredientObject(unsigned int);
+
+    /**
+     * Add map object
+     * */
+    void addMap(Map *map);
 
     /**
      * Returns all game objects

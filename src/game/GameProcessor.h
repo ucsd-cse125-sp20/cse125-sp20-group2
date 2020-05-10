@@ -4,6 +4,9 @@
 #include <game/GameState.h>
 #include <game/MovementProcessor.h>
 #include <deque>
+#include <objects/Map.h>
+#include <util/MapBuilder.h>
+#include <util/MessageBuilder.h>
 
 /**
  * This processes information from the server and modifies game state.

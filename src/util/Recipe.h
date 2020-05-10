@@ -1,11 +1,10 @@
 #pragma once
 
-#include <objects/IngredientObject.h>
 #include <util/Instruction.h>
 
 class Recipe {
 public:
-    string name;
-    vector<Instruction*> instructionList;
-    vector<IngredientObject*> ingredientList;
-}
+    std::string name;
+    std::vector<Instruction*> instructionList;
+    std::vector<IngredientObject*> ingredientList;
+};

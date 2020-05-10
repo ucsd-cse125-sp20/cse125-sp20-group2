@@ -1,21 +1,25 @@
 #include <game/ClientGame.h>
-#include <glm/gtx/string_cast.hpp>
-#include <objects/Player.h>
-#include <chrono>
-#include <thread>
-#include <util/MessageBuilder.h>
-#include <util/Config.h>
+
 
 #define CLIENT_DELAY 1000
 
 ClientGame::ClientGame(std::string IP, int port) : client(IP, port), window(Config::getFloat("Window_Width"), Config::getFloat("Window_Height"))
 {
-    // TODO: fix hardcoded player values and hardcoded window insertion
+    /// TODO: fix hardcoded player values and hardcoded window insertion
     GameObject* grid = new GameObject(999999);
     grid->setPosition(glm::vec3(0, 0, 0));
     grid->setModel(Config::get("Maze_Model"));
     grid->applyScale(glm::vec3(2, 2, 2));
     window.addObject(999999, grid);
+
+    /*Map* m = MapBuilder::getBasicMap();
+    for(auto it = m->wallList.begin(); it!= m->wallList.end(); it++) {
+        window.addObject((*it)->getID(), *it);
+    }
+
+    for(auto it = m->ingredients.begin(); it != m->ingredients.end(); it++) {
+        window.addObject((*it)->getID(), *it);
+    }*/
 
     runGame();
 }
@@ -28,7 +32,6 @@ ClientGame::~ClientGame()
 void ClientGame::runGame() 
 {
     while(!window.isClosed) {
-        
         // Take local input
         // Send to the server
         processInput();
@@ -67,8 +70,8 @@ void ClientGame::updateGameState()
 {
 
 
-    // TODO: Assume only object for now. Update GameObject to respective type
-    // TODO: switch case based on what kind of messages
+    /// TODO: Assume only object for now. Update GameObject to respective type
+    /// TODO: switch case based on what kind of messages
     for (Game::ServerMessage currMessage : client.messages) {
 
         // switch(currMessage.event_case()) {

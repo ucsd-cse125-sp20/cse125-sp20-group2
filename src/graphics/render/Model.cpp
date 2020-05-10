@@ -52,6 +52,10 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 	std::vector<unsigned int> indices;
 	std::vector<Texture> textures;
 
+	/// Min/Max for calculating width/depth/height (TODO: height (y-coord) currently unused)
+	float minX = 9999.9, minY = 9999.9, minZ = 9999.9;
+	float maxX = -9999.9, maxY = -9999.9, maxZ = -9999.9; 
+
 	// Walk through each of the mesh's vertices
 	for (unsigned int i = 0; i < mesh->mNumVertices; i++)
 	{
@@ -62,6 +66,15 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 		vector.y = mesh->mVertices[i].y;
 		vector.z = mesh->mVertices[i].z;
 		vertex.pos = vector;
+
+		/// Get min/maxes of coords (TODO: Maybe make this less repeitive)
+		if (vector.x < minX) minX = vector.x;
+		else if (vector.x > maxX) maxX = vector.x;
+		if (vector.y < minY) minY = vector.y;
+		else if (vector.y > maxY) maxY = vector.y;
+		if (vector.z < minZ) minZ = vector.z;
+		else if (vector.z > maxZ) maxZ = vector.z;
+
 		// normals
 		vector.x = mesh->mNormals[i].x;
 		vector.y = mesh->mNormals[i].y;
@@ -80,6 +93,12 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 			vertex.texCoords = glm::vec2(0.0f, 0.0f);
 		vertices.push_back(vertex);
 	}
+
+	/// TODO: measurement calculation should probably be more modular
+	modelWidth = maxX - minX;
+	modelDepth = maxZ - minZ;
+	modelHeight = maxY - minY;
+
 	// now wak through each of the mesh's faces (a face is a mesh its triangle) and retrieve the corresponding vertex indices.
 	for (unsigned int i = 0; i < mesh->mNumFaces; i++)
 	{

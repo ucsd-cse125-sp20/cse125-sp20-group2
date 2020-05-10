@@ -8,6 +8,6 @@ class Instruction {
 public:
     IngredientObject* ingredient;
     CookwareObject* cookware;
-    string instr;
+    std::string instr;
     int points;
-}
+};

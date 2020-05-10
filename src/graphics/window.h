@@ -55,6 +55,7 @@ public:
     Camera* camera;
 private:
     Shader* shader;
+    Shader* UIshader;
     void setupWindow();
     void cameraViewUpdate();
     unsigned int objNum;        // Increment when get response back from server

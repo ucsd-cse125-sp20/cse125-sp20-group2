@@ -1,14 +1,51 @@
 #include <objects/GameObject.h>
 
-GameObject::GameObject(int id) {
-	this->ID = id;
+/// TODO: remove this later
+int GameObject::counter = 1000000;
+
+/// TODO: Remove this later
+GameObject::GameObject() {
+	this->ID = GameObject::counter;
+	GameObject::counter++;
 	this->setPosition(glm::vec3(0, 0, 0));
 	this->setRotation(0);
 	this->applyScale(glm::vec3(0.2));
-	this->setPassable(false);
+	this->model = NULL;
 	this->box = new BoundingBox(this); 
+	this->setPassable(false);
 	this->setObjectType(OBJECT);
 }
+
+/**
+ * Initialize a new gameobject with a unique ID that should be provided by the server.
+ * 
+ * @param id - The unique unsigned int identifier of this object.
+ * */
+GameObject::GameObject(int id) {
+
+	// Set id
+	this->ID = id;
+
+	// Set transformations, assuming origin with no rotation
+	this->setPosition(glm::vec3(0, 0, 0));
+	this->setRotation(0);
+	this->applyScale(glm::vec3(0.2));
+
+	// Model should be set afterward
+	this->model = NULL;
+
+	// For collisions
+	this->box = new BoundingBox(this); 
+	this->setPassable(false);
+
+	// Generic object type
+	this->setObjectType(OBJECT);
+}
+
+/**GameObject:~GameObject() {
+	if (model) delete model;
+	if (box) delete box;
+}*/
 
 void GameObject::setObjectType(ObjectType newObjType) {
 	this->objType = newObjType;
@@ -33,15 +70,46 @@ BoundingBox* GameObject::getBoundingBox() {
 void GameObject::setModel(std::string path) {
 	this->modelPath = path;
 	this->model = new Model(path);
+	this->updateMeasurements();
 }
 
-void std::string getModelPath() {
+/// TODO: Consider if height is needed
+void GameObject::updateMeasurements()
+{
+	// This code serves to update collisions. If either of these are missing, stop
+	if (!model || !box) return;
+
+	// Update model
+	this->width = model->modelWidth * scaleVec.x;
+	this->depth = model->modelDepth * scaleVec.z;
+
+	// Update collision box, if applicable
+	if (!this->box->isCircleBoundingBox())
+	{
+		this->box->setWidth(width);
+		this->box->setDepth(depth);
+		this->box->updateCorners();
+	} 
+
+	// Update collision circle, if applicable
+	else 
+	{
+		this->box->setRadius(width/2);
+	}
+}
+
+std::string GameObject::getModelPath()
+{
 	return this->modelPath;
 }
 
-// Update the world position and move the model matrix
+// Update the world position
 void GameObject::setPosition(glm::vec3 loc) {
 	this->pos = loc;
+}
+
+void GameObject::setPosition(float x, float y, float z) {
+	this->pos = glm::vec3(x, y, z);
 }
 
 void GameObject::renderInvisible() {
@@ -64,6 +132,7 @@ void GameObject::toggleRender() {
 // Apply scaling to the model.
 void GameObject::applyScale(glm::vec3 scale) {
 	this->scaleVec = scale;
+	this->updateMeasurements();
 }
 
 glm::vec3 GameObject::getPosition() {

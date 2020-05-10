@@ -17,6 +17,7 @@ Window::Window(int width = Config::getFloat("Window_Width"), int height = Config
 	this->height = height;
 	this->setupWindow();
 	this->shader = new Shader(Config::get("Vertex_Shader"), Config::get("Fragment_Shader"));
+	this->UIshader = new Shader("src//graphics//shaders//ui_vert_shader.glsl", "src//graphics//shaders//ui_frag_shader.glsl"); // Need to add to Config?
 	this->camera = new Camera(Config::getVec3("Camera_Location"));
 }
 
@@ -139,10 +140,11 @@ void Window::render()
 
 	// // //
 	// Render each GameObject
-	// TODO: use render boolean
 
 	for (auto it = objectsToRender.begin(); it != objectsToRender.end(); ++it) {
 		GameObject* obj = it->second;
+
+		if (!obj->getRender()) continue; 
 
 		// Set respective model matrix for each object and send it to the shader.
 		glm::mat4 mat = glm::mat4(1.0);

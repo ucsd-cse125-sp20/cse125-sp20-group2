@@ -1,5 +1,6 @@
 #include <schema/Game.pb.h>
 #include <iostream>
+#pragma once
 
 class PrintUtil
 {
