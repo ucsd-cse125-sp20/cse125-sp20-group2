@@ -1,13 +1,12 @@
 #include <game/ServerGame.h>
 
-//#define TICK 30
+#define TICK 30
 
 ServerGame::ServerGame(int port) : server(port), processor(&this->gameState)
 {
     // std::function<void(int)> test = std::bind(&ServerGame::acall, this)
     std::function<void(int)> notifyClients = std::bind(&ServerGame::acceptCallback, this, std::placeholders::_1);
     this->server.setAcceptCallback(notifyClients);
-    this->tick = Config::getInt("Tick_Rate");
     run();
 }
 
@@ -27,7 +26,7 @@ void ServerGame::run()
         auto end = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double> dur = end - start;
 
-        std::chrono::duration<double> sleepTime = std::chrono::milliseconds(tick) - dur;
+        std::chrono::duration<double> sleepTime = std::chrono::milliseconds(TICK) - dur;
 
         if (sleepTime.count() >= 0) {
             // std::cout << "Time to process: " << dur.count() << " Sleeping for: " << sleepTime.count() << std::endl;
@@ -51,7 +50,7 @@ void ServerGame::process()
         auto msgs = iter->second;
         for (auto msg: msgs) {
             // PrintUtil::print(msg);
-            this->processor.process(clientId, msg, tick);
+            this->processor.process(clientId, msg, TICK);
             
             if (this->processor.messages.size() > 0) {
                 Game::ServerMessage* message = this->processor.messages.front();
