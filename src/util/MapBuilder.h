@@ -6,4 +6,5 @@
 class MapBuilder {
 public:
     static Map* getBasicMap();
+    static void assignIngredientPositions( Recipe* recipe, Map* mp )
 };

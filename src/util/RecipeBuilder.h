@@ -1,8 +1,9 @@
-#pragma once
 #include <util/Recipe.h>
+#include <utility>
+#include <util/Config.h>
 
 class RecipeBuilder {
 public:
-    Recipe* getBasicRecipe();
-    // IngredientObject createIngredient(std::string modelPath);
-};
+    static Recipe getBasicRecipe();
+    static IngredientObject createIngredient(string modelPath);
+}

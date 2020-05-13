@@ -6,5 +6,6 @@
 class Map {
 public:
     std::vector<Wall*> wallList;
-    std::vector<IngredientObject*> ingredients;
+    std::vector<glm::vec3> ingredientPositions;
+    std::vector<glm::vec3> spawningLocations;
 };

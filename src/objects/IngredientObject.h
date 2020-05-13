@@ -46,6 +46,8 @@ GLuint indices[6] = {
 unsigned nrOfIndices = sizeof(indices) / sizeof(GLuint);
     IngredientObject(int ID);
 
+    IngredientObject();
+
     ~IngredientObject();
 
     void setName(std::string name);

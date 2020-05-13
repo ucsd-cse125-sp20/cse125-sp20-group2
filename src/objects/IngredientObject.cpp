@@ -28,6 +28,35 @@ IngredientObject::IngredientObject(int ID) : GameObject(ID) {
 
     glBindVertexArray(0);
 }
+
+IngredientObject::IngredientObject() : GameObject() {
+    this->objType = INGREDIENT;
+    
+    //Config::get("Tomato_Image");
+    
+    // get filename (path and directory) to inventory image?
+    this->textureID = 0;     // remove this line when path and directory is included
+    // this->textureID = TextureFromFile(path, directory);
+
+    glGenVertexArrays(1, &(this->VAO));
+    glBindVertexArray(this->VAO);
+
+    glGenBuffers(1, &(this->VBO));
+    glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vert), vert, GL_STATIC_DRAW);
+
+    glGenBuffers(1, &(this->EBO));
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(VertexCoord), (GLvoid*)offsetof(VertexCoord, position));
+    glEnableVertexAttribArray(0);
+
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(VertexCoord), (GLvoid*)offsetof(VertexCoord, texcoord));
+    glEnableVertexAttribArray(1);
+
+    glBindVertexArray(0);
+}
     
 IngredientObject::~IngredientObject() {
     if (this->textureID != 0) {
