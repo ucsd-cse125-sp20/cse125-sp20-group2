@@ -17,7 +17,14 @@ class ClientGame {
         ClientGame(std::string IP, int port);
         ~ClientGame();
         void runGame();
-        int clientID;
+
+        // This is the client id.
+        // NOTE: This does NOT correlate directly with any objects!!!
+        unsigned int clientId;
+
+        // This is the object id.
+        // NOTE: This is the id that correlates to this client's player object. 
+        unsigned int objectId;
     private:
         NetworkClient client;
         Window window;

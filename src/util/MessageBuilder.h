@@ -66,6 +66,19 @@ public:
     }
 
     /**
+     * Creates client initialization message
+     * */
+    static Game::ServerMessage* toClientInfo(uint32_t clientId, uint32_t objectId)
+    {
+        Game::ServerMessage* serverMessage = new Game::ServerMessage();
+        Game::ClientInfo* clientInfo = new Game::ClientInfo();
+        clientInfo->set_clientid(clientId);
+        clientInfo->set_objectid(objectId);
+        serverMessage->set_allocated_clientinfo(clientInfo);
+        return serverMessage;
+    }
+
+    /**
      * Returns a Vector3 protocol message from a glm vec3
      * It is up to the caller to determine whether this is freed.
      * */

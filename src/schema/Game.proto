@@ -28,6 +28,7 @@ message ServerMessage {
         Object object = 2;
         Score score = 3;
         Inventory inventory = 4;
+        ClientInfo clientInfo = 5;
     }
 }
 
@@ -61,4 +62,9 @@ message Vector3 {
 message Inventory {
     required uint32 id = 1;
     required bool add = 2 [default = true];
+}
+
+message ClientInfo {
+    required uint32 clientId = 1;
+    required uint32 objectId = 2;
 }
