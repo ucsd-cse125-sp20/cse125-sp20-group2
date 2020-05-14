@@ -40,7 +40,7 @@ public:
      * */
     std::unordered_map<unsigned int, std::vector<Game::ClientMessage>> readAllMessages();
 
-    void setAcceptCallback(std::function<void(int)> func);
+    void setOnClientConnect(std::function<void(int)> func);
 
 private:
     /**
@@ -89,6 +89,6 @@ private:
      * Calls the function with the incoming clientId.
      * IMPORTANT: This is called on another thread.
      * */
-    std::function<void(int)> acceptCallback;
+    std::function<void(int)> onClientConnect;
     
 };

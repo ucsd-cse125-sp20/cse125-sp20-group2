@@ -3,14 +3,15 @@
 #include <util/MessageBuilder.h>
 #include <thread>
 #include <chrono>
+#include <spdlog/spdlog.h>
+#include <spdlog/sinks/basic_file_sink.h>
 
 #define TICK 30
 
 ServerGame::ServerGame(int port) : server(port), processor(&this->gameState)
 {
-    // std::function<void(int)> test = std::bind(&ServerGame::acall, this)
-    std::function<void(int)> notifyClients = std::bind(&ServerGame::acceptCallback, this, std::placeholders::_1);
-    this->server.setAcceptCallback(notifyClients);
+    std::function<void(int)> notifyClients = std::bind(&ServerGame::onClientConnect, this, std::placeholders::_1);
+    this->server.setOnClientConnect(notifyClients);
 
     run();
 }
@@ -69,7 +70,7 @@ void ServerGame::process()
 }
 
 // Only called from server network when it accepts a new client
-void ServerGame::acceptCallback(int clientId) 
+void ServerGame::onClientConnect(int clientId) 
 {
     int clientIdReturn = this->gameState.addPlayer(clientId);
 

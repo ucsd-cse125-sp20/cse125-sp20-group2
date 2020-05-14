@@ -52,8 +52,8 @@ void ServerNetwork::startAccepting()
         std::cout << "Accepted Client #" << id << std::endl;
         sessions.insert(std::pair<unsigned int, SOCKET>(id, ClientSocket));
 
-        if (this->acceptCallback) {
-            this->acceptCallback(id);
+        if (this->onClientConnect) {
+            this->onClientConnect(id);
         }
     }
 }
@@ -149,7 +149,7 @@ void ServerNetwork::sendToAll(Game::ServerMessage message)
     }
 }
 
-void ServerNetwork::setAcceptCallback(std::function<void(int)> func) 
+void ServerNetwork::setOnClientConnect(std::function<void(int)> func) 
 {
-    this->acceptCallback = func;
+    this->onClientConnect = func;
 }
