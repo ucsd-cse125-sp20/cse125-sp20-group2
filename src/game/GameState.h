@@ -38,7 +38,7 @@ public:
     /**
      * Adds a new user object using the clientId
      * */
-    int addPlayer(unsigned int);
+    void addPlayer(unsigned int);
 
     /**
      * Adds a new default game object class.

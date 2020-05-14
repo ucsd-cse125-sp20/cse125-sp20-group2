@@ -28,6 +28,7 @@ message ServerMessage {
         Object object = 2;
         Score score = 3;
         Inventory inventory = 4;
+        ClientInfo clientInfo = 5;
     }
 }
 
@@ -59,4 +60,9 @@ message Inventory {
     required uint32 objId = 1;
     required uint32 playerId = 2;
     // TODO: boolean for add/remove
+}
+
+message ClientInfo {
+    required uint32 clientId = 1;
+    required uint32 objectId = 2;
 }
