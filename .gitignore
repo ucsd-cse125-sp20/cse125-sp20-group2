@@ -3,6 +3,7 @@
 *.lo
 *.o
 *.obj
+src/schema/Game.pb.*
 
 # Executables
 *.exe
