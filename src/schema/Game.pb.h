@@ -48,7 +48,7 @@ struct TableStruct_Game_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[6]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[7]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -56,6 +56,9 @@ struct TableStruct_Game_2eproto {
 };
 extern const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_Game_2eproto;
 namespace Game {
+class ClientInfo;
+class ClientInfoDefaultTypeInternal;
+extern ClientInfoDefaultTypeInternal _ClientInfo_default_instance_;
 class ClientMessage;
 class ClientMessageDefaultTypeInternal;
 extern ClientMessageDefaultTypeInternal _ClientMessage_default_instance_;
@@ -76,6 +79,7 @@ class Vector3DefaultTypeInternal;
 extern Vector3DefaultTypeInternal _Vector3_default_instance_;
 }  // namespace Game
 PROTOBUF_NAMESPACE_OPEN
+template<> ::Game::ClientInfo* Arena::CreateMaybeMessage<::Game::ClientInfo>(Arena*);
 template<> ::Game::ClientMessage* Arena::CreateMaybeMessage<::Game::ClientMessage>(Arena*);
 template<> ::Game::Inventory* Arena::CreateMaybeMessage<::Game::Inventory>(Arena*);
 template<> ::Game::Object* Arena::CreateMaybeMessage<::Game::Object>(Arena*);
@@ -381,6 +385,7 @@ class ServerMessage :
     kObject = 2,
     kScore = 3,
     kInventory = 4,
+    kClientInfo = 5,
     EVENT_NOT_SET = 0,
   };
 
@@ -458,6 +463,7 @@ class ServerMessage :
     kObjectFieldNumber = 2,
     kScoreFieldNumber = 3,
     kInventoryFieldNumber = 4,
+    kClientInfoFieldNumber = 5,
   };
   // optional .Game.Net net = 1;
   bool has_net() const;
@@ -517,6 +523,21 @@ class ServerMessage :
   ::Game::Inventory* _internal_mutable_inventory();
   public:
 
+  // optional .Game.ClientInfo clientInfo = 5;
+  bool has_clientinfo() const;
+  private:
+  bool _internal_has_clientinfo() const;
+  public:
+  void clear_clientinfo();
+  const ::Game::ClientInfo& clientinfo() const;
+  ::Game::ClientInfo* release_clientinfo();
+  ::Game::ClientInfo* mutable_clientinfo();
+  void set_allocated_clientinfo(::Game::ClientInfo* clientinfo);
+  private:
+  const ::Game::ClientInfo& _internal_clientinfo() const;
+  ::Game::ClientInfo* _internal_mutable_clientinfo();
+  public:
+
   void clear_event();
   EventCase event_case() const;
   // @@protoc_insertion_point(class_scope:Game.ServerMessage)
@@ -526,6 +547,7 @@ class ServerMessage :
   void set_has_object();
   void set_has_score();
   void set_has_inventory();
+  void set_has_clientinfo();
 
   inline bool has_event() const;
   inline void clear_has_event();
@@ -539,6 +561,7 @@ class ServerMessage :
     ::Game::Object* object_;
     ::Game::Score* score_;
     ::Game::Inventory* inventory_;
+    ::Game::ClientInfo* clientinfo_;
   } event_;
   ::PROTOBUF_NAMESPACE_ID::uint32 _oneof_case_[1];
 
@@ -1188,6 +1211,164 @@ class Inventory :
   ::PROTOBUF_NAMESPACE_ID::uint32 playerid_;
   friend struct ::TableStruct_Game_2eproto;
 };
+// -------------------------------------------------------------------
+
+class ClientInfo :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Game.ClientInfo) */ {
+ public:
+  ClientInfo();
+  virtual ~ClientInfo();
+
+  ClientInfo(const ClientInfo& from);
+  ClientInfo(ClientInfo&& from) noexcept
+    : ClientInfo() {
+    *this = ::std::move(from);
+  }
+
+  inline ClientInfo& operator=(const ClientInfo& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline ClientInfo& operator=(ClientInfo&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields();
+  }
+  inline ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields();
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const ClientInfo& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const ClientInfo* internal_default_instance() {
+    return reinterpret_cast<const ClientInfo*>(
+               &_ClientInfo_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    6;
+
+  friend void swap(ClientInfo& a, ClientInfo& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(ClientInfo* other) {
+    if (other == this) return;
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline ClientInfo* New() const final {
+    return CreateMaybeMessage<ClientInfo>(nullptr);
+  }
+
+  ClientInfo* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<ClientInfo>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const ClientInfo& from);
+  void MergeFrom(const ClientInfo& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(ClientInfo* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Game.ClientInfo";
+  }
+  private:
+  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_Game_2eproto);
+    return ::descriptor_table_Game_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kClientIdFieldNumber = 1,
+    kObjectIdFieldNumber = 2,
+  };
+  // required uint32 clientId = 1;
+  bool has_clientid() const;
+  private:
+  bool _internal_has_clientid() const;
+  public:
+  void clear_clientid();
+  ::PROTOBUF_NAMESPACE_ID::uint32 clientid() const;
+  void set_clientid(::PROTOBUF_NAMESPACE_ID::uint32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::uint32 _internal_clientid() const;
+  void _internal_set_clientid(::PROTOBUF_NAMESPACE_ID::uint32 value);
+  public:
+
+  // required uint32 objectId = 2;
+  bool has_objectid() const;
+  private:
+  bool _internal_has_objectid() const;
+  public:
+  void clear_objectid();
+  ::PROTOBUF_NAMESPACE_ID::uint32 objectid() const;
+  void set_objectid(::PROTOBUF_NAMESPACE_ID::uint32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::uint32 _internal_objectid() const;
+  void _internal_set_objectid(::PROTOBUF_NAMESPACE_ID::uint32 value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:Game.ClientInfo)
+ private:
+  class _Internal;
+
+  // helper for ByteSizeLong()
+  size_t RequiredFieldsByteSizeFallback() const;
+
+  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  ::PROTOBUF_NAMESPACE_ID::uint32 clientid_;
+  ::PROTOBUF_NAMESPACE_ID::uint32 objectid_;
+  friend struct ::TableStruct_Game_2eproto;
+};
 // ===================================================================
 
 
@@ -1477,6 +1658,56 @@ inline ::Game::Inventory* ServerMessage::_internal_mutable_inventory() {
 inline ::Game::Inventory* ServerMessage::mutable_inventory() {
   // @@protoc_insertion_point(field_mutable:Game.ServerMessage.inventory)
   return _internal_mutable_inventory();
+}
+
+// optional .Game.ClientInfo clientInfo = 5;
+inline bool ServerMessage::_internal_has_clientinfo() const {
+  return event_case() == kClientInfo;
+}
+inline bool ServerMessage::has_clientinfo() const {
+  return _internal_has_clientinfo();
+}
+inline void ServerMessage::set_has_clientinfo() {
+  _oneof_case_[0] = kClientInfo;
+}
+inline void ServerMessage::clear_clientinfo() {
+  if (_internal_has_clientinfo()) {
+    delete event_.clientinfo_;
+    clear_has_event();
+  }
+}
+inline ::Game::ClientInfo* ServerMessage::release_clientinfo() {
+  // @@protoc_insertion_point(field_release:Game.ServerMessage.clientInfo)
+  if (_internal_has_clientinfo()) {
+    clear_has_event();
+      ::Game::ClientInfo* temp = event_.clientinfo_;
+    event_.clientinfo_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::Game::ClientInfo& ServerMessage::_internal_clientinfo() const {
+  return _internal_has_clientinfo()
+      ? *event_.clientinfo_
+      : *reinterpret_cast< ::Game::ClientInfo*>(&::Game::_ClientInfo_default_instance_);
+}
+inline const ::Game::ClientInfo& ServerMessage::clientinfo() const {
+  // @@protoc_insertion_point(field_get:Game.ServerMessage.clientInfo)
+  return _internal_clientinfo();
+}
+inline ::Game::ClientInfo* ServerMessage::_internal_mutable_clientinfo() {
+  if (!_internal_has_clientinfo()) {
+    clear_event();
+    set_has_clientinfo();
+    event_.clientinfo_ = CreateMaybeMessage< ::Game::ClientInfo >(
+        GetArenaNoVirtual());
+  }
+  return event_.clientinfo_;
+}
+inline ::Game::ClientInfo* ServerMessage::mutable_clientinfo() {
+  // @@protoc_insertion_point(field_mutable:Game.ServerMessage.clientInfo)
+  return _internal_mutable_clientinfo();
 }
 
 inline bool ServerMessage::has_event() const {
@@ -1789,9 +2020,71 @@ inline void Inventory::set_playerid(::PROTOBUF_NAMESPACE_ID::uint32 value) {
   // @@protoc_insertion_point(field_set:Game.Inventory.playerId)
 }
 
+// -------------------------------------------------------------------
+
+// ClientInfo
+
+// required uint32 clientId = 1;
+inline bool ClientInfo::_internal_has_clientid() const {
+  bool value = (_has_bits_[0] & 0x00000001u) != 0;
+  return value;
+}
+inline bool ClientInfo::has_clientid() const {
+  return _internal_has_clientid();
+}
+inline void ClientInfo::clear_clientid() {
+  clientid_ = 0u;
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline ::PROTOBUF_NAMESPACE_ID::uint32 ClientInfo::_internal_clientid() const {
+  return clientid_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::uint32 ClientInfo::clientid() const {
+  // @@protoc_insertion_point(field_get:Game.ClientInfo.clientId)
+  return _internal_clientid();
+}
+inline void ClientInfo::_internal_set_clientid(::PROTOBUF_NAMESPACE_ID::uint32 value) {
+  _has_bits_[0] |= 0x00000001u;
+  clientid_ = value;
+}
+inline void ClientInfo::set_clientid(::PROTOBUF_NAMESPACE_ID::uint32 value) {
+  _internal_set_clientid(value);
+  // @@protoc_insertion_point(field_set:Game.ClientInfo.clientId)
+}
+
+// required uint32 objectId = 2;
+inline bool ClientInfo::_internal_has_objectid() const {
+  bool value = (_has_bits_[0] & 0x00000002u) != 0;
+  return value;
+}
+inline bool ClientInfo::has_objectid() const {
+  return _internal_has_objectid();
+}
+inline void ClientInfo::clear_objectid() {
+  objectid_ = 0u;
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline ::PROTOBUF_NAMESPACE_ID::uint32 ClientInfo::_internal_objectid() const {
+  return objectid_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::uint32 ClientInfo::objectid() const {
+  // @@protoc_insertion_point(field_get:Game.ClientInfo.objectId)
+  return _internal_objectid();
+}
+inline void ClientInfo::_internal_set_objectid(::PROTOBUF_NAMESPACE_ID::uint32 value) {
+  _has_bits_[0] |= 0x00000002u;
+  objectid_ = value;
+}
+inline void ClientInfo::set_objectid(::PROTOBUF_NAMESPACE_ID::uint32 value) {
+  _internal_set_objectid(value);
+  // @@protoc_insertion_point(field_set:Game.ClientInfo.objectId)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

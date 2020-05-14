@@ -18,7 +18,7 @@ GameState::~GameState() {
     }
 }
 
-int GameState::addPlayer(unsigned int clientId) {
+void GameState::addPlayer(unsigned int clientId) {
     std::cout << "Called add user in GameState w/ clientID: " << clientId << std::endl;
 
     // First, create player w/ id
@@ -28,9 +28,6 @@ int GameState::addPlayer(unsigned int clientId) {
 
     // Next, add player to map
     this->playerObjects[clientId] = newPlayerObject;
-
-    // Placeholder, just returns client id
-    return clientId;
 
     // OLD CODE
     // Which id should be used to refer to the player
