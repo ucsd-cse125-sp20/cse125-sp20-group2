@@ -6,20 +6,11 @@
 ClientGame::ClientGame(std::string IP, int port) : client(IP, port), window(Config::getFloat("Window_Width"), Config::getFloat("Window_Height"))
 {
     /// TODO: fix hardcoded player values and hardcoded window insertion
-    GameObject* grid = new GameObject(999999);
+    /*GameObject* grid = new GameObject(999999);
     grid->setPosition(glm::vec3(0, 0, 0));
     grid->setModel(Config::get("Maze_Model"));
     grid->applyScale(glm::vec3(2, 2, 2));
-    window.addObject(999999, grid);
-
-    /*Map* m = MapBuilder::getBasicMap();
-    for(auto it = m->wallList.begin(); it!= m->wallList.end(); it++) {
-        window.addObject((*it)->getID(), *it);
-    }
-
-    for(auto it = m->ingredients.begin(); it != m->ingredients.end(); it++) {
-        window.addObject((*it)->getID(), *it);
-    }*/
+    window.addObject(999999, grid);*/
 
     runGame();
 }
@@ -69,8 +60,6 @@ void ClientGame::receiveUpdates()
 void ClientGame::updateGameState()
 {
 
-
-    /// TODO: Assume only object for now. Update GameObject to respective type
     /// TODO: switch case based on what kind of messages
     for (Game::ServerMessage currMessage : client.messages) {
 
@@ -85,18 +74,46 @@ void ClientGame::updateGameState()
         uint32_t id = currMessage.object().id();
 
         GameObject* obj = NULL;
-        // Update object state
-        if (window.objectsToRender.count(id) > 0) {
-            obj = window.objectsToRender[id];
-        } else {
-            /// Insert object into window (TODO: instantiate player object)
-            obj = new GameObject(id);
-            obj->setModel(Config::get("Character_Model"));
-            window.addObject(id, obj);
 
-            /// TODO: Hardcoded camera target set
-            window.camera->setTarget(obj);
+        // Update existing object state
+        if (window.objectsToRender.count(id) > 0) 
+        {
+            obj = window.objectsToRender[id];
         }
+        // Instantiate new object 
+        else 
+        {
+            // Different object types
+            switch(currMessage.object().type())
+            {
+                // Player object.
+                case Game::PLAYER:
+                    obj = new Player(id); break;
+
+                // Ingredient object.
+                case Game::INGREDIENT:
+                    obj = new IngredientObject(id); break;
+
+                // Cookware object.
+                case Game::COOKWARE:
+                    obj = new CookwareObject(id); break;
+
+                case Game::WALL:
+                    obj = new Wall(id); break;
+
+                // Basic gameobject.
+                default:
+                    obj = new GameObject(id); break;
+            }
+
+            /// Set model based on the model path provided by the server TODO: Might not be necessary???
+            obj->setModel(currMessage.object().modelpath());
+
+            // Add object to window
+            window.addObject(id, obj);
+        }
+
+        // Set object parameters
         obj->setRotation(rotation);
         obj->setPosition(glm::vec3(location.x(), location.y(), location.z()));
         

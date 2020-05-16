@@ -14,6 +14,7 @@ GameObject::GameObject() {
 	this->box = new BoundingBox(this); 
 	this->setPassable(false);
 	this->setObjectType(OBJECT);
+	this->loadCollisionSize();
 }
 
 /**
@@ -47,6 +48,13 @@ GameObject::GameObject(int id) {
 	if (box) delete box;
 }*/
 
+void GameObject::loadCollisionSize()
+{
+	this->baseWidth = Config::getFloat("Object_Default_Width");
+	this->baseDepth = Config::getFloat("Object_Default_Depth");
+	this->updateMeasurements();
+}
+
 void GameObject::setObjectType(ObjectType newObjType) {
 	this->objType = newObjType;
 }
@@ -69,38 +77,38 @@ BoundingBox* GameObject::getBoundingBox() {
 
 void GameObject::setModel(std::string path) {
 	this->modelPath = path;
-	this->model = new Model(path);
-	this->updateMeasurements();
 }
 
-/// TODO: Consider if height is needed
+/// NOTE: If height is ever needed, we will add it here.
 void GameObject::updateMeasurements()
 {
 	// This code serves to update collisions. If either of these are missing, stop
-	if (!model || !box) return;
-
-	// Update model
-	this->width = model->modelWidth * scaleVec.x;
-	this->depth = model->modelDepth * scaleVec.z;
+	if (!box) return;
 
 	// Update collision box, if applicable
 	if (!this->box->isCircleBoundingBox())
 	{
-		this->box->setWidth(width);
-		this->box->setDepth(depth);
+		this->box->setWidth(baseWidth * scaleVec.x);
+		this->box->setDepth(baseDepth * scaleVec.z);
 		this->box->updateCorners();
 	} 
 
 	// Update collision circle, if applicable
 	else 
 	{
-		this->box->setRadius(width/2);
+		this->box->setRadius(baseRadius * scaleVec.x);
 	}
 }
 
 std::string GameObject::getModelPath()
 {
 	return this->modelPath;
+}
+
+void GameObject::loadModel()
+{
+	this->model = new Model(modelPath);
+	this->updateMeasurements();
 }
 
 // Update the world position

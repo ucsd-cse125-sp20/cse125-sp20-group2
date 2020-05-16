@@ -6,9 +6,8 @@ GameProcessor::GameProcessor(GameState* gameState)
     this->state = gameState;
     
     /// TODO: Extend for different phases of the game
-    /*Map* m = MapBuilder::getBasicMap();
-    this->state->addMap(m);*/
-    ///FIXME: I don't know why, but this code causes a segfault!
+    Map* m = MapBuilder::getBasicMap();
+    this->state->addMap(m);
     
 }
 

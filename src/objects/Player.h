@@ -21,6 +21,9 @@ protected:
     std::unordered_map<int, IngredientObject*> inventory;
 
     std::deque<Instruction*> completedInstructions;
+
+    void loadCollisionSize();
+
 public:
     Player(int ID);
 

@@ -3,7 +3,6 @@ Taco=Salad
 // Model paths
 Bun_Model=assets\\models\\Bun.obj
 Burger_Model=assets\\models\\Burger.obj
-Character_Model=assets\\models\\Basic_Character_Model.obj
 Cheese_Model=assets\\models\\Cheese.obj
 Grid_Square_Model=assets\\models\\grid_square.obj
 Grid_Wire_Model=assets\\models\\grid_wire.obj
@@ -11,11 +10,18 @@ Lettuce_Model=assets\\models\\Lettuce.obj
 Maze_Model=assets\\models\\Basic_Dungeon_Map.obj
 Meat_Model=assets\\models\\meat.obj
 Onion_Model=assets\\models\\Onion.obj
+Player_Model=assets\\models\\Basic_Character_Model.obj
 Tomato_Model=assets\\models\\tomato.obj
 Wall_Model=assets\\models\\wall.obj
 
 // Image paths
 
+
+// Model sizings
+Object_Default_Width=1
+Object_Default_Depth=1
+Ingredient_Radius=0.5
+Player_Radius=0.75
 
 // Shaders
 Vertex_Shader=src\\graphics\\shaders\\vert_shader.glsl

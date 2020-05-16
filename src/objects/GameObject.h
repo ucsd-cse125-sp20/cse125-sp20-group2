@@ -1,5 +1,6 @@
 #pragma once
 
+#include <util/Config.h>
 #include <graphics/render/Shader.h>
 #include <graphics/render/Model.h>
 #include <glm/glm.hpp>
@@ -12,11 +13,11 @@ class BoundingBox;
 
 enum ObjectType
 {
-    OBJECT = 0, // GameObject
-    PLAYER = 1, // Player
-    INGREDIENT = 2, // IngredientObject
-    COOKWARE = 3,  // CookwareObject
-    WALL = 4 // Wall
+    OBJECT = 0, 
+    PLAYER = 1, 
+    INGREDIENT = 2, 
+    COOKWARE = 3,  
+    WALL = 4 
 };
 
 // is intersecting(GameObject) -> return boundingBox.isIntersecting
@@ -28,12 +29,7 @@ public:
     static int counter;  
 
 private:
-    // Sizing - may be needed for collisions, depends on model size and scale
-    float width, height, depth;
-
-    // Rendered model
-    Model* model = NULL;
-
+    // Model path
     std::string modelPath;
 
     // Position in the world
@@ -56,10 +52,24 @@ private:
     bool render = true;
 
 protected:
+
+    // base model sizes
+    float baseWidth, baseDepth;
+    float baseRadius;
+
+    // Sizing - may be needed for collisions, depends on model size and scale
+    float width, height, depth;
+
     // The bounding box for this game object
     BoundingBox* box = NULL;
 
+    // Object type
     ObjectType objType;
+
+    /**
+     * Helper method for constructor. Load collision measurements as needed. Update measurements.
+     * */
+    void loadCollisionSize();
 
 public:
     /// TODO: Remove this later - default ctor gives hardcoded id
@@ -74,6 +84,9 @@ public:
 
     /*~GameObject();*/
 
+    // Model
+    Model* model = NULL;
+
     ObjectType getObjectType();
     
     bool getRender();
@@ -81,6 +94,8 @@ public:
     void toggleRender();
 
     std::string getModelPath();
+
+    void loadModel();
 
     void setObjectType(ObjectType newObjType);
 

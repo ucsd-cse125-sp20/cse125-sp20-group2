@@ -147,7 +147,10 @@ void Window::render()
 	for (auto it = objectsToRender.begin(); it != objectsToRender.end(); ++it) {
 		GameObject* obj = it->second;
 
-		if (!obj->getRender()) continue; 
+		if (!obj->getRender()) continue;
+
+		// load model if needed
+		if (!obj->model) obj->loadModel();
 
 		// Set respective model matrix for each object and send it to the shader.
 		glm::mat4 mat = glm::mat4(1.0);

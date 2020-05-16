@@ -74,7 +74,6 @@ void ServerGame::process()
 // Only called from server network when it accepts a new client
 void ServerGame::acceptCallback(int clientId) 
 {
-    // Add player to map
     this->gameState.addPlayer(clientId);
 
     // Grab player object
@@ -85,13 +84,7 @@ void ServerGame::acceptCallback(int clientId)
 
     // Send out, then free
     this->server.sendToAll(*message);
-    // free(message);
     delete message;
-
-    // This sends out the initial client and game object id to the player.
-    Game::ServerMessage* init = MessageBuilder::toClientInfo(clientId, playerObject->getID());
-    this->server.send(clientId, *init);
-    delete init;
 
     // OLD CODE
     // int objId = this->gameState.addPlayer(clientId);
@@ -110,7 +103,6 @@ void ServerGame::acceptCallback(int clientId)
         auto objectPtr = objectPair.second;
         Game::ServerMessage* message = MessageBuilder::toServerMessage(objectPtr);
         this->server.sendToAll(*message);
-        // free(message);
         delete message;
     }
 
@@ -120,7 +112,6 @@ void ServerGame::acceptCallback(int clientId)
         auto ingredientPtr = ingredientObjectPair.second;
         Game::ServerMessage* message = MessageBuilder::toServerMessage(ingredientPtr);
         this->server.sendToAll(*message);
-        // free(message);
         delete message;
     }
 
@@ -130,7 +121,6 @@ void ServerGame::acceptCallback(int clientId)
         auto playerPtr = playerObjectPair.second;
         Game::ServerMessage* message = MessageBuilder::toServerMessage(playerPtr);
         this->server.sendToAll(*message);
-        // free(message);
         delete message;
     }
 }

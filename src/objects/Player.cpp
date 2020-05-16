@@ -6,11 +6,20 @@ Player::Player(int ID) : GameObject(ID)
     this->turnSpeed = 0;
     this->score = 0;
     this->objType = PLAYER;
+    this->setModel(Config::get("Player_Model"));
+    this->loadCollisionSize();
+}
+
+void Player::loadCollisionSize()
+{
+    this->baseRadius = Config::getFloat("Player_Radius");
+    this->box->setCircleBoundingBox();
+    this->updateMeasurements();
 }
 
 void Player::setScore(int newScore)
 {
-    score = newScore;
+    this->score = newScore;
 }
 
 void Player::setTeamID(int teamID)

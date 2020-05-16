@@ -52,7 +52,8 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 	std::vector<unsigned int> indices;
 	std::vector<Texture> textures;
 
-	/// Min/Max for calculating width/depth/height (TODO: height (y-coord) currently unused)
+	// Min/Max for calculating width/depth/height
+	/// NOTE: Height is unused until we need vertical collisions.
 	float minX = 9999.9, minY = 9999.9, minZ = 9999.9;
 	float maxX = -9999.9, maxY = -9999.9, maxZ = -9999.9; 
 
@@ -67,7 +68,7 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 		vector.z = mesh->mVertices[i].z;
 		vertex.pos = vector;
 
-		/// Get min/maxes of coords (TODO: Maybe make this less repeitive)
+		// Get min/maxes of coords
 		if (vector.x < minX) minX = vector.x;
 		else if (vector.x > maxX) maxX = vector.x;
 		if (vector.y < minY) minY = vector.y;
@@ -94,7 +95,8 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 		vertices.push_back(vertex);
 	}
 
-	/// TODO: measurement calculation should probably be more modular
+	/// NOTE: This is no longer used in actual collision calculations. Please use this to update model sizes in the config file.
+	/// Can be removed in the final release.
 	modelWidth = maxX - minX;
 	modelDepth = maxZ - minZ;
 	modelHeight = maxY - minY;

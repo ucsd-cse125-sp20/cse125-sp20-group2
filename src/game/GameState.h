@@ -6,6 +6,9 @@
 #include <objects/Player.h>
 #include <objects/IngredientObject.h>
 #include <objects/Map.h>
+#include <util/Recipe.h>
+#include <utility>
+#include <util/Config.h>
 
 /**
  * This class holds the game state.
@@ -31,6 +34,9 @@ private:
     /// TODO: Implement
     // This is a mapping of clientId to score
     // std::unordered_map<unsigned int, unsigned int> scoreMap;
+    Recipe* recipe; 
+
+    Map* map;
 
     // Timer used to dictate the current round
     int timer;
@@ -66,9 +72,14 @@ public:
     IngredientObject* getIngredientObject(unsigned int);
 
     /**
-     * Add map object
+     * Adds objects in map
      * */
     void addMap(Map *map);
+
+     /**
+     * Add ingredient objects in map
+     * */
+    void addRecipe(Recipe *recipe);
 
     /**
      * Returns all game objects

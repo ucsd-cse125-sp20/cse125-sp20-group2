@@ -21,8 +21,8 @@ Map* MapBuilder::getBasicMap() {
     mp->spawningLocations.push_back(glm::vec3(0, 0, 0));
     mp->spawningLocations.push_back(glm::vec3(10, 0, 0));
 
-    mp->ingredientLocations.push_back(glm::vec3(15, 0, 0));
-    mp->ingredientLocations.push_back(glm::vec3(15, 0, 0));
+    mp->ingredientPositions.push_back(glm::vec3(15, 0, 0));
+    mp->ingredientPositions.push_back(glm::vec3(15, 0, 0));
 
     return mp;
 }
@@ -30,7 +30,7 @@ Map* MapBuilder::getBasicMap() {
 void MapBuilder::assignIngredientPositions( Recipe* recipe, Map* mp ) {
     int i = 0;
     for( auto ingredient : recipe->ingredientList ) {
-        ingredient.setPosition(map->ingredientLocations[i]);
+        ingredient->setPosition(mp->ingredientPositions[i]);
         i++;
     }
 }
