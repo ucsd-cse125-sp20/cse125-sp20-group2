@@ -91,4 +91,17 @@ public:
 
         return vector;
     }
+
+    /**
+     * Creates a ServerMessage from a score
+     * */
+    static Game::ServerMessage* toScore(int value)
+    {
+        Game::Score* score = new Game::Score();
+        score->set_currscore(value);
+
+        Game::ServerMessage* message = new Game::ServerMessage();
+        message->set_allocated_score(score);
+        return message;
+    }
 };
