@@ -13,3 +13,6 @@
 .vscode/
 
 *.ini
+
+# Logs
+logs/*

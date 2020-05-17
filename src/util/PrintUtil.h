@@ -1,17 +1,15 @@
+#pragma once 
+
 #include <schema/Game.pb.h>
 #include <iostream>
+#include <spdlog/spdlog.h>
 
 class PrintUtil
 {
 private:
-    /* data */
 public:
-    static void print(Game::ServerMessage msg) {
-        std::cout << msg.DebugString() << std::endl;
-    }
-    
-    static void print(Game::ClientMessage msg) {
-        std::cout << msg.DebugString() << std::endl;
-    }
-};
+    static std::shared_ptr<spdlog::logger> _logger;
 
+    static void print(Game::ServerMessage msg);
+    static void print(Game::ClientMessage msg);
+};
