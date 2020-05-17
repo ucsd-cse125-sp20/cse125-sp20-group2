@@ -59,65 +59,107 @@ void ClientGame::receiveUpdates()
 
 void ClientGame::updateGameState()
 {
-
-    /// TODO: switch case based on what kind of messages
-    for (Game::ServerMessage currMessage : client.messages) {
-
-        // switch(currMessage.event_case()) {
-        //     case Game::ServerMessage::EventCase::kInventory:
-        //     {
-
-        //     }
-        // }
-        Game::Vector3 location = currMessage.object().worldposition();
-        float rotation = currMessage.object().rotation();
-        uint32_t id = currMessage.object().id();
-
-        GameObject* obj = NULL;
-
-        // Update existing object state
-        if (window.objectsToRender.count(id) > 0) 
+    // Process messages to update client game state
+    for (Game::ServerMessage currMessage : client.messages)
+    {
+        // Process different types of messages
+        switch(currMessage.event_case()) 
         {
-            obj = window.objectsToRender[id];
-        }
-        // Instantiate new object 
-        else 
-        {
-            // Different object types
-            switch(currMessage.object().type())
+            // Object-related messages
+            case Game::ServerMessage::EventCase::kObject:
             {
-                // Player object.
-                case Game::PLAYER:
-                    obj = new Player(id); break;
+                Game::Vector3 location = currMessage.object().worldposition();
+                float rotation = currMessage.object().rotation();
+                uint32_t id = currMessage.object().id();
 
-                // Ingredient object.
-                case Game::INGREDIENT:
-                    obj = new IngredientObject(id); break;
+                GameObject* obj = NULL;
 
-                // Cookware object.
-                case Game::COOKWARE:
-                    obj = new CookwareObject(id); break;
+                // Update existing object state
+                if (window.objectsToRender.count(id) > 0) 
+                {
+                    obj = window.objectsToRender[id];
+                }
 
-                case Game::WALL:
-                    obj = new Wall(id); break;
+                // Instantiate new object 
+                else 
+                {
+                    // Different object types
+                    switch(currMessage.object().type())
+                    {
+                        // Player object.
+                        case Game::PLAYER: obj = new Player(id); break;
 
-                // Basic gameobject.
-                default:
-                    obj = new GameObject(id); break;
+                        // Ingredient object.
+                        case Game::INGREDIENT: obj = new IngredientObject(id); break;
+
+                        // Cookware object.
+                        case Game::COOKWARE: obj = new CookwareObject(id); break;
+
+                        // Wall object.
+                        case Game::WALL: obj = new Wall(id); break;
+
+                        // Basic gameobject.
+                        default: obj = new GameObject(id); break;
+                    }
+
+                    /// Set model based on the model path provided by the server TODO: Might not be necessary???
+                    obj->setModel(currMessage.object().modelpath());
+
+                    // Add object to window
+                    window.addObject(id, obj);
+                }
+
+                // Set object parameters
+                obj->setRotation(rotation);
+                obj->setPosition(glm::vec3(location.x(), location.y(), location.z()));
+                break;
             }
 
-            /// Set model based on the model path provided by the server TODO: Might not be necessary???
-            obj->setModel(currMessage.object().modelpath());
+            ///TODO: Score update messages
+            case Game::ServerMessage::EventCase::kScore:
+            {
+                break;
+            }
 
-            // Add object to window
-            window.addObject(id, obj);
+            /// Inventory update messages (TODO: Testing required.)
+            case Game::ServerMessage::EventCase::kInventory: 
+            {
+                // Get player associated with this client
+                Player* player = (Player*)window.objectsToRender[objectId];
+
+                // Get id of the object to be picked up.
+                IngredientObject* pickup = (IngredientObject*)window.objectsToRender[currMessage.inventory().id()];
+
+                // Add object to player inventory.
+                if (currMessage.inventory().add())  player->addToInventory(pickup);
+                else    player->removeFromInventory(pickup);
+                std::cout << "Picked up: " << pickup->getName() << std::endl;
+
+                break;
+            }
+
+            // Client info messages
+            case Game::ServerMessage::EventCase::kClientInfo:
+            {
+                // Set client id
+                this->clientId = currMessage.clientinfo().clientid();
+                std::cout << "Connected. Client ID: " << clientId << std::endl;
+
+                // Set object id
+                this->objectId = currMessage.clientinfo().objectid();
+
+                // Set camera target
+                window.camera->setTarget(window.objectsToRender[currMessage.clientinfo().objectid()]);
+                break;
+            }
+
+            // All other messages
+            default:
+            {
+                std::cerr << "Unidentified message type." << std::endl; 
+            }
         }
-
-        // Set object parameters
-        obj->setRotation(rotation);
-        obj->setPosition(glm::vec3(location.x(), location.y(), location.z()));
-        
-        PrintUtil::print(currMessage);
+        //PrintUtil::print(currMessage);
     }
     client.messages.clear();
 }

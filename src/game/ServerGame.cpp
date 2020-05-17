@@ -74,6 +74,7 @@ void ServerGame::process()
 // Only called from server network when it accepts a new client
 void ServerGame::acceptCallback(int clientId) 
 {
+    // Add player with respective client ID
     this->gameState.addPlayer(clientId);
 
     // Grab player object
@@ -85,6 +86,11 @@ void ServerGame::acceptCallback(int clientId)
     // Send out, then free
     this->server.sendToAll(*message);
     delete message;
+
+    /// TODO: Joshua: Double-check with networking team to make sure this is ok
+    Game::ServerMessage* clientInfoMsg = MessageBuilder::toClientInfo(clientId, playerObject->getID());
+    this->server.send(clientId, *clientInfoMsg);
+    delete clientInfoMsg;
 
     // OLD CODE
     // int objId = this->gameState.addPlayer(clientId);
