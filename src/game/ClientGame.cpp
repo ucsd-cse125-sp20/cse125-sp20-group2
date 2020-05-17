@@ -12,6 +12,12 @@ ClientGame::ClientGame(std::string IP, int port) : client(IP, port), window(Conf
     grid->applyScale(glm::vec3(2, 2, 2));
     window.addObject(999999, grid);*/
 
+    /// TODO: Remove later. Using currently for example usage.
+    /*GameObject* nanosuit = new GameObject(3946);
+    nanosuit->setModel("assets/nanosuit/nanosuit.obj");
+    nanosuit->applyScale(glm::vec3(0.2, 0.2, 0.2));
+    window.addObject(3946, nanosuit);*/
+
     runGame();
 }
 

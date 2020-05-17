@@ -137,7 +137,7 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 
 unsigned int Model::TextureFromFile(const char* path, const std::string& directory, bool gamma)
 {
-	std::cout << "Using directory:  " << directory << std::endl;
+	//std::cout << "Using directory:  " << directory << std::endl;
 
 	// Debug
 	if (std::string(path) == std::string("") || path == NULL) std::cerr << "Model loading error: No texture path given!" << std::endl;
@@ -176,6 +176,9 @@ unsigned int Model::TextureFromFile(const char* path, const std::string& directo
 
 std::vector<Texture> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName)
 {
+	/*std::cout << "Material: " << std::string(mat->GetName().C_Str()) << std::endl;
+	std::cout << "Texture count: " << mat->GetTextureCount(type) << std::endl;
+	std::cout << "Texture type: " << typeName << std::endl;*/
 
 	std::vector<Texture> textures;
 	for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
