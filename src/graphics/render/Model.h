@@ -42,6 +42,9 @@ public:
 	// Draw all the meshes in the file
 	void draw(Shader shader);
 
+	/// NOTE: Model height is unused. Will remain unused until we need 3D collisions.
+	float modelWidth, modelHeight, modelDepth;
+
 private:
 	/*  Functions   */
 	void loadModel(std::string path);

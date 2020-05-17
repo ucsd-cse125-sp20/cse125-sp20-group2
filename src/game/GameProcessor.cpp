@@ -1,10 +1,14 @@
 #include <game/GameProcessor.h>
-#include <schema/Game.pb.h>
-#include <util/MessageBuilder.h>
+
 
 GameProcessor::GameProcessor(GameState* gameState)
 {
     this->state = gameState;
+    
+    /// TODO: Extend for different phases of the game
+    Map* m = MapBuilder::getBasicMap();
+    this->state->addMap(m);
+    
 }
 
 GameProcessor::~GameProcessor()
@@ -22,8 +26,6 @@ void GameProcessor::process(unsigned int clientId, Game::ClientMessage clientMsg
         Player* player = this->state->getPlayerObject(clientId);
         glm::vec3 originalPos = player->getPosition();
         MovementProcessor::processMovement(player, clientMsg.direction(), tickCount);
-
-        glm::vec3 newPos = player->getPosition();
 
         // See if colliding with any objects
         const std::unordered_map<unsigned int, GameObject*>& gameObjects = this->state->getObjects();
@@ -53,7 +55,9 @@ void GameProcessor::process(unsigned int clientId, Game::ClientMessage clientMsg
             {
                 currIngredient->renderInvisible();
                 player->addToInventory(currIngredient);
-                Game::ServerMessage* newServerMsg = MessageBuilder::toServerMessage(currIngredient);
+                Game::ServerMessage* newServerMsg = MessageBuilder::toInventoryServerMessage(currIngredient->getID(), true);
+                specificMessages[player->getID()].push_back(newServerMsg);
+                newServerMsg = MessageBuilder::toServerMessage(currIngredient);
                 messages.push_back(newServerMsg);
             }
         }

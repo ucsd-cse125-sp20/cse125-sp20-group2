@@ -37,6 +37,7 @@ enum ObjectType {
     PLAYER = 1;
     INGREDIENT = 2;
     COOKWARE = 3;
+    WALL = 4;
 }
 
 message Object {
@@ -44,6 +45,8 @@ message Object {
     required float rotation = 2;
     required uint32 id = 3;
     required ObjectType type = 4;
+    required bool render = 5 [default = true];
+    required string modelPath = 6 [default = ""];
 }
 
 message Score {
@@ -57,9 +60,8 @@ message Vector3 {
 }
 
 message Inventory {
-    required uint32 objId = 1;
-    required uint32 playerId = 2;
-    // TODO: boolean for add/remove
+    required uint32 id = 1;
+    required bool add = 2 [default = true];
 }
 
 message ClientInfo {

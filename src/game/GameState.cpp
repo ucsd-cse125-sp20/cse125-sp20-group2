@@ -1,10 +1,10 @@
 #include <game/GameState.h>
-#include <objects/Player.h>
 
 #define PLAYER_RADIUS 0.05
 
 GameState::GameState() {
-
+    /// TODO, implement timer logic
+    this->timer = 30;
 }
 
 GameState::~GameState() {
@@ -24,7 +24,7 @@ void GameState::addPlayer(unsigned int clientId) {
     // First, create player w/ id
     int objId = this->objCounter++;
     Player* newPlayerObject = new Player(objId);
-    newPlayerObject->getBoundingBox()->setRadius(0.15);
+    newPlayerObject->setPosition(glm::vec3(0, 0, 0));
 
     // Next, add player to map
     this->playerObjects[clientId] = newPlayerObject;
@@ -38,6 +38,30 @@ void GameState::addPlayer(unsigned int clientId) {
     // return id;
 
     std::cout << "Returning from add player" << std::endl;
+}
+
+void GameState::addMap(Map *map) {
+
+    this->map = map;
+    for(auto it = map->wallList.begin(); it!= map->wallList.end(); it++) {
+        this->gameObjects[(*it)->getID()] = *it;
+    }
+
+    /*for(auto it = map->ingredients.begin(); it != map->ingredients.end(); it++) {
+        this->gameObjects[(*it)->getID()] = *it;
+    }*/
+}
+
+void GameState::addRecipe(Recipe *recipe) {
+
+    this->recipe = recipe;
+    for(auto it = recipe->ingredientList.begin(); it!= recipe->ingredientList.end(); it++) {
+        this->gameObjects[(*it)->getID()] = *it;
+    }
+
+    /*for(auto it = map->ingredients.begin(); it != map->ingredients.end(); it++) {
+        this->gameObjects[(*it)->getID()] = *it;
+    }*/
 }
 
 // Adds the object to the object map

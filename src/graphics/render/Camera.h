@@ -1,5 +1,8 @@
 #pragma once
 
+#include <util/Config.h>
+#include <objects/GameObject.h>
+
 // Std. library
 #include <iostream>
 
@@ -22,18 +25,19 @@ const float INIT_YAW = -90.0f;
 const float INIT_PITCH = -45.0f;
 
 // Default camera movement options
-const float INIT_SPEED = 2.5f;
 const float INIT_SENSITIVITY = 0.1f;
 const float INIT_ZOOM = 45.0f;
 
-// Default lookAt vectors
-const glm::vec3 INIT_POS = glm::vec3(0, 0, 3);
+// Default lookAt vectors (if not given)
+const glm::vec3 INIT_POS = glm::vec3(0, 0, 0);
 const glm::vec3 INIT_UP = glm::vec3(0, 1, 0);
 const glm::vec3 INIT_FRONT = glm::vec3(0, 0, -1);
 
 class Camera {
 public:
+
 	// Camera Attributes
+	glm::vec3 staticPos;   // Refers to the position held when freecam is disabled.
 	glm::vec3 pos;
 	glm::vec3 front;
 	glm::vec3 up;
@@ -52,11 +56,17 @@ public:
 	float sensitivity;
 	float zoom;
 
+	// Camera target (if freecam is disabled)
+	GameObject* target;
+
 	// Constructor with vector values
 	Camera(glm::vec3 pos = INIT_POS, glm::vec3 up = INIT_UP, float yaw = INIT_YAW, float pitch = INIT_PITCH, bool freeCam = true);
 
 	// Constructor with scalar values
 	Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch, bool freeCam = true);
+
+	void setTarget(GameObject* target);
+	GameObject* getTarget();
 
 	void toggleFreeCam();
 
@@ -64,7 +74,9 @@ public:
 	glm::mat4 getViewMatrix();
 
 	// Processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
-	void processKeyMovement(Camera_Movement direction, float deltaTime);
+	void processKeyMovement(Camera_Movement direction);
+
+	void warpToTarget();
 
 	void processMouseMovement(float xoffset, float yoffset);
 

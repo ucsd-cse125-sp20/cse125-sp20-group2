@@ -5,6 +5,12 @@
 #include <util/PrintUtil.h>
 #include <graphics/window.h>
 #include <objects/Player.h>
+#include <glm/gtx/string_cast.hpp>
+#include <chrono>
+#include <thread>
+#include <util/MessageBuilder.h>
+#include <util/Config.h>
+#include <util/MapBuilder.h>
 
 class ClientGame {
     public:
@@ -20,8 +26,8 @@ class ClientGame {
         // NOTE: This is the id that correlates to this client's player object. 
         unsigned int objectId;
     private:
-        Window window;
         NetworkClient client;
+        Window window;
         void sendMsgs();
         void receiveUpdates();
         void updateGameState();

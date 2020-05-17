@@ -48,6 +48,13 @@ void BoundingBox::setWidth(float width)
     this->width = width;
 }
 
+void BoundingBox::setDepth(float depth)
+{
+    this->isCircle = false;
+    this->depth = depth;
+}
+
+/// TODO: Unused
 void BoundingBox::setHeight(float height)
 {
     this->isCircle = false;
@@ -90,6 +97,6 @@ void BoundingBox::updateCorners()
     glm::vec3 position = obj->getPosition();
     maxX = position.x + width / 2;
     minX = position.x - width / 2;
-    maxZ = position.z + height / 2;
-    minZ = position.z - height / 2;
+    maxZ = position.z + depth / 2;
+    minZ = position.z - depth / 2;
 }

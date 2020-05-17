@@ -1,8 +1,4 @@
 #include <game/ServerGame.h>
-#include <util/PrintUtil.h>
-#include <util/MessageBuilder.h>
-#include <thread>
-#include <chrono>
 
 #define TICK 30
 
@@ -11,7 +7,6 @@ ServerGame::ServerGame(int port) : server(port), processor(&this->gameState)
     // std::function<void(int)> test = std::bind(&ServerGame::acall, this)
     std::function<void(int)> notifyClients = std::bind(&ServerGame::acceptCallback, this, std::placeholders::_1);
     this->server.setAcceptCallback(notifyClients);
-
     run();
 }
 
@@ -22,6 +17,7 @@ ServerGame::~ServerGame()
 
 void ServerGame::run()
 {
+
     while (true) {
         auto start = std::chrono::high_resolution_clock::now();
 
@@ -62,7 +58,14 @@ void ServerGame::process()
                 this->server.sendToAll(*message);
                 delete message;
                 // free(message);
-                break; // TODO: Remove, this preprocesses messages s.t. only one is from each player per tick
+                break; /// TODO: Remove, this preprocesses messages s.t. only one is from each player per tick
+            }
+
+            if (this->processor.specificMessages[clientId].size() > 0) {
+                Game::ServerMessage* message = this->processor.specificMessages[clientId].front();
+                this->processor.specificMessages[clientId].pop_front();
+                this->server.send(clientId, *message);
+                delete message;
             }
         }
     }
@@ -71,7 +74,7 @@ void ServerGame::process()
 // Only called from server network when it accepts a new client
 void ServerGame::acceptCallback(int clientId) 
 {
-    // Add player to map
+    // Add player with respective client ID
     this->gameState.addPlayer(clientId);
 
     // Grab player object
@@ -82,13 +85,12 @@ void ServerGame::acceptCallback(int clientId)
 
     // Send out, then free
     this->server.sendToAll(*message);
-    // free(message);
     delete message;
 
-    // This sends out the initial client and game object id to the player.
-    Game::ServerMessage* init = MessageBuilder::toClientInfo(clientId, playerObject->getID());
-    this->server.send(clientId, *init);
-    delete init;
+    /// TODO: Joshua: Double-check with networking team to make sure this is ok
+    Game::ServerMessage* clientInfoMsg = MessageBuilder::toClientInfo(clientId, playerObject->getID());
+    this->server.send(clientId, *clientInfoMsg);
+    delete clientInfoMsg;
 
     // OLD CODE
     // int objId = this->gameState.addPlayer(clientId);
@@ -107,7 +109,6 @@ void ServerGame::acceptCallback(int clientId)
         auto objectPtr = objectPair.second;
         Game::ServerMessage* message = MessageBuilder::toServerMessage(objectPtr);
         this->server.sendToAll(*message);
-        // free(message);
         delete message;
     }
 
@@ -117,7 +118,6 @@ void ServerGame::acceptCallback(int clientId)
         auto ingredientPtr = ingredientObjectPair.second;
         Game::ServerMessage* message = MessageBuilder::toServerMessage(ingredientPtr);
         this->server.sendToAll(*message);
-        // free(message);
         delete message;
     }
 
@@ -127,7 +127,6 @@ void ServerGame::acceptCallback(int clientId)
         auto playerPtr = playerObjectPair.second;
         Game::ServerMessage* message = MessageBuilder::toServerMessage(playerPtr);
         this->server.sendToAll(*message);
-        // free(message);
         delete message;
     }
 }

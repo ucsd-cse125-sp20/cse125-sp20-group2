@@ -4,6 +4,9 @@
 #include <game/GameState.h>
 #include <game/MovementProcessor.h>
 #include <deque>
+#include <objects/Map.h>
+#include <util/MapBuilder.h>
+#include <util/MessageBuilder.h>
 
 /**
  * This processes information from the server and modifies game state.
@@ -29,5 +32,10 @@ public:
      * */
     void process(unsigned int, Game::ClientMessage, int);
     
+    // These are messages send to everyone
     std::deque<Game::ServerMessage*> messages;
+
+    // These are messages sent to specific clients
+    std::unordered_map<unsigned int, std::deque<Game::ServerMessage*>> specificMessages;
+    
 };

@@ -1,0 +1,42 @@
+Taco=Salad
+
+// Model paths
+Bun_Model=assets\\models\\Bun.obj
+Burger_Model=assets\\models\\Burger.obj
+Cheese_Model=assets\\models\\Cheese.obj
+Grid_Square_Model=assets\\models\\grid_square.obj
+Grid_Wire_Model=assets\\models\\grid_wire.obj
+Lettuce_Model=assets\\models\\Lettuce.obj
+Maze_Model=assets\\models\\Basic_Dungeon_Map.obj
+Meat_Model=assets\\models\\meat.obj
+Onion_Model=assets\\models\\Onion.obj
+Player_Model=assets\\models\\Basic_Character_Model.obj
+Tomato_Model=assets\\models\\tomato.obj
+Wall_Model=assets\\models\\wall.obj
+
+// Image paths
+
+
+// Model sizings
+Object_Default_Width=1
+Object_Default_Depth=1
+Ingredient_Radius=0.5
+Player_Radius=0.75
+
+// Shaders
+Vertex_Shader=src\\graphics\\shaders\\vert_shader.glsl
+Fragment_Shader=src\\graphics\\shaders\\frag_shader.glsl
+
+// Etc
+Window_Title=Comrade's Kitchen
+Window_Width=1800
+Window_Height=1600
+
+// Controls
+Camera_Speed=0.25
+Camera_Location=0,7,7
+Player_Run_Speed=1
+Player_Turn_Speed=1
+
+// Misc Coordinates
+Origin=0,0,0

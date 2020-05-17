@@ -6,11 +6,20 @@ Player::Player(int ID) : GameObject(ID)
     this->turnSpeed = 0;
     this->score = 0;
     this->objType = PLAYER;
+    this->setModel(Config::get("Player_Model"));
+    this->loadCollisionSize();
+}
+
+void Player::loadCollisionSize()
+{
+    this->baseRadius = Config::getFloat("Player_Radius");
+    this->box->setCircleBoundingBox();
+    this->updateMeasurements();
 }
 
 void Player::setScore(int newScore)
 {
-    score = newScore;
+    this->score = newScore;
 }
 
 void Player::setTeamID(int teamID)
@@ -48,3 +57,25 @@ void Player::removeFromInventory(IngredientObject *ingredient)
 int Player::getTeamID() { return this->teamID; };
 
 std::string Player::getTeamName() { return this->teamName; }
+
+std::deque<Instruction*> Player::getCompletedInstructions() {
+    return this->completedInstructions;
+}
+
+void Player::addToCompletedInstructions(Instruction* inst) {
+    this->completedInstructions.push_back(inst);
+    this->addToScore(inst->points);
+}
+
+// pass in uishader->ID as parameter
+void Player::drawInventory(GLuint shaderProgram) {
+    glDisable(GL_DEPTH_TEST);
+    glUseProgram(shaderProgram);
+
+    std::unordered_map<int, IngredientObject*>::iterator it = inventory.begin();
+
+    while (it != inventory.end()) {
+        it->second->draw();
+        it++;
+    }
+}

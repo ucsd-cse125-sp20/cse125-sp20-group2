@@ -4,6 +4,8 @@
 #include <objects/IngredientObject.h>
 #include <unordered_map>
 #include <string>
+#include <util/Instruction.h>
+#include <deque>
 
 class Player : public GameObject 
 {
@@ -17,8 +19,17 @@ protected:
     float runSpeed = 0, turnSpeed = 0;
 
     std::unordered_map<int, IngredientObject*> inventory;
+
+    std::deque<Instruction*> completedInstructions;
+
+    void loadCollisionSize();
+
 public:
     Player(int ID);
+
+    std::deque<Instruction*> getCompletedInstructions();
+
+    void addToCompletedInstructions(Instruction* inst);
     
     void setTeamID( int teamID );
 
@@ -43,4 +54,6 @@ public:
     void addToInventory( IngredientObject* ingredient );
 
     void removeFromInventory( IngredientObject* ingredient );
+
+    void drawInventory(GLuint shaderProgram);
 };

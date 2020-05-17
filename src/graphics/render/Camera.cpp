@@ -6,31 +6,53 @@
  * Default values are all defined in graphics/_options/graphics_vars.h .
  * */
 Camera::Camera(glm::vec3 pos, glm::vec3 up, float yaw, float pitch, bool freeCam) 
-	: front(INIT_FRONT), moveSpeed(INIT_SPEED), sensitivity(INIT_SENSITIVITY), zoom(INIT_ZOOM)
+	: front(INIT_FRONT), moveSpeed(Config::getFloat("Camera_Speed")), sensitivity(INIT_SENSITIVITY), zoom(INIT_ZOOM)
 {
 	this->pos = pos;
+	this->staticPos = pos;
 	this->worldUp = up;
 	this->yaw = yaw;
 	this->pitch = pitch;
 	this->freeCam = freeCam;
+	target = NULL;
 	updateCameraVectors();
 }
 
 
 Camera::Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch, bool freeCam)
-	: front(INIT_FRONT), moveSpeed(INIT_SPEED), sensitivity(INIT_SENSITIVITY), zoom(INIT_ZOOM)
+	: front(INIT_FRONT), moveSpeed(Config::getFloat("Camera_Speed")), sensitivity(INIT_SENSITIVITY), zoom(INIT_ZOOM)
 {
 	pos = glm::vec3(posX, posY, posZ);
+	this->staticPos = pos;
 	worldUp = glm::vec3(upX, upY, upZ);
 	this->yaw = yaw;
 	this->pitch = pitch;
 	this->freeCam = freeCam;
+	target = NULL;
 	updateCameraVectors();
 }
 
-/** TODO: add targetting */ 
+void Camera::setTarget(GameObject* target)
+{
+	this->target = target;
+}
+GameObject* Camera::getTarget() 
+{
+	return target;
+}
+
 void Camera::toggleFreeCam() {
 	freeCam = !freeCam;
+
+	if (!freeCam) 
+	{
+		yaw = INIT_YAW;
+		pitch = INIT_PITCH;
+
+		// Reset position to either target or initalized position
+		if (target) warpToTarget();
+		else pos = staticPos;
+	}
 }
 
 // Returns the view matrix calculated using Euler Angles and the LookAt Matrix
@@ -39,22 +61,22 @@ glm::mat4 Camera::getViewMatrix()
 	return glm::lookAt(pos, pos + front, up);
 }
 
-	// Set camera target
-
 // Processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
-void Camera::processKeyMovement(Camera_Movement direction, float deltaTime)
+void Camera::processKeyMovement(Camera_Movement direction)
 {
-	if (!freeCam) return;
-
-	float velocity = moveSpeed * deltaTime;
 	if (direction == FORWARD)
-		pos += front * velocity;
+		pos += front * moveSpeed;
 	if (direction == BACKWARD)
-		pos -= front * velocity;
+		pos -= front * moveSpeed;
 	if (direction == LEFT)
-		pos -= right * velocity;
+		pos -= right * moveSpeed;
 	if (direction == RIGHT)
-		pos += right * velocity;
+		pos += right * moveSpeed;
+}
+
+void Camera::warpToTarget()
+{
+	if (target) pos = target->getPosition() + staticPos;
 }
 
 // Processes input received from a mouse input system. Expects the offset value in both the x and y direction.

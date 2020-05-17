@@ -52,6 +52,11 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 	std::vector<unsigned int> indices;
 	std::vector<Texture> textures;
 
+	// Min/Max for calculating width/depth/height
+	/// NOTE: Height is unused until we need vertical collisions.
+	float minX = 9999.9, minY = 9999.9, minZ = 9999.9;
+	float maxX = -9999.9, maxY = -9999.9, maxZ = -9999.9; 
+
 	// Walk through each of the mesh's vertices
 	for (unsigned int i = 0; i < mesh->mNumVertices; i++)
 	{
@@ -62,6 +67,15 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 		vector.y = mesh->mVertices[i].y;
 		vector.z = mesh->mVertices[i].z;
 		vertex.pos = vector;
+
+		// Get min/maxes of coords
+		if (vector.x < minX) minX = vector.x;
+		else if (vector.x > maxX) maxX = vector.x;
+		if (vector.y < minY) minY = vector.y;
+		else if (vector.y > maxY) maxY = vector.y;
+		if (vector.z < minZ) minZ = vector.z;
+		else if (vector.z > maxZ) maxZ = vector.z;
+
 		// normals
 		vector.x = mesh->mNormals[i].x;
 		vector.y = mesh->mNormals[i].y;
@@ -80,6 +94,13 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 			vertex.texCoords = glm::vec2(0.0f, 0.0f);
 		vertices.push_back(vertex);
 	}
+
+	/// NOTE: This is no longer used in actual collision calculations. Please use this to update model sizes in the config file.
+	/// Can be removed in the final release.
+	modelWidth = maxX - minX;
+	modelDepth = maxZ - minZ;
+	modelHeight = maxY - minY;
+
 	// now wak through each of the mesh's faces (a face is a mesh its triangle) and retrieve the corresponding vertex indices.
 	for (unsigned int i = 0; i < mesh->mNumFaces; i++)
 	{
@@ -116,7 +137,7 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 
 unsigned int Model::TextureFromFile(const char* path, const std::string& directory, bool gamma)
 {
-	std::cout << "Using directory:  " << directory << std::endl;
+	//std::cout << "Using directory:  " << directory << std::endl;
 
 	// Debug
 	if (std::string(path) == std::string("") || path == NULL) std::cerr << "Model loading error: No texture path given!" << std::endl;
@@ -155,6 +176,9 @@ unsigned int Model::TextureFromFile(const char* path, const std::string& directo
 
 std::vector<Texture> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName)
 {
+	/*std::cout << "Material: " << std::string(mat->GetName().C_Str()) << std::endl;
+	std::cout << "Texture count: " << mat->GetTextureCount(type) << std::endl;
+	std::cout << "Texture type: " << typeName << std::endl;*/
 
 	std::vector<Texture> textures;
 	for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)

@@ -1,5 +1,8 @@
 #pragma once
 
+// Config
+#include <util/Config.h>
+
 // OpenGL function pointers
 #include <glad/glad.h>		// Include this...
 #include <GLFW/glfw3.h>		// ...before this.
@@ -52,8 +55,9 @@ public:
     Camera* camera;
 private:
     Shader* shader;
+    Shader* UIshader;
     void setupWindow();
-    
+    void cameraViewUpdate();
     unsigned int objNum;        // Increment when get response back from server
     int width;
     int height;

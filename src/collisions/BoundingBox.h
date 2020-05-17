@@ -12,7 +12,7 @@ protected:
     GameObject *obj;
     float radius;
     float minX, minZ, maxX, maxZ;
-    int height, width;
+    int height, width, depth;
     bool isCircle;
 
     bool isAABBIntersecting(BoundingBox *rbb);
@@ -36,6 +36,8 @@ public:
     void setCircleBoundingBox();
 
     void setWidth(float width);
+
+    void setDepth(float depth);
 
     void setHeight(float height);
 
