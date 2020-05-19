@@ -50,7 +50,7 @@ message Object {
 }
 
 message Score {
-    
+    required int32 currScore = 1;
 }
 
 message Vector3 {

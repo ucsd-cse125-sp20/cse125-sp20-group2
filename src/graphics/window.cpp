@@ -17,7 +17,8 @@ Window::Window(int width = Config::getFloat("Window_Width"), int height = Config
 	this->height = height;
 	this->setupWindow();
 	this->shader = new Shader(Config::get("Vertex_Shader"), Config::get("Fragment_Shader"));
-	this->UIshader = new Shader("src//graphics//shaders//ui_vert_shader.glsl", "src//graphics//shaders//ui_frag_shader.glsl"); // Need to add to Config?
+	this->UIshader = new Shader("src//graphics//shaders//ui_vert_shader.glsl", "src//graphics//shaders//ui_frag_shader.glsl"); 
+	///TODO: Need to add to Config?
 	this->camera = new Camera(Config::getVec3("Camera_Location"));
 	this->inventory = NULL;
 }
@@ -186,12 +187,14 @@ void Window::render()
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
-	ImGui::Begin("Inventory				");                         
+	ImGui::SetNextWindowSize(ImVec2((float)100, (float)100));
+	ImGui::Begin("Inventory");                         
 	if (this->inventory != NULL) {
 		std::unordered_map<int, IngredientObject*>::iterator it = this->inventory->begin();
 		while (it != this->inventory->end())
 		{
-			//ImGui::Text(it->second->getName().c_str());
+			ImGui::Text(it->second->getName().c_str());
+			it++;
 		}
 	}
 	ImGui::End();

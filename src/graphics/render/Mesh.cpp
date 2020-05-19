@@ -28,6 +28,10 @@ void Mesh::draw(Shader shader)
         shader.setFloat(("material." + name + number).c_str(), i);
         glBindTexture(GL_TEXTURE_2D, textures[i].id);
     }
+
+    // Unbind texture if no texture found.
+    if (textures.empty()) glBindTexture(GL_TEXTURE_2D, 0);
+
     glActiveTexture(GL_TEXTURE0);
 
     // draw mesh

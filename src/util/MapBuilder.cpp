@@ -22,7 +22,7 @@ Map* MapBuilder::getBasicMap() {
     mp->spawningLocations.push_back(glm::vec3(10, 0, 0));
 
     mp->ingredientPositions.push_back(glm::vec3(15, 0, 0));
-    mp->ingredientPositions.push_back(glm::vec3(15, 0, 0));
+    mp->ingredientPositions.push_back(glm::vec3(-15, 0, 0));
 
     return mp;
 }

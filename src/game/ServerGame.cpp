@@ -6,7 +6,7 @@ ServerGame::ServerGame(int port) : server(port), processor(&this->gameState)
 {
     // std::function<void(int)> test = std::bind(&ServerGame::acall, this)
     std::function<void(int)> notifyClients = std::bind(&ServerGame::acceptCallback, this, std::placeholders::_1);
-    this->server.setAcceptCallback(notifyClients);
+    this->server.setOnClientConnect(notifyClients);
     run();
 }
 
@@ -49,7 +49,7 @@ void ServerGame::process()
     for (auto iter = map.begin(); iter != map.end(); iter++) {
         auto clientId = iter->first;
         auto msgs = iter->second;
-        for (auto msg: msgs) {
+        for (auto msg : msgs) {
             // PrintUtil::print(msg);
             this->processor.Process(clientId, msg, TICK);
             
@@ -80,11 +80,11 @@ void ServerGame::acceptCallback(int clientId)
     GameObject* playerObject = this->gameState.getPlayerObject(clientId);
 
     // Build a message
-    Game::ServerMessage* message = MessageBuilder::toServerMessage(playerObject);
+    Game::ServerMessage* createPlayerMessage = MessageBuilder::toServerMessage(playerObject);
 
     // Send out, then free
-    this->server.sendToAll(*message);
-    delete message;
+    this->server.sendToAll(*createPlayerMessage);
+    delete createPlayerMessage;
 
     // Send over client info
     Game::ServerMessage* clientInfoMsg = MessageBuilder::toClientInfo(clientId, playerObject->getID());

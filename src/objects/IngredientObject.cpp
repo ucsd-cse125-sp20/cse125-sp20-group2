@@ -2,6 +2,8 @@
 
 IngredientObject::IngredientObject(int ID) : GameObject(ID) {
     this->objType = INGREDIENT;
+	this->setModel(Config::get("Wall_Model"));
+	this->setPosition(glm::vec3(1,0,1));
     
     //Config::get("Tomato_Image");
     
@@ -31,6 +33,7 @@ IngredientObject::IngredientObject(int ID) : GameObject(ID) {
 
 IngredientObject::IngredientObject() : GameObject() {
     this->objType = INGREDIENT;
+	this->setModel(Config::get("Wall_Model"));
     
     //Config::get("Tomato_Image");
     

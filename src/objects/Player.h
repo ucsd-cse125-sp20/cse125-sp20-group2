@@ -18,7 +18,7 @@ protected:
 
     float runSpeed = 0, turnSpeed = 0;
 
-    std::unordered_map<int, IngredientObject*> inventory;
+    std::unordered_map<int, IngredientObject*>* inventory;
 
     std::deque<Instruction*> completedInstructions;
 
@@ -50,6 +50,8 @@ public:
     void setScore(int newScore);
 
     void addToScore( int addition );
+
+    int getScore();
 
     void addToInventory( IngredientObject* ingredient );
 

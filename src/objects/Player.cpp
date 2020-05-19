@@ -8,6 +8,7 @@ Player::Player(int ID) : GameObject(ID)
     this->objType = PLAYER;
     this->setModel(Config::get("Player_Model"));
     this->loadCollisionSize();
+    this->inventory = new std::unordered_map<int, IngredientObject*>();
 }
 
 void Player::loadCollisionSize()
@@ -31,9 +32,15 @@ void Player::setTeamName(std::string teamName)
 {
     this->teamName = teamName;
 }
+
 void Player::addToScore(int addition)
 {
     this->score += addition;
+}
+
+int Player::getScore()
+{
+    return this->score;
 }
 
 void Player::setRunSpeed(float newRunSpeed) { this->runSpeed = newRunSpeed; }
@@ -46,12 +53,12 @@ float Player:: getTurnSpeed() { return this->turnSpeed; }
 
 void Player::addToInventory(IngredientObject *ingredient)
 {
-    inventory[ingredient->getID()] = ingredient;
+    (*inventory)[ingredient->getID()] = ingredient;
 }
 
 void Player::removeFromInventory(IngredientObject *ingredient)
 {
-    inventory.erase(ingredient->getID());
+    inventory->erase(ingredient->getID());
 }
 
 int Player::getClientID() { return this->clientID; };
@@ -68,7 +75,7 @@ void Player::addToCompletedInstructions(Instruction* inst) {
 }
 
 std::unordered_map<int, IngredientObject*>* Player::getInventory() {
-    return &this->inventory;
+    return this->inventory;
 }
 
 // pass in uishader->ID as parameter
@@ -76,9 +83,9 @@ void Player::drawInventory(GLuint shaderProgram) {
     glDisable(GL_DEPTH_TEST);
     glUseProgram(shaderProgram);
 
-    std::unordered_map<int, IngredientObject*>::iterator it = inventory.begin();
+    std::unordered_map<int, IngredientObject*>::iterator it = inventory->begin();
 
-    while (it != inventory.end()) {
+    while (it != inventory->end()) {
         it->second->draw();
         it++;
     }

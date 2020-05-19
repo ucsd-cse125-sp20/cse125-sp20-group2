@@ -169,5 +169,9 @@ public:
 
     void setPassable(bool passable);
     
+    /**
+     * Returns true if there is a collision. 
+     * Otherwise, returns false if no collision or either don't have a bounding box.
+     * */
     bool isColliding(GameObject*);
 };
