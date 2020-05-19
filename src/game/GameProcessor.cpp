@@ -1,6 +1,5 @@
 #include <game/GameProcessor.h>
 
-
 GameProcessor::GameProcessor(GameState* gameState)
 {
     this->state = gameState;
@@ -13,10 +12,21 @@ GameProcessor::GameProcessor(GameState* gameState)
 
 GameProcessor::~GameProcessor()
 {
-    
+
 }
 
-void GameProcessor::process(unsigned int clientId, Game::ClientMessage clientMsg, int tickCount)
+/// TODO: Work in progress, will delete every repeat message
+void GameProcessor::Preprocess(std::unordered_map<unsigned int, std::vector<Game::ClientMessage>> & clientMsgs)
+{
+    for (auto& it : clientMsgs)
+    {
+        std::vector<Game::ClientMessage> & msgList = it.second;
+        auto uniquePortion = std::unique(msgList.begin(), msgList.end(), google::protobuf::util::MessageDifferencer::Equals);
+        msgList.erase(uniquePortion, msgList.end());
+    }
+}
+
+void GameProcessor::Process(unsigned int clientId, Game::ClientMessage clientMsg, int tickCount)
 {
     switch (clientMsg.event_case())
     {
@@ -36,7 +46,6 @@ void GameProcessor::process(unsigned int clientId, Game::ClientMessage clientMsg
             // Check for collision
             if (player->isColliding(currObject))
             {
-                std::cout << "Detecting a collision" << std::endl;
                 // Revert movement
                 player->setPosition(originalPos);
                 player->setRunSpeed(0);
@@ -54,11 +63,18 @@ void GameProcessor::process(unsigned int clientId, Game::ClientMessage clientMsg
             if (player->isColliding(currIngredient))
             {
                 currIngredient->renderInvisible();
+                
+                // Update player state
                 player->addToInventory(currIngredient);
-                Game::ServerMessage* newServerMsg = MessageBuilder::toInventoryServerMessage(currIngredient->getID(), true);
-                specificMessages[player->getID()].push_back(newServerMsg);
-                newServerMsg = MessageBuilder::toServerMessage(currIngredient);
-                messages.push_back(newServerMsg);
+                player->addToScore(1);
+
+                Game::ServerMessage* scoreUpdate = MessageBuilder::toScore(player->getScore());
+                this->specificMessages[clientId].push_back(scoreUpdate);
+
+                Game::ServerMessage* moveToInventory = MessageBuilder::toInventoryServerMessage(currIngredient->getID(), true);
+                specificMessages[clientId].push_back(moveToInventory);
+                Game::ServerMessage* mapUpdate = MessageBuilder::toServerMessage(currIngredient);
+                messages.push_back(mapUpdate);
             }
         }
 

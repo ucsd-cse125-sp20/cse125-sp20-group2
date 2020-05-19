@@ -88,7 +88,7 @@ int GameState::addObject(Game::ObjectType objectType)
             ingredient->getBoundingBox()->setRadius(PLAYER_RADIUS/2);
             this->ingredientObjects[objId] = ingredient;
             std::cout << "Returning the ingredient object id" <<std::endl;
-        
+            return objId;
         }
         default:
             break;

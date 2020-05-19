@@ -42,6 +42,7 @@ void ServerGame::process()
     auto map = server.readAllMessages();
     
     // preprocess and remove all stuff here
+    this->processor.Preprocess(map);
 
     // Go through all clients
     // This is just an example. This isn't necessarily the correct logic.
@@ -50,15 +51,13 @@ void ServerGame::process()
         auto msgs = iter->second;
         for (auto msg: msgs) {
             // PrintUtil::print(msg);
-            this->processor.process(clientId, msg, TICK);
+            this->processor.Process(clientId, msg, TICK);
             
             if (this->processor.messages.size() > 0) {
                 Game::ServerMessage* message = this->processor.messages.front();
                 this->processor.messages.pop_front();
                 this->server.sendToAll(*message);
                 delete message;
-                // free(message);
-                break; /// TODO: Remove, this preprocesses messages s.t. only one is from each player per tick
             }
 
             if (this->processor.specificMessages[clientId].size() > 0) {
@@ -92,16 +91,8 @@ void ServerGame::acceptCallback(int clientId)
     this->server.send(clientId, *clientInfoMsg);
     delete clientInfoMsg;
 
-    // OLD CODE
-    // int objId = this->gameState.addPlayer(clientId);
-    // GameObject* object = this->gameState.getGameObject(objId);
-    // Game::ServerMessage* message = MessageBuilder::toServerMessage(object);
-    // this->server.sendToAll(*message);
-    // free(message);
-
-    // OK, THIS COVERS SENDING TO ALL. 
-    // WE NEED TO COVER THE LIST OF OBJECTS EXISTING
-    // SHOULD BE SIMPLE RIGHT
+    // TODO: Remove Ingredient
+    this->gameState.addObject(Game::ObjectType::INGREDIENT);
 
     // First, send all game objects
     for (auto objectPair : this->gameState.getObjects())

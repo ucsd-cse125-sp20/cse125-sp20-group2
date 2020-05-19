@@ -69,6 +69,7 @@ void ClientGame::updateGameState()
     for (Game::ServerMessage currMessage : client.messages)
     {
         // Process different types of messages
+        std::cout << currMessage.event_case() << std::endl;
         switch(currMessage.event_case()) 
         {
             // Object-related messages
@@ -124,10 +125,11 @@ void ClientGame::updateGameState()
             ///TODO: Score update messages
             case Game::ServerMessage::EventCase::kScore:
             {
+                std::cout << "GOT A SCORE AAAAAAAAAAAAAAAAAAAA" << currMessage.score().currscore() << std::endl;
                 break;
             }
 
-            /// Inventory update messages (TODO: Testing required.)
+            // Inventory update messages
             case Game::ServerMessage::EventCase::kInventory: 
             {
                 // Get player associated with this client

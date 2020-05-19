@@ -51,6 +51,8 @@ public:
 
     void addToScore( int addition );
 
+    int getScore();
+
     void addToInventory( IngredientObject* ingredient );
 
     void removeFromInventory( IngredientObject* ingredient );

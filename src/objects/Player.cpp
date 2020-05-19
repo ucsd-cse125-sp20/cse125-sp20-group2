@@ -31,9 +31,15 @@ void Player::setTeamName(std::string teamName)
 {
     this->teamName = teamName;
 }
+
 void Player::addToScore(int addition)
 {
     this->score += addition;
+}
+
+int Player::getScore()
+{
+    return this->score;
 }
 
 void Player::setRunSpeed(float newRunSpeed) { this->runSpeed = newRunSpeed; }
