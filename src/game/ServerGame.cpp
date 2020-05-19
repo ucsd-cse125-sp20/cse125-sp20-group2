@@ -42,6 +42,7 @@ void ServerGame::process()
     auto map = server.readAllMessages();
     
     // preprocess and remove all stuff here
+    this->processor.Preprocess(map);
 
     // Go through all clients
     // This is just an example. This isn't necessarily the correct logic.
@@ -50,25 +51,21 @@ void ServerGame::process()
         auto msgs = iter->second;
         for (auto msg: msgs) {
             // PrintUtil::print(msg);
-            this->processor.process(clientId, msg, TICK);
-            if (this->processor.specificMessages[clientId].size() > 0) {
-                std::cout << "Sending specific msg to " + clientId << std::endl;
-                Game::ServerMessage* message = this->processor.specificMessages[clientId].front();
-                this->processor.specificMessages[clientId].pop_front();
-                this->server.send(clientId, *message);
-                delete message;
-            }
+            this->processor.Process(clientId, msg, TICK);
             
             if (this->processor.messages.size() > 0) {
                 Game::ServerMessage* message = this->processor.messages.front();
                 this->processor.messages.pop_front();
                 this->server.sendToAll(*message);
                 delete message;
-                // free(message);
-                break; /// TODO: Remove, this preprocesses messages s.t. only one is from each player per tick
             }
 
-        
+            if (this->processor.specificMessages[clientId].size() > 0) {
+                Game::ServerMessage* message = this->processor.specificMessages[clientId].front();
+                this->processor.specificMessages[clientId].pop_front();
+                this->server.send(clientId, *message);
+                delete message;
+            }
         }
     }
 }
@@ -89,21 +86,10 @@ void ServerGame::acceptCallback(int clientId)
     this->server.sendToAll(*message);
     delete message;
 
-    /// TODO: Joshua: Double-check with networking team to make sure this is ok
+    // Send over client info
     Game::ServerMessage* clientInfoMsg = MessageBuilder::toClientInfo(clientId, playerObject->getID());
     this->server.send(clientId, *clientInfoMsg);
     delete clientInfoMsg;
-
-    // OLD CODE
-    // int objId = this->gameState.addPlayer(clientId);
-    // GameObject* object = this->gameState.getGameObject(objId);
-    // Game::ServerMessage* message = MessageBuilder::toServerMessage(object);
-    // this->server.sendToAll(*message);
-    // free(message);
-
-    // OK, THIS COVERS SENDING TO ALL. 
-    // WE NEED TO COVER THE LIST OF OBJECTS EXISTING
-    // SHOULD BE SIMPLE RIGHT
 
     // First, send all game objects
     for (auto objectPair : this->gameState.getObjects())

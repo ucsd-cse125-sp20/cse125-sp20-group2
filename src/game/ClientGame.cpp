@@ -148,12 +148,6 @@ void ClientGame::updateGameState()
                 // Set camera target
                 window.camera->setTarget(window.objectsToRender[currMessage.clientinfo().objectid()]);
 
-                Player* p = (Player*) window.objectsToRender[this->objectId];
-                window.addInventory(p->getInventory());
-                IngredientObject* ing = new IngredientObject(1000043);
-                ing->setName("lol");
-                p->addToInventory(ing);
-
                 break;
             }
 
