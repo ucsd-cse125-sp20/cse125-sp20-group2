@@ -91,6 +91,8 @@ public:
     
     bool getRender();
 
+    void setRender(bool render);
+
     void toggleRender();
 
     std::string getModelPath();

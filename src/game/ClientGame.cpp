@@ -5,19 +5,6 @@
 
 ClientGame::ClientGame(std::string IP, int port) : client(IP, port), window(Config::getFloat("Window_Width"), Config::getFloat("Window_Height"))
 {
-    /// TODO: fix hardcoded player values and hardcoded window insertion
-    /*GameObject* grid = new GameObject(999999);
-    grid->setPosition(glm::vec3(0, 0, 0));
-    grid->setModel(Config::get("Maze_Model"));
-    grid->applyScale(glm::vec3(2, 2, 2));
-    window.addObject(999999, grid);*/
-
-    /// TODO: Remove later. Using currently for example usage.
-    /*GameObject* nanosuit = new GameObject(3946);
-    nanosuit->setModel("assets/nanosuit/nanosuit.obj");
-    nanosuit->applyScale(glm::vec3(0.2, 0.2, 0.2));
-    window.addObject(3946, nanosuit);*/
-
     runGame();
 }
 
@@ -77,6 +64,7 @@ void ClientGame::updateGameState()
                 Game::Vector3 location = currMessage.object().worldposition();
                 float rotation = currMessage.object().rotation();
                 uint32_t id = currMessage.object().id();
+                bool render = currMessage.object().render();
 
                 GameObject* obj = NULL;
 
@@ -117,6 +105,7 @@ void ClientGame::updateGameState()
 
                 // Set object parameters
                 obj->setRotation(rotation);
+                obj->setRender(render);
                 obj->setPosition(glm::vec3(location.x(), location.y(), location.z()));
                 break;
             }
@@ -135,6 +124,8 @@ void ClientGame::updateGameState()
 
                 // Get id of the object to be picked up.
                 IngredientObject* pickup = (IngredientObject*)window.objectsToRender[currMessage.inventory().id()];
+
+                pickup->setName(currMessage.inventory().name());
 
                 // Add object to player inventory.
                 if (currMessage.inventory().add())  player->addToInventory(pickup);
@@ -156,6 +147,13 @@ void ClientGame::updateGameState()
 
                 // Set camera target
                 window.camera->setTarget(window.objectsToRender[currMessage.clientinfo().objectid()]);
+
+                Player* p = (Player*) window.objectsToRender[this->objectId];
+                window.addInventory(p->getInventory());
+                IngredientObject* ing = new IngredientObject(1000043);
+                ing->setName("lol");
+                p->addToInventory(ing);
+
                 break;
             }
 

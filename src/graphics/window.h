@@ -32,6 +32,10 @@
 // Objects
 #include <objects/GameObject.h>
 #include <objects/Player.h>
+#include <objects/IngredientObject.h>
+
+#include <gui/imgui_impl_glfw.h>
+#include <gui/imgui_impl_opengl3.h>
 
 class Window
 {
@@ -40,6 +44,7 @@ public:
     Window(int width, int height);
 
     std::unordered_map<unsigned int, GameObject*> objectsToRender;
+    std::unordered_map<int, IngredientObject*>* inventory;
     void render();
 
     /**
@@ -48,6 +53,8 @@ public:
     void addObject(unsigned int id, GameObject* object);
     
     void removeObject(unsigned int index);
+
+    void addInventory(std::unordered_map<int, IngredientObject*>* inventory);
 
     void close();
     GLFWwindow* glfwViewport;

@@ -22,9 +22,9 @@ void Player::setScore(int newScore)
     this->score = newScore;
 }
 
-void Player::setTeamID(int teamID)
+void Player::setClientID(int clientID)
 {
-    this->teamID = teamID;
+    this->clientID = clientID;
 }
 
 void Player::setTeamName(std::string teamName)
@@ -54,7 +54,7 @@ void Player::removeFromInventory(IngredientObject *ingredient)
     inventory.erase(ingredient->getID());
 }
 
-int Player::getTeamID() { return this->teamID; };
+int Player::getClientID() { return this->clientID; };
 
 std::string Player::getTeamName() { return this->teamName; }
 
@@ -65,6 +65,10 @@ std::deque<Instruction*> Player::getCompletedInstructions() {
 void Player::addToCompletedInstructions(Instruction* inst) {
     this->completedInstructions.push_back(inst);
     this->addToScore(inst->points);
+}
+
+std::unordered_map<int, IngredientObject*>* Player::getInventory() {
+    return &this->inventory;
 }
 
 // pass in uishader->ID as parameter

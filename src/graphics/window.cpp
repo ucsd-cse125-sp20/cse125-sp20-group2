@@ -19,6 +19,7 @@ Window::Window(int width = Config::getFloat("Window_Width"), int height = Config
 	this->shader = new Shader(Config::get("Vertex_Shader"), Config::get("Fragment_Shader"));
 	this->UIshader = new Shader("src//graphics//shaders//ui_vert_shader.glsl", "src//graphics//shaders//ui_frag_shader.glsl"); // Need to add to Config?
 	this->camera = new Camera(Config::getVec3("Camera_Location"));
+	this->inventory = NULL;
 }
 
 void Window::addObject(unsigned int id, GameObject* object) {
@@ -29,6 +30,10 @@ void Window::addObject(unsigned int id, GameObject* object) {
 void Window::removeObject(unsigned int index) {
 	this->objectsToRender.erase(index);
 	objNum--;
+}
+
+void Window::addInventory(std::unordered_map<int, IngredientObject*>* inventoryPtr) {
+	this->inventory = inventoryPtr;
 }
 
 void Window::setupWindow() {
@@ -51,12 +56,14 @@ void Window::setupWindow() {
 	
 	// Mouse centering
 	glfwSetCursorPos(glfwViewport, lastX, lastY);
+	
 
 	if (glfwViewport == NULL)
 	{
 		std::cerr << "Failed to create GLFW window" << std::endl;
 		glfwTerminate();
 	}
+
 
 	// Current context is window
 	glfwMakeContextCurrent(glfwViewport);
@@ -79,9 +86,19 @@ void Window::setupWindow() {
 
 	// Set window var
 	this->glfwViewport = glfwViewport;
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGui::StyleColorsClassic();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	ImGui_ImplGlfw_InitForOpenGL(glfwViewport, true);
+
+	ImGui_ImplOpenGL3_Init("#version 130");
 }
 
 void Window::close() {
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplGlfw_Shutdown();
+	ImGui::DestroyContext();
 	if (glfwWindowShouldClose(glfwViewport))
 	{
 		isClosed = true; 
@@ -95,6 +112,7 @@ void Window::render()
 	if (glfwViewport == NULL) {
 		std::cerr << "ERROR: No window!" << std::endl;
 	}
+
 
 	// // //
 	// User shader program
@@ -165,6 +183,20 @@ void Window::render()
 		// Draw the model
 		obj->draw(*shader);
 	}
+	ImGui_ImplOpenGL3_NewFrame();
+	ImGui_ImplGlfw_NewFrame();
+	ImGui::NewFrame();
+	ImGui::Begin("Inventory				");                         
+	if (this->inventory != NULL) {
+		std::unordered_map<int, IngredientObject*>::iterator it = this->inventory->begin();
+		while (it != this->inventory->end())
+		{
+			//ImGui::Text(it->second->getName().c_str());
+		}
+	}
+	ImGui::End();
+	ImGui::Render();
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 	// // //
 	// GLFW stuff
