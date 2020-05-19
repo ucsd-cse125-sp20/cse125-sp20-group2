@@ -7,6 +7,7 @@
 #include <objects/Map.h>
 #include <util/MapBuilder.h>
 #include <util/MessageBuilder.h>
+#include <google/protobuf/util/message_differencer.h>
 
 /**
  * This processes information from the server and modifies game state.
@@ -22,15 +23,15 @@ public:
     ~GameProcessor();
     
     /**
-     * This should be called to remove unnecessary duplicate messages
+     * Removes unecessary movement duplicates
      * */
-    // void preprocess();
+    void Preprocess(std::unordered_map<unsigned int, std::vector<Game::ClientMessage>> &);
 
     /**
      * This processes a client message for a client id.
      * This will modify GameState.
      * */
-    void process(unsigned int, Game::ClientMessage, int);
+    void Process(unsigned int, Game::ClientMessage, int);
     
     // These are messages send to everyone
     std::deque<Game::ServerMessage*> messages;

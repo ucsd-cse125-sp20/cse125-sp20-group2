@@ -1,6 +1,5 @@
 #include <game/GameProcessor.h>
 
-
 GameProcessor::GameProcessor(GameState* gameState)
 {
     this->state = gameState;
@@ -13,10 +12,21 @@ GameProcessor::GameProcessor(GameState* gameState)
 
 GameProcessor::~GameProcessor()
 {
-    
+
 }
 
-void GameProcessor::process(unsigned int clientId, Game::ClientMessage clientMsg, int tickCount)
+/// TODO: Work in progress, will delete every repeat message
+void GameProcessor::Preprocess(std::unordered_map<unsigned int, std::vector<Game::ClientMessage>> & clientMsgs)
+{
+    for (auto& it : clientMsgs)
+    {
+        std::vector<Game::ClientMessage> & msgList = it.second;
+        auto uniquePortion = std::unique(msgList.begin(), msgList.end(), google::protobuf::util::MessageDifferencer::Equals);
+        msgList.erase(uniquePortion, msgList.end());
+    }
+}
+
+void GameProcessor::Process(unsigned int clientId, Game::ClientMessage clientMsg, int tickCount)
 {
     switch (clientMsg.event_case())
     {

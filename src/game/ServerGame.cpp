@@ -42,6 +42,7 @@ void ServerGame::process()
     auto map = server.readAllMessages();
     
     // preprocess and remove all stuff here
+    this->processor.Preprocess(map);
 
     // Go through all clients
     // This is just an example. This isn't necessarily the correct logic.
@@ -50,7 +51,7 @@ void ServerGame::process()
         auto msgs = iter->second;
         for (auto msg: msgs) {
             // PrintUtil::print(msg);
-            this->processor.process(clientId, msg, TICK);
+            this->processor.Process(clientId, msg, TICK);
             
             if (this->processor.messages.size() > 0) {
                 Game::ServerMessage* message = this->processor.messages.front();
