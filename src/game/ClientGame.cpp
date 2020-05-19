@@ -129,7 +129,7 @@ void ClientGame::updateGameState()
                 break;
             }
 
-            /// Inventory update messages (TODO: Testing required.)
+            // Inventory update messages
             case Game::ServerMessage::EventCase::kInventory: 
             {
                 // Get player associated with this client
