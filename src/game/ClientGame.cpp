@@ -30,8 +30,12 @@ void ClientGame::runGame()
         // Update local game state
         updateGameState();
 
+        std::cout << "entering render" << std::endl;
+
         // Render world
         window.render();
+
+        std::cout << "out of render" << std::endl;
 
         // Sleep
         //std::this_thread::sleep_for(std::chrono::milliseconds(CLIENT_DELAY));
@@ -56,7 +60,6 @@ void ClientGame::updateGameState()
     for (Game::ServerMessage currMessage : client.messages)
     {
         // Process different types of messages
-        std::cout << currMessage.event_case() << std::endl;
         switch(currMessage.event_case()) 
         {
             // Object-related messages
@@ -151,6 +154,19 @@ void ClientGame::updateGameState()
                 window.camera->setTarget(window.objectsToRender[this->objectId]);
                 Player* p = (Player*) window.objectsToRender[this->objectId];
                 window.addInventory(p->getInventory());
+                break;
+            }
+
+            case Game::ServerMessage::EventCase::kRoundUpdate:
+            {
+                std::cout << "secs left " << currMessage.roundupdate().seconds() << std::endl;
+                /*
+                uint32_t seconds = currMessage.roundupdate().seconds();
+                if( seconds == 0) {
+                    this->round++;
+                    window.setRound(this->round);
+                }
+                window.setTimer(seconds);*/
                 break;
             }
 

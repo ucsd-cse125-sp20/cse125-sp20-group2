@@ -29,5 +29,5 @@ private:
 
     void process();
     
-    void acceptCallback(int);
+    void onClientConnect(int);
 };

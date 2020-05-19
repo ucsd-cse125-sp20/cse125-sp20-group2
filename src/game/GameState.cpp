@@ -4,7 +4,11 @@
 
 GameState::GameState() {
     /// TODO, implement timer logic
-    this->timer = 30;
+    // auto xMinutes = std::chrono::minutes(5);
+    auto xMinutes = std::chrono::seconds(15);
+    this->round = 0;
+    this->roundEnd = std::chrono::high_resolution_clock::now() + xMinutes;
+    this->oldTime = 0;
 }
 
 GameState::~GameState() {
@@ -156,4 +160,26 @@ void GameState::removeIngredient(unsigned int ingredientId)
     IngredientObject* ingredient = this->ingredientObjects[ingredientId];
     delete ingredient;
     this->ingredientObjects.erase(ingredientId);
+}
+
+bool GameState::gameOver()
+{
+    auto currTime = std::chrono::high_resolution_clock::now();
+    return currTime > this->roundEnd;
+}
+
+int GameState::getRoundTime()
+{
+    auto currTime = std::chrono::high_resolution_clock::now();
+    auto seconds = std::chrono::duration_cast<std::chrono::seconds> (this->roundEnd - currTime);
+
+    return seconds.count() > 0 ? seconds.count() : 0;
+}
+
+bool GameState::timeHasUpdated()
+{
+    auto roundTime = this->getRoundTime();
+    bool result = roundTime != this->oldTime;
+    this->oldTime = roundTime;
+    return result;
 }

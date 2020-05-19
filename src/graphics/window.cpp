@@ -108,6 +108,14 @@ void Window::close() {
 	else std::cerr << "ERROR: Unable to close window!" << std::endl;
 }
 
+void Window::setTimer(int64_t timer) {
+	this->timer = timer;
+}
+
+void Window::setRound(int round) {
+	this->round = round;
+}
+
 void Window::render()
 {
 	if (glfwViewport == NULL) {
@@ -184,10 +192,31 @@ void Window::render()
 		// Draw the model
 		obj->draw(*shader);
 	}
+	int32_t  minutes = this->timer / 60;
+	int32_t seconds = this->timer % 60;
+	int corner = 1;
+	const float DISTANCE = 10.0f;
+	//ImGuiIO& io = ImGui::GetIO();
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
-	ImGui::SetNextWindowSize(ImVec2((float)100, (float)100));
+	/**
+	ImGui::SetNextWindowBgAlpha(0.35f); // Transparent background
+	ImVec2 window_pos = ImVec2((corner & 1) ? io.DisplaySize.x - DISTANCE : DISTANCE, (corner & 2) ? io.DisplaySize.y - DISTANCE : DISTANCE);
+    ImVec2 window_pos_pivot = ImVec2((corner & 1) ? 1.0f : 0.0f, (corner & 2) ? 1.0f : 0.0f);
+    ImGui::SetNextWindowPos(window_pos, ImGuiCond_Always, window_pos_pivot);
+	ImGui::SetNextWindowSize(ImVec2(100.0f, 100.0f));
+    if (ImGui::Begin("Game Info"))
+    {
+		ImGui::Text("Round "+ this->round);
+		std::string str = "Time Left: " + minutes;
+		str.append(std::to_string(minutes));
+		str.append(" : ");
+		str.append(std::to_string(seconds));
+        ImGui::Text(str.c_str());
+    }
+    ImGui::End();**/
+	ImGui::SetNextWindowSize(ImVec2((float)100, (float)30*this->inventory->size()));
 	ImGui::Begin("Inventory");                         
 	if (this->inventory != NULL) {
 		std::unordered_map<int, IngredientObject*>::iterator it = this->inventory->begin();
@@ -198,6 +227,7 @@ void Window::render()
 		}
 	}
 	ImGui::End();
+
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
