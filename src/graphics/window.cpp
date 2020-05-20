@@ -196,27 +196,28 @@ void Window::render()
 	int32_t seconds = this->timer % 60;
 	int corner = 1;
 	const float DISTANCE = 10.0f;
-	//ImGuiIO& io = ImGui::GetIO();
+	ImGuiIO& io = ImGui::GetIO();
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
-	/**
 	ImGui::SetNextWindowBgAlpha(0.35f); // Transparent background
 	ImVec2 window_pos = ImVec2((corner & 1) ? io.DisplaySize.x - DISTANCE : DISTANCE, (corner & 2) ? io.DisplaySize.y - DISTANCE : DISTANCE);
     ImVec2 window_pos_pivot = ImVec2((corner & 1) ? 1.0f : 0.0f, (corner & 2) ? 1.0f : 0.0f);
     ImGui::SetNextWindowPos(window_pos, ImGuiCond_Always, window_pos_pivot);
-	ImGui::SetNextWindowSize(ImVec2(100.0f, 100.0f));
+	ImGui::SetNextWindowSize(ImVec2(150.0f, 100.0f));
     if (ImGui::Begin("Game Info"))
     {
-		ImGui::Text("Round "+ this->round);
+		std::string roundInfo = "Round ";
+		roundInfo = roundInfo.append(std::to_string(this->round));
+		ImGui::Text(roundInfo.c_str());
 		std::string str = "Time Left: " + minutes;
-		str.append(std::to_string(minutes));
-		str.append(" : ");
-		str.append(std::to_string(seconds));
+		str = str.append(std::to_string(minutes));
+		str = str.append(" : ");
+		str = str.append(std::to_string(seconds));
         ImGui::Text(str.c_str());
     }
-    ImGui::End();**/
-	ImGui::SetNextWindowSize(ImVec2((float)100, (float)30*this->inventory->size()));
+    ImGui::End();
+	ImGui::SetNextWindowSize(ImVec2((float)100, (float)(40*this->inventory->size())));
 	ImGui::Begin("Inventory");                         
 	if (this->inventory != NULL) {
 		std::unordered_map<int, IngredientObject*>::iterator it = this->inventory->begin();

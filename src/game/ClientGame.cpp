@@ -30,12 +30,8 @@ void ClientGame::runGame()
         // Update local game state
         updateGameState();
 
-        std::cout << "entering render" << std::endl;
-
         // Render world
         window.render();
-
-        std::cout << "out of render" << std::endl;
 
         // Sleep
         //std::this_thread::sleep_for(std::chrono::milliseconds(CLIENT_DELAY));
@@ -160,13 +156,12 @@ void ClientGame::updateGameState()
             case Game::ServerMessage::EventCase::kRoundUpdate:
             {
                 std::cout << "secs left " << currMessage.roundupdate().seconds() << std::endl;
-                /*
                 uint32_t seconds = currMessage.roundupdate().seconds();
                 if( seconds == 0) {
                     this->round++;
                     window.setRound(this->round);
                 }
-                window.setTimer(seconds);*/
+                window.setTimer(seconds);
                 break;
             }
 
