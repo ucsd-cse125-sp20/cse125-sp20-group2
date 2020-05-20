@@ -110,10 +110,9 @@ void ClientGame::updateGameState()
                 break;
             }
 
-            ///TODO: Score update messages
             case Game::ServerMessage::EventCase::kScore:
             {
-                std::cout << "GOT A SCORE AAAAAAAAAAAAAAAAAAAA" << currMessage.score().currscore() << std::endl;
+                window.setScore(currMessage.score().currscore());
                 break;
             }
 

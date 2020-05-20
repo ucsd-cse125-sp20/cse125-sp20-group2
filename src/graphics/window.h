@@ -56,6 +56,8 @@ public:
 
     void setTimer(int64_t timer);
 
+    void setScore(int score);
+
     void setRound(int round);
 
     void addInventory(std::unordered_map<int, IngredientObject*>* inventory);
@@ -69,6 +71,7 @@ private:
     Shader* UIshader;
     int64_t timer;
     int round;
+    int score = 0;
     void setupWindow();
     void cameraViewUpdate();
     unsigned int objNum;        // Increment when get response back from server

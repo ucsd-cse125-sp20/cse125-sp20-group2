@@ -116,6 +116,10 @@ void Window::setRound(int round) {
 	this->round = round;
 }
 
+void Window::setScore(int score) {
+	this->score = score;
+}
+
 void Window::render()
 {
 	if (glfwViewport == NULL) {
@@ -217,6 +221,17 @@ void Window::render()
         ImGui::Text(str.c_str());
     }
     ImGui::End();
+
+	window_pos = ImVec2(io.DisplaySize.x / 2 - DISTANCE, DISTANCE);
+	ImGui::SetNextWindowPos(window_pos, ImGuiCond_Always, window_pos_pivot);
+	ImGui::SetNextWindowSize(ImVec2(60.0f, 40.0f));
+	if (ImGui::Begin("Score"))
+	{
+		std::string scoreStr = std::to_string(this->score);
+		ImGui::Text(scoreStr.c_str());
+	}
+	ImGui::End();
+	
 	ImGui::SetNextWindowSize(ImVec2((float)100, (float)(40*this->inventory->size())));
 	ImGui::Begin("Inventory");                         
 	if (this->inventory != NULL) {
