@@ -33,27 +33,27 @@ void GameProcessor::Process(unsigned int clientId, Game::ClientMessage clientMsg
 {
     switch (clientMsg.event_case())
     {
-    // Modify gameState direction
+    // The message is a movement event
     case Game::ClientMessage::EventCase::kDirection:
     {
+        // Get the Player Object of the current client id
         Player* player = this->state->getPlayerObject(clientId);
+        // 
         glm::vec3 originalPos = player->getPosition();
         MovementProcessor::processMovement(player, clientMsg.direction(), tickCount);
 
         // See if colliding with any objects
-        const std::unordered_map<unsigned int, GameObject*>& gameObjects = this->state->getObjects();
-        for (auto currObjectPair : gameObjects)
+        const std::vector<GameObject*>& objects = this->state->getAllObjects();
+        for (GameObject* currObject : objects)
         {
-            GameObject* currObject = currObjectPair.second;
+            // Don't collide with yourself kiddo
+            if (currObject == player) continue;
 
-            // Check if the collision will be an inventory pickup event
-            if (currObject->getObjectType() == INGREDIENT) {
-                IngredientObject* currIngredient = (IngredientObject*) currObject;
-
-                // Check for collision
-                if (player->isColliding(currIngredient))
-                {
+            if (player->isColliding(currObject)) {
+                // Check if the collision will be an inventory pickup event
+                if (currObject->getObjectType() == INGREDIENT) {
                     std::cout << "Colliding with ingredients" << std::endl;
+                    IngredientObject* currIngredient = (IngredientObject*) currObject;
                     currIngredient->renderInvisible();
                     player->addToInventory(currIngredient);
                     player->addToScore(1);
@@ -71,71 +71,20 @@ void GameProcessor::Process(unsigned int clientId, Game::ClientMessage clientMsg
                     // Send updated map stuff
                      Game::ServerMessage* mapUpdate = MessageBuilder::toServerMessage(currIngredient);
                     this->messages.push_back(mapUpdate);
+                } else {
+                    std::cout << "Detecting collision with an object" << std::endl;
+
+                    // Revert movement
+                    player->setPosition(originalPos);
+                    player->setRunSpeed(0);
+                    break;
                 }
-            }
-            else if (player->isColliding(currObject))
-            {
-                std::cout << "Detecting collision with an object" << std::endl;
-
-                // Revert movement
-                player->setPosition(originalPos);
-                player->setRunSpeed(0);
-                break;
-            }
-        }
-
-        // Check for collisions for ingredients
-        // const std::unordered_map<unsigned int, IngredientObject*>& ingredientObjects = this->state->getIngredientObjects();
-        // for (auto currIngredientPair : ingredientObjects)
-        // {
-        //     IngredientObject* currIngredient = currIngredientPair.second;
-
-        //     // Check for collision
-        //     if (player->isColliding(currIngredient))
-        //     {
-        //         currIngredient->renderInvisible();
-                
-        //         // Update player state
-        //         player->addToInventory(currIngredient);
-        //         player->addToScore(1);
-
-        //         Game::ServerMessage* scoreUpdate = MessageBuilder::toScore(player->getScore());
-        //         this->specificMessages[clientId].push_back(scoreUpdate);
-
-        //         Game::ServerMessage* moveToInventory = MessageBuilder::toInventoryServerMessage(currIngredient->getID(), true, currIngredient->getName());
-        //         specificMessages[clientId].push_back(moveToInventory);
-        //         Game::ServerMessage* mapUpdate = MessageBuilder::toServerMessage(currIngredient);
-        //         messages.push_back(mapUpdate);
-        //     }
-        // }
-
-        // See if colliding with any players
-        const std::unordered_map<unsigned int, Player*>& playerObjects = this->state->getPlayerObjects();
-        for (auto currPlayerPair : playerObjects)
-        {
-            Player* currPlayer = currPlayerPair.second;
-            if (player == currPlayer)
-            {
-                continue;
-            }
-            // Check for collisions
-            if(player->isColliding(currPlayer))
-            {
-                // Revert the movement
-                std::cout << "Detecting collision with another player" << std::endl;
-                player->setPosition(originalPos);
-                player->setRunSpeed(0);
-                break;
             }
         }
 
         // Create serverMessage from vector
         Game::ServerMessage* newServerMsg = MessageBuilder::toServerMessage(player);
         messages.push_back(newServerMsg);
-
-        // Reinstate movement into gamestate (may not need to do this)
-
-        // gameObject->moveTo() bark bark
         break;
     }
     default:

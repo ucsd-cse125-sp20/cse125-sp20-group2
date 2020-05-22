@@ -45,7 +45,6 @@ void ServerGame::process()
     this->processor.Preprocess(map);
 
     // Go through all clients
-    // This is just an example. This isn't necessarily the correct logic.
     for (auto iter = map.begin(); iter != map.end(); iter++) {
         auto clientId = iter->first;
         auto msgs = iter->second;
@@ -73,11 +72,10 @@ void ServerGame::process()
     if (this->gameState.timeHasUpdated())
     {
         // Create time update message
-        Game::RoundUpdate* roundUpdateMessage = new Game::RoundUpdate();
-        // roundUpdateMessage->
-        roundUpdateMessage->set_seconds(this->gameState.getRoundTime());
+        Game::TimeUpdate* timeUpdateMessage = new Game::TimeUpdate();
+        timeUpdateMessage->set_seconds(this->gameState.getRoundTime());
         Game::ServerMessage* serverMsg = new Game::ServerMessage();
-        serverMsg->set_allocated_roundupdate(roundUpdateMessage);
+        serverMsg->set_allocated_time(timeUpdateMessage);
 
         // Send round update to everyone
         this->server.sendToAll(*serverMsg);
@@ -94,48 +92,53 @@ void ServerGame::process()
 // Only called from server network when it accepts a new client
 void ServerGame::onClientConnect(int clientId) 
 {
-    // Add player with respective client ID
-    this->gameState.addPlayer(clientId);
+    // // Add player with respective client ID
+    // this->gameState.addPlayer(clientId);
 
-    // Grab player object
-    GameObject* playerObject = this->gameState.getPlayerObject(clientId);
+    // // Grab player object
+    // GameObject* playerObject = this->gameState.getPlayerObject(clientId);
 
-    // Build a message
-    Game::ServerMessage* createPlayerMessage = MessageBuilder::toServerMessage(playerObject);
+    // // Build a message
+    // Game::ServerMessage* createPlayerMessage = MessageBuilder::toServerMessage(playerObject);
 
-    // Send out, then free
-    this->server.sendToAll(*createPlayerMessage);
-    delete createPlayerMessage;
+    // // Send out, then free
+    // this->server.sendToAll(*createPlayerMessage);
+    // delete createPlayerMessage;
 
-    // Send over client info
-    Game::ServerMessage* clientInfoMsg = MessageBuilder::toClientInfo(clientId, playerObject->getID());
-    this->server.send(clientId, *clientInfoMsg);
-    delete clientInfoMsg;
+    // // Send over client info
+    // Game::ServerMessage* clientInfoMsg = MessageBuilder::toClientInfo(clientId, playerObject->getID());
+    // this->server.send(clientId, *clientInfoMsg);
+    // delete clientInfoMsg;
 
-    // First, send all game objects
-    for (auto objectPair : this->gameState.getObjects())
-    {
-        auto objectPtr = objectPair.second;
-        Game::ServerMessage* message = MessageBuilder::toServerMessage(objectPtr);
-        this->server.sendToAll(*message);
-        delete message;
-    }
+    // // First, send all game objects
+    // for (auto objectPair : this->gameState.getObjects())
+    // {
+    //     auto objectPtr = objectPair.second;
+    //     Game::ServerMessage* message = MessageBuilder::toServerMessage(objectPtr);
+    //     this->server.sendToAll(*message);
+    //     delete message;
+    // }
 
-    // Then, send all ingredients on the map (if applicable)
-    for (auto ingredientObjectPair : this->gameState.getIngredientObjects())
-    {
-        auto ingredientPtr = ingredientObjectPair.second;
-        Game::ServerMessage* message = MessageBuilder::toServerMessage(ingredientPtr);
-        this->server.sendToAll(*message);
-        delete message;
-    }
+    // // Then, send all ingredients on the map (if applicable)
+    // for (auto ingredientObjectPair : this->gameState.getIngredientObjects())
+    // {
+    //     auto ingredientPtr = ingredientObjectPair.second;
+    //     Game::ServerMessage* message = MessageBuilder::toServerMessage(ingredientPtr);
+    //     this->server.sendToAll(*message);
+    //     delete message;
+    // }
 
-    // Next, send all existing players
-    for (auto playerObjectPair : this->gameState.getPlayerObjects())
-    {
-        auto playerPtr = playerObjectPair.second;
-        Game::ServerMessage* message = MessageBuilder::toServerMessage(playerPtr);
-        this->server.sendToAll(*message);
-        delete message;
-    }
+    // // Next, send all existing players
+    // for (auto playerObjectPair : this->gameState.getPlayerObjects())
+    // {
+    //     auto playerPtr = playerObjectPair.second;
+    //     Game::ServerMessage* message = MessageBuilder::toServerMessage(playerPtr);
+    //     this->server.sendToAll(*message);
+    //     delete message;
+    // }
 }
+
+// OnClientConnect: Send a lobby state.
+// onRoundChange: 
+//  switch: Lobby, Send a lobby message. 
+// Prepare for next phase

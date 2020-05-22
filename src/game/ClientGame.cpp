@@ -152,10 +152,11 @@ void ClientGame::updateGameState()
                 break;
             }
 
-            case Game::ServerMessage::EventCase::kRoundUpdate:
+            case Game::ServerMessage::EventCase::kTime:
             {
-                std::cout << "secs left " << currMessage.roundupdate().seconds() << std::endl;
-                uint32_t seconds = currMessage.roundupdate().seconds();
+                
+                std::cout << "secs left " << currMessage.time().seconds() << std::endl;
+                uint32_t seconds = currMessage.time().seconds();
                 if( seconds == 0) {
                     this->round++;
                     window.setRound(this->round);

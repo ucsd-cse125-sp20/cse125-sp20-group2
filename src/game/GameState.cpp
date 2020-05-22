@@ -3,22 +3,19 @@
 #define PLAYER_RADIUS 0.05
 
 GameState::GameState() {
-    /// TODO, implement timer logic
+    /// TODO: implement timer logic
     // auto xMinutes = std::chrono::minutes(5);
     auto xMinutes = std::chrono::seconds(15);
-    this->round = 0;
-    this->roundEnd = std::chrono::high_resolution_clock::now() + xMinutes;
+    this->round = Game::RoundInfo::LOBBY;
+    /// TODO: Round End should start once the Dungeon or Kitchen phase starts
+    // this->roundEnd = std::chrono::high_resolution_clock::now() + xMinutes;
     this->oldTime = 0;
 }
 
 GameState::~GameState() {
-    for (auto gameObjectPair : this->gameObjects)
+    for (auto objects : this->getAllObjects())
     {
-        delete gameObjectPair.second;
-    }
-    for (auto playerObjectPair : this->playerObjects)
-    {
-        delete playerObjectPair.second;
+        delete objects;
     }
 }
 
@@ -33,23 +30,14 @@ void GameState::addPlayer(unsigned int clientId) {
 
     // Next, add player to map
     this->playerObjects[clientId] = newPlayerObject;
-
-    // OLD CODE
-    // Which id should be used to refer to the player
-    // (Can we just use clientId to refer to player object)?
-    // int id = addObject(Game::ObjectType::PLAYER);
-    // this->clientIdToGameObjId[clientId] = id;
-
-    // return id;
-
-    std::cout << "Returning from add player" << std::endl;
 }
 
 void GameState::addMap(Map *map) {
 
     this->map = map;
     for(auto it = map->wallList.begin(); it!= map->wallList.end(); it++) {
-        this->gameObjects[(*it)->getID()] = *it;
+        /// TODO: This needs a new map
+        // this->gameObjects[(*it)->getID()] = *it;
     }
 }
 
@@ -57,46 +45,9 @@ void GameState::addRecipe(Recipe *recipe) {
 
     this->recipe = recipe;
     for(auto it = recipe->ingredientList.begin(); it!= recipe->ingredientList.end(); it++) {
-        this->gameObjects[(*it)->getID()] = *it;
+        /// TODO: This needs a new map
+        // this->gameObjects[(*it)->getID()] = *it;
     }
-}
-
-// Adds the object to the object map
-int GameState::addObject(Game::ObjectType objectType)
-{
-    switch (objectType) {
-        // Create player object, add to map
-        case Game::ObjectType::PLAYER:
-        {
-            std::cout << "Creating a player object on the server side" << std::endl;
-            int objId = this->objCounter++;
-            Player* player = new Player(objId);
-            player->getBoundingBox()->setRadius(PLAYER_RADIUS);
-            this->gameObjects[objId] = player;
-            std::cout << "Returning the player object id" <<std::endl;
-            return objId;
-        }
-        // Create fruit object, add to map TODO
-        case Game::ObjectType::INGREDIENT:
-        {
-            std::cout << "Creating a ingredient object on the server side" << std::endl;
-            int objId = this->objCounter++;
-            IngredientObject* ingredient = new IngredientObject(objId);
-            ingredient->getBoundingBox()->setRadius(PLAYER_RADIUS/2);
-            this->ingredientObjects[objId] = ingredient;
-            std::cout << "Returning the ingredient object id" <<std::endl;
-            return objId;
-        }
-        default:
-            break;
-    }
-    return -1;
-}
-
-const std::unordered_map<unsigned int, GameObject*>& GameState::getObjects()
-{
-    // the class contains a unordered map called this->gameObjects
-    return this->gameObjects;
 }
 
 const std::unordered_map<unsigned int, Player*>& GameState::getPlayerObjects()
@@ -108,34 +59,14 @@ const std::unordered_map<unsigned int, IngredientObject*>& GameState::getIngredi
     return this->ingredientObjects;
 }
 
-// If I called this, and assigned it to the following, what would happen?
-//std::unordered_map<unsigned int, GameObject*> myMap = getObjects() (copy?)
-//std::unordered_map<unsigned int, GameObject*>& myMap = getObjects() (reference?)
-
 Player* GameState::getPlayerObject(unsigned int clientId)
 {
     return this->playerObjects[clientId];
-
-    // OLD CODE
-    // int objId = this->clientIdToGameObjId[clientId];
-    // return this->gameObjects[objId];
-}
-
-GameObject* GameState::getGameObject(unsigned int objId) 
-{
-    return this->gameObjects[objId];
 }
 
 IngredientObject* GameState::getIngredientObject(unsigned int ingredientId)
 {
     return this->ingredientObjects[ingredientId];
-}
-
-void GameState::removeObject(unsigned int objId)
-{
-    GameObject* object = this->gameObjects[objId];
-    delete object;
-    this->gameObjects.erase(objId);
 }
 
 void GameState::removePlayer(unsigned int clientId)
@@ -144,15 +75,6 @@ void GameState::removePlayer(unsigned int clientId)
     Player* playerObject = this->playerObjects[clientId];
     delete playerObject;
     this->playerObjects.erase(clientId);
-
-    // OLD CODE
-    // int objId = this->clientIdToGameObjId[clientId];
-
-    // GameObject* object = this->gameObjects[objId];
-    // free(object);
-
-    // this->clientIdToGameObjId.erase(clientId);
-    // this->gameObjects.erase(objId);
 }
 
 void GameState::removeIngredient(unsigned int ingredientId)
@@ -182,4 +104,27 @@ bool GameState::timeHasUpdated()
     bool result = roundTime != this->oldTime;
     this->oldTime = roundTime;
     return result;
+}
+
+void GameState::removeAllObjects()
+{
+    this->ingredientObjects.clear();
+    this->playerObjects.clear();
+}
+
+std::vector<GameObject*> GameState::getAllObjects()
+{
+    std::vector<GameObject*> gameObjectList;
+
+    for (const auto & ingredientPair : this->ingredientObjects)
+    {
+        gameObjectList.push_back(ingredientPair.second);
+    }
+
+    for (const auto & playerPair : this->playerObjects)
+    {
+        gameObjectList.push_back(playerPair.second);
+    }
+
+    return gameObjectList;
 }
