@@ -74,6 +74,9 @@ void BoundingBox::setRadius(float radius)
 
 bool BoundingBox::isIntersecting(BoundingBox *bb)
 {
+    if (bb == NULL) {
+        return false;
+    }
     if (this->isCircle && bb->isCircle)
     {
         return this->isCircleIntersecting(bb);

@@ -122,7 +122,7 @@ void GameObject::setPosition(float x, float y, float z) {
 
 void GameObject::renderInvisible() {
 	glm::vec3 originalPos = this->getPosition();
-	glm::vec3 newPos = glm::vec3(originalPos.x, -2, originalPos.z);
+	glm::vec3 newPos = glm::vec3(originalPos.x, -100, originalPos.z);
 	this->setPosition(newPos);
 	this->render = false;
 	this->box = NULL;
@@ -136,6 +136,12 @@ bool GameObject::getRender() {
 void GameObject::toggleRender() {
 	this->render = !this->render;
 }
+
+// set render
+void GameObject::setRender(bool render) {
+	this->render = render;
+}
+
 
 // Apply scaling to the model.
 void GameObject::applyScale(glm::vec3 scale) {

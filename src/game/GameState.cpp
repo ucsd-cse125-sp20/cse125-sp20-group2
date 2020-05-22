@@ -4,7 +4,11 @@
 
 GameState::GameState() {
     /// TODO, implement timer logic
-    this->timer = 30;
+    // auto xMinutes = std::chrono::minutes(5);
+    auto xMinutes = std::chrono::seconds(15);
+    this->round = 0;
+    this->roundEnd = std::chrono::high_resolution_clock::now() + xMinutes;
+    this->oldTime = 0;
 }
 
 GameState::~GameState() {
@@ -25,6 +29,7 @@ void GameState::addPlayer(unsigned int clientId) {
     int objId = this->objCounter++;
     Player* newPlayerObject = new Player(objId);
     newPlayerObject->setPosition(glm::vec3(0, 0, 0));
+    newPlayerObject->setClientID(clientId);
 
     // Next, add player to map
     this->playerObjects[clientId] = newPlayerObject;
@@ -46,10 +51,6 @@ void GameState::addMap(Map *map) {
     for(auto it = map->wallList.begin(); it!= map->wallList.end(); it++) {
         this->gameObjects[(*it)->getID()] = *it;
     }
-
-    /*for(auto it = map->ingredients.begin(); it != map->ingredients.end(); it++) {
-        this->gameObjects[(*it)->getID()] = *it;
-    }*/
 }
 
 void GameState::addRecipe(Recipe *recipe) {
@@ -58,10 +59,6 @@ void GameState::addRecipe(Recipe *recipe) {
     for(auto it = recipe->ingredientList.begin(); it!= recipe->ingredientList.end(); it++) {
         this->gameObjects[(*it)->getID()] = *it;
     }
-
-    /*for(auto it = map->ingredients.begin(); it != map->ingredients.end(); it++) {
-        this->gameObjects[(*it)->getID()] = *it;
-    }*/
 }
 
 // Adds the object to the object map
@@ -163,4 +160,26 @@ void GameState::removeIngredient(unsigned int ingredientId)
     IngredientObject* ingredient = this->ingredientObjects[ingredientId];
     delete ingredient;
     this->ingredientObjects.erase(ingredientId);
+}
+
+bool GameState::gameOver()
+{
+    auto currTime = std::chrono::high_resolution_clock::now();
+    return currTime > this->roundEnd;
+}
+
+int GameState::getRoundTime()
+{
+    auto currTime = std::chrono::high_resolution_clock::now();
+    auto seconds = std::chrono::duration_cast<std::chrono::seconds> (this->roundEnd - currTime);
+
+    return seconds.count() > 0 ? seconds.count() : 0;
+}
+
+bool GameState::timeHasUpdated()
+{
+    auto roundTime = this->getRoundTime();
+    bool result = roundTime != this->oldTime;
+    this->oldTime = roundTime;
+    return result;
 }

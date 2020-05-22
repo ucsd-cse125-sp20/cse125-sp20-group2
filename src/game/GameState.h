@@ -9,6 +9,7 @@
 #include <util/Recipe.h>
 #include <utility>
 #include <util/Config.h>
+#include <chrono>
 
 /**
  * This class holds the game state.
@@ -38,8 +39,14 @@ private:
 
     Map* map;
 
-    // Timer used to dictate the current round
-    int timer;
+    // A number representing the current round
+    int round;
+
+    // The time when the current round ends
+    std::chrono::high_resolution_clock::time_point roundEnd;
+
+    // Keeps track of previous time
+    int64_t oldTime;
 
 public:
     GameState();
@@ -113,4 +120,21 @@ public:
      * Remove a ingredient object using the object id
      * */
     void removeIngredient(unsigned int);
+
+    /**
+     * Used to determine if the current round is over
+     * */
+    bool gameOver();
+
+    /**
+     * Used to retrieve the amount of time before the round ends.
+     * This returns the time unit in seconds.
+     * */
+    int getRoundTime();
+
+    /**
+     * Used to determine if the timer value has updated, and should
+     * be sent over to the clients
+     * */
+    bool timeHasUpdated();
 };

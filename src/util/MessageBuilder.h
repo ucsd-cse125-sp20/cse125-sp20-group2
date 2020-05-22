@@ -56,10 +56,11 @@ public:
     /**
      * Convert inventory id to message for inventory pickup event
      * */
-    static Game::ServerMessage* toInventoryServerMessage(int id, bool add) {
+    static Game::ServerMessage* toInventoryServerMessage(int id, bool add, std::string name) {
         Game::Inventory* msgObj = new Game::Inventory();
         msgObj->set_id(id);
         msgObj->set_add(add);
+        msgObj->set_name(name);
         Game::ServerMessage* message = new Game::ServerMessage();
         message->set_allocated_inventory(msgObj);
         return message;

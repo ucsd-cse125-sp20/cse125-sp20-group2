@@ -8,6 +8,7 @@ Player::Player(int ID) : GameObject(ID)
     this->objType = PLAYER;
     this->setModel(Config::get("Player_Model"));
     this->loadCollisionSize();
+    this->inventory = new std::unordered_map<int, IngredientObject*>();
 }
 
 void Player::loadCollisionSize()
@@ -22,9 +23,9 @@ void Player::setScore(int newScore)
     this->score = newScore;
 }
 
-void Player::setTeamID(int teamID)
+void Player::setClientID(int clientID)
 {
-    this->teamID = teamID;
+    this->clientID = clientID;
 }
 
 void Player::setTeamName(std::string teamName)
@@ -52,15 +53,15 @@ float Player:: getTurnSpeed() { return this->turnSpeed; }
 
 void Player::addToInventory(IngredientObject *ingredient)
 {
-    inventory[ingredient->getID()] = ingredient;
+    (*inventory)[ingredient->getID()] = ingredient;
 }
 
 void Player::removeFromInventory(IngredientObject *ingredient)
 {
-    inventory.erase(ingredient->getID());
+    inventory->erase(ingredient->getID());
 }
 
-int Player::getTeamID() { return this->teamID; };
+int Player::getClientID() { return this->clientID; };
 
 std::string Player::getTeamName() { return this->teamName; }
 
@@ -73,14 +74,18 @@ void Player::addToCompletedInstructions(Instruction* inst) {
     this->addToScore(inst->points);
 }
 
+std::unordered_map<int, IngredientObject*>* Player::getInventory() {
+    return this->inventory;
+}
+
 // pass in uishader->ID as parameter
 void Player::drawInventory(GLuint shaderProgram) {
     glDisable(GL_DEPTH_TEST);
     glUseProgram(shaderProgram);
 
-    std::unordered_map<int, IngredientObject*>::iterator it = inventory.begin();
+    std::unordered_map<int, IngredientObject*>::iterator it = inventory->begin();
 
-    while (it != inventory.end()) {
+    while (it != inventory->end()) {
         it->second->draw();
         it++;
     }

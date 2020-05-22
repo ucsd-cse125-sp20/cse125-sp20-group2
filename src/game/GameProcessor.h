@@ -6,6 +6,7 @@
 #include <deque>
 #include <objects/Map.h>
 #include <util/MapBuilder.h>
+#include <util/RecipeBuilder.h>
 #include <util/MessageBuilder.h>
 #include <google/protobuf/util/message_differencer.h>
 

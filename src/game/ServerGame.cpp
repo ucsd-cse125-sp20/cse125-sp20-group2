@@ -5,8 +5,8 @@
 ServerGame::ServerGame(int port) : server(port), processor(&this->gameState)
 {
     // std::function<void(int)> test = std::bind(&ServerGame::acall, this)
-    std::function<void(int)> notifyClients = std::bind(&ServerGame::acceptCallback, this, std::placeholders::_1);
-    this->server.setAcceptCallback(notifyClients);
+    std::function<void(int)> notifyClients = std::bind(&ServerGame::onClientConnect, this, std::placeholders::_1);
+    this->server.setOnClientConnect(notifyClients);
     run();
 }
 
@@ -49,7 +49,7 @@ void ServerGame::process()
     for (auto iter = map.begin(); iter != map.end(); iter++) {
         auto clientId = iter->first;
         auto msgs = iter->second;
-        for (auto msg: msgs) {
+        for (auto msg : msgs) {
             // PrintUtil::print(msg);
             this->processor.Process(clientId, msg, TICK);
             
@@ -68,10 +68,31 @@ void ServerGame::process()
             }
         }
     }
+
+    /// TODO: mainly for testing, timer functionality, can delete
+    if (this->gameState.timeHasUpdated())
+    {
+        // Create time update message
+        Game::RoundUpdate* roundUpdateMessage = new Game::RoundUpdate();
+        // roundUpdateMessage->
+        roundUpdateMessage->set_seconds(this->gameState.getRoundTime());
+        Game::ServerMessage* serverMsg = new Game::ServerMessage();
+        serverMsg->set_allocated_roundupdate(roundUpdateMessage);
+
+        // Send round update to everyone
+        this->server.sendToAll(*serverMsg);
+
+        delete serverMsg;
+    }
+
+    if (this->gameState.gameOver())
+    {
+        std::cout << "GAME OVER AAAAAAAAAAAAAA" << std::endl;
+    }
 }
 
 // Only called from server network when it accepts a new client
-void ServerGame::acceptCallback(int clientId) 
+void ServerGame::onClientConnect(int clientId) 
 {
     // Add player with respective client ID
     this->gameState.addPlayer(clientId);
@@ -80,19 +101,16 @@ void ServerGame::acceptCallback(int clientId)
     GameObject* playerObject = this->gameState.getPlayerObject(clientId);
 
     // Build a message
-    Game::ServerMessage* message = MessageBuilder::toServerMessage(playerObject);
+    Game::ServerMessage* createPlayerMessage = MessageBuilder::toServerMessage(playerObject);
 
     // Send out, then free
-    this->server.sendToAll(*message);
-    delete message;
+    this->server.sendToAll(*createPlayerMessage);
+    delete createPlayerMessage;
 
-    /// TODO: Joshua: Double-check with networking team to make sure this is ok
+    // Send over client info
     Game::ServerMessage* clientInfoMsg = MessageBuilder::toClientInfo(clientId, playerObject->getID());
     this->server.send(clientId, *clientInfoMsg);
     delete clientInfoMsg;
-
-    // TODO: Remove Ingredient
-    this->gameState.addObject(Game::ObjectType::INGREDIENT);
 
     // First, send all game objects
     for (auto objectPair : this->gameState.getObjects())

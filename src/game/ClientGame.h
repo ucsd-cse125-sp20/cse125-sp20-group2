@@ -25,6 +25,7 @@ class ClientGame {
         // This is the object id.
         // NOTE: This is the id that correlates to this client's player object. 
         unsigned int objectId;
+        unsigned int round = 0;
     private:
         NetworkClient client;
         Window window;

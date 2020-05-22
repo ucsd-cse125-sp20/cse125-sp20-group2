@@ -5,19 +5,6 @@
 
 ClientGame::ClientGame(std::string IP, int port) : client(IP, port), window(Config::getFloat("Window_Width"), Config::getFloat("Window_Height"))
 {
-    /// TODO: fix hardcoded player values and hardcoded window insertion
-    /*GameObject* grid = new GameObject(999999);
-    grid->setPosition(glm::vec3(0, 0, 0));
-    grid->setModel(Config::get("Maze_Model"));
-    grid->applyScale(glm::vec3(2, 2, 2));
-    window.addObject(999999, grid);*/
-
-    /// TODO: Remove later. Using currently for example usage.
-    /*GameObject* nanosuit = new GameObject(3946);
-    nanosuit->setModel("assets/nanosuit/nanosuit.obj");
-    nanosuit->applyScale(glm::vec3(0.2, 0.2, 0.2));
-    window.addObject(3946, nanosuit);*/
-
     runGame();
 }
 
@@ -69,7 +56,6 @@ void ClientGame::updateGameState()
     for (Game::ServerMessage currMessage : client.messages)
     {
         // Process different types of messages
-        std::cout << currMessage.event_case() << std::endl;
         switch(currMessage.event_case()) 
         {
             // Object-related messages
@@ -78,6 +64,7 @@ void ClientGame::updateGameState()
                 Game::Vector3 location = currMessage.object().worldposition();
                 float rotation = currMessage.object().rotation();
                 uint32_t id = currMessage.object().id();
+                bool render = currMessage.object().render();
 
                 GameObject* obj = NULL;
 
@@ -118,14 +105,14 @@ void ClientGame::updateGameState()
 
                 // Set object parameters
                 obj->setRotation(rotation);
+                obj->setRender(render);
                 obj->setPosition(glm::vec3(location.x(), location.y(), location.z()));
                 break;
             }
 
-            ///TODO: Score update messages
             case Game::ServerMessage::EventCase::kScore:
             {
-                std::cout << "GOT A SCORE AAAAAAAAAAAAAAAAAAAA" << currMessage.score().currscore() << std::endl;
+                window.setScore(currMessage.score().currscore());
                 break;
             }
 
@@ -137,6 +124,8 @@ void ClientGame::updateGameState()
 
                 // Get id of the object to be picked up.
                 IngredientObject* pickup = (IngredientObject*)window.objectsToRender[currMessage.inventory().id()];
+
+                pickup->setName(currMessage.inventory().name());
 
                 // Add object to player inventory.
                 if (currMessage.inventory().add())  player->addToInventory(pickup);
@@ -157,7 +146,21 @@ void ClientGame::updateGameState()
                 this->objectId = currMessage.clientinfo().objectid();
 
                 // Set camera target
-                window.camera->setTarget(window.objectsToRender[currMessage.clientinfo().objectid()]);
+                window.camera->setTarget(window.objectsToRender[this->objectId]);
+                Player* p = (Player*) window.objectsToRender[this->objectId];
+                window.addInventory(p->getInventory());
+                break;
+            }
+
+            case Game::ServerMessage::EventCase::kRoundUpdate:
+            {
+                std::cout << "secs left " << currMessage.roundupdate().seconds() << std::endl;
+                uint32_t seconds = currMessage.roundupdate().seconds();
+                if( seconds == 0) {
+                    this->round++;
+                    window.setRound(this->round);
+                }
+                window.setTimer(seconds);
                 break;
             }
 

@@ -10,7 +10,7 @@
 class Player : public GameObject 
 {
 protected:
-    int teamID;
+    int clientID;
 
     int score  = 0;
 
@@ -18,7 +18,7 @@ protected:
 
     float runSpeed = 0, turnSpeed = 0;
 
-    std::unordered_map<int, IngredientObject*> inventory;
+    std::unordered_map<int, IngredientObject*>* inventory;
 
     std::deque<Instruction*> completedInstructions;
 
@@ -31,11 +31,11 @@ public:
 
     void addToCompletedInstructions(Instruction* inst);
     
-    void setTeamID( int teamID );
+    void setClientID( int clientID );
 
     void setTeamName( std::string teamName );
 
-    int getTeamID();
+    int getClientID();
 
     void setRunSpeed( float newRunSpeed );
 
@@ -56,6 +56,8 @@ public:
     void addToInventory( IngredientObject* ingredient );
 
     void removeFromInventory( IngredientObject* ingredient );
+
+    std::unordered_map<int, IngredientObject*>* getInventory();
 
     void drawInventory(GLuint shaderProgram);
 };

@@ -17,8 +17,10 @@ Window::Window(int width = Config::getFloat("Window_Width"), int height = Config
 	this->height = height;
 	this->setupWindow();
 	this->shader = new Shader(Config::get("Vertex_Shader"), Config::get("Fragment_Shader"));
-	this->UIshader = new Shader("src//graphics//shaders//ui_vert_shader.glsl", "src//graphics//shaders//ui_frag_shader.glsl"); // Need to add to Config?
+	this->UIshader = new Shader("src//graphics//shaders//ui_vert_shader.glsl", "src//graphics//shaders//ui_frag_shader.glsl"); 
+	///TODO: Need to add to Config?
 	this->camera = new Camera(Config::getVec3("Camera_Location"));
+	this->inventory = NULL;
 }
 
 void Window::addObject(unsigned int id, GameObject* object) {
@@ -29,6 +31,10 @@ void Window::addObject(unsigned int id, GameObject* object) {
 void Window::removeObject(unsigned int index) {
 	this->objectsToRender.erase(index);
 	objNum--;
+}
+
+void Window::addInventory(std::unordered_map<int, IngredientObject*>* inventoryPtr) {
+	this->inventory = inventoryPtr;
 }
 
 void Window::setupWindow() {
@@ -51,12 +57,14 @@ void Window::setupWindow() {
 	
 	// Mouse centering
 	glfwSetCursorPos(glfwViewport, lastX, lastY);
+	
 
 	if (glfwViewport == NULL)
 	{
 		std::cerr << "Failed to create GLFW window" << std::endl;
 		glfwTerminate();
 	}
+
 
 	// Current context is window
 	glfwMakeContextCurrent(glfwViewport);
@@ -79,9 +87,19 @@ void Window::setupWindow() {
 
 	// Set window var
 	this->glfwViewport = glfwViewport;
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGui::StyleColorsClassic();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	ImGui_ImplGlfw_InitForOpenGL(glfwViewport, true);
+
+	ImGui_ImplOpenGL3_Init("#version 130");
 }
 
 void Window::close() {
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplGlfw_Shutdown();
+	ImGui::DestroyContext();
 	if (glfwWindowShouldClose(glfwViewport))
 	{
 		isClosed = true; 
@@ -90,11 +108,24 @@ void Window::close() {
 	else std::cerr << "ERROR: Unable to close window!" << std::endl;
 }
 
+void Window::setTimer(int64_t timer) {
+	this->timer = timer;
+}
+
+void Window::setRound(int round) {
+	this->round = round;
+}
+
+void Window::setScore(int score) {
+	this->score = score;
+}
+
 void Window::render()
 {
 	if (glfwViewport == NULL) {
 		std::cerr << "ERROR: No window!" << std::endl;
 	}
+
 
 	// // //
 	// User shader program
@@ -165,6 +196,56 @@ void Window::render()
 		// Draw the model
 		obj->draw(*shader);
 	}
+	int32_t  minutes = this->timer / 60;
+	int32_t seconds = this->timer % 60;
+	int corner = 1;
+	const float DISTANCE = 10.0f;
+	ImGuiIO& io = ImGui::GetIO();
+	ImGui_ImplOpenGL3_NewFrame();
+	ImGui_ImplGlfw_NewFrame();
+	ImGui::NewFrame();
+	ImGui::SetNextWindowBgAlpha(0.35f); // Transparent background
+	ImVec2 window_pos = ImVec2((corner & 1) ? io.DisplaySize.x - DISTANCE : DISTANCE, (corner & 2) ? io.DisplaySize.y - DISTANCE : DISTANCE);
+    ImVec2 window_pos_pivot = ImVec2((corner & 1) ? 1.0f : 0.0f, (corner & 2) ? 1.0f : 0.0f);
+    ImGui::SetNextWindowPos(window_pos, ImGuiCond_Always, window_pos_pivot);
+	ImGui::SetNextWindowSize(ImVec2(150.0f, 100.0f));
+    if (ImGui::Begin("Game Info"))
+    {
+		std::string roundInfo = "Round ";
+		roundInfo = roundInfo.append(std::to_string(this->round));
+		ImGui::Text(roundInfo.c_str());
+		std::string str = "Time Left: " + minutes;
+		str = str.append(std::to_string(minutes));
+		str = str.append(" : ");
+		str = str.append(std::to_string(seconds));
+        ImGui::Text(str.c_str());
+    }
+    ImGui::End();
+
+	window_pos = ImVec2(io.DisplaySize.x / 2 - DISTANCE, DISTANCE);
+	ImGui::SetNextWindowPos(window_pos, ImGuiCond_Always, window_pos_pivot);
+	ImGui::SetNextWindowSize(ImVec2(60.0f, 40.0f));
+	if (ImGui::Begin("Score"))
+	{
+		std::string scoreStr = std::to_string(this->score);
+		ImGui::Text(scoreStr.c_str());
+	}
+	ImGui::End();
+	
+	ImGui::SetNextWindowSize(ImVec2((float)100, (float)(40*this->inventory->size())));
+	ImGui::Begin("Inventory");                         
+	if (this->inventory != NULL) {
+		std::unordered_map<int, IngredientObject*>::iterator it = this->inventory->begin();
+		while (it != this->inventory->end())
+		{
+			ImGui::Text(it->second->getName().c_str());
+			it++;
+		}
+	}
+	ImGui::End();
+
+	ImGui::Render();
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 	// // //
 	// GLFW stuff

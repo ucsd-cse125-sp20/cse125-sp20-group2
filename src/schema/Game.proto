@@ -14,6 +14,11 @@ enum Direction {
     RIGHT = 3;
 }
 
+enum RoundState {
+    START = 0;
+    END = 1;
+}
+
 message ClientMessage {
     oneof event {
         Net net = 1;
@@ -29,6 +34,7 @@ message ServerMessage {
         Score score = 3;
         Inventory inventory = 4;
         ClientInfo clientInfo = 5;
+        RoundUpdate roundUpdate = 6;
     }
 }
 
@@ -62,9 +68,14 @@ message Vector3 {
 message Inventory {
     required uint32 id = 1;
     required bool add = 2 [default = true];
+    required string name = 3 [default = ""];
 }
 
 message ClientInfo {
     required uint32 clientId = 1;
     required uint32 objectId = 2;
+}
+
+message RoundUpdate {
+    required uint32 seconds = 1;
 }

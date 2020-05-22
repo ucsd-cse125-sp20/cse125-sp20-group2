@@ -26,6 +26,9 @@ void Model::loadModel(std::string path)
 	}
 	directory = path.substr(0, path.find_last_of('/'));
 
+	/// NOTE: Debug
+	//std::cout << std::endl << "Model: " << path << std::endl;
+
 	processNode(scene->mRootNode, scene);
 }
 
@@ -131,6 +134,13 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 	std::vector<Texture> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
 	textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 
+	/// NOTE: Debug statements to enumerate textures
+	/*std::cout << "Listing textures for this object: " << std::endl;
+	for (auto tex : textures) {
+		std::cout << "Texture " << tex.path << " of type " << tex.type << std::endl;
+	}
+    std::cout << "Texture count for this object: " << textures.size() << std::endl;*/
+
 	// return a mesh object created from the extracted mesh data
 	return Mesh(vertices, indices, textures);
 }
@@ -153,9 +163,14 @@ unsigned int Model::TextureFromFile(const char* path, const std::string& directo
 	unsigned char* image = SOIL_load_image(filename.c_str(), &width, &height, 0, SOIL_LOAD_RGB);
 	
 	if (image == NULL)  {
+		std::cerr << "======" << std::endl;
 		std::cerr << "Model loading error: Texture image not found!" << std::endl;
 		std::cerr << "Path given:" << std::endl;
-		std::cerr << std::string(path) << std::endl;
+		std::cerr << std::string(filename) << std::endl;
+		std::cerr << "======" << std::endl;
+		std::cerr << "Error: " << std::endl;
+		std::cerr << std::string(SOIL_last_result()) << std::endl;
+		std::cerr << "======" << std::endl;
 	}
 
 	// Assign texture to ID
