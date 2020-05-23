@@ -105,4 +105,17 @@ public:
         message->set_allocated_score(score);
         return message;
     }
+
+    /**
+     * Creates a ServerMessage to update the round state
+     * */ 
+    static Game::ServerMessage* toRoundUpdate(Game::RoundInfo::RoundState currState)
+    {
+        Game::RoundInfo* roundInfo = new Game::RoundInfo();
+        roundInfo->set_type(currState);
+
+        Game::ServerMessage* message = new Game::ServerMessage();
+        message->set_allocated_round(roundInfo);
+        return message;
+    }
 };

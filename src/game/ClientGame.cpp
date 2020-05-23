@@ -1,10 +1,11 @@
 #include <game/ClientGame.h>
-
+#include <game/KeyBinds.h>
 
 #define CLIENT_DELAY 1000
 
 ClientGame::ClientGame(std::string IP, int port) : client(IP, port), window(Config::getFloat("Window_Width"), Config::getFloat("Window_Height"))
 {
+    // glfwSetKeyCallback(window.glfwViewport, key_callback);
     runGame();
 }
 
@@ -162,6 +163,12 @@ void ClientGame::updateGameState()
                     window.setRound(this->round);
                 }
                 window.setTimer(seconds);
+                break;
+            }
+
+            case Game::ServerMessage::EventCase::kRound:
+            {
+                std::cout << " received round update message " << currMessage.DebugString() << std::endl;
                 break;
             }
 

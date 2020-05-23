@@ -22,6 +22,8 @@ private:
     // This is used to increment the counter
     unsigned int objCounter = 0;
 
+    std::unordered_map<unsigned int, GameObject*> worldObjects;
+
     // This is a mapping of client id to Player objects
     /// TODO: Map from team id to allow instructor to quickly access their team's player
     std::unordered_map<unsigned int, Player*> playerObjects;
@@ -57,7 +59,7 @@ public:
     /**
      * Adds a new user object using the clientId
      * */
-    void addPlayer(unsigned int);
+    Player* addPlayer(unsigned int);
 
     /**
      * Gets a player object from the client id
@@ -125,4 +127,19 @@ public:
      *  Used to get all objects
      * */
     std::vector<GameObject*> getAllObjects();
+
+    /**
+     * Used to retrieve the current round
+     * */
+    Game::RoundInfo::RoundState getRound();
+
+    /**
+     * Used to set the game state's round
+     * */
+    void setRound(Game::RoundInfo::RoundState);
+
+    /**
+     * Used to advance to the next round (for the gamestate)
+     * */
+    void advanceRound();
 };

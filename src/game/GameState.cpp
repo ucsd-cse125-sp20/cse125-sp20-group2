@@ -19,7 +19,7 @@ GameState::~GameState() {
     }
 }
 
-void GameState::addPlayer(unsigned int clientId) {
+Player* GameState::addPlayer(unsigned int clientId) {
     std::cout << "Called add user in GameState w/ clientID: " << clientId << std::endl;
 
     // First, create player w/ id
@@ -30,6 +30,7 @@ void GameState::addPlayer(unsigned int clientId) {
 
     // Next, add player to map
     this->playerObjects[clientId] = newPlayerObject;
+    return newPlayerObject;
 }
 
 void GameState::addMap(Map *map) {
@@ -37,7 +38,7 @@ void GameState::addMap(Map *map) {
     this->map = map;
     for(auto it = map->wallList.begin(); it!= map->wallList.end(); it++) {
         /// TODO: This needs a new map
-        // this->gameObjects[(*it)->getID()] = *it;
+        this->worldObjects[(*it)->getID()] = *it;
     }
 }
 
@@ -46,7 +47,7 @@ void GameState::addRecipe(Recipe *recipe) {
     this->recipe = recipe;
     for(auto it = recipe->ingredientList.begin(); it!= recipe->ingredientList.end(); it++) {
         /// TODO: This needs a new map
-        // this->gameObjects[(*it)->getID()] = *it;
+        this->worldObjects[(*it)->getID()] = *it;
     }
 }
 
@@ -126,5 +127,60 @@ std::vector<GameObject*> GameState::getAllObjects()
         gameObjectList.push_back(playerPair.second);
     }
 
+    for (const auto & worldPair : this->worldObjects)
+    {
+        gameObjectList.push_back(worldPair.second);
+    }
+
     return gameObjectList;
+}
+
+Game::RoundInfo::RoundState GameState::getRound()
+{
+    return this->round;
+}
+
+
+void GameState::setRound(Game::RoundInfo::RoundState round)
+{
+    this->round = round;
+}
+
+void GameState::advanceRound()
+{
+    switch (this->round)
+    {
+        case Game::RoundInfo::LOBBY :
+        {
+            this->round = Game::RoundInfo::DUNGEON_WAITING;
+            break;
+        }
+        case Game::RoundInfo::DUNGEON_WAITING :
+        {
+            this->round = Game::RoundInfo::DUNGEON;
+            break;
+        }
+        case Game::RoundInfo::DUNGEON :
+        {
+            this->round = Game::RoundInfo::KITCHEN_WAITING;
+            break;
+        }
+        case Game::RoundInfo::KITCHEN_WAITING :
+        {
+            this->round = Game::RoundInfo::KITCHEN;
+            break;
+        }
+        case Game::RoundInfo::KITCHEN :
+        {
+            this->round = Game::RoundInfo::END;
+            break;
+        }
+        case Game::RoundInfo::END :
+        {
+            this->round = Game::RoundInfo::LOBBY;
+            break;
+        }
+        default:
+            break;
+    }
 }

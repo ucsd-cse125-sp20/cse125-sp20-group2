@@ -23,11 +23,35 @@ private:
 
     GameState gameState;
 
-    GameProcessor processor;
+    GameProcessor gameProcessor;
 
     void run();
 
     void process();
+
+    /**
+     * Sends messages for specific players and
+     * messages for all players
+     * */
+    void sendPendingMessages();
+
+    /**
+     * Updates world as if game was in lobby state
+     * */
+    void updateLobbyState(unsigned int, std::vector<Game::ClientMessage>);
+
+    /**
+     * Updates world as if game was in waiting state
+     * */
+    void updateWaitingState(unsigned int, std::vector<Game::ClientMessage>);
     
+    /**
+     * Updates world as if game was in playing state
+     * */
+    void updatePlayingState(unsigned int, std::vector<Game::ClientMessage>);
+    
+    /**
+    * Called from server network when it accepts a new client
+    * */
     void onClientConnect(int);
 };

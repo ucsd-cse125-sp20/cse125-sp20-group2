@@ -18,7 +18,6 @@ message ClientMessage {
     oneof event {
         Net net = 1;
         Direction direction = 2;
-        // need to request an object
     }
 }
 
@@ -85,6 +84,7 @@ message RoundInfo {
         DUNGEON = 2;
         KITCHEN_WAITING = 3;
         KITCHEN = 4;
+        END = 5;
     }
 }
 

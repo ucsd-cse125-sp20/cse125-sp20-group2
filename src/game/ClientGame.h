@@ -12,6 +12,9 @@
 #include <util/Config.h>
 #include <util/MapBuilder.h>
 
+/// TODO: remove this
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+
 class ClientGame {
     public:
         ClientGame(std::string IP, int port);
@@ -26,6 +29,7 @@ class ClientGame {
         // NOTE: This is the id that correlates to this client's player object. 
         unsigned int objectId;
         unsigned int round = 0;
+
     private:
         NetworkClient client;
         Window window;
