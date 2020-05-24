@@ -3,13 +3,7 @@
 #define PLAYER_RADIUS 0.05
 
 GameState::GameState() {
-    /// TODO: implement timer logic
-    // auto xMinutes = std::chrono::minutes(5);
-    auto xMinutes = std::chrono::seconds(15);
     this->round = Game::RoundInfo::LOBBY;
-    /// TODO: Round End should start once the Dungeon or Kitchen phase starts
-    // this->roundEnd = std::chrono::high_resolution_clock::now() + xMinutes;
-    this->oldTime = 0;
 }
 
 GameState::~GameState() {
@@ -183,4 +177,11 @@ void GameState::advanceRound()
         default:
             break;
     }
+}
+
+void GameState::setRoundTime(unsigned int seconds)
+{
+    auto xMinutes = std::chrono::seconds(seconds);
+    this->roundEnd = std::chrono::high_resolution_clock::now() + xMinutes;
+    this->oldTime = 0;
 }

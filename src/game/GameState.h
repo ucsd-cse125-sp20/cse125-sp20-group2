@@ -142,4 +142,10 @@ public:
      * Used to advance to the next round (for the gamestate)
      * */
     void advanceRound();
+
+    /**
+     * Used to set the round time (in seconds)
+     * @param seconds the number of seconds from the current time that this round should end
+     * */
+    void setRoundTime(unsigned int seconds);
 };
