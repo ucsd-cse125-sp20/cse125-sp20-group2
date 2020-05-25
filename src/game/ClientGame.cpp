@@ -1,11 +1,14 @@
 #include <game/ClientGame.h>
-#include <game/KeyBinds.h>
+#include <game/KeyResolver.h>
 
 #define CLIENT_DELAY 1000
 
 ClientGame::ClientGame(std::string IP, int port) : client(IP, port), window(Config::getFloat("Window_Width"), Config::getFloat("Window_Height"))
 {
-    // glfwSetKeyCallback(window.glfwViewport, key_callback);
+    // Configure keybinds
+    glfwSetWindowUserPointer(this->window.glfwViewport, reinterpret_cast<void*> (this));
+    glfwSetKeyCallback(this->window.glfwViewport, key_callback_wrapper);
+
     runGame();
 }
 
@@ -14,16 +17,32 @@ ClientGame::~ClientGame()
 
 }
 
+void ClientGame::keyBindsHandler(GLFWwindow* glfwWindow, int key, int scancode, int action, int mods)
+{
+    // Handles ready up
+    if (key == GLFW_KEY_R && action == GLFW_PRESS)
+    {
+        std::cout << "sending ready up message" << std::endl;
+        Game::ClientMessage* readyMsg = MessageBuilder::toReadyMessage(true);
+        this->client.send(*readyMsg);
+        delete readyMsg;
+    }
+
+    // Handles toggling free cam
+    if (key == GLFW_KEY_F && action == GLFW_PRESS)
+    {
+        std::cout << "locking / unlocking the camera" << std::endl;
+        this->window.camera->toggleFreeCam();
+    }
+}
+
 void ClientGame::runGame() 
 {
-    while(!window.isClosed) {
+    while(!window.isClosed) 
+    {
         // Take local input
         // Send to the server
         processInput();
-
-        // may not need this
-        // Send input to server
-        //sendMsgs();
 
         // Receive updated state from server
         receiveUpdates();
@@ -33,17 +52,7 @@ void ClientGame::runGame()
 
         // Render world
         window.render();
-
-        // Sleep
-        //std::this_thread::sleep_for(std::chrono::milliseconds(CLIENT_DELAY));
     }
-}
-
-void ClientGame::sendMsgs()
-{
-    Game::ClientMessage clientMessage;
-    clientMessage.set_direction(Game::Direction::UP);
-    client.send(clientMessage);
 }
 
 void ClientGame::receiveUpdates()
@@ -223,9 +232,6 @@ void ClientGame::processInput()
 		window.camera->processKeyMovement(LEFT);
     if (glfwGetKey(window.glfwViewport, GLFW_KEY_RIGHT) == GLFW_PRESS)
 		window.camera->processKeyMovement(RIGHT);
-	if (glfwGetKey(window.glfwViewport, GLFW_KEY_F) == GLFW_PRESS)
-		window.camera->toggleFreeCam();
-
     
     // Send message only if it has a direction associated with it
     if (msg.has_direction()) {

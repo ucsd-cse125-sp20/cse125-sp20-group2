@@ -56,6 +56,9 @@ public:
     GameState();
     ~GameState();
 
+    // Mapping used to determine who is ready
+    std::unordered_map<unsigned int, bool> readyStatus;
+
     /**
      * Adds a new user object using the clientId
      * */
@@ -103,8 +106,14 @@ public:
 
     /**
      * Used to determine if the current round is over
+     * Logic is depended on the current round
      * */
     bool gameOver();
+
+    /**
+     * Used to determine if all clients are ready
+     * */
+    bool allClientsReady();
 
     /**
      * Used to retrieve the amount of time before the round ends.

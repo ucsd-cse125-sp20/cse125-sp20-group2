@@ -77,13 +77,18 @@ void ServerGame::process(std::unordered_map<unsigned int, std::vector<Game::Clie
         auto clientId = iter->first;
         auto msgs = iter->second;
 
-        for (auto msg: msgs) {
+        for (auto msg : msgs) {
 
             switch (this->gameState.getRound()) {
                 case Game::RoundInfo::LOBBY:
                 {
-                    std::cout << "This is either lobby phase" << std::endl;
-                    // LobbyProcessor::Process
+                    std::cout << "This is lobby phase" << std::endl;
+                    LobbyProcessor::Process(clientId, msg, this);
+                    break;
+                }
+                case Game::RoundInfo::DUNGEON_WAITING:
+                {
+                    std::cout << "This is dungeon waiting phase" << std::endl;
                     break;
                 }
                 case Game::RoundInfo::DUNGEON:
@@ -92,19 +97,14 @@ void ServerGame::process(std::unordered_map<unsigned int, std::vector<Game::Clie
                     GameProcessor::Process(clientId, msg, this);
                     break;
                 }
-                case Game::RoundInfo::KITCHEN:
-                {
-                    std::cout << "this is ktichen phase" << std::endl;
-                    break;
-                }
-                case Game::RoundInfo::DUNGEON_WAITING:
-                {
-                    std::cout << "This is dungeon waiting phase" << std::endl;
-                    break;
-                }
                 case Game::RoundInfo::KITCHEN_WAITING:
                 {
                     std::cout << "This is kitchen waiting phase" << std::endl;
+                    break;
+                }
+                case Game::RoundInfo::KITCHEN:
+                {
+                    std::cout << "this is ktichen phase" << std::endl;
                     break;
                 }
                 case Game::RoundInfo::END:
@@ -174,6 +174,10 @@ void ServerGame::onClientConnect(int clientId)
     // Send lobby state to the client
     Game::ServerMessage* gameStatus = MessageBuilder::toRoundUpdate(this->gameState.getRound());
     this->server.sendToAll(*gameStatus);
+    std::cout << gameStatus->DebugString() << std::endl;
+
+    // Add client to ready map
+    this->gameState.readyStatus[clientId] = false;
 
     /// TODO: If we go image lobby route, this will not load the player or client info initially. This needs client support.
     // Add player with respective client ID
@@ -203,14 +207,15 @@ void ServerGame::onRoundChange()
     {
         case Game::RoundInfo::LOBBY:
         {
-            LobbyProcessor::initGameState(&this->gameState);
-            // LobbyProcessor::Init
-            /// Initialize the gamestate
             std::cout << "initializing lobby" << std::endl;
+            LobbyProcessor::initGameState(&this->gameState);
             break;
         }
         case Game::RoundInfo::DUNGEON_WAITING:
         {
+            /// TODO: NEED SOME LOGIC TO HANDLE HOW TO INIT DUNGEON WAITING STAGE, 
+            // FOR NOW IT JUST TRANSITIONS TO NEXT STAGE
+            std::cout << "Initializing dungeon waiting" << std::endl;
             break;
         }
         case Game::RoundInfo::DUNGEON:

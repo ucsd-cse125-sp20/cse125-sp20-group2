@@ -14,10 +14,15 @@ enum Direction {
     RIGHT = 3;
 }
 
+message ReadyState {
+    required bool ready = 1;
+}
+
 message ClientMessage {
     oneof event {
         Net net = 1;
         Direction direction = 2;
+        ReadyState ready = 3;
     }
 }
 

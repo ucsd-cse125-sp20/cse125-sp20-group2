@@ -118,4 +118,17 @@ public:
         message->set_allocated_round(roundInfo);
         return message;
     }
+
+    /*
+    * Creates a client ready / unready message
+    * */
+    static Game::ClientMessage* toReadyMessage(bool isReady)
+    {
+        Game::ReadyState* readyMsg = new Game::ReadyState();
+        readyMsg->set_ready(isReady);
+
+        Game::ClientMessage* clientMsg = new Game::ClientMessage();
+        clientMsg->set_allocated_ready(readyMsg);
+        return clientMsg;
+    }
 };

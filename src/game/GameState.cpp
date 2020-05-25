@@ -81,8 +81,65 @@ void GameState::removeIngredient(unsigned int ingredientId)
 
 bool GameState::gameOver()
 {
+    switch (this->round)
+    {
+        // Game over if all players are ready
+        case Game::RoundInfo_RoundState_LOBBY:
+        {
+            return this->allClientsReady();
+        }
+        // Game over if 15 seconds over (TODO, change logic)
+        /// TODO: Modify logic
+        case Game::RoundInfo_RoundState_DUNGEON_WAITING:
+        { 
+            break;
+        }
+        // Game over if some time is over
+        case Game::RoundInfo_RoundState_DUNGEON:
+        {
+            break;
+        }
+        // Game over if 15 seconds is over
+        case Game::RoundInfo_RoundState_KITCHEN_WAITING:
+        {
+            break;
+        }
+        // Game over if some time is over
+        case Game::RoundInfo_RoundState_KITCHEN:
+        {
+            break;
+        }
+        // Never in game over
+        case Game::RoundInfo_RoundState_END:
+        {
+            break;
+        }
+        
+        default:
+            break;
+    }
+
     auto currTime = std::chrono::high_resolution_clock::now();
     return currTime > this->roundEnd;
+}
+
+bool GameState::allClientsReady()
+{
+    // If no clients connected, return false
+    if (this->readyStatus.size() == 0)
+    {
+        return false;
+    }
+
+    for (auto clientPair : this->readyStatus)
+    {
+        bool clientIsReady = clientPair.second;
+        if (!clientIsReady)
+        {
+            return false;
+        }
+    }
+    return true;
 }
 
 int GameState::getRoundTime()

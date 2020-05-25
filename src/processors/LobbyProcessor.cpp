@@ -15,7 +15,15 @@ void LobbyProcessor::Process(unsigned int clientId, Game::ClientMessage clientMs
         // The message is a movement event
         case Game::ClientMessage::EventCase::kDirection:
         {
-
+            std::cout << "LobbyProcessor: Ignoring movement" << std::endl;
+            break;
+        }
+        case Game::ClientMessage::EventCase::kReady:
+        {
+            std::cout << "LobbyProcessor: Received ready up" << std::endl;
+            bool clientStatus = clientMsg.ready().ready();
+            server->gameState.readyStatus[clientId] = clientStatus;
+            break;
         }
         default:
         {
