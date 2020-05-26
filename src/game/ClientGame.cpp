@@ -6,8 +6,8 @@
 ClientGame::ClientGame(std::string IP, int port) : client(IP, port), window(Config::getFloat("Window_Width"), Config::getFloat("Window_Height"))
 {
     // Configure keybinds
-    glfwSetWindowUserPointer(this->window.glfwViewport, reinterpret_cast<void*> (this));
-    glfwSetKeyCallback(this->window.glfwViewport, key_callback_wrapper);
+    //glfwSetWindowUserPointer(this->window.glfwViewport, reinterpret_cast<void*> (this));
+    //glfwSetKeyCallback(this->window.glfwViewport, key_callback_wrapper);
 
     runGame();
 }
@@ -38,6 +38,9 @@ void ClientGame::keyBindsHandler(GLFWwindow* glfwWindow, int key, int scancode, 
 
 void ClientGame::runGame() 
 {
+    glfwSetWindowUserPointer(this->window.glfwViewport, reinterpret_cast<void*> (this));
+    glfwSetKeyCallback(this->window.glfwViewport, key_callback_wrapper);
+
     while(!window.isClosed) 
     {
         // Take local input

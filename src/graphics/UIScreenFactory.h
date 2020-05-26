@@ -2,6 +2,7 @@
 #include <gui/imgui_impl_opengl3.h>
 #include <string>
 #include <unordered_map>
+#include <objects/IngredientObject.h>
 
 class UIScreenFactory {
 public:
@@ -14,7 +15,11 @@ public:
 
 	void UIGameInfo(int round, int32_t minutes, int32_t seconds);
 	void UIScore(int score);
-	void UIText(const char* str);
+	void UIInventory(std::unordered_map<int, IngredientObject*>* map);
+	IngredientObject* UIButtonInventory(std::unordered_map<int, IngredientObject*>* map);
+	void UIGameOver(bool gameWin);
+
+	void UIText(std::string str);
 	void UIEnd();
 	void setWindowSize(ImVec2 size);
 

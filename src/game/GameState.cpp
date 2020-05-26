@@ -19,8 +19,6 @@ Player* GameState::addPlayer(unsigned int clientId) {
     // First, create player w/ id
     int objId = this->objCounter++;
     Player* newPlayerObject = new Player(objId);
-    newPlayerObject->setPosition(this->map->spawningLocations.back());
-    this->map->spawningLocations.pop_back();
     newPlayerObject->setClientID(clientId);
 
     // Next, add player to map
@@ -43,9 +41,6 @@ void GameState::addIngredient(IngredientObject* ing)
 void GameState::addRecipe(Recipe *recipe) 
 {
     this->recipe = recipe;
-    /*for(auto it = recipe->ingredientList.begin(); it!= recipe->ingredientList.end(); it++) {
-        this->ingredientObjects[(*it)->getID()] = *it;
-    }*/
 }
 Recipe* GameState::getRecipe()
 {

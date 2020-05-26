@@ -44,6 +44,7 @@ public:
 
     std::unordered_map<unsigned int, GameObject*> objectsToRender;
     std::unordered_map<int, IngredientObject*>* inventory;
+    IngredientObject* selectedIngredient;
     void render();
 
     /**
