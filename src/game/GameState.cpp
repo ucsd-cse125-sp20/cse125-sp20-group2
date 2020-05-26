@@ -31,7 +31,6 @@ void GameState::addMap(Map *map) {
 
     this->map = map;
     for(auto it = map->wallList.begin(); it!= map->wallList.end(); it++) {
-        /// TODO: This needs a new map
         this->worldObjects[(*it)->getID()] = *it;
     }
 }
@@ -40,7 +39,6 @@ void GameState::addRecipe(Recipe *recipe) {
 
     this->recipe = recipe;
     for(auto it = recipe->ingredientList.begin(); it!= recipe->ingredientList.end(); it++) {
-        /// TODO: This needs a new map
         this->worldObjects[(*it)->getID()] = *it;
     }
 }

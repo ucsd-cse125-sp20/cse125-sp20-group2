@@ -18,8 +18,8 @@ Map* MapBuilder::getBasicMap() {
     wall->setPosition(glm::vec3(-5, 0, 0));
     mp->wallList.push_back(wall);
 
-    mp->spawningLocations.push_back(glm::vec3(0, 0, 0));
-    mp->spawningLocations.push_back(glm::vec3(10, 0, 0));
+    mp->spawningLocations.push_back(glm::vec3(-1, 0, 0));
+    mp->spawningLocations.push_back(glm::vec3(1, 0, 0));
 
     mp->ingredientPositions.push_back(glm::vec3(15, 0, 0));
     mp->ingredientPositions.push_back(glm::vec3(-15, 0, 0));

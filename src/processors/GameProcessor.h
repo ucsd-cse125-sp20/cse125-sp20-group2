@@ -29,4 +29,9 @@ class GameProcessor
          * This will modify GameState.
          * */
         static void Process(unsigned int, Game::ClientMessage, ServerGame*);
+
+        /**
+         * Used to spawn another ingredient on the map randomly
+         * */
+        static void spawnIngredient();
 };

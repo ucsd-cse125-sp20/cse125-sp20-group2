@@ -2,7 +2,7 @@
 
 void GameProcessor::initGameState(GameState* gameState)
 {
-    gameState->setRoundTime(15);
+    gameState->setRoundTime(120);
 
     /// TODO: switch statement on dungeon or kitchen
     Map* m = MapBuilder::getBasicMap();
@@ -10,6 +10,14 @@ void GameProcessor::initGameState(GameState* gameState)
     MapBuilder::assignIngredientPositions(r, m);
     gameState->addMap(m);
     gameState->addRecipe(r);
+
+    // Move players to spawn locations
+    for (auto playerPair : gameState->getPlayerObjects())
+    {
+        Player* currPlayer = playerPair.second;
+        currPlayer->setPosition(m->spawningLocations.back());
+        m->spawningLocations.pop_back();
+    }
 }
 
 void GameProcessor::Process(unsigned int clientId, Game::ClientMessage clientMsg, ServerGame* server)
@@ -54,6 +62,10 @@ void GameProcessor::Process(unsigned int clientId, Game::ClientMessage clientMsg
                         // Send updated map stuff
                         Game::ServerMessage* mapUpdate = MessageBuilder::toServerMessage(currIngredient);
                         server->messages.push_back(mapUpdate);
+
+                        // Create new ingredient
+                        
+
                     } else {
                         std::cout << "Detecting collision with an object" << std::endl;
 
@@ -76,5 +88,9 @@ void GameProcessor::Process(unsigned int clientId, Game::ClientMessage clientMsg
             break;
         }
     }
+}
+
+void GameProcessor::createIngredient()
+{
 
 }

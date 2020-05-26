@@ -1,6 +1,7 @@
 #include <game/ServerGame.h>
 #include <processors/GameProcessor.h>
 #include <processors/LobbyProcessor.h>
+#include <stdlib.h>
 
 ServerGame::ServerGame(int port) : server(port)
 {
@@ -84,6 +85,7 @@ void ServerGame::process(std::unordered_map<unsigned int, std::vector<Game::Clie
                 {
                     std::cout << "This is lobby phase" << std::endl;
                     LobbyProcessor::Process(clientId, msg, this);
+                    GameProcessor::Process(clientId, msg, this);
                     break;
                 }
                 case Game::RoundInfo::DUNGEON_WAITING:
@@ -173,7 +175,7 @@ void ServerGame::onClientConnect(int clientId)
 {
     // Send lobby state to the client
     Game::ServerMessage* gameStatus = MessageBuilder::toRoundUpdate(this->gameState.getRound());
-    this->server.sendToAll(*gameStatus);
+    this->server.send(clientId, *gameStatus);
     std::cout << gameStatus->DebugString() << std::endl;
 
     // Add client to ready map
@@ -182,8 +184,23 @@ void ServerGame::onClientConnect(int clientId)
     /// TODO: If we go image lobby route, this will not load the player or client info initially. This needs client support.
     // Add player with respective client ID
     Player* player = this->gameState.addPlayer(clientId);
+   
+    // while player is colliding, generate new location
+    for (GameObject* obj : this->gameState.getAllObjects())
+    {
+        if (obj == player) continue;
+        while (player->isColliding(obj))
+        {
+            glm::vec3 playerPos;
+            playerPos.x = rand() % 6;
+            playerPos.y = 0;
+            playerPos.z = rand() % 6;  
+            player->setPosition(playerPos);
+        }
+    }
 
-    for (GameObject* obj: this->gameState.getAllObjects()) {
+    // Send objects
+    for (GameObject* obj : this->gameState.getAllObjects()) {
         Game::ServerMessage* message = MessageBuilder::toServerMessage(obj);
         this->server.sendToAll(*message);
         delete message;
@@ -201,7 +218,7 @@ void ServerGame::onRoundChange()
     Game::ServerMessage* gameStatus = MessageBuilder::toRoundUpdate(this->gameState.getRound());
     this->server.sendToAll(*gameStatus);
 
-    /// TODO: Handle unloading all objects
+    /// TODO: Handle unloading all objects. Should not unload the player object.
     
     switch (this->gameState.getRound())
     {
@@ -243,6 +260,7 @@ void ServerGame::onRoundChange()
         }
     }
 
+    // On round change, send over all objects
     for (GameObject* obj: this->gameState.getAllObjects()) {
         Game::ServerMessage* message = MessageBuilder::toServerMessage(obj);
         this->server.sendToAll(*message);
