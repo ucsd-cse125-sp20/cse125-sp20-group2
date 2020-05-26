@@ -131,4 +131,17 @@ public:
         clientMsg->set_allocated_ready(readyMsg);
         return clientMsg;
     }
+
+    /*
+    * Creates a winning message indicating that a client has won
+    * */
+   static Game::ServerMessage* toWinningMessage(uint32_t clientId)
+   {
+       Game::RoundWin* winMsg = new Game::RoundWin();
+       winMsg->set_clientid(clientId);
+
+       Game::ServerMessage* serverMsg = new Game::ServerMessage();
+       serverMsg->set_allocated_win(winMsg);
+       return serverMsg;
+   }
 };

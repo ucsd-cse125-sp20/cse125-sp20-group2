@@ -35,6 +35,7 @@ message ServerMessage {
         ClientInfo clientInfo = 5;
         TimeUpdate time = 6;
         RoundInfo round = 7;
+        RoundWin win = 8;
     }
 }
 
@@ -91,6 +92,10 @@ message RoundInfo {
         KITCHEN = 4;
         END = 5;
     }
+}
+
+message RoundWin {
+    required uint32 clientId = 1;
 }
 
    

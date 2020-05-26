@@ -44,6 +44,9 @@ void ClientGame::runGame()
         // Send to the server
         processInput();
 
+        /// TODO: SEND PENDING MSG LATER IF YOU WANT TO QUEUE UP
+        // sendPendingMsgs()
+
         // Receive updated state from server
         receiveUpdates();
 
@@ -181,6 +184,21 @@ void ClientGame::updateGameState()
                 break;
             }
 
+            /// TODO: NEED TO CHANGE LATER
+            case Game::ServerMessage::EventCase::kWin:
+            {
+                std::cout << " received win event " << std::endl;
+                window.gameOver = true;
+
+                // Win or lose
+                if (currMessage.win().clientid() == clientId)
+                    window.gameWin = true;
+                else
+                    window.gameWin = false;
+
+                break;
+            }
+
             // All other messages
             default:
             {
@@ -208,6 +226,7 @@ void ClientGame::processInput()
     // Get key inputs and set direction of message
 	if (glfwGetKey(window.glfwViewport, GLFW_KEY_W) == GLFW_PRESS)
     {
+        std::cout << "calling w" << std::endl;
         msg.set_direction(Game::Direction::UP);  
     }
 	else if (glfwGetKey(window.glfwViewport, GLFW_KEY_S) == GLFW_PRESS) 
@@ -216,6 +235,7 @@ void ClientGame::processInput()
     }
 	if (glfwGetKey(window.glfwViewport, GLFW_KEY_A) == GLFW_PRESS)
     {
+        std::cout << "calling a" << std::endl;
         msg.set_direction(Game::Direction::LEFT); 
     }
 	else if (glfwGetKey(window.glfwViewport, GLFW_KEY_D) == GLFW_PRESS)

@@ -2,7 +2,7 @@
 
 void GameProcessor::initGameState(GameState* gameState)
 {
-    gameState->setRoundTime(120);
+    gameState->setRoundTime(10);
 
     /// TODO: switch statement on dungeon or kitchen
     Map* m = MapBuilder::getBasicMap();
@@ -18,6 +18,9 @@ void GameProcessor::initGameState(GameState* gameState)
         currPlayer->setPosition(m->spawningLocations.back());
         m->spawningLocations.pop_back();
     }
+    
+    ///TODO: Spawn first ingredient
+    spawnIngredient(gameState, r);
 }
 
 void GameProcessor::Process(unsigned int clientId, Game::ClientMessage clientMsg, ServerGame* server)
@@ -45,6 +48,7 @@ void GameProcessor::Process(unsigned int clientId, Game::ClientMessage clientMsg
                     if (currObject->getObjectType() == INGREDIENT) {
                         std::cout << "Colliding with ingredients" << std::endl;
                         IngredientObject* currIngredient = (IngredientObject*) currObject;
+                        ///TODO: Add this back? 
                         currIngredient->renderInvisible();
                         player->addToInventory(currIngredient);
                         player->addToScore(1);
@@ -63,9 +67,13 @@ void GameProcessor::Process(unsigned int clientId, Game::ClientMessage clientMsg
                         Game::ServerMessage* mapUpdate = MessageBuilder::toServerMessage(currIngredient);
                         server->messages.push_back(mapUpdate);
 
-                        // Create new ingredient
+                        ///TODO: Create new ingredient
+                        IngredientObject* newIngredient = spawnIngredient(&server->gameState, server->gameState.getRecipe());
+                        Game::ServerMessage* ingredientUpdate = MessageBuilder::toServerMessage(newIngredient);
+                        server->messages.push_back(ingredientUpdate);
+                        //delete newIngredient;
                         
-
+                        
                     } else {
                         std::cout << "Detecting collision with an object" << std::endl;
 
@@ -90,7 +98,24 @@ void GameProcessor::Process(unsigned int clientId, Game::ClientMessage clientMsg
     }
 }
 
-void GameProcessor::createIngredient()
+IngredientObject* GameProcessor::spawnIngredient(GameState* gameState, Recipe* recipe)
 {
+    std::cerr << "Spawning next ingredient..." << std::endl;
+    
+    // Make a copy of the ingredient
+    IngredientObject* ing = recipe->ingredientList.front();
+    IngredientObject* copy = RecipeBuilder::createIngredient(ing->getName());
 
+    ///TODO: make position random
+    copy->setPosition(ing->getPosition());
+
+    // Add copy
+    gameState->addIngredient(copy);
+
+    // Push to the back of the list
+    recipe->ingredientList.pop();
+    recipe->ingredientList.push(ing);
+
+    // Return the copy of ingredient
+    return copy;
 }

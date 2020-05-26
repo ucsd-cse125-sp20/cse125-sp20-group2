@@ -33,5 +33,5 @@ class GameProcessor
         /**
          * Used to spawn another ingredient on the map randomly
          * */
-        static void spawnIngredient();
+        static IngredientObject* spawnIngredient(GameState* gameState, Recipe* recipe);
 };

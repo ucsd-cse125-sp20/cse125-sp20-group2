@@ -64,7 +64,8 @@ public:
 
     void close();
     GLFWwindow* glfwViewport;
-    Player* player;     // FIXME - IN THE FUTURE, WINDOW SHOULD NOT KNOW ABOUT THE PLAYER
+    bool gameOver = false;
+    bool gameWin = false;
     Camera* camera;
 private:
     Shader* shader;

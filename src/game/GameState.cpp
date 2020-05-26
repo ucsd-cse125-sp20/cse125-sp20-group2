@@ -35,12 +35,20 @@ void GameState::addMap(Map *map) {
     }
 }
 
-void GameState::addRecipe(Recipe *recipe) {
-
+void GameState::addIngredient(IngredientObject* ing)
+{
+    this->ingredientObjects[ing->getID()] = ing;
+} 
+void GameState::addRecipe(Recipe *recipe) 
+{
     this->recipe = recipe;
-    for(auto it = recipe->ingredientList.begin(); it!= recipe->ingredientList.end(); it++) {
-        this->worldObjects[(*it)->getID()] = *it;
-    }
+    /*for(auto it = recipe->ingredientList.begin(); it!= recipe->ingredientList.end(); it++) {
+        this->ingredientObjects[(*it)->getID()] = *it;
+    }*/
+}
+Recipe* GameState::getRecipe()
+{
+    return this->recipe;
 }
 
 const std::unordered_map<unsigned int, Player*>& GameState::getPlayerObjects()
@@ -89,7 +97,7 @@ bool GameState::gameOver()
         // Game over if 15 seconds over (TODO, change logic)
         /// TODO: Modify logic
         case Game::RoundInfo_RoundState_DUNGEON_WAITING:
-        { 
+        {
             break;
         }
         // Game over if some time is over
@@ -100,6 +108,7 @@ bool GameState::gameOver()
         // Game over if 15 seconds is over
         case Game::RoundInfo_RoundState_KITCHEN_WAITING:
         {
+            return false;
             break;
         }
         // Game over if some time is over
@@ -195,13 +204,14 @@ void GameState::setRound(Game::RoundInfo::RoundState round)
     this->round = round;
 }
 
+/// TODO: RESET BACK SO THAT LOBBY GOES TO DUNGEON WAITING INSTEAD OF DUNGEON
 void GameState::advanceRound()
 {
     switch (this->round)
     {
         case Game::RoundInfo::LOBBY :
         {
-            this->round = Game::RoundInfo::DUNGEON_WAITING;
+            this->round = Game::RoundInfo::DUNGEON;
             break;
         }
         case Game::RoundInfo::DUNGEON_WAITING :
@@ -239,4 +249,22 @@ void GameState::setRoundTime(unsigned int seconds)
     auto xMinutes = std::chrono::seconds(seconds);
     this->roundEnd = std::chrono::high_resolution_clock::now() + xMinutes;
     this->oldTime = 0;
+}
+
+Player* GameState::getWinningPlayer()
+{
+    int maxScore = -1;
+    Player* maxPlayer = NULL;
+    for (auto playerPair : this->playerObjects)
+    {
+        Player* currPlayer = playerPair.second;
+        int currScore = currPlayer->getScore();
+
+        if (currScore > maxScore)
+        {
+            maxScore = currScore;
+            maxPlayer = currPlayer;
+        }
+    }
+    return maxPlayer;
 }

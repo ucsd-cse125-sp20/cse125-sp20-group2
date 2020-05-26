@@ -244,6 +244,17 @@ void Window::render()
 	}
 	ImGui::End();
 
+	
+	if (gameOver)
+	{
+		ImGui::SetNextWindowSize(ImVec2(200.0f, 200.0f));
+		ImGui::Begin("Game Over!");
+		if (gameWin) ImGui::Text("You win!");
+		else ImGui::Text("You lose!");
+		ImGui::End();
+	}
+	
+
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 

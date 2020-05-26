@@ -79,10 +79,14 @@ public:
      * */
     void addMap(Map *map);
 
+    void addIngredient(IngredientObject* ing);
+
      /**
      * Add ingredient objects in map
      * */
     void addRecipe(Recipe *recipe);
+
+    Recipe* getRecipe();
 
     /**
      * Returns all player objects
@@ -157,4 +161,9 @@ public:
      * @param seconds the number of seconds from the current time that this round should end
      * */
     void setRoundTime(unsigned int seconds);
+
+    /*
+    * Used to get the winning player at the end of a round
+    * */
+   Player* getWinningPlayer();
 };

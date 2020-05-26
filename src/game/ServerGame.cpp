@@ -1,6 +1,7 @@
 #include <game/ServerGame.h>
 #include <processors/GameProcessor.h>
 #include <processors/LobbyProcessor.h>
+#include <processors/EndProcessor.h>
 #include <stdlib.h>
 
 ServerGame::ServerGame(int port) : server(port)
@@ -167,8 +168,10 @@ void ServerGame::sendPendingMessages()
             this->server.send(clientId, *msg);
             delete msg;
         }
+
         messages.clear();
     }
+    this->specificMessages.clear();
 }
 
 void ServerGame::onClientConnect(int clientId) 
@@ -243,6 +246,8 @@ void ServerGame::onRoundChange()
         }
         case Game::RoundInfo::KITCHEN_WAITING:
         {
+            std::cout << "initializing kitchen waiting" << std::endl;
+            EndProcessor::initGameState(&this->gameState, this);
             break;
         }
         case Game::RoundInfo::KITCHEN:

@@ -5,10 +5,17 @@ Recipe* RecipeBuilder::getBasicRecipe() {
     recipe->name = "Bun Burger";
 
     IngredientObject *ing = createIngredient("Bun");
-    recipe->ingredientList.push_back(ing);
+    recipe->ingredientList.push(ing);
 
+    ///TODO: add more ingredients
     ing = createIngredient("Bun");
-    recipe->ingredientList.push_back(ing);
+    recipe->ingredientList.push(ing);
+
+    ing = createIngredient("Meat");
+    recipe->ingredientList.push(ing);
+
+    ing = createIngredient("Onion");
+    recipe->ingredientList.push(ing);
 
     return recipe;
 }
