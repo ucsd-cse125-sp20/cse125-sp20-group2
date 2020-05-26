@@ -28,7 +28,8 @@ void GameState::addPlayer(unsigned int clientId) {
     // First, create player w/ id
     int objId = this->objCounter++;
     Player* newPlayerObject = new Player(objId);
-    newPlayerObject->setPosition(glm::vec3(0, 0, 0));
+    newPlayerObject->setPosition(this->map->spawningLocations.back());
+    this->map->spawningLocations.pop_back();
     newPlayerObject->setClientID(clientId);
 
     // Next, add player to map

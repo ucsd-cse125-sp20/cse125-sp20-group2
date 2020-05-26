@@ -2,6 +2,7 @@
 
 #include <objects/GameObject.h>
 #include <string>
+#include <unordered_map>
 
 enum class IngredientStatus
 {
@@ -9,6 +10,8 @@ enum class IngredientStatus
     Cut,
     Cooked
 };
+
+
 
 struct VertexCoord {
     glm::vec3 position;
@@ -28,22 +31,11 @@ protected:
 
     GLuint VAO, VBO, EBO;
 
-public:
-// FIXME: need to update coordinate for more than one ingredient
-// FIXME: Need to make sure this is always on top regardless player's location
-VertexCoord vert[4] = {
-    glm::vec3(-1.f, 1.f, 0.f), glm::vec2(0.f, 1.f),
-    glm::vec3(-1.f, 0.8f, 0.f), glm::vec2(0.f, 0.f),
-    glm::vec3(-0.85f, 0.8f, 0.f), glm::vec2(1.f, 0.f),
-    glm::vec3(-0.85, 1.f, 0.f), glm::vec2(1.f, 1.f)
-};
-unsigned nrOfVertices = sizeof(vert) / sizeof(VertexCoord);
+    static std::unordered_map<IngredientStatus, std::string> IngredientStatusToString;
 
-GLuint indices[6] = {
-    0,1,2, // Triangle 1
-    0,2,3  // Triangle 2
-};
-unsigned nrOfIndices = sizeof(indices) / sizeof(GLuint);
+    static std::unordered_map<std::string, IngredientStatus> stringToIngredientStatus;
+
+public:
     IngredientObject(int ID);
 
     IngredientObject();
@@ -53,6 +45,11 @@ unsigned nrOfIndices = sizeof(indices) / sizeof(GLuint);
     void setName(std::string name);
 
     void setStatus(IngredientStatus status);
+
+    std::string getStringStatus();
+
+    void setStatusFromString(std::string);
+
 
     std::string getName();
 
