@@ -12,7 +12,7 @@ OUT_DIR = build
 BIN_DIR = bin
 
 CC = g++
-FLAG = -ggdb -Wall -pthread -Isrc
+FLAG = -ggdb -Wall -pthread -Isrc -g
 LIBS = -lws2_32 -lwsock32 -lprotobuf -lassimp -lglfw3 -lgdi32 -lSOIL -lopengl32
 SRC := $(shell find $(SRC_DIR) -name "*.cpp")
 HDR := $(shell find $(HDR_DIR) -name "*.h")

@@ -4,7 +4,6 @@
 #include <game/GameState.h>
 #include <unordered_map>
 #include <objects/GameObject.h>
-#include <game/GameProcessor.h>
 #include <util/PrintUtil.h>
 #include <util/MessageBuilder.h>
 #include <thread>
@@ -12,22 +11,58 @@
 
 class ServerGame
 {
-public:
+    public:
 
-    ServerGame(int port);
+        ServerGame(int port);
 
-    ~ServerGame();
+        ~ServerGame();
 
-private:
-    ServerNetwork server;
+        // The world
+        GameState gameState;
 
-    GameState gameState;
+        int getTick();
 
-    GameProcessor processor;
+        // These are messages send to everyone
+        std::deque<Game::ServerMessage*> messages;
 
-    void run();
+        // These are messages sent to specific clients
+        std::unordered_map<unsigned int, std::deque<Game::ServerMessage*>> specificMessages;
 
-    void process();
-    
-    void onClientConnect(int);
+    private:
+
+        const int TICK = 30;
+
+        ServerNetwork server;
+
+        void run();
+
+        /**
+         * Cleans the messages before using them
+         * */
+        void preprocess(std::unordered_map<unsigned int, std::vector<Game::ClientMessage>> & clientMsgs);
+
+        /*
+        * Uses the messages to update the game state,
+        * using the appropriate processor
+        * */
+        void process(std::unordered_map<unsigned int, std::vector<Game::ClientMessage>> & msgMap);
+
+        /**
+         * Sends messages for specific players and
+         * messages for all players
+         * */
+        void sendPendingMessages();
+        
+        /**
+        * Called from server network when it accepts a new client
+        * */
+        void onClientConnect(int);
+
+        /**
+        * Called when there is a change of round.
+        * This should send out the message that there is a round change to the client.
+        * This should also initialize the respective map and objects for the round
+        * and send out the map and object messages.
+        * */
+        void onRoundChange();
 };

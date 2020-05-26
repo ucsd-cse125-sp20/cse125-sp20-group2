@@ -1,10 +1,14 @@
 #include <game/ClientGame.h>
-
+#include <game/KeyResolver.h>
 
 #define CLIENT_DELAY 1000
 
 ClientGame::ClientGame(std::string IP, int port) : client(IP, port), window(Config::getFloat("Window_Width"), Config::getFloat("Window_Height"))
 {
+    // Configure keybinds
+    glfwSetWindowUserPointer(this->window.glfwViewport, reinterpret_cast<void*> (this));
+    glfwSetKeyCallback(this->window.glfwViewport, key_callback_wrapper);
+
     runGame();
 }
 
@@ -13,16 +17,35 @@ ClientGame::~ClientGame()
 
 }
 
+void ClientGame::keyBindsHandler(GLFWwindow* glfwWindow, int key, int scancode, int action, int mods)
+{
+    // Handles ready up
+    if (key == GLFW_KEY_R && action == GLFW_PRESS)
+    {
+        std::cout << "sending ready up message" << std::endl;
+        Game::ClientMessage* readyMsg = MessageBuilder::toReadyMessage(true);
+        this->client.send(*readyMsg);
+        delete readyMsg;
+    }
+
+    // Handles toggling free cam
+    if (key == GLFW_KEY_F && action == GLFW_PRESS)
+    {
+        std::cout << "locking / unlocking the camera" << std::endl;
+        this->window.camera->toggleFreeCam();
+    }
+}
+
 void ClientGame::runGame() 
 {
-    while(!window.isClosed) {
+    while(!window.isClosed) 
+    {
         // Take local input
         // Send to the server
         processInput();
 
-        // may not need this
-        // Send input to server
-        //sendMsgs();
+        /// TODO: SEND PENDING MSG LATER IF YOU WANT TO QUEUE UP
+        // sendPendingMsgs()
 
         // Receive updated state from server
         receiveUpdates();
@@ -32,17 +55,7 @@ void ClientGame::runGame()
 
         // Render world
         window.render();
-
-        // Sleep
-        //std::this_thread::sleep_for(std::chrono::milliseconds(CLIENT_DELAY));
     }
-}
-
-void ClientGame::sendMsgs()
-{
-    Game::ClientMessage clientMessage;
-    clientMessage.set_direction(Game::Direction::UP);
-    client.send(clientMessage);
 }
 
 void ClientGame::receiveUpdates()
@@ -152,15 +165,37 @@ void ClientGame::updateGameState()
                 break;
             }
 
-            case Game::ServerMessage::EventCase::kRoundUpdate:
+            case Game::ServerMessage::EventCase::kTime:
             {
-                std::cout << "secs left " << currMessage.roundupdate().seconds() << std::endl;
-                uint32_t seconds = currMessage.roundupdate().seconds();
+                
+                std::cout << "secs left " << currMessage.time().seconds() << std::endl;
+                uint32_t seconds = currMessage.time().seconds();
                 if( seconds == 0) {
                     this->round++;
                     window.setRound(this->round);
                 }
                 window.setTimer(seconds);
+                break;
+            }
+
+            case Game::ServerMessage::EventCase::kRound:
+            {
+                std::cout << " received round update message " << currMessage.DebugString() << std::endl;
+                break;
+            }
+
+            /// TODO: NEED TO CHANGE LATER
+            case Game::ServerMessage::EventCase::kWin:
+            {
+                std::cout << " received win event " << std::endl;
+                window.gameOver = true;
+
+                // Win or lose
+                if (currMessage.win().clientid() == clientId)
+                    window.gameWin = true;
+                else
+                    window.gameWin = false;
+
                 break;
             }
 
@@ -191,6 +226,7 @@ void ClientGame::processInput()
     // Get key inputs and set direction of message
 	if (glfwGetKey(window.glfwViewport, GLFW_KEY_W) == GLFW_PRESS)
     {
+        std::cout << "calling w" << std::endl;
         msg.set_direction(Game::Direction::UP);  
     }
 	else if (glfwGetKey(window.glfwViewport, GLFW_KEY_S) == GLFW_PRESS) 
@@ -199,6 +235,7 @@ void ClientGame::processInput()
     }
 	if (glfwGetKey(window.glfwViewport, GLFW_KEY_A) == GLFW_PRESS)
     {
+        std::cout << "calling a" << std::endl;
         msg.set_direction(Game::Direction::LEFT); 
     }
 	else if (glfwGetKey(window.glfwViewport, GLFW_KEY_D) == GLFW_PRESS)
@@ -215,9 +252,6 @@ void ClientGame::processInput()
 		window.camera->processKeyMovement(LEFT);
     if (glfwGetKey(window.glfwViewport, GLFW_KEY_RIGHT) == GLFW_PRESS)
 		window.camera->processKeyMovement(RIGHT);
-	if (glfwGetKey(window.glfwViewport, GLFW_KEY_F) == GLFW_PRESS)
-		window.camera->toggleFreeCam();
-
     
     // Send message only if it has a direction associated with it
     if (msg.has_direction()) {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <game/GameProcessor.h>
+#include <processors/GameProcessor.h>
 #include <objects/Player.h>
 #include <utility>
 #include <util/Config.h>

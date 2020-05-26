@@ -18,22 +18,31 @@ Map* MapBuilder::getBasicMap() {
     wall->setPosition(glm::vec3(-5, 0, 0));
     mp->wallList.push_back(wall);
 
-    
     mp->spawningLocations.push_back(glm::vec3(10, 0, 0));
     mp->spawningLocations.push_back(glm::vec3(-10, 0, 0));
     mp->spawningLocations.push_back(glm::vec3(0, 10, 0));
     mp->spawningLocations.push_back(glm::vec3(0, 0, 0));
 
-    mp->ingredientPositions.push_back(glm::vec3(15, 0, 0));
-    mp->ingredientPositions.push_back(glm::vec3(-15, 0, 0));
+
+    ///TODO: Add different positions?
+    mp->ingredientPositions.push_back(glm::vec3(8, 0, 0));
+    mp->ingredientPositions.push_back(glm::vec3(-8, 0, 0));
+    mp->ingredientPositions.push_back(glm::vec3(8, 0, 0));
+    mp->ingredientPositions.push_back(glm::vec3(-8, 0, 0));
 
     return mp;
 }
 
 void MapBuilder::assignIngredientPositions( Recipe* recipe, Map* mp ) {
-    int i = 0;
+    /*int i = 0;
     for( auto ingredient : recipe->ingredientList ) {
         ingredient->setPosition(mp->ingredientPositions[i]);
         i++;
+    }*/
+    for (int i = 0; i < recipe->ingredientList.size(); i++) {
+        IngredientObject* ing = recipe->ingredientList.front();
+        recipe->ingredientList.pop();
+        ing->setPosition(mp->ingredientPositions[i]);
+        recipe->ingredientList.push(ing);
     }
 }

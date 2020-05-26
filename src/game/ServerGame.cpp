@@ -1,10 +1,15 @@
 #include <game/ServerGame.h>
+#include <processors/GameProcessor.h>
+#include <processors/LobbyProcessor.h>
+#include <processors/EndProcessor.h>
+#include <stdlib.h>
 
-#define TICK 30
-
-ServerGame::ServerGame(int port) : server(port), processor(&this->gameState)
+ServerGame::ServerGame(int port) : server(port)
 {
-    // std::function<void(int)> test = std::bind(&ServerGame::acall, this)
+    // Initialize the gamestate
+    this->onRoundChange();
+    
+    // Set up function to initialize players
     std::function<void(int)> notifyClients = std::bind(&ServerGame::onClientConnect, this, std::placeholders::_1);
     this->server.setOnClientConnect(notifyClients);
     run();
@@ -15,13 +20,24 @@ ServerGame::~ServerGame()
 
 }
 
+int ServerGame::getTick() 
+{
+    return TICK;
+}
+
 void ServerGame::run()
 {
-
     while (true) {
         auto start = std::chrono::high_resolution_clock::now();
 
-        this->process();
+        auto msgMap = server.readAllMessages();
+        
+        // Cleans messages
+        this->preprocess(msgMap);
+
+        this->process(msgMap);
+
+        this->sendPendingMessages();
 
         auto end = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double> dur = end - start;
@@ -37,104 +53,221 @@ void ServerGame::run()
     }
 }
 
-void ServerGame::process() 
+
+void ServerGame::preprocess(std::unordered_map<unsigned int, std::vector<Game::ClientMessage>> & clientMsgs)
 {
-    auto map = server.readAllMessages();
-    
-    // preprocess and remove all stuff here
-    this->processor.Preprocess(map);
+    for (auto & it : clientMsgs)
+    {
+        std::vector<Game::ClientMessage> & msgList = it.second;
+        auto uniquePortion = std::unique(msgList.begin(), msgList.end(), google::protobuf::util::MessageDifferencer::Equals);
+        msgList.erase(uniquePortion, msgList.end());
+    }
+}
+
+void ServerGame::process(std::unordered_map<unsigned int, std::vector<Game::ClientMessage>> & msgMap) 
+{
+    /// TODO: Different ways to advance round based on the different rounds.
+    if (this->gameState.gameOver()) {
+        this->gameState.advanceRound();
+        this->onRoundChange();
+        return;
+    }
 
     // Go through all clients
-    // This is just an example. This isn't necessarily the correct logic.
-    for (auto iter = map.begin(); iter != map.end(); iter++) {
+    for (auto iter = msgMap.begin(); iter != msgMap.end(); iter++) {
+        
         auto clientId = iter->first;
         auto msgs = iter->second;
-        for (auto msg : msgs) {
-            // PrintUtil::print(msg);
-            this->processor.Process(clientId, msg, TICK);
-            
-            if (this->processor.messages.size() > 0) {
-                Game::ServerMessage* message = this->processor.messages.front();
-                this->processor.messages.pop_front();
-                this->server.sendToAll(*message);
-                delete message;
-            }
 
-            if (this->processor.specificMessages[clientId].size() > 0) {
-                Game::ServerMessage* message = this->processor.specificMessages[clientId].front();
-                this->processor.specificMessages[clientId].pop_front();
-                this->server.send(clientId, *message);
-                delete message;
+        for (auto msg : msgs) {
+
+            switch (this->gameState.getRound()) {
+                case Game::RoundInfo::LOBBY:
+                {
+                    std::cout << "This is lobby phase" << std::endl;
+                    LobbyProcessor::Process(clientId, msg, this);
+                    GameProcessor::Process(clientId, msg, this);
+                    break;
+                }
+                case Game::RoundInfo::DUNGEON_WAITING:
+                {
+                    std::cout << "This is dungeon waiting phase" << std::endl;
+                    break;
+                }
+                case Game::RoundInfo::DUNGEON:
+                {
+                    std::cout << "this is dungeon phase" << std::endl;
+                    GameProcessor::Process(clientId, msg, this);
+                    break;
+                }
+                case Game::RoundInfo::KITCHEN_WAITING:
+                {
+                    std::cout << "This is kitchen waiting phase" << std::endl;
+                    break;
+                }
+                case Game::RoundInfo::KITCHEN:
+                {
+                    std::cout << "this is ktichen phase" << std::endl;
+                    break;
+                }
+                case Game::RoundInfo::END:
+                {
+                    std::cout << "This is ending phase" << std::endl;
+                    break;
+                }
+                default:
+                {
+                    std::cout << "Round state is not handled" << std::endl;
+                }
             }
         }
     }
 
-    /// TODO: mainly for testing, timer functionality, can delete
-    if (this->gameState.timeHasUpdated())
-    {
-        // Create time update message
-        Game::RoundUpdate* roundUpdateMessage = new Game::RoundUpdate();
-        // roundUpdateMessage->
-        roundUpdateMessage->set_seconds(this->gameState.getRoundTime());
-        Game::ServerMessage* serverMsg = new Game::ServerMessage();
-        serverMsg->set_allocated_roundupdate(roundUpdateMessage);
+    /// TODO: Remove
+    // /// TODO: mainly for testing, timer functionality, can delete
+    // if (this->gameState.timeHasUpdated())
+    // {
+    //     // Create time update message
+    //     Game::TimeUpdate* timeUpdateMessage = new Game::TimeUpdate();
+    //     timeUpdateMessage->set_seconds(this->gameState.getRoundTime());
+    //     Game::ServerMessage* serverMsg = new Game::ServerMessage();
+    //     serverMsg->set_allocated_time(timeUpdateMessage);
 
-        // Send round update to everyone
-        this->server.sendToAll(*serverMsg);
+    //     // Send round update to everyone
+    //     this->server.sendToAll(*serverMsg);
 
-        delete serverMsg;
-    }
+    //     delete serverMsg;
+    // }
 
-    if (this->gameState.gameOver())
-    {
-        std::cout << "GAME OVER AAAAAAAAAAAAAA" << std::endl;
-    }
+    // /// TODO FIX LOGIC
+    // if (this->gameState.gameOver())
+    // {
+    //     // std::cout << "GAME OVER AAAAAAAAAAAAAA" << std::endl;
+    // }
 }
 
-// Only called from server network when it accepts a new client
+
+
+void ServerGame::sendPendingMessages()
+{
+    // Send global messages
+    for (auto message : this->messages) {
+        this->server.sendToAll(*message);
+        delete message;
+    }
+    this->messages.clear();
+
+    // Send player specific messages
+    for (auto pair : this->specificMessages)
+    {
+        auto clientId = pair.first;
+        auto messages = pair.second;
+
+        for (auto msg : messages)
+        {
+            this->server.send(clientId, *msg);
+            delete msg;
+        }
+
+        messages.clear();
+    }
+    this->specificMessages.clear();
+}
+
 void ServerGame::onClientConnect(int clientId) 
 {
+    // Send lobby state to the client
+    Game::ServerMessage* gameStatus = MessageBuilder::toRoundUpdate(this->gameState.getRound());
+    this->server.send(clientId, *gameStatus);
+    std::cout << gameStatus->DebugString() << std::endl;
+
+    // Add client to ready map
+    this->gameState.readyStatus[clientId] = false;
+
+    /// TODO: If we go image lobby route, this will not load the player or client info initially. This needs client support.
     // Add player with respective client ID
-    this->gameState.addPlayer(clientId);
+    Player* player = this->gameState.addPlayer(clientId);
+   
+    // while player is colliding, generate new location
+    for (GameObject* obj : this->gameState.getAllObjects())
+    {
+        if (obj == player) continue;
+        while (player->isColliding(obj))
+        {
+            glm::vec3 playerPos;
+            playerPos.x = rand() % 6;
+            playerPos.y = 0;
+            playerPos.z = rand() % 6;  
+            player->setPosition(playerPos);
+        }
+    }
 
-    // Grab player object
-    GameObject* playerObject = this->gameState.getPlayerObject(clientId);
-
-    // Build a message
-    Game::ServerMessage* createPlayerMessage = MessageBuilder::toServerMessage(playerObject);
-
-    // Send out, then free
-    this->server.sendToAll(*createPlayerMessage);
-    delete createPlayerMessage;
+    // Send objects
+    for (GameObject* obj : this->gameState.getAllObjects()) {
+        Game::ServerMessage* message = MessageBuilder::toServerMessage(obj);
+        this->server.sendToAll(*message);
+        delete message;
+    }
 
     // Send over client info
-    Game::ServerMessage* clientInfoMsg = MessageBuilder::toClientInfo(clientId, playerObject->getID());
+    Game::ServerMessage* clientInfoMsg = MessageBuilder::toClientInfo(clientId, player->getID());
     this->server.send(clientId, *clientInfoMsg);
     delete clientInfoMsg;
+}
 
-    // First, send all game objects
-    for (auto objectPair : this->gameState.getObjects())
+void ServerGame::onRoundChange()
+{
+    // Send updated state to the client
+    Game::ServerMessage* gameStatus = MessageBuilder::toRoundUpdate(this->gameState.getRound());
+    this->server.sendToAll(*gameStatus);
+
+    /// TODO: Handle unloading all objects. Should not unload the player object.
+    
+    switch (this->gameState.getRound())
     {
-        auto objectPtr = objectPair.second;
-        Game::ServerMessage* message = MessageBuilder::toServerMessage(objectPtr);
-        this->server.sendToAll(*message);
-        delete message;
+        case Game::RoundInfo::LOBBY:
+        {
+            std::cout << "initializing lobby" << std::endl;
+            LobbyProcessor::initGameState(&this->gameState);
+            break;
+        }
+        case Game::RoundInfo::DUNGEON_WAITING:
+        {
+            /// TODO: NEED SOME LOGIC TO HANDLE HOW TO INIT DUNGEON WAITING STAGE, 
+            // FOR NOW IT JUST TRANSITIONS TO NEXT STAGE
+            std::cout << "Initializing dungeon waiting" << std::endl;
+            break;
+        }
+        case Game::RoundInfo::DUNGEON:
+        {
+            std::cout << "initializing dungeon" << std::endl;
+            GameProcessor::initGameState(&this->gameState);
+            break;
+        }
+        case Game::RoundInfo::KITCHEN_WAITING:
+        {
+            std::cout << "initializing kitchen waiting" << std::endl;
+            EndProcessor::initGameState(&this->gameState, this);
+            break;
+        }
+        case Game::RoundInfo::KITCHEN:
+        {
+            break;
+        }
+        case Game::RoundInfo::END:
+        {
+            break;
+        }
+        default: 
+        {
+            std::cout << "Unhandled round change" << std::endl;
+            break;
+        }
     }
 
-    // Then, send all ingredients on the map (if applicable)
-    for (auto ingredientObjectPair : this->gameState.getIngredientObjects())
-    {
-        auto ingredientPtr = ingredientObjectPair.second;
-        Game::ServerMessage* message = MessageBuilder::toServerMessage(ingredientPtr);
-        this->server.sendToAll(*message);
-        delete message;
-    }
-
-    // Next, send all existing players
-    for (auto playerObjectPair : this->gameState.getPlayerObjects())
-    {
-        auto playerPtr = playerObjectPair.second;
-        Game::ServerMessage* message = MessageBuilder::toServerMessage(playerPtr);
+    // On round change, send over all objects
+    for (GameObject* obj: this->gameState.getAllObjects()) {
+        Game::ServerMessage* message = MessageBuilder::toServerMessage(obj);
         this->server.sendToAll(*message);
         delete message;
     }
