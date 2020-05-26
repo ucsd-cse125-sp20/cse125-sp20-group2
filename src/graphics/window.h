@@ -34,8 +34,7 @@
 #include <objects/Player.h>
 #include <objects/IngredientObject.h>
 
-#include <gui/imgui_impl_glfw.h>
-#include <gui/imgui_impl_opengl3.h>
+#include <graphics/UIScreenFactory.h>
 
 class Window
 {

@@ -29,8 +29,8 @@ Fragment_Shader=src/graphics/shaders/frag_shader.glsl
 
 // Etc
 Window_Title=Comrade's Kitchen
-Window_Width=1800
-Window_Height=1600
+Window_Width=900
+Window_Height=800
 
 // Controls
 Camera_Speed=0.25
