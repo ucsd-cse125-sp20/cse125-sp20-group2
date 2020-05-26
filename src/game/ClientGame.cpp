@@ -226,7 +226,6 @@ void ClientGame::processInput()
     // Get key inputs and set direction of message
 	if (glfwGetKey(window.glfwViewport, GLFW_KEY_W) == GLFW_PRESS)
     {
-        std::cout << "calling w" << std::endl;
         msg.set_direction(Game::Direction::UP);  
     }
 	else if (glfwGetKey(window.glfwViewport, GLFW_KEY_S) == GLFW_PRESS) 
@@ -235,7 +234,6 @@ void ClientGame::processInput()
     }
 	if (glfwGetKey(window.glfwViewport, GLFW_KEY_A) == GLFW_PRESS)
     {
-        std::cout << "calling a" << std::endl;
         msg.set_direction(Game::Direction::LEFT); 
     }
 	else if (glfwGetKey(window.glfwViewport, GLFW_KEY_D) == GLFW_PRESS)
