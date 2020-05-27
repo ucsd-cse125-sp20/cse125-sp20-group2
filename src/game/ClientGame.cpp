@@ -33,6 +33,7 @@ void ClientGame::keyBindsHandler(GLFWwindow* glfwWindow, int key, int scancode, 
     {
         std::cout << "locking / unlocking the camera" << std::endl;
         this->window.camera->toggleFreeCam();
+        this->window.toggleCursor();
     }
 
     // Handles interact event

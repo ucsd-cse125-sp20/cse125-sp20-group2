@@ -72,6 +72,8 @@ public:
 
     void addInventory(std::unordered_map<int, IngredientObject*>* inventory);
 
+    void toggleCursor();
+
     void close();
     GLFWwindow* glfwViewport;
     bool gameOver = false;
