@@ -11,5 +11,5 @@ class MapBuilder {
 public:
     static DungeonMap* getBasicDungeonMap();
     static KitchenMap* getBasicKitchenMap();
-    static void assignIngredientPositions( Recipe* recipe, Map* mp );
+    static void assignIngredientPositions( Recipe* recipe, DungeonMap* mp );
 };

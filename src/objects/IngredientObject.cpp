@@ -1,6 +1,6 @@
 #include <objects/IngredientObject.h>
 
-IngredintObject::IngredientObject(int ID) : GameObject(ID) {
+IngredientObject::IngredientObject(int ID) : GameObject(ID) {
     this->objType = INGREDIENT;
 	this->setModel(Config::get("Wall_Model"));
 	this->setPosition(glm::vec3(1,0,1));

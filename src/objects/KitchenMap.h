@@ -4,4 +4,4 @@
 class KitchenMap : public Map {
     public:
         std::vector<CookwareObject*> cookwareObjects;
-}
+};

@@ -9,6 +9,8 @@ protected:
     std::string name;
 
 public:
+    CookwareObject();
+    
     CookwareObject(int ID);
 
     void setName(std::string name);

@@ -5,7 +5,7 @@ void GameProcessor::initGameState(GameState* gameState)
     gameState->setRoundTime(10);
 
     /// TODO: switch statement on dungeon or kitchen
-    Map* m = MapBuilder::getBasicDungeonMap();
+    DungeonMap* m = MapBuilder::getBasicDungeonMap();
     Recipe* r = RecipeBuilder::getBasicRecipe();
     MapBuilder::assignIngredientPositions(r, m);
     gameState->addMap(m);
