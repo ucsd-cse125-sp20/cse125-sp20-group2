@@ -3,9 +3,13 @@
 #include <objects/Wall.h>
 #include <util/Recipe.h>
 #include <objects/Map.h>
+#include <objects/KitchenMap.h>
+#include <objects/DungeonMap.h>
+
 //
 class MapBuilder {
 public:
-    static Map* getBasicMap();
+    static DungeonMap* getBasicDungeonMap();
+    static KitchenMap* getBasicKitchenMap();
     static void assignIngredientPositions( Recipe* recipe, Map* mp );
 };

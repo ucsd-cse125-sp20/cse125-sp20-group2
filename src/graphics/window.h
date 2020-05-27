@@ -29,6 +29,9 @@
 // Etc
 #include <constants/graphics_vars.h>
 
+// Protobuf
+#include <schema/Game.pb.h>
+
 // Objects
 #include <objects/GameObject.h>
 #include <objects/Player.h>
@@ -44,7 +47,8 @@ public:
 
     std::unordered_map<unsigned int, GameObject*> objectsToRender;
     std::unordered_map<int, IngredientObject*>* inventory;
-    IngredientObject* selectedIngredient;
+    IngredientObject* selectedIngredient = NULL;
+
     void render();
 
     /**
@@ -60,6 +64,12 @@ public:
 
     void setRound(int round);
 
+    int getRound();
+
+    IngredientObject* getSelectedIngredient();
+
+    void updateRound(Game::RoundInfo_RoundState);
+
     void addInventory(std::unordered_map<int, IngredientObject*>* inventory);
 
     void close();
@@ -70,7 +80,7 @@ public:
 private:
     Shader* shader;
     Shader* UIshader;
-    int64_t timer;
+    int64_t timer = 0;
     int round;
     int score = 0;
     void setupWindow();

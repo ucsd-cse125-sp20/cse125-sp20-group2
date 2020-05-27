@@ -4,8 +4,7 @@
 #include <objects/IngredientObject.h>
 
 class Map {
-public:
-    std::vector<Wall*> wallList;
-    std::vector<glm::vec3> ingredientPositions;
-    std::vector<glm::vec3> spawningLocations;
+    public:
+        std::vector<Wall*> wallList;
+        std::vector<glm::vec3> spawningLocations;
 };

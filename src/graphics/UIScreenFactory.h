@@ -3,6 +3,7 @@
 #include <string>
 #include <unordered_map>
 #include <objects/IngredientObject.h>
+#include <constants/gameplay_vars.h>
 
 class UIScreenFactory {
 public:
@@ -24,6 +25,10 @@ public:
 	void setWindowSize(ImVec2 size);
 
 private:
+
+	const std::string lobby = "LOBBY";
+	const std::string dungeon = "DUNGEON";
+	const std::string kitchen = "KITCHEN";
 	int corner = 1;
 	const float DISTANCE = 10.0f;
 };

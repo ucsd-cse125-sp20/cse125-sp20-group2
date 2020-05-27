@@ -144,4 +144,17 @@ public:
        serverMsg->set_allocated_win(winMsg);
        return serverMsg;
    }
+
+   /*
+   * Creates a client message for cooking event
+   * */
+  static Game::ClientMessage* toCookMessage(IngredientObject* ingredient)
+  {
+      Game::CookEvent* cookMsg = new Game::CookEvent();
+      cookMsg->set_objectid(ingredient->getID());
+
+      Game::ClientMessage* clientMsg = new Game::ClientMessage();
+      clientMsg->set_allocated_cookevent(cookMsg);
+      return clientMsg;
+  }
 };

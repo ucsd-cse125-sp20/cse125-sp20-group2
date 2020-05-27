@@ -107,6 +107,7 @@ void ServerGame::process(std::unordered_map<unsigned int, std::vector<Game::Clie
                 }
                 case Game::RoundInfo::KITCHEN:
                 {
+                    GameProcessor::Process(clientId, msg, this);
                     std::cout << "this is ktichen phase" << std::endl;
                     break;
                 }

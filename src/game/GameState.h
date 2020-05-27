@@ -75,9 +75,9 @@ public:
     IngredientObject* getIngredientObject(unsigned int);
 
     /**
-     * Adds objects in map
+     * Adds objects from maps
      * */
-    void addMap(Map *map);
+    void addMap(Map* map);
 
     void addIngredient(IngredientObject* ing);
 

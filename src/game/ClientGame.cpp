@@ -6,8 +6,8 @@
 ClientGame::ClientGame(std::string IP, int port) : client(IP, port), window(Config::getFloat("Window_Width"), Config::getFloat("Window_Height"))
 {
     // Configure keybinds
-    //glfwSetWindowUserPointer(this->window.glfwViewport, reinterpret_cast<void*> (this));
-    //glfwSetKeyCallback(this->window.glfwViewport, key_callback_wrapper);
+    glfwSetWindowUserPointer(this->window.glfwViewport, reinterpret_cast<void*> (this));
+    glfwSetKeyCallback(this->window.glfwViewport, key_callback_wrapper);
 
     runGame();
 }
@@ -34,13 +34,19 @@ void ClientGame::keyBindsHandler(GLFWwindow* glfwWindow, int key, int scancode, 
         std::cout << "locking / unlocking the camera" << std::endl;
         this->window.camera->toggleFreeCam();
     }
+
+    // Handles interact event
+    if (key == GLFW_KEY_E && action == GLFW_PRESS && this->window.getSelectedIngredient() != NULL && this->window.getRound() == KITCHEN )
+    {
+        std::cout << "pressed interact key" << std::endl;
+        Game::ClientMessage* cookMsg = MessageBuilder::toCookMessage(this->window.getSelectedIngredient());
+        this->client.send(*cookMsg);
+        delete cookMsg;
+    }
 }
 
 void ClientGame::runGame() 
 {
-    glfwSetWindowUserPointer(this->window.glfwViewport, reinterpret_cast<void*> (this));
-    glfwSetKeyCallback(this->window.glfwViewport, key_callback_wrapper);
-
     while(!window.isClosed) 
     {
         // Take local input
@@ -183,6 +189,7 @@ void ClientGame::updateGameState()
 
             case Game::ServerMessage::EventCase::kRound:
             {
+                window.updateRound(currMessage.round().type());         
                 std::cout << " received round update message " << currMessage.DebugString() << std::endl;
                 break;
             }

@@ -51,13 +51,9 @@ void Window::setupWindow() {
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);		
 	GLFWwindow* glfwViewport = glfwCreateWindow((int)Config::getFloat("Window_Width"), (int)Config::getFloat("Window_Height"), Config::get("Window_Title").c_str(), NULL, NULL);
-
-	// Capture mouse
-	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	
 	// Mouse centering
 	glfwSetCursorPos(glfwViewport, lastX, lastY);
-	
 
 	if (glfwViewport == NULL)
 	{
@@ -65,12 +61,11 @@ void Window::setupWindow() {
 		glfwTerminate();
 	}
 
-
 	// Current context is window
 	glfwMakeContextCurrent(glfwViewport);
 
 	// Capture mouse
-	glfwSetInputMode(glfwViewport, GLFW_CURSOR, GLFW_CURSOR_DISABLED);  
+	// glfwSetInputMode(glfwViewport, GLFW_CURSOR, GLFW_CURSOR_DISABLED);  
 
 	// Register callback functions
 	glfwSetFramebufferSizeCallback(glfwViewport, framebuffer_size_callback);
@@ -114,6 +109,40 @@ void Window::setTimer(int64_t timer) {
 
 void Window::setRound(int round) {
 	this->round = round;
+}
+
+int Window::getRound() {
+	return this->round;
+}
+
+IngredientObject* Window::getSelectedIngredient() {
+	return this->selectedIngredient;
+}
+
+void Window::updateRound(Game::RoundInfo_RoundState roundState) {
+	switch (roundState) {
+        case Game::RoundInfo_RoundState_LOBBY: {
+            this->setRound(0);
+            break;
+        }
+        case Game::RoundInfo_RoundState_DUNGEON: {
+            this->setRound(1);
+            break;
+        } 
+        case Game::RoundInfo_RoundState_DUNGEON_WAITING: {
+            this->setRound(2);
+            break;
+        }
+        case Game::RoundInfo_RoundState_KITCHEN:
+        {
+            this->setRound(3);
+            break;
+        }
+        case Game::RoundInfo_RoundState_KITCHEN_WAITING: {
+            this->setRound(4);
+			break;
+        }
+    } 
 }
 
 void Window::setScore(int score) {
@@ -200,13 +229,18 @@ void Window::render()
 	int32_t seconds = this->timer % 60;
 
 	UIScreenFactory ui = UIScreenFactory();
-	ui.UIGameInfo(round, minutes, seconds);
+	ui.UIGameInfo(this->round, minutes, seconds);
 	ui.UIScore(this->score);
 	
-	if( this->inventory != NULL )
-		ui.UIInventory(this->inventory);
+	IngredientObject* tmp;
 
-	
+	if( this->inventory != NULL )
+		if( this->round == DUNGEON )
+			ui.UIInventory(this->inventory);
+		else
+			tmp = ui.UIButtonInventory(this->inventory);
+	selectedIngredient = tmp != NULL? tmp: selectedIngredient;
+
 	if (gameOver)
 	{
 		ui.UIGameOver(gameWin);

@@ -27,7 +27,6 @@ Player* GameState::addPlayer(unsigned int clientId) {
 }
 
 void GameState::addMap(Map *map) {
-
     this->map = map;
     for(auto it = map->wallList.begin(); it!= map->wallList.end(); it++) {
         this->worldObjects[(*it)->getID()] = *it;
@@ -81,6 +80,7 @@ void GameState::removeIngredient(unsigned int ingredientId)
     this->ingredientObjects.erase(ingredientId);
 }
 
+/// TODO: REPAIR GAME OVER LOGIC
 bool GameState::gameOver()
 {
     switch (this->round)
@@ -94,6 +94,7 @@ bool GameState::gameOver()
         /// TODO: Modify logic
         case Game::RoundInfo_RoundState_DUNGEON_WAITING:
         {
+            return true;
             break;
         }
         // Game over if some time is over
@@ -104,12 +105,13 @@ bool GameState::gameOver()
         // Game over if 15 seconds is over
         case Game::RoundInfo_RoundState_KITCHEN_WAITING:
         {
-            return false;
+            return true;
             break;
         }
         // Game over if some time is over
         case Game::RoundInfo_RoundState_KITCHEN:
         {
+            return false;
             break;
         }
         // Never in game over

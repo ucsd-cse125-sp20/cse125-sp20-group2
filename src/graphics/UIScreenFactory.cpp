@@ -34,10 +34,14 @@ void UIScreenFactory::UIInventory(std::unordered_map<int, IngredientObject*>* ma
 void UIScreenFactory::UIGameInfo(int round, int32_t minutes, int32_t seconds) {
 	if (ImGui::Begin("Game Info"))
 	{
-		std::string roundInfo = "Round ";
-		roundInfo = roundInfo.append(std::to_string(round));
+		std::string roundInfo;
+		switch(round) {
+			case LOBBY: roundInfo = lobby; break;
+			case DUNGEON: roundInfo = dungeon; break;
+			case KITCHEN: roundInfo = kitchen; break;
+		}
 		UIText(roundInfo);
-		std::string str = "Time Left: " + minutes;
+		std::string str = "Time Left: " + std::to_string(minutes);
 		str = str.append(std::to_string(minutes));
 		str = str.append(" : ");
 		str = str.append(std::to_string(seconds));
@@ -60,15 +64,17 @@ IngredientObject* UIScreenFactory::UIButtonInventory(std::unordered_map<int, Ing
 	window_pos = ImVec2((corner & 1) ? io.DisplaySize.x - DISTANCE : DISTANCE, (corner & 2) ? io.DisplaySize.y - DISTANCE : DISTANCE);
 	window_pos_pivot = ImVec2((corner & 1) ? 1.0f : 0.0f, (corner & 2) ? 1.0f : 0.0f);
 	ImGui::SetNextWindowPos(window_pos, ImGuiCond_Always, window_pos_pivot);
-	setWindowSize(ImVec2((float)100, (float)(40 * map->size())));
+	setWindowSize(ImVec2((float)100, 30+ (float)(40 * map->size())));
 	ImGui::Begin("Inventory");
 	std::unordered_map<int, IngredientObject*>::iterator it = map->begin();
 	while (it != map->end())
 	{
 		if (ImGui::Button(it->second->getName().c_str())) {
 			ret = it->second;
+			std::cout<<"Ingredient clicked"<<std::endl;
 		}
 		it++;
+		
 	}
 	UIEnd();
 	return ret;

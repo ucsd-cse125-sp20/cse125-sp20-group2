@@ -18,11 +18,16 @@ message ReadyState {
     required bool ready = 1;
 }
 
+message CookEvent {
+    required uint32 objectId = 1;
+}
+
 message ClientMessage {
     oneof event {
         Net net = 1;
         Direction direction = 2;
         ReadyState ready = 3;
+        CookEvent cookEvent = 4;
     }
 }
 
@@ -97,5 +102,6 @@ message RoundInfo {
 message RoundWin {
     required uint32 clientId = 1;
 }
+
 
    
