@@ -50,6 +50,7 @@ enum ObjectType {
     INGREDIENT = 2;
     COOKWARE = 3;
     WALL = 4;
+    TABLE = 5;
 }
 
 message Object {

@@ -32,7 +32,6 @@ void ServerGame::run()
 
         auto msgMap = server.readAllMessages();
         
-        // Cleans messages
         this->preprocess(msgMap);
 
         this->process(msgMap);
@@ -223,36 +222,50 @@ void ServerGame::onRoundChange()
     this->server.sendToAll(*gameStatus);
 
     /// TODO: Handle unloading all objects. Should not unload the player object.
+
+    // Init all objects into the world (everything preloaded)
     
     switch (this->gameState.getRound())
     {
         case Game::RoundInfo::LOBBY:
         {
             std::cout << "initializing lobby" << std::endl;
-            LobbyProcessor::initGameState(&this->gameState);
+
             break;
         }
         case Game::RoundInfo::DUNGEON_WAITING:
         {
             /// TODO: NEED SOME LOGIC TO HANDLE HOW TO INIT DUNGEON WAITING STAGE, 
-            // FOR NOW IT JUST TRANSITIONS TO NEXT STAGE
+            // FOR NOW IT JUST TRANSITIONS TO NEXT STAGE          
+            GameProcessor::initDungeonPhase(&this->gameState);
+            GameProcessor::initKitchenPhase(&this->gameState);
+            this->gameState.kitchenMap->setRender(false);
             std::cout << "Initializing dungeon waiting" << std::endl;
+            LobbyProcessor::initDungeonWaiting(&this->gameState);
             break;
         }
         case Game::RoundInfo::DUNGEON:
         {
             std::cout << "initializing dungeon" << std::endl;
-            GameProcessor::initGameState(&this->gameState);
+            gameState.setRoundTime(Config::getInt("Dungeon_Round_Time"));
+            GameProcessor::initDungeonPhase(&this->gameState);
             break;
         }
         case Game::RoundInfo::KITCHEN_WAITING:
         {
             std::cout << "initializing kitchen waiting" << std::endl;
-            EndProcessor::initGameState(&this->gameState, this);
+            gameState.setRoundTime(Config::getInt("Kitchen_Waiting_Round_Time"));
+            this->gameState.kitchenMap->setRender(true);
+            this->gameState.dungeonMap->setRender(false);
+            for(auto ingredientPair : gameState.ingredientObjects )
+                ingredientPair.second->setRender(false);
+            // EndProcessor::initGameState(&this->gameState, this);
             break;
         }
         case Game::RoundInfo::KITCHEN:
         {
+            gameState.setRoundTime(Config::getInt("Kitchen_Round_Time"));
+            // "set render to false for everything not associate"
             break;
         }
         case Game::RoundInfo::END:
@@ -266,8 +279,10 @@ void ServerGame::onRoundChange()
         }
     }
 
+    
+
     // On round change, send over all objects
-    for (GameObject* obj: this->gameState.getAllObjects()) {
+    for (GameObject* obj : this->gameState.getAllObjects()) {
         Game::ServerMessage* message = MessageBuilder::toServerMessage(obj);
         this->server.sendToAll(*message);
         delete message;

@@ -142,7 +142,6 @@ void GameObject::setRender(bool render) {
 	this->render = render;
 }
 
-
 // Apply scaling to the model.
 void GameObject::applyScale(glm::vec3 scale) {
 	this->scaleVec = scale;

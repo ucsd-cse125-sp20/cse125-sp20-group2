@@ -3,13 +3,15 @@
 #include <objects/GameObject.h>
 #include <string>
 
-class CookwareObject : public GameObject 
+class Cookware : public GameObject 
 {
 protected:
     std::string name;
 
 public:
-    CookwareObject(int ID);
+    Cookware(int ID);
+
+    Cookware();
 
     void setName(std::string name);
 

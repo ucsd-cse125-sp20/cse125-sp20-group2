@@ -45,6 +45,8 @@ public:
                 msgObj->set_type(Game::ObjectType::COOKWARE); break;
             case 4:
                 msgObj->set_type(Game::ObjectType::WALL); break;
+            case 5:
+                msgObj->set_type(Game::ObjectType::TABLE); break;
         }
 
         // Put allocated object into message to be sent
@@ -148,7 +150,7 @@ public:
    /*
    * Creates a client message for cooking event
    * */
-  static Game::ClientMessage* toCookMessage(IngredientObject* ingredient)
+  static Game::ClientMessage* toCookMessage(Ingredient* ingredient)
   {
       Game::CookEvent* cookMsg = new Game::CookEvent();
       cookMsg->set_objectid(ingredient->getID());

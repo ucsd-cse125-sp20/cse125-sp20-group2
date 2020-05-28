@@ -4,10 +4,10 @@
 #include <game/GameState.h>
 #include <processors/MovementProcessor.h>
 #include <deque>
-#include <objects/Map.h>
 #include <util/MapBuilder.h>
 #include <util/RecipeBuilder.h>
 #include <util/MessageBuilder.h>
+#include <util/Config.h>
 #include <google/protobuf/util/message_differencer.h>
 #include <game/ServerGame.h>
 
@@ -20,9 +20,14 @@ class GameProcessor
 {
     public:
         /**
-         * Initializes the game state
+         * Initializes the dungeon phase
          * */
-        static void initGameState(GameState* gameState);
+        static void initDungeonPhase(GameState* gameState);
+
+        /*
+        * Initialize the kitchen phase
+        * */
+        static void initKitchenPhase(GameState* gameState);
 
         /**
          * This processes a client message for a client id.
@@ -33,5 +38,5 @@ class GameProcessor
         /**
          * Used to spawn another ingredient on the map randomly
          * */
-        static IngredientObject* spawnIngredient(GameState* gameState, Recipe* recipe);
+        static Ingredient* spawnIngredient(GameState* gameState, Recipe* recipe);
 };

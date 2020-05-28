@@ -26,14 +26,13 @@ Player* GameState::addPlayer(unsigned int clientId) {
     return newPlayerObject;
 }
 
-void GameState::addMap(Map *map) {
-    this->map = map;
+void GameState::addWalls(Map *map) {
     for(auto it = map->wallList.begin(); it!= map->wallList.end(); it++) {
         this->worldObjects[(*it)->getID()] = *it;
     }
 }
 
-void GameState::addIngredient(IngredientObject* ing)
+void GameState::addIngredient(Ingredient* ing)
 {
     this->ingredientObjects[ing->getID()] = ing;
 } 
@@ -51,7 +50,7 @@ const std::unordered_map<unsigned int, Player*>& GameState::getPlayerObjects()
     return this->playerObjects;
 }
 
-const std::unordered_map<unsigned int, IngredientObject*>& GameState::getIngredientObjects() {
+const std::unordered_map<unsigned int, Ingredient*>& GameState::getIngredientObjects() {
     return this->ingredientObjects;
 }
 
@@ -60,7 +59,7 @@ Player* GameState::getPlayerObject(unsigned int clientId)
     return this->playerObjects[clientId];
 }
 
-IngredientObject* GameState::getIngredientObject(unsigned int ingredientId)
+Ingredient* GameState::getIngredientObject(unsigned int ingredientId)
 {
     return this->ingredientObjects[ingredientId];
 }
@@ -75,7 +74,7 @@ void GameState::removePlayer(unsigned int clientId)
 
 void GameState::removeIngredient(unsigned int ingredientId)
 {
-    IngredientObject* ingredient = this->ingredientObjects[ingredientId];
+    Ingredient* ingredient = this->ingredientObjects[ingredientId];
     delete ingredient;
     this->ingredientObjects.erase(ingredientId);
 }
@@ -105,7 +104,6 @@ bool GameState::gameOver()
         // Game over if 15 seconds is over
         case Game::RoundInfo_RoundState_KITCHEN_WAITING:
         {
-            return true;
             break;
         }
         // Game over if some time is over
@@ -186,6 +184,11 @@ std::vector<GameObject*> GameState::getAllObjects()
     for (const auto & worldPair : this->worldObjects)
     {
         gameObjectList.push_back(worldPair.second);
+    }
+
+    for (const auto & cookwarePair : this->worldObjects)
+    {
+        gameObjectList.push_back(cookwarePair.second);
     }
 
     return gameObjectList;

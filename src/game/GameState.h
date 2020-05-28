@@ -4,12 +4,13 @@
 #include <objects/GameObject.h>
 #include <unordered_map>
 #include <objects/Player.h>
-#include <objects/IngredientObject.h>
 #include <objects/Map.h>
 #include <util/Recipe.h>
 #include <utility>
 #include <util/Config.h>
 #include <chrono>
+#include <objects/DungeonMap.h>
+#include <objects/KitchenMap.h>
 
 /**
  * This class holds the game state.
@@ -22,18 +23,11 @@ private:
     // This is used to increment the counter
     unsigned int objCounter = 0;
 
-    std::unordered_map<unsigned int, GameObject*> worldObjects;
-
     // This is a mapping of client id to Player objects
     /// TODO: Map from team id to allow instructor to quickly access their team's player
     std::unordered_map<unsigned int, Player*> playerObjects;
 
-    // This is a mapping of gameObjId to ingredient objects
-    std::unordered_map<unsigned int, IngredientObject*> ingredientObjects;
-
     Recipe* recipe; 
-
-    Map* map;
 
     // An enum representing the current round
     // Lobby - Represents phase where players are waiting
@@ -56,8 +50,21 @@ public:
     GameState();
     ~GameState();
 
+    DungeonMap* dungeonMap;
+
+    KitchenMap* kitchenMap;
+
     // Mapping used to determine who is ready
     std::unordered_map<unsigned int, bool> readyStatus;
+
+    // This is a mapping of gameObjId to cookware objects
+    std::unordered_map<unsigned int, Cookware*> cookwareObjects;
+
+    // This is a mapping of gameObjId to world objects
+    std::unordered_map<unsigned int, GameObject*> worldObjects;
+
+    // This is a mapping of gameObjId to ingredient objects
+    std::unordered_map<unsigned int, Ingredient*> ingredientObjects;
 
     /**
      * Adds a new user object using the clientId
@@ -72,14 +79,14 @@ public:
     /**
      * Return the reference ingredient object
      * */
-    IngredientObject* getIngredientObject(unsigned int);
+    Ingredient* getIngredientObject(unsigned int);
 
     /**
      * Adds objects from maps
      * */
-    void addMap(Map* map);
+    void addWalls(Map* map);
 
-    void addIngredient(IngredientObject* ing);
+    void addIngredient(Ingredient* ing);
 
      /**
      * Add ingredient objects in map
@@ -96,7 +103,7 @@ public:
     /**
      * Returns all ingredient objects
      * */
-    const std::unordered_map<unsigned int, IngredientObject*>& getIngredientObjects();
+    const std::unordered_map<unsigned int, Ingredient*>& getIngredientObjects();
 
     /**
      * Removes a player object using the client id

@@ -5,6 +5,7 @@
 #include <objects/Map.h>
 #include <objects/KitchenMap.h>
 #include <objects/DungeonMap.h>
+#include <objects/Table.h>
 
 //
 class MapBuilder {

@@ -33,7 +33,7 @@ void Window::removeObject(unsigned int index) {
 	objNum--;
 }
 
-void Window::addInventory(std::unordered_map<int, IngredientObject*>* inventoryPtr) {
+void Window::addInventory(std::unordered_map<int, Ingredient*>* inventoryPtr) {
 	this->inventory = inventoryPtr;
 }
 
@@ -115,7 +115,7 @@ int Window::getRound() {
 	return this->round;
 }
 
-IngredientObject* Window::getSelectedIngredient() {
+Ingredient* Window::getSelectedIngredient() {
 	return this->selectedIngredient;
 }
 
@@ -232,7 +232,7 @@ void Window::render()
 	ui.UIGameInfo(this->round, minutes, seconds);
 	ui.UIScore(this->score);
 	
-	IngredientObject* tmp;
+	Ingredient* tmp;
 
 	if( this->inventory != NULL )
 		if( this->round == DUNGEON )

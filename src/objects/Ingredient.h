@@ -20,7 +20,7 @@ struct VertexCoord {
 
 
 
-class IngredientObject : public GameObject
+class Ingredient : public GameObject
 {
 protected:
     std::string name;
@@ -36,11 +36,11 @@ protected:
     static std::unordered_map<std::string, IngredientStatus> stringToIngredientStatus;
 
 public:
-    IngredientObject(int ID);
+    Ingredient(int ID);
 
-    IngredientObject();
+    Ingredient();
 
-    ~IngredientObject();
+    ~Ingredient();
 
     void setName(std::string name);
 

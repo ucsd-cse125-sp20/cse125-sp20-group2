@@ -1,13 +1,13 @@
 #pragma once
 
-#include <objects/IngredientObject.h>
-#include <objects/CookwareObject.h>
+#include <objects/Ingredient.h>
+#include <objects/Cookware.h>
 #include <string>
 
 class Instruction {
 public:
-    IngredientObject* ingredient;
-    CookwareObject* cookware;
+    Ingredient* ingredient;
+    Cookware* cookware;
     IngredientStatus before;
     IngredientStatus after;
     std::string instr;

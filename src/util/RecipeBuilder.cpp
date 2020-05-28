@@ -4,7 +4,7 @@ Recipe* RecipeBuilder::getBasicRecipe() {
     Recipe* recipe = new Recipe();
     recipe->name = "Bun Burger";
 
-    IngredientObject *ing = createIngredient("Bun");
+    Ingredient *ing = createIngredient("Bun");
     recipe->ingredientList.push(ing);
 
     ///TODO: add more ingredients
@@ -20,8 +20,8 @@ Recipe* RecipeBuilder::getBasicRecipe() {
     return recipe;
 }
 
-IngredientObject* RecipeBuilder::createIngredient( std::string model ) {
-    IngredientObject* obj = new IngredientObject();
+Ingredient* RecipeBuilder::createIngredient( std::string model ) {
+    Ingredient* obj = new Ingredient();
     obj->setName(model);
     obj->setModel(Config::get(model + "_Model"));
     obj->getBoundingBox()->setRadius(1);

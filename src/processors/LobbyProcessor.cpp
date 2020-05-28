@@ -1,11 +1,15 @@
 #include <processors/LobbyProcessor.h>
 
-void LobbyProcessor::initGameState(GameState* gameState)
+void LobbyProcessor::initLobby(GameState* gameState)
 {
-    gameState->setRoundTime(15);
+    gameState->setRoundTime(Config::getInt("Lobby_Round_Time"));
     // Map* m = MapBuilder::getBasicMap();
     // MapBuilder::assignIngredientPositions(r, m);
-    // gameState->addMap(m);
+    // gameState->addWalls(m);
+}
+
+void LobbyProcessor::initDungeonWaiting(GameState* gameState) {
+    // gameState->setRoundTime(Config::getInt("Dungeon_Waiting_Round_Time"));
 }
 
 void LobbyProcessor::Process(unsigned int clientId, Game::ClientMessage clientMsg, ServerGame* server)

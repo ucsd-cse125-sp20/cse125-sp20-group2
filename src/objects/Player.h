@@ -1,7 +1,7 @@
 #pragma once
 
 #include <objects/GameObject.h>
-#include <objects/IngredientObject.h>
+#include <objects/Ingredient.h>
 #include <unordered_map>
 #include <string>
 #include <util/Instruction.h>
@@ -18,7 +18,7 @@ protected:
 
     float runSpeed = 0, turnSpeed = 0;
 
-    std::unordered_map<int, IngredientObject*>* inventory;
+    std::unordered_map<int, Ingredient*>* inventory;
 
     std::deque<Instruction*> completedInstructions;
 
@@ -53,11 +53,11 @@ public:
 
     int getScore();
 
-    void addToInventory( IngredientObject* ingredient );
+    void addToInventory( Ingredient* ingredient );
 
-    void removeFromInventory( IngredientObject* ingredient );
+    void removeFromInventory( Ingredient* ingredient );
 
-    std::unordered_map<int, IngredientObject*>* getInventory();
+    std::unordered_map<int, Ingredient*>* getInventory();
 
     void drawInventory(GLuint shaderProgram);
 };

@@ -15,14 +15,14 @@ UIScreenFactory::~UIScreenFactory() {
 
 }
 
-void UIScreenFactory::UIInventory(std::unordered_map<int, IngredientObject*>* map) {
+void UIScreenFactory::UIInventory(std::unordered_map<int, Ingredient*>* map) {
 	corner = 0;
 	window_pos = ImVec2((corner & 1) ? io.DisplaySize.x - DISTANCE : DISTANCE, (corner & 2) ? io.DisplaySize.y - DISTANCE : DISTANCE);
 	window_pos_pivot = ImVec2((corner & 1) ? 1.0f : 0.0f, (corner & 2) ? 1.0f : 0.0f);
 	ImGui::SetNextWindowPos(window_pos, ImGuiCond_Always, window_pos_pivot);
 	setWindowSize(ImVec2((float)100, (float)(40 * map->size())));
 	ImGui::Begin("Inventory");
-	std::unordered_map<int, IngredientObject*>::iterator it = map->begin();
+	std::unordered_map<int, Ingredient*>::iterator it = map->begin();
 	while (it != map->end())
 	{
 		UIText(it->second->getName());
@@ -58,15 +58,15 @@ void UIScreenFactory::UIGameOver(bool gameWin) {
 	ImGui::End();
 }
 
-IngredientObject* UIScreenFactory::UIButtonInventory(std::unordered_map<int, IngredientObject*>* map) {
-	IngredientObject* ret = NULL;
+Ingredient* UIScreenFactory::UIButtonInventory(std::unordered_map<int, Ingredient*>* map) {
+	Ingredient* ret = NULL;
 	corner = 0;
 	window_pos = ImVec2((corner & 1) ? io.DisplaySize.x - DISTANCE : DISTANCE, (corner & 2) ? io.DisplaySize.y - DISTANCE : DISTANCE);
 	window_pos_pivot = ImVec2((corner & 1) ? 1.0f : 0.0f, (corner & 2) ? 1.0f : 0.0f);
 	ImGui::SetNextWindowPos(window_pos, ImGuiCond_Always, window_pos_pivot);
 	setWindowSize(ImVec2((float)100, 30+ (float)(40 * map->size())));
 	ImGui::Begin("Inventory");
-	std::unordered_map<int, IngredientObject*>::iterator it = map->begin();
+	std::unordered_map<int, Ingredient*>::iterator it = map->begin();
 	while (it != map->end())
 	{
 		if (ImGui::Button(it->second->getName().c_str())) {

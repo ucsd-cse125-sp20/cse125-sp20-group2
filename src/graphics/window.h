@@ -35,7 +35,7 @@
 // Objects
 #include <objects/GameObject.h>
 #include <objects/Player.h>
-#include <objects/IngredientObject.h>
+#include <objects/Ingredient.h>
 
 #include <graphics/UIScreenFactory.h>
 
@@ -46,8 +46,8 @@ public:
     Window(int width, int height);
 
     std::unordered_map<unsigned int, GameObject*> objectsToRender;
-    std::unordered_map<int, IngredientObject*>* inventory;
-    IngredientObject* selectedIngredient = NULL;
+    std::unordered_map<int, Ingredient*>* inventory;
+    Ingredient* selectedIngredient = NULL;
 
     void render();
 
@@ -66,11 +66,11 @@ public:
 
     int getRound();
 
-    IngredientObject* getSelectedIngredient();
+    Ingredient* getSelectedIngredient();
 
     void updateRound(Game::RoundInfo_RoundState);
 
-    void addInventory(std::unordered_map<int, IngredientObject*>* inventory);
+    void addInventory(std::unordered_map<int, Ingredient*>* inventory);
 
     void close();
     GLFWwindow* glfwViewport;

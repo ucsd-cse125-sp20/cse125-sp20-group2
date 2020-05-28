@@ -7,5 +7,5 @@ class Recipe {
 public:
     std::string name;
     std::vector<Instruction*> instructionList;
-    std::queue<IngredientObject*> ingredientList;
+    std::queue<Ingredient*> ingredientList;
 };

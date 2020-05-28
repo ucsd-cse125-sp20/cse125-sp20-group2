@@ -106,13 +106,15 @@ void ClientGame::updateGameState()
                         case Game::PLAYER: obj = new Player(id); break;
 
                         // Ingredient object.
-                        case Game::INGREDIENT: obj = new IngredientObject(id); break;
+                        case Game::INGREDIENT: obj = new Ingredient(id); break;
 
                         // Cookware object.
-                        case Game::COOKWARE: obj = new CookwareObject(id); break;
+                        case Game::COOKWARE: obj = new Cookware(id); break;
 
                         // Wall object.
                         case Game::WALL: obj = new Wall(id); break;
+                        
+                        case Game::TABLE: obj = new Table(id); break;
 
                         // Basic gameobject.
                         default: obj = new GameObject(id); break;
@@ -145,7 +147,7 @@ void ClientGame::updateGameState()
                 Player* player = (Player*)window.objectsToRender[objectId];
 
                 // Get id of the object to be picked up.
-                IngredientObject* pickup = (IngredientObject*)window.objectsToRender[currMessage.inventory().id()];
+                Ingredient* pickup = (Ingredient*)window.objectsToRender[currMessage.inventory().id()];
 
                 pickup->setName(currMessage.inventory().name());
 

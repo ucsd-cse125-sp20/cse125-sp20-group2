@@ -36,7 +36,7 @@ DungeonMap* MapBuilder::getBasicDungeonMap() {
 KitchenMap* MapBuilder::getBasicKitchenMap() {
     Wall* wall = new Wall();
     wall->setPosition(glm::vec3(0, 0, 5));
-    Map *mp = new KitchenMap();
+    KitchenMap* mp = new KitchenMap();
     mp->wallList.push_back(wall);
 
     mp->spawningLocations.push_back(glm::vec3(10, 0, 0));
@@ -44,11 +44,15 @@ KitchenMap* MapBuilder::getBasicKitchenMap() {
     mp->spawningLocations.push_back(glm::vec3(0, 10, 0));
     mp->spawningLocations.push_back(glm::vec3(0, 0, 0));
 
-    CookwareObject* c = new CookwareObject();
+    Cookware* c = new Cookware();
 
     // TODO: Change to proper kitchenware object later
-    c->setModel(Config::get("Bun_Model"))
-    c->setPosition(glm::vec3(5, 0, 0))
+    c->setModel(Config::get("Pan_Model"));
+    c->setPosition(glm::vec3(5, 3, 0));
+    Table *t = new Table();
+    t->setPosition(glm::vec3(5, 0, 0));
+    mp->tableList.push_back(t);
+
     mp->cookwareObjects.push_back(c);
 
     return mp;
@@ -60,10 +64,12 @@ void MapBuilder::assignIngredientPositions( Recipe* recipe, Map* mp ) {
         ingredient->setPosition(mp->ingredientPositions[i]);
         i++;
     }*/
+
+    DungeonMap* dMapPtr = static_cast<DungeonMap*>(mp);
     for (int i = 0; i < recipe->ingredientList.size(); i++) {
-        IngredientObject* ing = recipe->ingredientList.front();
+        Ingredient* ing = recipe->ingredientList.front();
         recipe->ingredientList.pop();
-        ing->setPosition(mp->ingredientPositions[i]);
+        ing->setPosition(dMapPtr->ingredientPositions[i]);
         recipe->ingredientList.push(ing);
     }
 }

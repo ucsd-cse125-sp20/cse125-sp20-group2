@@ -13,6 +13,7 @@ Onion_Model=assets/models/Onion.obj
 Player_Model=assets/models/Basic_Character_Model.obj
 Tomato_Model=assets/models/tomato.obj
 Wall_Model=assets/models/wall.obj
+Pan_Model=assets/models/Pan.obj
 
 // Image paths
 
@@ -37,6 +38,13 @@ Camera_Speed=0.25
 Camera_Location=0,7,7
 Player_Run_Speed=1
 Player_Turn_Speed=1
+
+// Round time (in seconds)
+Kitchen_Round_Time=15
+Kitchen_Waiting_Round_Time=10
+Dungeon_Round_Time=15
+Lobby_Round_Time=15
+Dungeon_Waiting_Round_Time=5
 
 // Misc Coordinates
 Origin=0,0,0

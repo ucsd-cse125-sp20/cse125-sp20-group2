@@ -1,6 +1,7 @@
 #include <game/GameState.h>
 #include <schema/Game.pb.h>
 #include <game/ServerGame.h>
+#include <util/Config.h>
 
 class ServerGame;
 
@@ -8,13 +9,20 @@ class LobbyProcessor
 {
     public:
         /**
-         * Initializes the game state
+         * Initializes lobby phase
          * */
-        static void initGameState(GameState* gameState);
+        static void initLobby(GameState* gameState);
+
+        /**
+         * Initialize the dungeon waiting phase
+         * */
+        static void initDungeonWaiting(GameState* gameState);
 
         /**
          * This processes a client message for a client id.
          * This will modify GameState.
          * */
         static void Process(unsigned int, Game::ClientMessage, ServerGame*);    
+
+        
 };

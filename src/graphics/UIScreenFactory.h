@@ -2,7 +2,7 @@
 #include <gui/imgui_impl_opengl3.h>
 #include <string>
 #include <unordered_map>
-#include <objects/IngredientObject.h>
+#include <objects/Ingredient.h>
 #include <constants/gameplay_vars.h>
 
 class UIScreenFactory {
@@ -16,8 +16,8 @@ public:
 
 	void UIGameInfo(int round, int32_t minutes, int32_t seconds);
 	void UIScore(int score);
-	void UIInventory(std::unordered_map<int, IngredientObject*>* map);
-	IngredientObject* UIButtonInventory(std::unordered_map<int, IngredientObject*>* map);
+	void UIInventory(std::unordered_map<int, Ingredient*>* map);
+	Ingredient* UIButtonInventory(std::unordered_map<int, Ingredient*>* map);
 	void UIGameOver(bool gameWin);
 
 	void UIText(std::string str);

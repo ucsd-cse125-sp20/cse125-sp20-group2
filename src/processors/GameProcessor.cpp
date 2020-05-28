@@ -1,14 +1,13 @@
 #include <processors/GameProcessor.h>
 
-void GameProcessor::initGameState(GameState* gameState)
+void GameProcessor::initDungeonPhase(GameState* gameState)
 {
-    gameState->setRoundTime(10);
-
     /// TODO: switch statement on dungeon or kitchen
-    Map* m = MapBuilder::getBasicDungeonMap();
+    DungeonMap* m = MapBuilder::getBasicDungeonMap();
     Recipe* r = RecipeBuilder::getBasicRecipe();
     MapBuilder::assignIngredientPositions(r, m);
-    gameState->addMap(m);
+    gameState->dungeonMap = m;
+    gameState->addWalls(m);
     gameState->addRecipe(r);
 
     // Move players to spawn locations
@@ -24,11 +23,20 @@ void GameProcessor::initGameState(GameState* gameState)
 }
 
 void GameProcessor::initKitchenPhase(GameState* gameState) {
-     gameState->setRoundTime(10);
-
     /// TODO: switch statement on dungeon or kitchen
-    Map* m = MapBuilder::getBasicKitchenMap();
-    gameState->addMap(m);
+    KitchenMap* m = MapBuilder::getBasicKitchenMap();
+    gameState->addWalls(m);
+
+    gameState->kitchenMap = m;
+
+    for(auto it = m->cookwareObjects.begin(); it!= m->cookwareObjects.end(); it++) {
+        gameState->cookwareObjects[(*it)->getID()] = *it;
+    }
+
+    for(auto it = m->tableList.begin(); it!= m->tableList.end(); it++) {
+        gameState->worldObjects[(*it)->getID()] = *it;
+    }
+    
 
     // Move players to spawn locations
     for (auto playerPair : gameState->getPlayerObjects())
@@ -68,7 +76,7 @@ void GameProcessor::Process(unsigned int clientId, Game::ClientMessage clientMsg
                     // Check if the collision will be an inventory pickup event
                     if (currObject->getObjectType() == INGREDIENT) {
                         std::cout << "Colliding with ingredients" << std::endl;
-                        IngredientObject* currIngredient = (IngredientObject*) currObject;
+                        Ingredient* currIngredient = (Ingredient*) currObject;
                         ///TODO: Add this back? 
                         currIngredient->renderInvisible();
                         player->addToInventory(currIngredient);
@@ -89,7 +97,7 @@ void GameProcessor::Process(unsigned int clientId, Game::ClientMessage clientMsg
                         server->messages.push_back(mapUpdate);
 
                         ///TODO: Create new ingredient
-                        IngredientObject* newIngredient = spawnIngredient(&server->gameState, server->gameState.getRecipe());
+                        Ingredient* newIngredient = spawnIngredient(&server->gameState, server->gameState.getRecipe());
                         Game::ServerMessage* ingredientUpdate = MessageBuilder::toServerMessage(newIngredient);
                         server->messages.push_back(ingredientUpdate);
                         //delete newIngredient;
@@ -119,13 +127,13 @@ void GameProcessor::Process(unsigned int clientId, Game::ClientMessage clientMsg
     }
 }
 
-IngredientObject* GameProcessor::spawnIngredient(GameState* gameState, Recipe* recipe)
+Ingredient* GameProcessor::spawnIngredient(GameState* gameState, Recipe* recipe)
 {
     std::cerr << "Spawning next ingredient..." << std::endl;
     
     // Make a copy of the ingredient
-    IngredientObject* ing = recipe->ingredientList.front();
-    IngredientObject* copy = RecipeBuilder::createIngredient(ing->getName());
+    Ingredient* ing = recipe->ingredientList.front();
+    Ingredient* copy = RecipeBuilder::createIngredient(ing->getName());
 
     ///TODO: make position random
     copy->setPosition(ing->getPosition());

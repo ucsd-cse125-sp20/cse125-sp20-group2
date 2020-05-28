@@ -17,7 +17,8 @@ enum ObjectType
     PLAYER = 1, 
     INGREDIENT = 2, 
     COOKWARE = 3,  
-    WALL = 4 
+    WALL = 4, 
+    TABLE = 5
 };
 
 // is intersecting(GameObject) -> return boundingBox.isIntersecting
