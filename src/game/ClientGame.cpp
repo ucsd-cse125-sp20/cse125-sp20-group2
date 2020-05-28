@@ -111,10 +111,11 @@ void ClientGame::updateGameState()
 
                         // Cookware object.
                         case Game::COOKWARE: obj = new Cookware(id); break;
-
+                        
                         // Wall object.
                         case Game::WALL: obj = new Wall(id); break;
-                        
+
+                        // Table object.
                         case Game::TABLE: obj = new Table(id); break;
 
                         // Basic gameobject.

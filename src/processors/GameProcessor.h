@@ -30,11 +30,6 @@ class GameProcessor
         static void initKitchenPhase(GameState* gameState);
 
         /**
-         * Initializes the kitchen phase
-         * */
-        static void initKitchenPhase(GameState* gameState);
-
-        /**
          * This processes a client message for a client id.
          * This will modify GameState.
          * */

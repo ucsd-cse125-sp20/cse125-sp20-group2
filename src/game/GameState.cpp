@@ -186,7 +186,7 @@ std::vector<GameObject*> GameState::getAllObjects()
         gameObjectList.push_back(worldPair.second);
     }
 
-    for (const auto & cookwarePair : this->worldObjects)
+    for (const auto & cookwarePair : this->cookwareObjects)
     {
         gameObjectList.push_back(cookwarePair.second);
     }
@@ -212,7 +212,7 @@ void GameState::advanceRound()
     {
         case Game::RoundInfo::LOBBY :
         {
-            this->round = Game::RoundInfo::DUNGEON;
+            this->round = Game::RoundInfo::DUNGEON_WAITING;
             break;
         }
         case Game::RoundInfo::DUNGEON_WAITING :
