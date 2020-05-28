@@ -60,10 +60,10 @@ public:
 	GameObject* target;
 
 	// Constructor with vector values
-	Camera(glm::vec3 pos = INIT_POS, glm::vec3 up = INIT_UP, float yaw = INIT_YAW, float pitch = INIT_PITCH, bool freeCam = true);
+	Camera(glm::vec3 pos = INIT_POS, glm::vec3 up = INIT_UP, float yaw = INIT_YAW, float pitch = INIT_PITCH, bool freeCam = false);
 
 	// Constructor with scalar values
-	Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch, bool freeCam = true);
+	Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch, bool freeCam = false);
 
 	void setTarget(GameObject* target);
 	GameObject* getTarget();

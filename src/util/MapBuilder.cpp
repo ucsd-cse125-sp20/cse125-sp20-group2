@@ -58,7 +58,7 @@ KitchenMap* MapBuilder::getBasicKitchenMap() {
     return mp;
 }
 
-void MapBuilder::assignIngredientPositions( Recipe* recipe, Map* mp ) {
+void MapBuilder::assignIngredientPositions( Recipe* recipe, DungeonMap* mp ) {
     /*int i = 0;
     for( auto ingredient : recipe->ingredientList ) {
         ingredient->setPosition(mp->ingredientPositions[i]);

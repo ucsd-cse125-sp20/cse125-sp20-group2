@@ -37,6 +37,21 @@ void Window::addInventory(std::unordered_map<int, Ingredient*>* inventoryPtr) {
 	this->inventory = inventoryPtr;
 }
 
+void Window::toggleCursor()
+{
+	// Disable cursor
+	if (glfwGetInputMode(glfwViewport, GLFW_CURSOR) == GLFW_CURSOR_NORMAL)
+	{
+		glfwSetInputMode(glfwViewport, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	}
+
+	// Enable cursor
+	else
+	{
+		glfwSetInputMode(glfwViewport, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	}
+}
+
 void Window::setupWindow() {
 
 	// inital mouse positions
@@ -63,9 +78,6 @@ void Window::setupWindow() {
 
 	// Current context is window
 	glfwMakeContextCurrent(glfwViewport);
-
-	// Capture mouse
-	// glfwSetInputMode(glfwViewport, GLFW_CURSOR, GLFW_CURSOR_DISABLED);  
 
 	// Register callback functions
 	glfwSetFramebufferSizeCallback(glfwViewport, framebuffer_size_callback);
