@@ -1,17 +1,17 @@
 Taco=Salad
 
 // Model paths
-Bun_Model=assets/models/Bun.obj
-Burger_Model=assets/models/Burger.obj
+Bun_Model=assets/models/Bun2.obj
+Burger_Model=assets/models/Burger2.obj
 Cheese_Model=assets/models/Cheese.obj
 Grid_Square_Model=assets/models/grid_square.obj
 Grid_Wire_Model=assets/models/grid_wire.obj
-Lettuce_Model=assets/models/Lettuce.obj
+Lettuce_Model=assets/models/Lettuce2.obj
 Maze_Model=assets/models/Basic_Dungeon_Map.obj
-Meat_Model=assets/models/meat.obj
+Meat_Model=assets/models/meat_3.obj
 Onion_Model=assets/models/Onion.obj
 Player_Model=assets/models/Basic_Character_Model.obj
-Tomato_Model=assets/models/tomato.obj
+Tomato_Model=assets/models/tomato2.obj
 Wall_Model=assets/models/wall.obj
 Table_Model=assets/models/wall.obj
 Pan_Model=assets/models/Pan.obj
