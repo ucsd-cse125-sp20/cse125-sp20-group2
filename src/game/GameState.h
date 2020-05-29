@@ -8,6 +8,7 @@
 #include <util/Recipe.h>
 #include <utility>
 #include <util/Config.h>
+#include <game/CookEvent.h>
 #include <chrono>
 #include <objects/DungeonMap.h>
 #include <objects/KitchenMap.h>
@@ -53,6 +54,8 @@ public:
     DungeonMap* dungeonMap;
 
     KitchenMap* kitchenMap;
+
+    std::vector<CookEvent*> cookEvents;
 
     // Mapping used to determine who is ready
     std::unordered_map<unsigned int, bool> readyStatus;

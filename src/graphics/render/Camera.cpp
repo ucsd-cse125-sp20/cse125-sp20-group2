@@ -6,13 +6,13 @@
  * Default values are all defined in graphics/_options/graphics_vars.h .
  * */
 Camera::Camera(glm::vec3 pos, glm::vec3 up, float yaw, float pitch, bool freeCam) 
-	: front(INIT_FRONT), moveSpeed(Config::getFloat("Camera_Speed")), sensitivity(INIT_SENSITIVITY), zoom(INIT_ZOOM)
+	: front(INIT_FRONT), moveSpeed(Config::getFloat("Camera_Speed")), sensitivity(INIT_SENSITIVITY), fov(Config::getFloat("Camera_FOV"))
 {
 	this->pos = pos;
 	this->staticPos = pos;
 	this->worldUp = up;
-	this->yaw = yaw;
-	this->pitch = pitch;
+	this->yaw = Config::getFloat("Camera_Yaw");
+	this->pitch = Config::getFloat("Camera_Pitch");
 	this->freeCam = freeCam;
 	target = NULL;
 	updateCameraVectors();
@@ -20,7 +20,7 @@ Camera::Camera(glm::vec3 pos, glm::vec3 up, float yaw, float pitch, bool freeCam
 
 
 Camera::Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch, bool freeCam)
-	: front(INIT_FRONT), moveSpeed(Config::getFloat("Camera_Speed")), sensitivity(INIT_SENSITIVITY), zoom(INIT_ZOOM)
+	: front(INIT_FRONT), moveSpeed(Config::getFloat("Camera_Speed")), sensitivity(INIT_SENSITIVITY), fov(Config::getFloat("Camera_FOV"))
 {
 	pos = glm::vec3(posX, posY, posZ);
 	this->staticPos = pos;
@@ -46,8 +46,8 @@ void Camera::toggleFreeCam() {
 
 	if (!freeCam) 
 	{
-		yaw = INIT_YAW;
-		pitch = INIT_PITCH;
+		yaw = Config::getFloat("Camera_Yaw");
+		pitch = Config::getFloat("Camera_Pitch");
 
 		// Reset position to either target or initalized position
 		if (target) warpToTarget();
@@ -98,19 +98,6 @@ void Camera::processMouseMovement(float xoffset, float yoffset)
 
 	// Update front, right and Up Vectors using the updated Euler angles
 	updateCameraVectors();
-}
-
-// Processes input received from a mouse scroll-wheel event. Only requires input on the vertical wheel-axis
-void Camera::processMouseScroll(float yoffset)
-{
-	if (!freeCam) return;
-
-	if (zoom >= 1.0f && zoom <= 45.0f)
-		zoom -= yoffset;
-	if (zoom < 1.0f)
-		zoom = 1.0f;
-	if (zoom > 45.0f)
-		zoom = 45.0f;
 }
 
 // Calculates the front vector from the Camera's (updated) Euler Angles

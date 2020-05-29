@@ -1,7 +1,7 @@
 Taco=Salad
 
 // Model paths
-Bun_Model=assets/models/Bun2.obj
+Bun_Model=assets/models/Bun.obj
 Burger_Model=assets/models/Burger2.obj
 Cheese_Model=assets/models/Cheese.obj
 Grid_Square_Model=assets/models/grid_square.obj
@@ -34,9 +34,16 @@ Window_Title=Comrade's Kitchen
 Window_Width=900
 Window_Height=800
 
-// Controls
+// Camera properties
 Camera_Speed=0.25
+Camera_FOV=65.0
 Camera_Location=0,7,7
+
+// Camera rotations (yaw = rotation about y-axis, pitch = rotation about x-axis)
+Camera_Yaw=-90.0
+Camera_Pitch=-45.0
+
+// Controls
 Player_Run_Speed=1
 Player_Turn_Speed=1
 
@@ -47,10 +54,14 @@ Dungeon_Round_Time=15
 Lobby_Round_Time=15
 Dungeon_Waiting_Round_Time=5
 
+Cook_Event_Time=5
+
 // Scaling
 Wall_Scaling=3,2,2
 Table_Scaling=1,1,1
 Cookware_Scaling=2,2,2
+
+Cooking_Event_Min_Distance=1.5
 
 // Misc Coordinates
 Origin=0,0,0

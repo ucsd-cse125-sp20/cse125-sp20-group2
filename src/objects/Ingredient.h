@@ -8,8 +8,23 @@ enum class IngredientStatus
 {
     Raw,
     Cut,
-    Cooked
+    Boiled, 
+    Fried
 };
+
+
+const std::string BUN = "Bun";
+const std::string ONION = "Onion";
+const std::string MEAT = "Meat";
+const std::string CHEESE = "Cheese";
+
+/**
+raw -> boiled
+raw -> fried
+raw -> cut -> boiled
+raw -> cut -> fried
+raw -> cut**/
+
 
 
 
@@ -17,8 +32,6 @@ struct VertexCoord {
     glm::vec3 position;
     glm::vec2 texcoord;
 };
-
-
 
 class Ingredient : public GameObject
 {

@@ -6,8 +6,8 @@
 
 class Instruction {
 public:
-    Ingredient* ingredient;
-    Cookware* cookware;
+    std::string ingredient;
+    std::string cookware;
     IngredientStatus before;
     IngredientStatus after;
     std::string instr;
