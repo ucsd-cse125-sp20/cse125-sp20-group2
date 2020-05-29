@@ -13,6 +13,7 @@ Onion_Model=assets/models/Onion.obj
 Player_Model=assets/models/Basic_Character_Model.obj
 Tomato_Model=assets/models/tomato.obj
 Wall_Model=assets/models/wall.obj
+Table_Model=assets/models/wall.obj
 Pan_Model=assets/models/Pan.obj
 
 // Image paths
@@ -45,6 +46,11 @@ Kitchen_Waiting_Round_Time=10
 Dungeon_Round_Time=15
 Lobby_Round_Time=15
 Dungeon_Waiting_Round_Time=5
+
+// Scaling
+Wall_Scaling=3,2,2
+Table_Scaling=1,1,1
+Cookware_Scaling=2,2,2
 
 // Misc Coordinates
 Origin=0,0,0

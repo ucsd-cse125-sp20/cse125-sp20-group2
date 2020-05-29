@@ -36,10 +36,12 @@ void GameState::addIngredient(Ingredient* ing)
 {
     this->ingredientObjects[ing->getID()] = ing;
 } 
+
 void GameState::addRecipe(Recipe *recipe) 
 {
     this->recipe = recipe;
 }
+
 Recipe* GameState::getRecipe()
 {
     return this->recipe;

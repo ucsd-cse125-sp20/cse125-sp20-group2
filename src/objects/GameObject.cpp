@@ -188,7 +188,7 @@ glm::vec3 GameObject::getScaleVec() {
 }
 
 bool GameObject::isColliding(GameObject* obj) {
-	if (this->box == NULL || obj->box == NULL) {
+	if (this->box == NULL || obj->box == NULL || !obj->render || !this->render ) {
 		return false;
 	}
 	return this->box->isIntersecting(obj->box);

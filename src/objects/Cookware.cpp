@@ -6,14 +6,12 @@ Cookware::Cookware(int ID) : GameObject(ID) {
 
 Cookware::Cookware() : GameObject() {
     this->objType = COOKWARE;
-	this->setModel(Config::get("Wall_Model"));
-    
+    this->applyScale(Config::getVec3("Cookware_Scaling"));
 }
     
 void Cookware::setName(std::string name) {
     this->name = name;
 };
-
 
 std::string Cookware::getName() {
     return this->name;

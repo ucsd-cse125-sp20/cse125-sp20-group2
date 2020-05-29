@@ -23,12 +23,11 @@ DungeonMap* MapBuilder::getBasicDungeonMap() {
     mp->spawningLocations.push_back(glm::vec3(0, 10, 0));
     mp->spawningLocations.push_back(glm::vec3(0, 0, 0));
 
-
     ///TODO: Add different positions?
     mp->ingredientPositions.push_back(glm::vec3(8, 0, 0));
     mp->ingredientPositions.push_back(glm::vec3(-8, 0, 0));
-    mp->ingredientPositions.push_back(glm::vec3(8, 0, 0));
-    mp->ingredientPositions.push_back(glm::vec3(-8, 0, 0));
+    mp->ingredientPositions.push_back(glm::vec3(10, 0, 0));
+    mp->ingredientPositions.push_back(glm::vec3(-10, 0, 0));
 
     return mp;
 }
@@ -46,9 +45,9 @@ KitchenMap* MapBuilder::getBasicKitchenMap() {
 
     Cookware* c = new Cookware();
 
-    // TODO: Change to proper kitchenware object later
     c->setModel(Config::get("Pan_Model"));
-    c->setPosition(glm::vec3(5, 3, 0));
+    c->setPosition(glm::vec3(3, 0, 0));
+    
     Table *t = new Table();
     t->setPosition(glm::vec3(5, 0, 0));
     mp->tableList.push_back(t);

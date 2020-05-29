@@ -230,17 +230,18 @@ void ServerGame::onRoundChange()
         case Game::RoundInfo::LOBBY:
         {
             std::cout << "initializing lobby" << std::endl;
-
             break;
         }
         case Game::RoundInfo::DUNGEON_WAITING:
-        {
-            /// TODO: NEED SOME LOGIC TO HANDLE HOW TO INIT DUNGEON WAITING STAGE, 
-            // FOR NOW IT JUST TRANSITIONS TO NEXT STAGE          
+        { 
+            std::cout << "Initializing dungeon waiting" << std::endl;
+
+            // Create the other phases 
             GameProcessor::initDungeonPhase(&this->gameState);
             GameProcessor::initKitchenPhase(&this->gameState);
+
+
             this->gameState.kitchenMap->setRender(false);
-            std::cout << "Initializing dungeon waiting" << std::endl;
             LobbyProcessor::initDungeonWaiting(&this->gameState);
             break;
         }
@@ -248,7 +249,6 @@ void ServerGame::onRoundChange()
         {
             std::cout << "initializing dungeon" << std::endl;
             gameState.setRoundTime(Config::getInt("Dungeon_Round_Time"));
-            GameProcessor::initDungeonPhase(&this->gameState);
             break;
         }
         case Game::RoundInfo::KITCHEN_WAITING:
