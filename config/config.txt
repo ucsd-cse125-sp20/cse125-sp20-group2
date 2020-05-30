@@ -1,7 +1,7 @@
 Taco=Salad
 
 // Model paths
-Bun_Model=assets/models/Bun.obj
+Bun_Model=assets/models/Bun2.obj
 Burger_Model=assets/models/Burger2.obj
 Cheese_Model=assets/models/Cheese.obj
 Grid_Square_Model=assets/models/grid_square.obj
