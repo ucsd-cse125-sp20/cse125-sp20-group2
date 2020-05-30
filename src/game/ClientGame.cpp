@@ -183,10 +183,6 @@ void ClientGame::updateGameState()
                 
                 std::cout << "secs left " << currMessage.time().seconds() << std::endl;
                 uint32_t seconds = currMessage.time().seconds();
-                if( seconds == 0) {
-                    this->round++;
-                    window.setRound(this->round);
-                }
                 window.setTimer(seconds);
                 break;
             }

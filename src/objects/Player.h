@@ -2,6 +2,7 @@
 
 #include <objects/GameObject.h>
 #include <objects/Ingredient.h>
+#include <util/Recipe.h>
 #include <unordered_map>
 #include <string>
 #include <util/Instruction.h>
@@ -13,6 +14,8 @@ protected:
     int clientID;
 
     int score  = 0;
+
+    bool freeze;
 
     std::string teamName;
 
@@ -26,6 +29,12 @@ protected:
 
 public:
     Player(int ID);
+
+    void setFreeze(bool f);
+
+    bool getFreeze();
+
+    std::vector<std::pair<Instruction*, bool>> instructionSet;
 
     std::deque<Instruction*> getCompletedInstructions();
 
@@ -60,4 +69,7 @@ public:
     std::unordered_map<int, Ingredient*>* getInventory();
 
     void drawInventory(GLuint shaderProgram);
+
+    ///TODO: Implement
+    void addIngredientsFromRecipe(Recipe* recipe);
 };

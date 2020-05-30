@@ -41,6 +41,7 @@ message ServerMessage {
         TimeUpdate time = 6;
         RoundInfo round = 7;
         RoundWin win = 8;
+        ValidateCooking validCook = 9;
     }
 }
 
@@ -104,5 +105,7 @@ message RoundWin {
     required uint32 clientId = 1;
 }
 
-
-   
+message ValidateCooking {
+    required string message = 1;
+    required bool valid = 2;
+}

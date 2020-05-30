@@ -20,13 +20,8 @@ enum Camera_Movement {
 	RIGHT
 };
 
-// Default euler angles
-const float INIT_YAW = -90.0f;
-const float INIT_PITCH = -45.0f;
-
 // Default camera movement options
 const float INIT_SENSITIVITY = 0.1f;
-const float INIT_ZOOM = 45.0f;
 
 // Default lookAt vectors (if not given)
 const glm::vec3 INIT_POS = glm::vec3(0, 0, 0);
@@ -54,13 +49,13 @@ public:
 	// Movement options
 	float moveSpeed;
 	float sensitivity;
-	float zoom;
+	float fov;
 
 	// Camera target (if freecam is disabled)
 	GameObject* target;
 
 	// Constructor with vector values
-	Camera(glm::vec3 pos = INIT_POS, glm::vec3 up = INIT_UP, float yaw = INIT_YAW, float pitch = INIT_PITCH, bool freeCam = false);
+	Camera(glm::vec3 pos = INIT_POS, glm::vec3 up = INIT_UP, float yaw = Config::getFloat("Camera_Yaw"), float pitch = Config::getFloat("Camera_Pitch"), bool freeCam = false);
 
 	// Constructor with scalar values
 	Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch, bool freeCam = false);
@@ -79,9 +74,6 @@ public:
 	void warpToTarget();
 
 	void processMouseMovement(float xoffset, float yoffset);
-
-	// Processes input received from a mouse scroll-wheel event. Only requires input on the vertical wheel-axis
-	void processMouseScroll(float yoffset);
 
 private:
 	// Calculates the front vector from the Camera's (updated) Euler Angles

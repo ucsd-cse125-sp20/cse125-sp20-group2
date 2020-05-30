@@ -159,4 +159,17 @@ public:
       clientMsg->set_allocated_cookevent(cookMsg);
       return clientMsg;
   }
+
+  /*
+  * Create a server message for time update
+  * */
+ static Game::ServerMessage* toTimeMessage(int time)
+ {
+     Game::TimeUpdate* timeUpdateMessage = new Game::TimeUpdate();
+     timeUpdateMessage->set_seconds(time);
+
+     Game::ServerMessage* serverMsg = new Game::ServerMessage();
+     serverMsg->set_allocated_time(timeUpdateMessage);
+     return serverMsg;
+ }
 };

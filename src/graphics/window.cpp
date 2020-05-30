@@ -206,9 +206,9 @@ void Window::render()
 	// camera view transformation (related to xy axis rotations)
 	glm::mat4 view = this->camera->getViewMatrix();
 
-	// camera projection transformation (related to zooms)
+	// camera projection transformation
 	glm::mat4 projection = glm::mat4(1.0f);
-	projection = glm::perspective(glm::radians(this->camera->zoom), Config::getFloat("Window_Width") / Config::getFloat("Window_Height"), 0.1f, 100.0f);
+	projection = glm::perspective(glm::radians(this->camera->fov), Config::getFloat("Window_Width") / Config::getFloat("Window_Height"), 0.1f, 100.0f);
 
 	// pass transformation matrices to the shader
 	shader->setMat4("projection", projection); // note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.

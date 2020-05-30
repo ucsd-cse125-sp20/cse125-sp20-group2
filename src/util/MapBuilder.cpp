@@ -46,6 +46,7 @@ KitchenMap* MapBuilder::getBasicKitchenMap() {
     Cookware* c = new Cookware();
 
     c->setModel(Config::get("Pan_Model"));
+    c->setName(PAN);
     c->setPosition(glm::vec3(3, 0, 0));
     
     Table *t = new Table();
@@ -67,8 +68,8 @@ void MapBuilder::assignIngredientPositions( Recipe* recipe, DungeonMap* mp ) {
     DungeonMap* dMapPtr = static_cast<DungeonMap*>(mp);
     for (int i = 0; i < recipe->ingredientList.size(); i++) {
         Ingredient* ing = recipe->ingredientList.front();
-        recipe->ingredientList.pop();
+        recipe->ingredientList.erase(recipe->ingredientList.begin());
         ing->setPosition(dMapPtr->ingredientPositions[i]);
-        recipe->ingredientList.push(ing);
+        recipe->ingredientList.push_back(ing);
     }
 }

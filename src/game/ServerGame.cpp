@@ -36,6 +36,8 @@ void ServerGame::run()
 
         this->process(msgMap);
 
+        this->update();
+
         this->sendPendingMessages();
 
         auto end = std::chrono::high_resolution_clock::now();
@@ -122,31 +124,29 @@ void ServerGame::process(std::unordered_map<unsigned int, std::vector<Game::Clie
             }
         }
     }
-
-    /// TODO: Remove
-    // /// TODO: mainly for testing, timer functionality, can delete
-    // if (this->gameState.timeHasUpdated())
-    // {
-    //     // Create time update message
-    //     Game::TimeUpdate* timeUpdateMessage = new Game::TimeUpdate();
-    //     timeUpdateMessage->set_seconds(this->gameState.getRoundTime());
-    //     Game::ServerMessage* serverMsg = new Game::ServerMessage();
-    //     serverMsg->set_allocated_time(timeUpdateMessage);
-
-    //     // Send round update to everyone
-    //     this->server.sendToAll(*serverMsg);
-
-    //     delete serverMsg;
-    // }
-
-    // /// TODO FIX LOGIC
-    // if (this->gameState.gameOver())
-    // {
-    //     // std::cout << "GAME OVER AAAAAAAAAAAAAA" << std::endl;
-    // }
 }
 
+/// TODO: USE FOR TIMER LOGIC AND EVENTS THAT DEPEND ON TIME
+void ServerGame::update()
+{
+    // Time updates
+    if (this->gameState.timeHasUpdated())
+    {
+        int roundTime = this->gameState.getRoundTime();
+        Game::ServerMessage* serverMsg = MessageBuilder::toTimeMessage(roundTime);
+        this->messages.push_back(serverMsg);
+    }
 
+    /// TODO: yes
+    // Check some data structure (timer value), create any pending messages if any, send over
+    // Check for any cooking events that have just terminated
+    // Unfreeze the player (set busy state to false), make the cookware ingredient free
+    // Change the model of the cookware (if applicable)
+    // Change status of ingredient and update the inventory of player
+    // Check the instructions if player scored points for doing the correct instruction
+    // If the instruction was sequential, give more points to the player
+    
+}
 
 void ServerGame::sendPendingMessages()
 {
@@ -264,6 +264,7 @@ void ServerGame::onRoundChange()
         }
         case Game::RoundInfo::KITCHEN:
         {
+            std::cout << "initializing kitchen" << std::endl;
             gameState.setRoundTime(Config::getInt("Kitchen_Round_Time"));
             // "set render to false for everything not associate"
             break;

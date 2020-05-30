@@ -47,6 +47,11 @@ class ServerGame
         * */
         void process(std::unordered_map<unsigned int, std::vector<Game::ClientMessage>> & msgMap);
 
+        /*
+        * Use to process time sensitive events
+        * */
+        void update();
+
         /**
          * Sends messages for specific players and
          * messages for all players

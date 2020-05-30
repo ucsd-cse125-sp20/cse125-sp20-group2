@@ -90,3 +90,11 @@ void Player::drawInventory(GLuint shaderProgram) {
         it++;
     }
 }
+
+void Player::setFreeze(bool f) {
+    this->freeze = f;
+}
+
+bool Player::getFreeze() {
+    return this->freeze;
+}

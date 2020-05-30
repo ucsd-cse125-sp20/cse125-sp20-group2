@@ -10,6 +10,7 @@
 #include <util/Config.h>
 #include <google/protobuf/util/message_differencer.h>
 #include <game/ServerGame.h>
+#include <math.h>
 
 class ServerGame;
 
