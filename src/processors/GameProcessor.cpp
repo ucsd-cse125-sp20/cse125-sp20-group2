@@ -8,8 +8,9 @@ void GameProcessor::initLobbyPhase(GameState *gameState)
     // gameState->addWalls(m);
 }
 
-void GameProcessor::initDungeonPhase(GameState *gameState)
+void GameProcessor::initDungeonPhase(GameState *gameState, ServerGame *server)
 {
+    // Create the map
     DungeonMap *m = MapBuilder::getBasicDungeonMap();
     Recipe *r = RecipeBuilder::getBasicRecipe();
     MapBuilder::assignIngredientPositions(r, m);
@@ -17,13 +18,43 @@ void GameProcessor::initDungeonPhase(GameState *gameState)
     gameState->addWalls(m);
     gameState->addRecipe(r);
 
+    // Give all connected players basic ingredients
+    // Make sure all those ingredients are in gameState
+    for (auto &playerPair : gameState->getPlayerObjects())
+    {
+        unsigned int clientId = playerPair.first;
+        Player *currPlayer = playerPair.second;
+        std::cout << "this is the ingredient list size " << r->ingredientList.size() << std::endl;
+        for (auto ingredientCopy : r->ingredientList)
+        {
+            // Set low quality, add to player, add to gamestate, make invisible
+            Ingredient *currIngredient = RecipeBuilder::createIngredient(ingredientCopy->getName());
+            currIngredient->setQualityIndex(BAD_QUALITY);
+            currIngredient->renderInvisible();
+
+            currPlayer->addToInventory(currIngredient);
+            gameState->addIngredient(currIngredient);
+
+            // Create message for collecting ingredient
+            Game::ServerMessage *serverMsg =
+                MessageBuilder::toInventoryServerMessage(currIngredient->getID(),
+                                                         true,
+                                                         currIngredient->getName(),
+                                                         currIngredient->getStatus(),
+                                                         currIngredient->getQualityIndex());
+
+            // put onto pending to send out
+            server->specificMessages[clientId].push_back(serverMsg);
+        }
+    }
+
     ///TODO: Spawn first ingredient
     spawnIngredient(gameState, r);
 }
 
-void GameProcessor::initPlayersLocations(Map* map, GameState* gameState)
+void GameProcessor::initPlayersLocations(Map *map, GameState *gameState)
 {
-// M// Move players to spawn locations
+    // M// Move players to spawn locations
     for (auto playerPair : gameState->getPlayerObjects())
     {
         Player *currPlayer = playerPair.second;
@@ -74,18 +105,18 @@ void GameProcessor::processLobby(unsigned int clientId, Game::ClientMessage clie
 {
     switch (clientMsg.event_case())
     {
-    case Game::ClientMessage::EventCase::kReady:
-    {
-        std::cout << "received ready up event in processing lobby" << std::endl;
-        bool clientStatus = clientMsg.ready().ready();
-        server->gameState.readyStatus[clientId] = clientStatus;
-        break;
-    }
-    default:
-    {
-        std::cout << "ignored by lobby processing" << std::endl;
-        break;
-    }
+        case Game::ClientMessage::EventCase::kReady:
+        {
+            std::cout << "received ready up event in processing lobby" << std::endl;
+            bool clientStatus = clientMsg.ready().ready();
+            server->gameState.readyStatus[clientId] = clientStatus;
+            break;
+        }
+        default:
+        {
+            std::cout << "ignored by lobby processing" << std::endl;
+            break;
+        }
     }
 }
 
@@ -106,7 +137,7 @@ void GameProcessor::process(unsigned int clientId, Game::ClientMessage clientMsg
         glm::vec3 pPos = p->getPosition();
 
         // Check for valid cookware in range
-        for (auto & cookwarePair : cookwarePairs)
+        for (auto &cookwarePair : cookwarePairs)
         {
             Cookware *cookware = cookwarePair.second;
             glm::vec3 cPos = cookware->getPosition();
@@ -158,9 +189,9 @@ void GameProcessor::process(unsigned int clientId, Game::ClientMessage clientMsg
         }
 
         /// TODO: may not be in the right spot, but see if close to any plates, and interact with them
-        for (auto & platePair : server->gameState.plateObjects)
+        for (auto &platePair : server->gameState.plateObjects)
         {
-            Plate* plate = platePair.second;
+            Plate *plate = platePair.second;
             glm::vec3 cPos = plate->getPosition();
 
             float distance = sqrt(pow((pPos.x - cPos.x), 2) + pow((pPos.y - cPos.y), 2) + pow((pPos.z - cPos.z), 2));
@@ -184,17 +215,21 @@ void GameProcessor::process(unsigned int clientId, Game::ClientMessage clientMsg
         glm::vec3 originalPos = player->getPosition();
 
         // Cancel cooking event if frozen
-        if (player->getFreeze()) {
-            std::vector<CookEvent*>::iterator iter;
-            for( iter = server->gameState.cookEvents.begin(); iter != server->gameState.cookEvents.end(); ) {
-                CookEvent* cookEvent = *iter;
-                if( cookEvent->player == player ) {
+        if (player->getFreeze())
+        {
+            std::vector<CookEvent *>::iterator iter;
+            for (iter = server->gameState.cookEvents.begin(); iter != server->gameState.cookEvents.end();)
+            {
+                CookEvent *cookEvent = *iter;
+                if (cookEvent->player == player)
+                {
                     std::cout << "found a player and their cookevent" << std::endl;
                     player->setFreeze(false);
                     cookEvent->cookware->setBusy(false);
                     iter = server->gameState.cookEvents.erase(iter);
                     break;
-                } else
+                }
+                else
                     iter++;
             }
         }

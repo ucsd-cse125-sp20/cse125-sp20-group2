@@ -12,6 +12,7 @@ const std::string BUN = "Bun";
 const std::string ONION = "Onion";
 const std::string MEAT = "Meat";
 const std::string CHEESE = "Cheese";
+const int NUM_INGREDIENTS = 6;
 
 const int BAD_QUALITY = 1;
 const int OK_QUALITY = 2;

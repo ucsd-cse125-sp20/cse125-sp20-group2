@@ -201,6 +201,9 @@ void ServerGame::update()
             ++it;
         }
     }
+
+    // Spawn random ingredients from time to time
+    
 }
 
 void ServerGame::sendPendingMessages()
@@ -292,7 +295,7 @@ void ServerGame::onRoundChange()
             std::cout << "Initializing dungeon waiting" << std::endl;
 
             // Create the other phases 
-            GameProcessor::initDungeonPhase(&this->gameState);
+            GameProcessor::initDungeonPhase(&this->gameState, this);
             GameProcessor::initKitchenPhase(&this->gameState);
 
 

@@ -101,12 +101,19 @@ void Window::setupWindow() {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGui::StyleColorsDark();
+	
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 	ImGui_ImplGlfw_InitForOpenGL(glfwViewport, true);
 
+	//impl = GlfwRenderer(glfwViewport);
+
 	ImGui_ImplOpenGL3_Init("#version 130");
-	ImFont* font1 = io.Fonts->AddFontFromFileTTF("assets/fonts/NikkyouSans-B6aV.ttf", Config::getInt("Font_Size_Pixels"));
-	ImGui::PushFont(font1);
+	//ImFont* font1 = io.Fonts->AddFontFromFileTTF("assets/fontsNikkyouSans-B6aV.ttf", Config::getInt("Font_Size_Pixels"));
+	//glfwViewport.refresh_font_texture();
+	ImGuiStyle * style = &ImGui::GetStyle();
+
+
+	//ImGui::PushFont(font1);
 
 }
 
@@ -256,6 +263,7 @@ void Window::render()
 	int32_t seconds = this->timer % 60;
 
 	UIScreenFactory ui = UIScreenFactory();
+	ImGui::SetWindowFontScale(1.8);
 	ui.UIGameInfo(this->round, minutes, seconds);
 	ui.UIScore(this->score);
 	

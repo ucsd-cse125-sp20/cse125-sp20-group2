@@ -15,4 +15,3 @@ src/schema/Game.pb.*
 *.ini
 
 # Textures and Models
-assets/

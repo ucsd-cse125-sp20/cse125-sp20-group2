@@ -7,14 +7,19 @@ Recipe* RecipeBuilder::getBasicRecipe() {
     Ingredient *ing = createIngredient("Bun");
     recipe->ingredientList.push_back(ing);
 
-    ///TODO: add more ingredients
-    ing = createIngredient("Bun");
-    recipe->ingredientList.push_back(ing);
-
     ing = createIngredient("Meat");
     recipe->ingredientList.push_back(ing);
 
     ing = createIngredient("Onion");
+    recipe->ingredientList.push_back(ing);
+
+    ing = createIngredient("Cheese");
+    recipe->ingredientList.push_back(ing);
+    
+    ing = createIngredient("Lettuce");
+    recipe->ingredientList.push_back(ing);
+    
+    ing = createIngredient("Tomato");
     recipe->ingredientList.push_back(ing);
 
     Instruction *inst = new Instruction();

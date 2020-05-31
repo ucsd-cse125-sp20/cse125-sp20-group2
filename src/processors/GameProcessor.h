@@ -29,7 +29,7 @@ class GameProcessor
         /**
          * Initializes the dungeon phase
          * */
-        static void initDungeonPhase(GameState* gameState);
+        static void initDungeonPhase(GameState* gameState, ServerGame* server);
 
         /**
          * Teleport players to spawn locations of the given map
