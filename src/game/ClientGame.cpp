@@ -186,24 +186,42 @@ void ClientGame::processInput()
 	}
 
     // Message to send
-    Game::ClientMessage msg;
+    Game::ClientMessage movementMessage;
+    Game::ClientMessage rotationMessage;
 
     // Get key inputs and set direction of message
-	if (glfwGetKey(window.glfwViewport, GLFW_KEY_W) == GLFW_PRESS)
+    if (glfwGetKey(window.glfwViewport, GLFW_KEY_W) == GLFW_PRESS &&
+    glfwGetKey(window.glfwViewport, GLFW_KEY_S) == GLFW_PRESS) {
+        // Do nothing: The movements should cancel each other out.
+    }
+    else if (glfwGetKey(window.glfwViewport, GLFW_KEY_W) == GLFW_PRESS)
     {
-        msg.set_direction(Game::Direction::UP);  
+        movementMessage.set_direction(Game::Direction::UP);  
     }
 	else if (glfwGetKey(window.glfwViewport, GLFW_KEY_S) == GLFW_PRESS) 
     {
-        msg.set_direction(Game::Direction::DOWN); 
+        movementMessage.set_direction(Game::Direction::DOWN); 
     }
-	if (glfwGetKey(window.glfwViewport, GLFW_KEY_A) == GLFW_PRESS)
+
+    
+    if (glfwGetKey(window.glfwViewport, GLFW_KEY_A) == GLFW_PRESS &&
+    glfwGetKey(window.glfwViewport, GLFW_KEY_D) == GLFW_PRESS) {
+        // Do nothing: The movements should cancel each other out.
+    }
+	else if (glfwGetKey(window.glfwViewport, GLFW_KEY_A) == GLFW_PRESS)
     {
-        msg.set_direction(Game::Direction::LEFT); 
+        rotationMessage.set_direction(Game::Direction::LEFT); 
     }
 	else if (glfwGetKey(window.glfwViewport, GLFW_KEY_D) == GLFW_PRESS)
     {
-        msg.set_direction(Game::Direction::RIGHT); 
+        rotationMessage.set_direction(Game::Direction::RIGHT); 
+    }
+    // Send message only if it has a direction associated with it
+    if (movementMessage.has_direction()) {
+        this->client.send(movementMessage);
+    }
+    if (rotationMessage.has_direction()) {
+        this->client.send(rotationMessage);
     }
 
     // Camera movement options (client-side only)
@@ -215,12 +233,4 @@ void ClientGame::processInput()
 		window.camera->processKeyMovement(LEFT);
     if (glfwGetKey(window.glfwViewport, GLFW_KEY_RIGHT) == GLFW_PRESS)
 		window.camera->processKeyMovement(RIGHT);
-	if (glfwGetKey(window.glfwViewport, GLFW_KEY_F) == GLFW_PRESS)
-		window.camera->toggleFreeCam();
-
-    
-    // Send message only if it has a direction associated with it
-    if (msg.has_direction()) {
-        this->client.send(msg);
-    }
 }
