@@ -100,11 +100,14 @@ void Window::setupWindow() {
 	this->glfwViewport = glfwViewport;
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
-	ImGui::StyleColorsClassic();
+	ImGui::StyleColorsDark();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 	ImGui_ImplGlfw_InitForOpenGL(glfwViewport, true);
 
 	ImGui_ImplOpenGL3_Init("#version 130");
+	ImFont* font1 = io.Fonts->AddFontFromFileTTF("assets/fonts/NikkyouSans-B6aV.ttf", 14);
+	ImGui::PushFont(font1);
+
 }
 
 void Window::addCookingEventMessage(std::string msg) {

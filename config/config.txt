@@ -61,6 +61,7 @@ Cook_Event_Time=5
 Wall_Scaling=3,2,2
 Table_Scaling=1,1,1
 Cookware_Scaling=2,2,2
+Plate_Scaling=1,1,1
 
 Cooking_Event_Min_Distance=1.5
 Plate_Event_Min_Distance=1.5

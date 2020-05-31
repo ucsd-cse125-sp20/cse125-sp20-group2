@@ -16,6 +16,8 @@ public:
 
     Cookware();
 
+    Cookware(std::string name);
+
     void setBusy(bool busy);
 
     bool getBusy();

@@ -44,8 +44,7 @@ KitchenMap* MapBuilder::getBasicKitchenMap(GameState* gameState) {
     mp->spawningLocations.push_back(glm::vec3(0, 0, 0));
 
     // Add cookware
-    Cookware* c = new Cookware();
-    c->setModel(Config::get("Pan_Model"));
+    Cookware* c = new Cookware(PAN);
     c->setName(PAN);
     c->setPosition(glm::vec3(3, 0, 0));
     mp->cookwareObjects.push_back(c);
@@ -57,7 +56,6 @@ KitchenMap* MapBuilder::getBasicKitchenMap(GameState* gameState) {
 
     // Add plate
     Plate* p = new Plate();
-    p->setModel(Config::get("Plate_Model"));
     p->setPosition(glm::vec3(7, 0, 0));
     mp->plateObjects.push_back(p);
 
