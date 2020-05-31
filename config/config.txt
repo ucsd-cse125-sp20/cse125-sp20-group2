@@ -66,6 +66,8 @@ Plate_Scaling=1,1,1
 Cooking_Event_Min_Distance=1.5
 Plate_Event_Min_Distance=1.5
 
+Font_Size_Pixels=15
+
 // Misc Coordinates
 Origin=0,0,0
 

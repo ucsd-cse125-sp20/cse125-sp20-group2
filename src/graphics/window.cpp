@@ -105,7 +105,7 @@ void Window::setupWindow() {
 	ImGui_ImplGlfw_InitForOpenGL(glfwViewport, true);
 
 	ImGui_ImplOpenGL3_Init("#version 130");
-	ImFont* font1 = io.Fonts->AddFontFromFileTTF("assets/fonts/NikkyouSans-B6aV.ttf", 14);
+	ImFont* font1 = io.Fonts->AddFontFromFileTTF("assets/fonts/NikkyouSans-B6aV.ttf", Config::getInt("Font_Size_Pixels"));
 	ImGui::PushFont(font1);
 
 }
