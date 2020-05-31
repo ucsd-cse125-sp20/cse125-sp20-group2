@@ -26,6 +26,14 @@ std::string Ingredient::getName() {
     return this->name;
 }
 
+void Ingredient::setQualityIndex(int i) {
+    this->qualityIndex = i;
+}
+
+int Ingredient::getQualityIndex() {
+    return this->qualityIndex;
+}
+
 IngredientStatus Ingredient::getStatus() {
     return this->status;
 }
@@ -47,6 +55,16 @@ void Ingredient::draw() {
 
 GLuint Ingredient::getTextureID() {
     return this->textureID;
+}
+
+std::string Ingredient::getDetailedName() {
+    std::string qualityMsg;
+    switch( qualityIndex ) {
+        case BAD_QUALITY : qualityMsg = "Moldy "; break;
+        case OK_QUALITY : qualityMsg = "Mildly Adequate "; break;
+        case GOOD_QUALITY : qualityMsg = "Soviet Union Approved "; break;
+    }
+    return IngredientStatusToString[getStatus()] + " " + qualityMsg + this->name;
 }
 
 std::unordered_map<IngredientStatus, std::string> Ingredient::IngredientStatusToString = {

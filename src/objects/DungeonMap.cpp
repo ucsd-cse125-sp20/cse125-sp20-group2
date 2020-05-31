@@ -3,5 +3,4 @@
 void DungeonMap::setRender(bool b) {
     for(auto wall : this->wallList)
         wall->setRender(b);
-
 }

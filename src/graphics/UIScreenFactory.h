@@ -18,6 +18,8 @@ public:
 	void UIScore(int score);
 	void UIInventory(std::unordered_map<int, Ingredient*>* map);
 	Ingredient* UIButtonInventory(std::unordered_map<int, Ingredient*>* map);
+	void UICookingEvent(std::string);
+
 	void UIGameOver(bool gameWin);
 
 	void UIText(std::string str);

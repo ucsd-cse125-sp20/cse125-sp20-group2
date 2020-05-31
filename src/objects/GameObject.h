@@ -13,38 +13,39 @@ class BoundingBox;
 
 enum ObjectType
 {
-    OBJECT = 0, 
-    PLAYER = 1, 
-    INGREDIENT = 2, 
-    COOKWARE = 3,  
-    WALL = 4, 
-    TABLE = 5
+    OBJECT = 0,
+    PLAYER = 1,
+    INGREDIENT = 2,
+    COOKWARE = 3,
+    WALL = 4,
+    TABLE = 5,
+    PLATE = 6
 };
 
 // is intersecting(GameObject) -> return boundingBox.isIntersecting
 class GameObject
 {
 
-/// TODO: remove this later - hardcoded id
+    /// TODO: remove this later - hardcoded id
 public:
-    static int counter;  
+    static int counter;
 
 private:
     // Model path
     std::string modelPath;
 
     // Position in the world
-	glm::vec3 pos;
+    glm::vec3 pos;
 
     // Used to determine transformations of object
-	glm::vec3 scaleVec;
+    glm::vec3 scaleVec;
     float rotation;
 
     // Identifies the rendering ID of the object
-	int ID;
+    int ID;
 
     // Inventory
-    std::unordered_map<unsigned int, GameObject*> inventory;
+    std::unordered_map<unsigned int, GameObject *> inventory;
 
     // Able to pass through object
     bool passable = false;
@@ -53,7 +54,6 @@ private:
     bool render = true;
 
 protected:
-
     // base model sizes
     float baseWidth, baseDepth;
     float baseRadius;
@@ -62,7 +62,7 @@ protected:
     float width, height, depth;
 
     // The bounding box for this game object
-    BoundingBox* box = NULL;
+    BoundingBox *box = NULL;
 
     // Object type
     ObjectType objType;
@@ -86,10 +86,10 @@ public:
     /*~GameObject();*/
 
     // Model
-    Model* model = NULL;
+    Model *model = NULL;
 
     ObjectType getObjectType();
-    
+
     bool getRender();
 
     void setRender(bool render);
@@ -154,14 +154,14 @@ public:
 
     float getRotation();
 
-    BoundingBox* getBoundingBox();
+    BoundingBox *getBoundingBox();
 
     void setRotation(float rot);
-    
-    GameObject* getItem(int index);
-    
+
+    GameObject *getItem(int index);
+
     // Will probably be used on item pickup in dungeon phase
-    void setItem(int index, GameObject* item);
+    void setItem(int index, GameObject *item);
 
     // Will probably be used on item placement in cooking phase
     void removeItem(int index);
@@ -169,10 +169,10 @@ public:
     bool isPassable();
 
     void setPassable(bool passable);
-    
+
     /**
      * Returns true if there is a collision. 
      * Otherwise, returns false if no collision or either don't have a bounding box.
      * */
-    bool isColliding(GameObject*);
+    bool isColliding(GameObject *);
 };

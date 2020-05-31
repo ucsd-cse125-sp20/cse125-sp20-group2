@@ -193,6 +193,11 @@ std::vector<GameObject*> GameState::getAllObjects()
         gameObjectList.push_back(cookwarePair.second);
     }
 
+    for (const auto & platePair : this->plateObjects)
+    {
+        gameObjectList.push_back(platePair.second);
+    }
+
     return gameObjectList;
 }
 

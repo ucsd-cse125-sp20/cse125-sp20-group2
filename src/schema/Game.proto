@@ -52,6 +52,7 @@ enum ObjectType {
     COOKWARE = 3;
     WALL = 4;
     TABLE = 5;
+    PLATE = 6;
 }
 
 message Object {
@@ -77,6 +78,8 @@ message Inventory {
     required uint32 id = 1;
     required bool add = 2 [default = true];
     required string name = 3 [default = ""];
+    required string ingredientStatus = 4 [default = "Raw"];
+    required uint32 qualityIndex = 5;
 }
 
 message ClientInfo {

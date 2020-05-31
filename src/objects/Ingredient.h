@@ -3,6 +3,7 @@
 #include <objects/GameObject.h>
 #include <string>
 #include <unordered_map>
+#include <constants/gameplay_vars.h>
 
 enum class IngredientStatus
 {
@@ -12,21 +13,12 @@ enum class IngredientStatus
     Fried
 };
 
-
-const std::string BUN = "Bun";
-const std::string ONION = "Onion";
-const std::string MEAT = "Meat";
-const std::string CHEESE = "Cheese";
-
 /**
 raw -> boiled
 raw -> fried
 raw -> cut -> boiled
 raw -> cut -> fried
 raw -> cut**/
-
-
-
 
 struct VertexCoord {
     glm::vec3 position;
@@ -44,11 +36,14 @@ protected:
 
     GLuint VAO, VBO, EBO;
 
+    int qualityIndex;
+
+
+public:
     static std::unordered_map<IngredientStatus, std::string> IngredientStatusToString;
 
     static std::unordered_map<std::string, IngredientStatus> stringToIngredientStatus;
 
-public:
     Ingredient(int ID);
 
     Ingredient();
@@ -59,10 +54,15 @@ public:
 
     void setStatus(IngredientStatus status);
 
+    int getQualityIndex();
+
+    void setQualityIndex(int i);
+
     std::string getStringStatus();
 
     void setStatusFromString(std::string);
 
+    std::string getDetailedName();
 
     std::string getName();
 

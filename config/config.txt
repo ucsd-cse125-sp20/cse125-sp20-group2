@@ -15,6 +15,7 @@ Tomato_Model=assets/models/tomato2.obj
 Wall_Model=assets/models/wall.obj
 Table_Model=assets/models/wall.obj
 Pan_Model=assets/models/Pan.obj
+Plate_Model=assets/models/plate.obj
 
 // Image paths
 
@@ -62,6 +63,10 @@ Table_Scaling=1,1,1
 Cookware_Scaling=2,2,2
 
 Cooking_Event_Min_Distance=1.5
+Plate_Event_Min_Distance=1.5
 
 // Misc Coordinates
 Origin=0,0,0
+
+// multipliers
+Points_Multi=2

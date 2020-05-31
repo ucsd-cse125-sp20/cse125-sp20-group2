@@ -11,6 +11,7 @@
 #include <google/protobuf/util/message_differencer.h>
 #include <game/ServerGame.h>
 #include <math.h>
+#include <constants/gameplay_vars.h>
 
 class ServerGame;
 
@@ -21,20 +22,40 @@ class GameProcessor
 {
     public:
         /**
+         * Initializes the lobby phase
+         * */
+        static void initLobbyPhase(GameState* gameState);
+
+        /**
          * Initializes the dungeon phase
          * */
         static void initDungeonPhase(GameState* gameState);
 
+        /**
+         * Teleport players to spawn locations of the given map
+         * */
+        static void initPlayersLocations(Map* map, GameState* gameState);
+
         /*
-        * Initialize the kitchen phase
-        * */
+         * Initialize the kitchen phase
+         * */
         static void initKitchenPhase(GameState* gameState);
+
+        /*
+         * Initialize the ending phase
+         * */
+        static void initEndPhase(GameState* gameState, ServerGame* server);
+
+        /**
+         * This will process events specifically for the lobby state
+         * */
+        static void processLobby(unsigned int, Game::ClientMessage, ServerGame*);
 
         /**
          * This processes a client message for a client id.
          * This will modify GameState.
          * */
-        static void Process(unsigned int, Game::ClientMessage, ServerGame*);
+        static void process(unsigned int, Game::ClientMessage, ServerGame*);
 
         /**
          * Used to spawn another ingredient on the map randomly

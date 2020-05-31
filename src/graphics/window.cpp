@@ -107,6 +107,14 @@ void Window::setupWindow() {
 	ImGui_ImplOpenGL3_Init("#version 130");
 }
 
+void Window::addCookingEventMessage(std::string msg) {
+	this->cookingEventMsg = msg;
+}
+
+void Window::removeCookingEventMessage() {
+	this->cookingEventMsg = "";
+}
+
 void Window::close() {
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
@@ -256,6 +264,9 @@ void Window::render()
 		else
 			tmp = ui.UIButtonInventory(this->inventory);
 	selectedIngredient = tmp != NULL? tmp: selectedIngredient;
+
+	if( this->cookingEventMsg.compare("") != 0 )
+		ui.UICookingEvent(this->cookingEventMsg);
 
 	if (gameOver)
 	{

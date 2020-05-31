@@ -1,5 +1,7 @@
 #include <game/ClientGame.h>
 #include <game/KeyResolver.h>
+#include <objects/Player.h>
+#include <objects/Plate.h>
 
 #define CLIENT_DELAY 1000
 
@@ -118,6 +120,9 @@ void ClientGame::updateGameState()
                         // Table object.
                         case Game::TABLE: obj = new Table(id); break;
 
+                        // Plate object.
+                        case Game::PLATE: obj = new Plate(id); break;
+
                         // Basic gameobject.
                         default: obj = new GameObject(id); break;
                     }
@@ -133,6 +138,7 @@ void ClientGame::updateGameState()
                 obj->setRotation(rotation);
                 obj->setRender(render);
                 obj->setPosition(glm::vec3(location.x(), location.y(), location.z()));
+                window.removeCookingEventMessage();
                 break;
             }
 
@@ -147,18 +153,36 @@ void ClientGame::updateGameState()
             {
                 // Get player associated with this client
                 Player* player = (Player*)window.objectsToRender[objectId];
+                auto currInventory = player->getInventory();
 
-                // Get id of the object to be picked up.
+                // Get id of the object to be picked up, set the conditions
                 Ingredient* pickup = (Ingredient*)window.objectsToRender[currMessage.inventory().id()];
-
                 pickup->setName(currMessage.inventory().name());
+                pickup->setQualityIndex(currMessage.inventory().qualityindex());
+                pickup->setStatus(Ingredient::stringToIngredientStatus[currMessage.inventory().ingredientstatus()]);
+                window.removeCookingEventMessage();
 
-                // Add object to player inventory.
-                if (currMessage.inventory().add())  player->addToInventory(pickup);
-                else    player->removeFromInventory(pickup);
+                // Already exists
+                if (currInventory->count(currMessage.inventory().id()) > 0)
+                {
+                    if (!currMessage.inventory().add()) 
+                        player->removeFromInventory(pickup);
+                }
+                // Doesn't exist in inventory
+                else
+                {
+                    player->addToInventory(pickup);
+                }
+                
                 std::cout << "Picked up: " << pickup->getName() << std::endl;
-
                 break;
+            }
+
+            case Game::ServerMessage::EventCase::kValidCook:
+            {
+                std::cout << "got valid event from server" << std::endl;
+                window.addCookingEventMessage(currMessage.validcook().message());
+                break;   
             }
 
             // Client info messages

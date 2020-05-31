@@ -87,7 +87,7 @@ void ServerGame::process(std::unordered_map<unsigned int, std::vector<Game::Clie
                 {
                     std::cout << "This is lobby phase" << std::endl;
                     LobbyProcessor::Process(clientId, msg, this);
-                    GameProcessor::Process(clientId, msg, this);
+                    GameProcessor::process(clientId, msg, this);
                     break;
                 }
                 case Game::RoundInfo::DUNGEON_WAITING:
@@ -98,7 +98,7 @@ void ServerGame::process(std::unordered_map<unsigned int, std::vector<Game::Clie
                 case Game::RoundInfo::DUNGEON:
                 {
                     std::cout << "this is dungeon phase" << std::endl;
-                    GameProcessor::Process(clientId, msg, this);
+                    GameProcessor::process(clientId, msg, this);
                     break;
                 }
                 case Game::RoundInfo::KITCHEN_WAITING:
@@ -108,8 +108,8 @@ void ServerGame::process(std::unordered_map<unsigned int, std::vector<Game::Clie
                 }
                 case Game::RoundInfo::KITCHEN:
                 {
-                    GameProcessor::Process(clientId, msg, this);
                     std::cout << "this is kitchen phase" << std::endl;
+                    GameProcessor::process(clientId, msg, this);
                     break;
                 }
                 case Game::RoundInfo::END:
@@ -145,7 +145,62 @@ void ServerGame::update()
     // Change status of ingredient and update the inventory of player
     // Check the instructions if player scored points for doing the correct instruction
     // If the instruction was sequential, give more points to the player
-    
+    std::vector<CookEvent*> & cookEvents = this->gameState.cookEvents;
+    for (auto it = cookEvents.begin(); it != cookEvents.end(); )
+    {
+        CookEvent* cookEvent = *it;
+        auto timeNow = std::chrono::high_resolution_clock::now();
+        if (timeNow > cookEvent->terminationTime)
+        {
+            std::cout << "sufficient time has passed, cooking is complete" << std::endl;
+
+            Ingredient* currIngredient = cookEvent->ingredient;
+            Player* currPlayer = cookEvent->player;
+
+            // Unfreeze the player
+            cookEvent->player->setFreeze(false);
+
+            /// TODO: make cookware ingredient free, set status dependent on food type
+            cookEvent->cookware->setBusy(false);
+            cookEvent->ingredient->setStatus(cookEvent->after);
+
+            /// TODO: have to send over also (verify correctness of this)
+            Game::ServerMessage* serverMsg = MessageBuilder::toInventoryServerMessage(currIngredient->getID(), true, currIngredient->getName()
+                , currIngredient->getStatus(), currIngredient->getQualityIndex());
+            this->specificMessages[currPlayer->getClientID()].push_back(serverMsg);
+
+            int i = 0;
+            for( auto instruction : this->gameState.recipe->instructionList ) {
+                if( (instruction->ingredient.compare(cookEvent->ingredient->getName()) == 0)
+                && (instruction->cookware.compare(cookEvent->cookware->getName()) == 0 )
+                && (instruction->after == cookEvent->after )) {
+
+                    if( instruction->before == cookEvent->before )
+                        cookEvent->player->addToScore(instruction->points);
+                    else 
+                        cookEvent->player->addToScore(instruction->points/2);
+                    // Mark instruction as true
+                    cookEvent->player->instructionSet.at(i) = std::make_pair(instruction, true);
+                    
+                    // sequential instruction bonus
+                    if( i > 0 && cookEvent->player->instructionSet.at(i-1).second )
+                        cookEvent->player->addToScore(instruction->points);
+                    
+                    serverMsg = MessageBuilder::toScore(cookEvent->player->getScore());
+                    std::cout << "sending over a score" << std::endl;
+                    this->specificMessages[currPlayer->getClientID()].push_back(serverMsg);
+                }
+                i++;
+            }
+
+            delete cookEvent;
+            it = cookEvents.erase(it);
+        }
+        else
+        {
+            ++it;
+        }
+    }
 }
 
 void ServerGame::sendPendingMessages()
@@ -271,6 +326,7 @@ void ServerGame::onRoundChange()
         }
         case Game::RoundInfo::END:
         {
+            std::cout << "initializing end" << std::endl;
             break;
         }
         default: 

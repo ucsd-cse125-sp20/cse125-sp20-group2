@@ -2,6 +2,7 @@
 
 #include <schema/Game.pb.h>
 #include <objects/GameObject.h>
+#include <objects/Ingredient.h>
 
 /**
  * This is a utility function to convert to ProtocolBuffer messages
@@ -47,6 +48,8 @@ public:
                 msgObj->set_type(Game::ObjectType::WALL); break;
             case 5:
                 msgObj->set_type(Game::ObjectType::TABLE); break;
+            case 6:
+                msgObj->set_type(Game::ObjectType::PLATE); break;
         }
 
         // Put allocated object into message to be sent
@@ -58,11 +61,13 @@ public:
     /**
      * Convert inventory id to message for inventory pickup event
      * */
-    static Game::ServerMessage* toInventoryServerMessage(int id, bool add, std::string name) {
+    static Game::ServerMessage* toInventoryServerMessage(int id, bool add, std::string name, IngredientStatus status, int qualityIndex) {
         Game::Inventory* msgObj = new Game::Inventory();
         msgObj->set_id(id);
         msgObj->set_add(add);
         msgObj->set_name(name);
+        msgObj->set_ingredientstatus(Ingredient::IngredientStatusToString[status]);
+        msgObj->set_qualityindex(qualityIndex);
         Game::ServerMessage* message = new Game::ServerMessage();
         message->set_allocated_inventory(msgObj);
         return message;
@@ -170,6 +175,17 @@ public:
 
      Game::ServerMessage* serverMsg = new Game::ServerMessage();
      serverMsg->set_allocated_time(timeUpdateMessage);
+     return serverMsg;
+ }
+
+ static Game::ServerMessage* toValidCookingEvent(std::string msg, bool b)
+ {
+     Game::ValidateCooking* validMsg = new Game::ValidateCooking();
+     validMsg->set_message(msg);
+     validMsg->set_valid(b);
+
+     Game::ServerMessage* serverMsg = new Game::ServerMessage();
+     serverMsg->set_allocated_validcook(validMsg);
      return serverMsg;
  }
 };

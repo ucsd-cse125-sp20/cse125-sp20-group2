@@ -28,8 +28,6 @@ private:
     /// TODO: Map from team id to allow instructor to quickly access their team's player
     std::unordered_map<unsigned int, Player*> playerObjects;
 
-    Recipe* recipe; 
-
     // An enum representing the current round
     // Lobby - Represents phase where players are waiting
     // DungeonWaiting - This can be used to show a tutorial and memes
@@ -68,6 +66,11 @@ public:
 
     // This is a mapping of gameObjId to ingredient objects
     std::unordered_map<unsigned int, Ingredient*> ingredientObjects;
+
+    // This is a mapping of gameObjId to plate objects
+    std::unordered_map<unsigned int, Plate*> plateObjects;
+
+    Recipe* recipe; 
 
     /**
      * Adds a new user object using the clientId

@@ -25,7 +25,7 @@ void UIScreenFactory::UIInventory(std::unordered_map<int, Ingredient*>* map) {
 	std::unordered_map<int, Ingredient*>::iterator it = map->begin();
 	while (it != map->end())
 	{
-		UIText(it->second->getName());
+		UIText(it->second->getDetailedName());
 		it++;
 	}
 	UIEnd();
@@ -39,6 +39,7 @@ void UIScreenFactory::UIGameInfo(int round, int32_t minutes, int32_t seconds) {
 			case LOBBY: roundInfo = lobby; break;
 			case DUNGEON: roundInfo = dungeon; break;
 			case KITCHEN: roundInfo = kitchen; break;
+			default: roundInfo = "TRANSITION";
 		}
 		UIText(roundInfo);
 		std::string str = "Time Left: " + std::to_string(minutes);
@@ -69,7 +70,7 @@ Ingredient* UIScreenFactory::UIButtonInventory(std::unordered_map<int, Ingredien
 	std::unordered_map<int, Ingredient*>::iterator it = map->begin();
 	while (it != map->end())
 	{
-		if (ImGui::Button(it->second->getName().c_str())) {
+		if (ImGui::Button(it->second->getDetailedName().c_str())) {
 			ret = it->second;
 			std::cout<<"Ingredient clicked"<<std::endl;
 		}
@@ -78,6 +79,17 @@ Ingredient* UIScreenFactory::UIButtonInventory(std::unordered_map<int, Ingredien
 	}
 	UIEnd();
 	return ret;
+}
+
+void UIScreenFactory::UICookingEvent(std::string msg) {
+	window_pos = ImVec2(io.DisplaySize.x / 2 - DISTANCE, 2*DISTANCE);
+	ImGui::SetNextWindowPos(window_pos, ImGuiCond_Always, window_pos_pivot);
+	setWindowSize(ImVec2(50.0f, 40.0f));
+	if (ImGui::Begin(" "))
+	{
+		UIText(msg);
+	}
+	UIEnd();
 }
 
 void UIScreenFactory::UIScore(int score) {

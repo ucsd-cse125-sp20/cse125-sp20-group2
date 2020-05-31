@@ -22,7 +22,7 @@ Recipe* RecipeBuilder::getBasicRecipe() {
     inst->after = IngredientStatus::Fried;
     inst->points = 10;
     inst->cookware = PAN;
-    inst->ingredient = MEAT;
+    inst->ingredient = BUN;
     inst->instr = "Fry the meat";
     recipe->instructionList.push_back(inst);
 

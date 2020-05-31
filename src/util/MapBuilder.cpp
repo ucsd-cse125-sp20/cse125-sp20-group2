@@ -32,7 +32,7 @@ DungeonMap* MapBuilder::getBasicDungeonMap() {
     return mp;
 }
 
-KitchenMap* MapBuilder::getBasicKitchenMap() {
+KitchenMap* MapBuilder::getBasicKitchenMap(GameState* gameState) {
     Wall* wall = new Wall();
     wall->setPosition(glm::vec3(0, 0, 5));
     KitchenMap* mp = new KitchenMap();
@@ -43,17 +43,23 @@ KitchenMap* MapBuilder::getBasicKitchenMap() {
     mp->spawningLocations.push_back(glm::vec3(0, 10, 0));
     mp->spawningLocations.push_back(glm::vec3(0, 0, 0));
 
+    // Add cookware
     Cookware* c = new Cookware();
-
     c->setModel(Config::get("Pan_Model"));
     c->setName(PAN);
     c->setPosition(glm::vec3(3, 0, 0));
-    
+    mp->cookwareObjects.push_back(c);
+
+    // Add table
     Table *t = new Table();
     t->setPosition(glm::vec3(5, 0, 0));
     mp->tableList.push_back(t);
 
-    mp->cookwareObjects.push_back(c);
+    // Add plate
+    Plate* p = new Plate();
+    p->setModel(Config::get("Plate_Model"));
+    p->setPosition(glm::vec3(7, 0, 0));
+    mp->plateObjects.push_back(p);
 
     return mp;
 }

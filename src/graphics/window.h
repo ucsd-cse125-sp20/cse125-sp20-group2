@@ -74,6 +74,10 @@ public:
 
     void toggleCursor();
 
+    void addCookingEventMessage(std::string);
+
+    void removeCookingEventMessage();
+
     void close();
     GLFWwindow* glfwViewport;
     bool gameOver = false;
@@ -82,6 +86,8 @@ public:
 private:
     Shader* shader;
     Shader* UIshader;
+
+    std::string cookingEventMsg = "";
     int64_t timer = 0;
     int round;
     int score = 0;
