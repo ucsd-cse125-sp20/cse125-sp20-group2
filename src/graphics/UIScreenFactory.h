@@ -18,6 +18,8 @@ public:
 	int shopping_list_height;
 	GLuint shopping_list_texture;
 
+	Ingredient* highlighted = NULL;
+
 	UIScreenFactory();
 	~UIScreenFactory();
 

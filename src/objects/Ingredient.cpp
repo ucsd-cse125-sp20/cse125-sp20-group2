@@ -67,14 +67,6 @@ std::string Ingredient::getDetailedName() {
     return IngredientStatusToString[getStatus()] + " " + qualityMsg + this->name;
 }
 
-void Ingredient::setClicked(bool c) {
-    this->clicked = c;
-}
-
-int Ingredient::getClicked() {
-    return this->clicked;
-}
-
 std::unordered_map<IngredientStatus, std::string> Ingredient::IngredientStatusToString = {
     {IngredientStatus::Raw, "Raw"},
     {IngredientStatus::Cut, "Cut"},

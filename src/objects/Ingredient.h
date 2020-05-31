@@ -43,8 +43,6 @@ public:
     static std::unordered_map<IngredientStatus, std::string> IngredientStatusToString;
 
     static std::unordered_map<std::string, IngredientStatus> stringToIngredientStatus;
-    
-    bool clicked;
 
     Ingredient(int ID);
 
@@ -74,7 +72,4 @@ public:
 
     GLuint getTextureID();
 
-    void setClicked(bool c);
-
-    int getClicked();
 };

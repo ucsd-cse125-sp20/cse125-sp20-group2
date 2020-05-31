@@ -117,7 +117,7 @@ Ingredient* UIScreenFactory::UIButtonInventory(std::unordered_map<int, Ingredien
 	ImGui::BeginChild("Scrolling");
 	while (it != map->end())
 	{
-		if (it->second->getClicked()) {
+		if (this->highlighted == it->second) {
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(ImColor(255, 0, 0)));
 			ImGui::Button(it->second->getDetailedName().c_str());
 			ImGui::PopStyleColor();
@@ -125,9 +125,7 @@ Ingredient* UIScreenFactory::UIButtonInventory(std::unordered_map<int, Ingredien
 		else if (ImGui::Button(it->second->getDetailedName().c_str())) {
 			ret = it->second;
 			std::cout<<"Ingredient clicked"<<std::endl;
-			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(ImColor(255, 0, 0)));
-			ImGui::PopStyleColor();
-			it->second->setClicked(true);
+			this->highlighted = it->second;
 		}
 		it++;
 		
