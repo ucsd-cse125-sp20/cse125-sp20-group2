@@ -86,6 +86,7 @@ public:
 private:
     Shader* shader;
     Shader* UIshader;
+    UIScreenFactory ui;
 
     std::string cookingEventMsg = "";
     int64_t timer = 0;

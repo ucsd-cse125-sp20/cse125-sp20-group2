@@ -4,7 +4,6 @@
 #include <iostream>
 #include <util/PrintUtil.h>
 #include <graphics/window.h>
-#include <glm/gtx/string_cast.hpp>
 #include <chrono>
 #include <thread>
 #include <util/MessageBuilder.h>

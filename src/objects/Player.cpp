@@ -98,3 +98,13 @@ void Player::setFreeze(bool f) {
 bool Player::getFreeze() {
     return this->freeze;
 }
+
+Team Player::getTeam()
+{
+    return this->team;
+}
+
+void Player::setTeam(Team team)
+{
+    this->team = team;
+}

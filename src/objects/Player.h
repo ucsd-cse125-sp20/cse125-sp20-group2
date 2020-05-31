@@ -8,6 +8,14 @@
 #include <util/Instruction.h>
 #include <deque>
 
+enum Team
+{
+    BLUE = 0,
+    GREEN = 1,
+    PURPLE = 2,
+    RED = 3
+};
+
 class Player : public GameObject 
 {
 protected:
@@ -26,6 +34,8 @@ protected:
     std::deque<Instruction*> completedInstructions;
 
     void loadCollisionSize();
+
+    Team team;
 
 public:
     Player(int ID);
@@ -70,6 +80,7 @@ public:
 
     void drawInventory(GLuint shaderProgram);
 
-    ///TODO: Implement
-    void addIngredientsFromRecipe(Recipe* recipe);
+    Team getTeam();
+
+    void setTeam(Team team);
 };

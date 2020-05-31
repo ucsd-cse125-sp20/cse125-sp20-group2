@@ -1,24 +1,42 @@
 Taco=Salad
 
-// Model paths
+// Ingredient model paths
 Bun_Model=assets/models/Bun2.obj
-Burger_Model=assets/models/Burger2.obj
 Cheese_Model=assets/models/Cheese.obj
-Grid_Square_Model=assets/models/grid_square.obj
-Grid_Wire_Model=assets/models/grid_wire.obj
 Lettuce_Model=assets/models/Lettuce2.obj
-Maze_Model=assets/models/Basic_Dungeon_Map.obj
 Meat_Model=assets/models/meat_3.obj
 Onion_Model=assets/models/Onion.obj
-Player_Model=assets/models/Basic_Character_Model.obj
 Tomato_Model=assets/models/tomato2.obj
-Wall_Model=assets/models/wall.obj
-Table_Model=assets/models/wall.obj
+
+// Cookware model paths
+Pot_Model=assets/models/Pot.obj
+Knife_Model=assets/models/Knife.obj
 Pan_Model=assets/models/Pan.obj
 Plate_Model=assets/models/plate.obj
 
-// Image paths
+// Terrain model paths
+Wall_Model=assets/models/wall.obj
+Table_Model=assets/models/wall.obj
+Dirty_Pillar_Model=assets/models/dirtypillar.obj
+Dirty_Wall_Model=assets/models/dirtywall.obj
+Tile_Model=assets/models/tile.obj
+Tile4_Model=assets/models/tile4.obj
+Tile9_Model=assets/models/tile9.obj
 
+// Character model paths
+Player_Model=assets/models/Basic_Character_Model.obj
+Blue_Player=assets/models/characters/characterblue.obj
+Green_Player=assets/models/characters/charactergreen.obj
+Purple_Player=assets/models/characters/characterpurple.obj
+Red_Player=assets/models/characters/characterred.obj
+
+// Etc model paths
+Burger_Model=assets/models/Burger2.obj
+Grid_Square_Model=assets/models/grid_square.obj
+Grid_Wire_Model=assets/models/grid_wire.obj
+Maze_Model=assets/models/Basic_Dungeon_Map.obj
+
+// Image paths
 
 // Model sizings
 Object_Default_Width=1
@@ -37,7 +55,7 @@ Window_Height=800
 
 // Camera properties
 Camera_Speed=0.25
-Camera_FOV=65.0
+Camera_FOV=50.0
 Camera_Location=0,7,7
 
 // Camera rotations (yaw = rotation about y-axis, pitch = rotation about x-axis)
@@ -60,8 +78,8 @@ Cook_Event_Time=5
 // Scaling
 Wall_Scaling=3,2,2
 Table_Scaling=1,1,1
-Cookware_Scaling=2,2,2
-Plate_Scaling=1,1,1
+Cookware_Scaling=0.5,0.5,0.5
+Plate_Scaling=0.25,0.25,0.25
 
 Cooking_Event_Min_Distance=1.5
 Plate_Event_Min_Distance=1.5

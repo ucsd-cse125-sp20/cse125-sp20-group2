@@ -4,6 +4,8 @@ Plate::Plate() : GameObject()
 {
     this->setModel(Config::get("Plate_Model"));
     this->setObjectType(ObjectType::PLATE);
+    this->box = new BoundingBox(this);
+    this->box->setRadius(0.5);
     this->applyScale(Config::getVec3("Plate_Scaling"));
 }
 
@@ -11,6 +13,8 @@ Plate::Plate(int ID) : GameObject(ID)
 {
     this->setModel(Config::get("Plate_Model"));
     this->setObjectType(ObjectType::PLATE);
+    this->box = new BoundingBox(this);
+    this->box->setRadius(0.5);
     this->applyScale(Config::getVec3("Plate_Scaling"));
 }
 

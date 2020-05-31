@@ -49,11 +49,6 @@ KitchenMap* MapBuilder::getBasicKitchenMap(GameState* gameState) {
     c->setPosition(glm::vec3(3, 0, 0));
     mp->cookwareObjects.push_back(c);
 
-    // Add table
-    Table *t = new Table();
-    t->setPosition(glm::vec3(5, 0, 0));
-    mp->tableList.push_back(t);
-
     // Add plate
     Plate* p = new Plate();
     p->setPosition(glm::vec3(7, 0, 0));
