@@ -42,6 +42,7 @@ message ServerMessage {
         RoundInfo round = 7;
         RoundWin win = 8;
         ValidateCooking validCook = 9;
+        InstructionInfo instruction = 10;
     }
 }
 
@@ -55,6 +56,11 @@ enum ObjectType {
     PLATE = 6;
 }
 
+message InstructionInfo {
+    required string instructionMsg = 1;
+    required uint32 index = 2;
+}
+
 message Object {
     required Vector3 worldPosition = 1; 
     required float rotation = 2;
@@ -62,6 +68,7 @@ message Object {
     required ObjectType type = 4;
     required bool render = 5 [default = true];
     required string modelPath = 6 [default = ""];
+    optional Vector3 scale = 7;
 }
 
 message Score {

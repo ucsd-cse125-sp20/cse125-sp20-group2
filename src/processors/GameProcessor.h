@@ -46,6 +46,8 @@ class GameProcessor
          * */
         static void initEndPhase(GameState* gameState, ServerGame* server);
 
+        static void initDungeonWaiting(GameState* game);
+
         /**
          * This will process events specifically for the lobby state
          * */

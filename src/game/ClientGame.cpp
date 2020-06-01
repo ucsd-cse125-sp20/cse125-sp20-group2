@@ -11,6 +11,13 @@ ClientGame::ClientGame(std::string IP, int port) : client(IP, port), window(Conf
     glfwSetWindowUserPointer(this->window.glfwViewport, reinterpret_cast<void*> (this));
     glfwSetKeyCallback(this->window.glfwViewport, key_callback_wrapper);
 
+    // Create floor lol
+    GameObject* floor = new GameObject(-1);
+    floor->setModel("assets/models/floor.obj");
+    floor->setPosition(glm::vec3(0,-0.5,0));
+    floor->applyScale(glm::vec3(1));
+    window.addObject(-1, floor);
+
     runGame();
 }
 
@@ -39,7 +46,7 @@ void ClientGame::keyBindsHandler(GLFWwindow* glfwWindow, int key, int scancode, 
     }
 
     // Handles interact event
-    if (key == GLFW_KEY_E && action == GLFW_PRESS && this->window.getSelectedIngredient() != NULL && this->window.getRound() == KITCHEN )
+    if (key == GLFW_KEY_E && action == GLFW_PRESS && this->window.getSelectedIngredient() != NULL && this->window.getRound() == KITCHEN_NUM )
     {
         std::cout << "pressed interact key" << std::endl;
         Game::ClientMessage* cookMsg = MessageBuilder::toCookMessage(this->window.getSelectedIngredient());
@@ -90,6 +97,7 @@ void ClientGame::updateGameState()
                 float rotation = currMessage.object().rotation();
                 uint32_t id = currMessage.object().id();
                 bool render = currMessage.object().render();
+                Game::Vector3 scale = currMessage.object().scale();
 
                 GameObject* obj = NULL;
 
@@ -117,7 +125,7 @@ void ClientGame::updateGameState()
                         // Wall object.
                         case Game::WALL: obj = new Wall(id); break;
 
-                        // Table object.
+                        // Table object..
                         case Game::TABLE: obj = new Table(id); break;
 
                         // Plate object.
@@ -136,6 +144,7 @@ void ClientGame::updateGameState()
 
                 // Set object parameters
                 obj->setRotation(rotation);
+                if (currMessage.object().has_scale()) obj->applyScale(glm::vec3(scale.x(), scale.y(), scale.z()));
                 obj->setRender(render);
                 obj->setPosition(glm::vec3(location.x(), location.y(), location.z()));
                 window.removeCookingEventMessage();
@@ -199,6 +208,14 @@ void ClientGame::updateGameState()
                 window.camera->setTarget(window.objectsToRender[this->objectId]);
                 Player* p = (Player*) window.objectsToRender[this->objectId];
                 window.addInventory(p->getInventory());
+                break;
+            }
+
+            case Game::ServerMessage::EventCase::kInstruction:
+            {
+                int index = currMessage.instruction().index();
+                std::string msg = currMessage.instruction().instructionmsg();
+                window.instructionStrings.insert(window.instructionStrings.begin()+index, msg);
                 break;
             }
 

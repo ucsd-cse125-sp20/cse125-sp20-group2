@@ -10,7 +10,7 @@ Tomato_Model=assets/models/tomato2.obj
 
 // Cookware model paths
 Pot_Model=assets/models/Pot.obj
-Knife_Model=assets/models/Knife.obj
+Cutting_Board_Model=assets/models/Knife.obj
 Pan_Model=assets/models/Pan.obj
 Plate_Model=assets/models/plate.obj
 
@@ -25,10 +25,10 @@ Tile9_Model=assets/models/tile9.obj
 
 // Character model paths
 Player_Model=assets/models/Basic_Character_Model.obj
-Blue_Player=assets/models/characters/characterblue.obj
-Green_Player=assets/models/characters/charactergreen.obj
-Purple_Player=assets/models/characters/characterpurple.obj
-Red_Player=assets/models/characters/characterred.obj
+Player_0=assets/models/characters/characterblue.obj
+Player_1=assets/models/characters/charactergreen.obj
+Player_2=assets/models/characters/characterpurple.obj
+Player_3=assets/models/characters/characterred.obj
 
 // Etc model paths
 Burger_Model=assets/models/Burger2.obj
@@ -38,9 +38,11 @@ Maze_Model=assets/models/Basic_Dungeon_Map.obj
 
 // Image paths
 
-// Model sizings
+// Bounding box sizings
 Object_Default_Width=1
 Object_Default_Depth=1
+Wall_Width=1
+Wall_Depth=4.2
 Ingredient_Radius=0.5
 Player_Radius=0.75
 
@@ -55,7 +57,7 @@ Window_Height=800
 
 // Camera properties
 Camera_Speed=0.25
-Camera_FOV=50.0
+Camera_FOV=60.0
 Camera_Location=0,7,7
 
 // Camera rotations (yaw = rotation about y-axis, pitch = rotation about x-axis)
@@ -69,14 +71,14 @@ Player_Turn_Speed=1
 // Round time (in seconds)
 Kitchen_Round_Time=15
 Kitchen_Waiting_Round_Time=10
-Dungeon_Round_Time=15
+Dungeon_Round_Time=10
 Lobby_Round_Time=15
-Dungeon_Waiting_Round_Time=5
+Dungeon_Waiting_Round_Time=20
 
 Cook_Event_Time=5
 
 // Scaling
-Wall_Scaling=3,2,2
+Wall_Scaling=1,1,1
 Table_Scaling=1,1,1
 Cookware_Scaling=0.5,0.5,0.5
 Plate_Scaling=0.25,0.25,0.25
@@ -91,3 +93,35 @@ Origin=0,0,0
 
 // multipliers
 Points_Multi=2
+
+// Lighting options
+ambientStrength=1.1
+specularStrength=0.1
+defaultObjColor=0.2,0.4,0.7
+lightPos=1.2,1.0,2.0
+colorScale=0.5
+
+// Indicate that there is no color when color values are less than...
+noColorPrecision=0.01
+
+// Dungeon walls
+Dungeon_Wall_Count=4
+
+// Top and bottom Walls (external)
+Dungeon_Wall_Pos_1=0,0,15
+Dungeon_Wall_Scale_1=94.7,1,0.33
+Dungeon_Wall_Pos_2=0,0,-15
+Dungeon_Wall_Scale_2=94.7,1,0.33
+
+// Left and right walls (external)
+Dungeon_Wall_Pos_3=45,0,0
+Dungeon_Wall_Scale_3=1,1,8
+Dungeon_Wall_Pos_4=-45,0,0
+Dungeon_Wall_Scale_4=1,1,8
+
+// Dungeon Spawn Positions
+Dungeon_Spawn_Count=4
+Dungeon_Spawn_1=-1,0,1
+Dungeon_Spawn_2=1,0,1
+Dungeon_Spawn_3=-1,0,-1
+Dungeon_Spawn_4=1,0,-1

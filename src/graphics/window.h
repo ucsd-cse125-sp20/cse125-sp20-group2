@@ -26,9 +26,6 @@
 #include <graphics/render/Camera.h>
 #include <graphics/render/Model.h>
 
-// Etc
-#include <constants/graphics_vars.h>
-
 // Protobuf
 #include <schema/Game.pb.h>
 
@@ -45,7 +42,7 @@ public:
     bool isClosed;
     Window(int width, int height);
 
-    std::unordered_map<unsigned int, GameObject*> objectsToRender;
+    std::unordered_map<int, GameObject*> objectsToRender;
     std::unordered_map<int, Ingredient*>* inventory;
     Ingredient* selectedIngredient = NULL;
 
@@ -54,9 +51,9 @@ public:
     /**
      * @param object the game object to add to the map of objects
      * */
-    void addObject(unsigned int id, GameObject* object);
+    void addObject(int id, GameObject* object);
     
-    void removeObject(unsigned int index);
+    void removeObject(int index);
 
     void setTimer(int64_t timer);
 
@@ -83,10 +80,13 @@ public:
     bool gameOver = false;
     bool gameWin = false;
     Camera* camera;
+    std::vector<std::string> instructionStrings;
+
 private:
     Shader* shader;
     Shader* UIshader;
     UIScreenFactory ui;
+    // ImFont* font1;
 
     std::string cookingEventMsg = "";
     int64_t timer = 0;

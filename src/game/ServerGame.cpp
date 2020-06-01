@@ -1,6 +1,5 @@
 #include <game/ServerGame.h>
 #include <processors/GameProcessor.h>
-#include <processors/LobbyProcessor.h>
 #include <processors/EndProcessor.h>
 #include <stdlib.h>
 
@@ -85,36 +84,30 @@ void ServerGame::process(std::unordered_map<unsigned int, std::vector<Game::Clie
             switch (this->gameState.getRound()) {
                 case Game::RoundInfo::LOBBY:
                 {
-                    std::cout << "This is lobby phase" << std::endl;
-                    LobbyProcessor::Process(clientId, msg, this);
+                    GameProcessor::processLobby(clientId, msg, this);
                     GameProcessor::process(clientId, msg, this);
                     break;
                 }
                 case Game::RoundInfo::DUNGEON_WAITING:
                 {
-                    std::cout << "This is dungeon waiting phase" << std::endl;
                     break;
                 }
                 case Game::RoundInfo::DUNGEON:
                 {
-                    std::cout << "this is dungeon phase" << std::endl;
                     GameProcessor::process(clientId, msg, this);
                     break;
                 }
                 case Game::RoundInfo::KITCHEN_WAITING:
                 {
-                    std::cout << "This is kitchen waiting phase" << std::endl;
                     break;
                 }
                 case Game::RoundInfo::KITCHEN:
                 {
-                    std::cout << "this is kitchen phase" << std::endl;
                     GameProcessor::process(clientId, msg, this);
                     break;
                 }
                 case Game::RoundInfo::END:
                 {
-                    std::cout << "This is ending phase" << std::endl;
                     break;
                 }
                 default:
@@ -242,9 +235,10 @@ void ServerGame::onClientConnect(int clientId)
     // Add client to ready map
     this->gameState.readyStatus[clientId] = false;
 
-    /// TODO: If we go image lobby route, this will not load the player or client info initially. This needs client support.
     // Add player with respective client ID
     Player* player = this->gameState.addPlayer(clientId);
+    std::string configPath = "Player_" + std::to_string(clientId);
+    player->setModel(Config::get(configPath));
    
     // while player is colliding, generate new location
     for (GameObject* obj : this->gameState.getAllObjects())
@@ -261,7 +255,8 @@ void ServerGame::onClientConnect(int clientId)
     }
 
     // Send objects
-    for (GameObject* obj : this->gameState.getAllObjects()) {
+    for (GameObject* obj : this->gameState.getAllObjects()) 
+    {
         Game::ServerMessage* message = MessageBuilder::toServerMessage(obj);
         this->server.sendToAll(*message);
         delete message;
@@ -278,6 +273,7 @@ void ServerGame::onRoundChange()
     // Send updated state to the client
     Game::ServerMessage* gameStatus = MessageBuilder::toRoundUpdate(this->gameState.getRound());
     this->server.sendToAll(*gameStatus);
+    delete gameStatus;
 
     /// TODO: Handle unloading all objects. Should not unload the player object.
 
@@ -294,13 +290,18 @@ void ServerGame::onRoundChange()
         { 
             std::cout << "Initializing dungeon waiting" << std::endl;
 
-            // Create the other phases 
+            // Initialize dungeon waiting time
+            GameProcessor::initDungeonWaiting(&this->gameState);
+
+            // Create the other phases (all visible)
             GameProcessor::initDungeonPhase(&this->gameState, this);
             GameProcessor::initKitchenPhase(&this->gameState);
 
-
+            // Make kitchen invisible
             this->gameState.kitchenMap->setRender(false);
-            LobbyProcessor::initDungeonWaiting(&this->gameState);
+
+            /// Position players on spawn points
+            GameProcessor::initPlayersLocations(gameState.dungeonMap, &gameState);
             break;
         }
         case Game::RoundInfo::DUNGEON:
@@ -317,6 +318,14 @@ void ServerGame::onRoundChange()
             this->gameState.dungeonMap->setRender(false);
             for(auto ingredientPair : gameState.ingredientObjects )
                 ingredientPair.second->setRender(false);
+            // Send instructions from recipe to clients
+            int i = 0;
+            for(auto inst : this->gameState.recipe->instructionList ) {
+                Game::ServerMessage* msg = MessageBuilder::toInstructionInfo(inst, i);
+                this->server.sendToAll(*msg);
+                delete msg;
+                i++;
+            }
             // EndProcessor::initGameState(&this->gameState, this);
             break;
         }

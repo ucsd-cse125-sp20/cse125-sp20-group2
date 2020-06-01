@@ -47,10 +47,22 @@ void UIScreenFactory::setUpFrame() {
 }
 
 void UIScreenFactory::loadImages() {
-	this->shopping_list_width = 0;
-	this->shopping_list_height = 0;
-	this->shopping_list_texture = 0;
-	bool ret = LoadTextureFromFile("assets/images/ShoppingList.png", &shopping_list_texture, &shopping_list_width, &shopping_list_height);
+	this->dungeon_waiting_width = 0;
+	this->dungeon_waiting_height = 0;
+	this->dungeon_waiting_texture = 0;
+	bool ret = LoadTextureFromFile("assets/images/DungeonWaitingScreen.png", &dungeon_waiting_texture, &dungeon_waiting_width, &dungeon_waiting_height);
+	IM_ASSERT(ret);
+
+	this->kitchen_waiting_width = 0;
+	this->kitchen_waiting_height = 0;
+	this->kitchen_waiting_texture = 0;
+	ret = LoadTextureFromFile("assets/images/KitchenWaitingScreen.png", &kitchen_waiting_texture, &kitchen_waiting_width, &kitchen_waiting_height);
+	IM_ASSERT(ret);
+
+	this->lobby_width = 0;
+	this->lobby_height = 0;
+	this->lobby_texture = 0;
+	ret = LoadTextureFromFile("assets/images/LobbyScreen.png", &lobby_texture, &lobby_width, &lobby_height);
 	IM_ASSERT(ret);
 }
 
@@ -82,9 +94,9 @@ void UIScreenFactory::UIGameInfo(int round, int32_t minutes, int32_t seconds) {
 	{
 		std::string roundInfo;
 		switch(round) {
-			case LOBBY: roundInfo = lobby; break;
-			case DUNGEON: roundInfo = dungeon; break;
-			case KITCHEN: roundInfo = kitchen; break;
+			case LOBBY_NUM: roundInfo = LOBBY_STR; break;
+			case DUNGEON_NUM: roundInfo = DUNGEON_STR; break;
+			case KITCHEN_NUM: roundInfo = kitchen; break;
 			default: roundInfo = "TRANSITION";
 		}
 		UIText(roundInfo);
@@ -160,9 +172,31 @@ void UIScreenFactory::UIScore(int score) {
 	UIEnd();
 }
 
-void UIScreenFactory::UIShoppingList() {
-	ImGui::Begin("Your Assigned Shopping List");
-	ImGui::Image((void*)(intptr_t)shopping_list_texture, ImVec2(shopping_list_width, shopping_list_height));
+void UIScreenFactory::UIDungeonInstructions() {
+	ImGui::Begin("Dungeon Instructions");
+	ImGui::Image((void*)(intptr_t)dungeon_waiting_texture, ImVec2(dungeon_waiting_width, dungeon_waiting_height));
+	ImGui::End();
+}
+
+void UIScreenFactory::UIInstructionSet(std::vector<std::string> instructions ) {
+	ImGui::Begin("Recipe Instructions");
+	ImGui::BeginChild("Scrolling");
+	for( auto str: instructions ) {
+		UIText(str);
+	}
+	ImGui::EndChild();
+	ImGui::End();
+}
+
+void UIScreenFactory::UIKitchenInstructions() {
+	ImGui::Begin("Dungeon Instructions");
+	ImGui::Image((void*)(intptr_t)kitchen_waiting_texture, ImVec2(kitchen_waiting_width, kitchen_waiting_height));
+	ImGui::End();
+}
+
+void UIScreenFactory::UILobbyScreen() {
+	ImGui::Begin("Lobby Screen");
+	ImGui::Image((void*)(intptr_t)lobby_texture, ImVec2(lobby_width, lobby_height));
 	ImGui::End();
 }
 

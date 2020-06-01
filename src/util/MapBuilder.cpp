@@ -1,27 +1,30 @@
 #include <util/MapBuilder.h>
 
 DungeonMap* MapBuilder::getBasicDungeonMap() {
-    Wall* wall = new Wall();
-    wall->setPosition(glm::vec3(0, 0, 5));
+
+    // Create the dungeon map
     DungeonMap *mp = new DungeonMap();
-    mp->wallList.push_back(wall);
 
-    wall = new Wall();
-    wall->setPosition(glm::vec3(0, 0, -5));
-    mp->wallList.push_back(wall);
+    // Get wall count
+    int dungeonWallCount = Config::getInt("Dungeon_Wall_Count");
+    
+    // Iterate over walls and add them to the map
+    for (int i = 1; i <= dungeonWallCount; i++)
+    {
+        Wall* wall = new Wall();
+        wall->setPosition(Config::getVec3("Dungeon_Wall_Pos_" +std::to_string(i)));
+        wall->applyScale(Config::getVec3("Dungeon_Wall_Scale_" +std::to_string(i)));
+        mp->wallList.push_back(wall);
+    }
 
-    wall = new Wall();
-    wall->setPosition(glm::vec3(5, 0, 0));
-    mp->wallList.push_back(wall);
+    // Get spawn count
+    int spawnCount = Config::getInt("Dungeon_Spawn_Count");
 
-    wall = new Wall();
-    wall->setPosition(glm::vec3(-5, 0, 0));
-    mp->wallList.push_back(wall);
-
-    mp->spawningLocations.push_back(glm::vec3(10, 0, 0));
-    mp->spawningLocations.push_back(glm::vec3(-10, 0, 0));
-    mp->spawningLocations.push_back(glm::vec3(0, 10, 0));
-    mp->spawningLocations.push_back(glm::vec3(0, 0, 0));
+    // Iterate over spawns and add to map
+    for (int i = 1; i <= spawnCount; i++)
+    {
+        mp->spawningLocations.push_back(Config::getVec3("Dungeon_Spawn_" + std::to_string(i)));
+    }
 
     ///TODO: Add different positions?
     mp->ingredientPositions.push_back(glm::vec3(8, 0, 0));
@@ -40,13 +43,25 @@ KitchenMap* MapBuilder::getBasicKitchenMap(GameState* gameState) {
 
     mp->spawningLocations.push_back(glm::vec3(10, 0, 0));
     mp->spawningLocations.push_back(glm::vec3(-10, 0, 0));
-    mp->spawningLocations.push_back(glm::vec3(0, 10, 0));
+    mp->spawningLocations.push_back(glm::vec3(0, 0, -5));
     mp->spawningLocations.push_back(glm::vec3(0, 0, 0));
 
     // Add cookware
     Cookware* c = new Cookware(PAN);
     c->setName(PAN);
     c->setPosition(glm::vec3(3, 0, 0));
+    mp->cookwareObjects.push_back(c);
+
+    // Add cookware
+    c = new Cookware(CUTTING_BOARD);
+    c->setName(PAN);
+    c->setPosition(glm::vec3(-3, 0, 0));
+    mp->cookwareObjects.push_back(c);
+
+    // Add cookware
+    c = new Cookware(POT);
+    c->setName(PAN);
+    c->setPosition(glm::vec3(0, 0, -3));
     mp->cookwareObjects.push_back(c);
 
     // Add plate

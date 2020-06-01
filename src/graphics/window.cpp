@@ -24,12 +24,12 @@ Window::Window(int width = Config::getFloat("Window_Width"), int height = Config
 	this->inventory = NULL;
 }
 
-void Window::addObject(unsigned int id, GameObject* object) {
+void Window::addObject(int id, GameObject* object) {
 	this->objectsToRender.insert({id, object});
 	objNum++;
 }
 
-void Window::removeObject(unsigned int index) {
+void Window::removeObject(int index) {
 	this->objectsToRender.erase(index);
 	objNum--;
 }
@@ -110,7 +110,8 @@ void Window::setupWindow() {
 	//impl = GlfwRenderer(glfwViewport);
 
 	ImGui_ImplOpenGL3_Init("#version 130");
-	//ImFont* font1 = io.Fonts->AddFontFromFileTTF("assets/fontsNikkyouSans-B6aV.ttf", Config::getInt("Font_Size_Pixels"));
+	// ImFont* font1 = io.Fonts->AddFontFromFileTTF("assets/fonts/NikkyouSans-B6aV.ttf", Config::getInt("Font_Size_Pixels"));
+
 	//glfwViewport.refresh_font_texture();
 	ImGuiStyle * style = &ImGui::GetStyle();
  
@@ -255,11 +256,12 @@ void Window::render()
 
 	// Apply lighting options
 	shader->setVec3("lightColor", glm::vec3(1.0, 1.0, 1.0f));
-	shader->setFloat("ambientStrength", ambientStrength);
-	shader->setVec3("lightPos", lightPos);
-	shader->setVec3("defaultObjColor", defaultObjColor);
-	shader->setFloat("noColorPrecision", noColorPrecision);
-	shader->setFloat("specularStrength", specularStrength);
+	shader->setFloat("ambientStrength", Config::getFloat("ambientStrength"));
+	shader->setVec3("lightPos", Config::getVec3("lightPos"));
+	shader->setVec3("defaultObjColor", Config::getVec3("defaultObjColor"));
+	shader->setFloat("noColorPrecision", Config::getFloat("noColorPrecision"));
+	shader->setFloat("specularStrength", Config::getFloat("specularStrength"));
+	shader->setFloat("colorScale", Config::getFloat("colorScale"));
 	shader->setVec3("viewPos", this->camera->pos);
 	
 	// Target following
@@ -296,8 +298,8 @@ void Window::render()
 		// Set respective model matrix for each object and send it to the shader.
 		glm::mat4 mat = glm::mat4(1.0);
 		mat = glm::translate(mat, obj->getPosition());
-		mat = glm::scale(mat, obj->getScaleVec());
-		mat = glm::rotate(mat, obj->getRotation(), UP);
+		mat = glm::scale(mat, obj->getScaleVec());		
+		mat = glm::rotate(mat, obj->getRotation(), glm::vec3(0.0f, 1.0f, 0.0f));
 		shader->setMat4("model", mat);
 
 		// Used to convert normal vectors to world space coordinates, without applying translations to them
@@ -311,18 +313,27 @@ void Window::render()
 
 	ui.setUpFrame();
 	ImGui::SetWindowFontScale(1.8);
+	// ImGui::PushFont(font1);
 	ui.UIGameInfo(this->round, minutes, seconds);
 	ui.UIScore(this->score);
 	
 	Ingredient* tmp;
 
 	if( this->inventory != NULL ) {
-		if( this->round == DUNGEON ) {
+		if( this->round == DUNGEON_NUM ) {
 			ui.UIInventory(this->inventory);
-			ui.UIShoppingList();
+			ImGui::SetNextWindowCollapsed(true, 0);
+		} else if ( this->round == DUNGEON_WAITING_NUM ) {
+			ui.UIDungeonInstructions();
 		}
-		else
+		else if ( this->round == KITCHEN_NUM ) {
 			tmp = ui.UIButtonInventory(this->inventory);
+			ui.UIInstructionSet(instructionStrings);
+		} else if ( this->round == KITCHEN_WAITING_NUM ) {
+			ui.UIKitchenInstructions();
+		} else if (this->round == LOBBY_NUM ) {
+			ui.UILobbyScreen();
+		}
 	}
 	selectedIngredient = tmp != NULL? tmp: selectedIngredient;
 
@@ -337,6 +348,7 @@ void Window::render()
 
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+	// ImGui::PopFont();
 
 	// // //
 	// GLFW stuff

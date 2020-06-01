@@ -91,11 +91,9 @@ bool GameState::gameOver()
         {
             return this->allClientsReady();
         }
-        // Game over if 15 seconds over (TODO, change logic)
-        /// TODO: Modify logic
+         // Game over if some time is over
         case Game::RoundInfo_RoundState_DUNGEON_WAITING:
         {
-            return true;
             break;
         }
         // Game over if some time is over
