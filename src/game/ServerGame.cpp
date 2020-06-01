@@ -195,8 +195,41 @@ void ServerGame::update()
         }
     }
 
-    // Spawn random ingredients from time to time
-    
+    // Only spawn ingredient in dungeon phase
+    if (this->gameState.getRound() == Game::RoundInfo::DUNGEON)
+    {
+        // Time to spawn ingredient
+        auto currTime = std::chrono::high_resolution_clock::now();
+        if (currTime > this->gameState.dungeonMap->ingredientSpawnTime)
+        {
+            // Get a random ingredient
+            std::vector<Ingredient*> & ingredientList = this->gameState.recipe->ingredientList;
+            int randomIdx = rand() % ingredientList.size();
+            Ingredient* currIngredient = ingredientList.at(randomIdx);
+
+            // Make a copy
+            Ingredient* ingredientCopy = RecipeBuilder::createIngredient(currIngredient->getName());
+
+            // set spawn location
+            int lowerX = this->gameState.dungeonMap->lowerX;
+            int upperX = this->gameState.dungeonMap->upperX;
+            int lowerZ = this->gameState.dungeonMap->lowerZ;
+            int upperZ = this->gameState.dungeonMap->upperZ;
+            int x = (rand() % (upperX - lowerX + 1)) + lowerX;
+            int z = (rand() % (upperZ - lowerZ + 1)) + lowerZ;
+            ingredientCopy->setPosition(glm::vec3(x, 0, z));
+
+            // Add to gameState, add to pending messages
+            gameState.addIngredient(ingredientCopy);
+            Game::ServerMessage* ingredientMsg = MessageBuilder::toServerMessage(ingredientCopy);
+            this->messages.push_back(ingredientMsg);
+
+            // Reset the time
+            auto instantTime = std::chrono::high_resolution_clock::now();
+            auto deltaTime = this->gameState.dungeonMap->timeDelta;
+            this->gameState.dungeonMap->ingredientSpawnTime = instantTime + deltaTime;
+        }
+    }
 }
 
 void ServerGame::sendPendingMessages()

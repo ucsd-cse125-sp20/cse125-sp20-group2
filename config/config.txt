@@ -113,6 +113,15 @@ Dungeon_Wall_Scale_1=94.7,1,0.33
 Dungeon_Wall_Pos_2=0,0,-15
 Dungeon_Wall_Scale_2=94.7,1,0.33
 
+// Adjusted wall boundaries used for ingredient spawning
+Dungeon_Lower_X=-44
+Dungeon_Upper_X=44
+Dungeon_Lower_Z=-15
+Dungeon_Upper_Z=11
+
+// Ingredient spawn rate (in seconds)
+Dungeon_Ingredient_Spawn_Rate=3;
+
 // Left and right walls (external)
 Dungeon_Wall_Pos_3=45,0,0
 Dungeon_Wall_Scale_3=1,1,8

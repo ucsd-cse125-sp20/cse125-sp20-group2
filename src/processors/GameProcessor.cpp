@@ -54,7 +54,7 @@ void GameProcessor::initDungeonPhase(GameState *gameState, ServerGame *server)
     }
 
     ///TODO: Spawn first ingredient
-    spawnIngredient(gameState, r);
+    // spawnIngredient(gameState, r);
 }
 
 void GameProcessor::initPlayersLocations(Map *map, GameState *gameState)
@@ -271,12 +271,6 @@ void GameProcessor::process(unsigned int clientId, Game::ClientMessage clientMsg
                     // Send updated map stuff
                     Game::ServerMessage *mapUpdate = MessageBuilder::toServerMessage(currIngredient);
                     server->messages.push_back(mapUpdate);
-
-                    ///TODO: Create new ingredient
-                    Ingredient *newIngredient = spawnIngredient(&server->gameState, server->gameState.getRecipe());
-                    Game::ServerMessage *ingredientUpdate = MessageBuilder::toServerMessage(newIngredient);
-                    server->messages.push_back(ingredientUpdate);
-                    //delete newIngredient;
                 }
                 else
                 {

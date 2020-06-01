@@ -43,11 +43,17 @@ DungeonMap* MapBuilder::getBasicDungeonMap() {
         mp->spawningLocations.push_back(Config::getVec3("Dungeon_Spawn_" + std::to_string(i)));
     }
 
-    ///TODO: Add different positions?
-    mp->ingredientPositions.push_back(glm::vec3(8, 0, 0));
-    mp->ingredientPositions.push_back(glm::vec3(-8, 0, 0));
-    mp->ingredientPositions.push_back(glm::vec3(10, 0, 0));
-    mp->ingredientPositions.push_back(glm::vec3(-10, 0, 0));
+    // Set box for ingredient spawning position
+    mp->lowerX = Config::getFloat("Dungeon_Lower_X");
+    mp->upperX = Config::getFloat("Dungeon_Upper_X");
+    mp->lowerZ = Config::getFloat("Dungeon_Lower_Z");
+    mp->upperZ = Config::getFloat("Dungeon_Upper_Z");
+
+    // Set time difference between spawning ingredients
+    mp->timeDelta = std::chrono::seconds(Config::getInt("Dungeon_Ingredient_Spawn_Rate"));
+
+    // Set initial time to spawn ingredient
+    mp->ingredientSpawnTime = std::chrono::high_resolution_clock::now();
 
     return mp;
 }
@@ -95,12 +101,12 @@ void MapBuilder::assignIngredientPositions( Recipe* recipe, DungeonMap* mp ) {
         ingredient->setPosition(mp->ingredientPositions[i]);
         i++;
     }*/
-
-    DungeonMap* dMapPtr = static_cast<DungeonMap*>(mp);
-    for (int i = 0; i < recipe->ingredientList.size(); i++) {
-        Ingredient* ing = recipe->ingredientList.front();
-        recipe->ingredientList.erase(recipe->ingredientList.begin());
-        ing->setPosition(dMapPtr->ingredientPositions[i]);
-        recipe->ingredientList.push_back(ing);
-    }
+    std::cout << "WARNING, INGREDIENT POSITIONS ARE NOT BEING ASSIGNED" << std::endl;
+    // DungeonMap* dMapPtr = static_cast<DungeonMap*>(mp);
+    // for (int i = 0; i < recipe->ingredientList.size(); i++) {
+    //     Ingredient* ing = recipe->ingredientList.front();
+    //     recipe->ingredientList.erase(recipe->ingredientList.begin());
+    //     ing->setPosition(dMapPtr->ingredientPositions[i]);
+    //     recipe->ingredientList.push_back(ing);
+    // }
 }
