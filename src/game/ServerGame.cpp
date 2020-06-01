@@ -200,8 +200,10 @@ void ServerGame::update()
     {
         // Time to spawn ingredient
         auto currTime = std::chrono::high_resolution_clock::now();
-        if (currTime > this->gameState.dungeonMap->ingredientSpawnTime)
+        if (currTime > this->gameState.dungeonMap->ingredientSpawnTime && this->gameState.getIngredientObjects().size() < 15)
         {
+            std::cout << "spawning new ingredient because time is over" << std::endl;
+
             // Get a random ingredient
             std::vector<Ingredient*> & ingredientList = this->gameState.recipe->ingredientList;
             int randomIdx = rand() % ingredientList.size();
@@ -215,9 +217,31 @@ void ServerGame::update()
             int upperX = this->gameState.dungeonMap->upperX;
             int lowerZ = this->gameState.dungeonMap->lowerZ;
             int upperZ = this->gameState.dungeonMap->upperZ;
-            int x = (rand() % (upperX - lowerX + 1)) + lowerX;
-            int z = (rand() % (upperZ - lowerZ + 1)) + lowerZ;
-            ingredientCopy->setPosition(glm::vec3(x, 0, z));
+
+            bool isColliding = true;
+            while (isColliding)
+            {
+                // Choose a position
+                int x = (rand() % (upperX - lowerX + 1)) + lowerX;
+                int z = (rand() % (upperZ - lowerZ + 1)) + lowerZ;
+                ingredientCopy->setPosition(glm::vec3(x, 0, z));
+                
+                // See if colliding
+                isColliding = false;
+                for (GameObject* obj : this->gameState.getAllObjects()) 
+                {
+                    if (ingredientCopy->isColliding(obj)) 
+                    {
+                        isColliding = true;
+                        break;
+                    }
+                }
+            }
+
+            // std::cout << ingredientCopy->getPosition() << std::endl; // test if vec3 is overrided
+            std::cout << "ingredient name: " + ingredientCopy->getName() << std::endl;
+            std::cout << "x value for ingredient" + std::to_string(ingredientCopy->getPosition().x) << std::endl;
+            std::cout << "z value for ingredient" + std::to_string(ingredientCopy->getPosition().z) << std::endl;
 
             // Add to gameState, add to pending messages
             gameState.addIngredient(ingredientCopy);
@@ -274,16 +298,24 @@ void ServerGame::onClientConnect(int clientId)
     player->setModel(Config::get(configPath));
    
     // while player is colliding, generate new location
-    for (GameObject* obj : this->gameState.getAllObjects())
+    bool isColliding = true;
+    while (isColliding)
     {
-        if (obj == player) continue;
-        while (player->isColliding(obj))
+        // Choose a position
+        int x = rand() % 6;
+        int z = rand() % 6;
+        player->setPosition(glm::vec3(x, 0, z));
+                
+        // See if colliding
+        isColliding = false;
+        for (GameObject* obj : this->gameState.getAllObjects()) 
         {
-            glm::vec3 playerPos;
-            playerPos.x = rand() % 6;
-            playerPos.y = 0;
-            playerPos.z = rand() % 6;  
-            player->setPosition(playerPos);
+            if (obj == player) continue;
+            if (player->isColliding(obj)) 
+            {
+                isColliding = true;
+                break;
+            }
         }
     }
 
@@ -380,8 +412,6 @@ void ServerGame::onRoundChange()
             break;
         }
     }
-
-    
 
     // On round change, send over all objects
     for (GameObject* obj : this->gameState.getAllObjects()) {

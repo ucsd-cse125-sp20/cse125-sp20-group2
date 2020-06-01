@@ -63,9 +63,6 @@ void ClientGame::runGame()
         // Send to the server
         processInput();
 
-        /// TODO: SEND PENDING MSG LATER IF YOU WANT TO QUEUE UP
-        // sendPendingMsgs()
-
         // Receive updated state from server
         receiveUpdates();
 
@@ -221,8 +218,6 @@ void ClientGame::updateGameState()
 
             case Game::ServerMessage::EventCase::kTime:
             {
-                
-                std::cout << "secs left " << currMessage.time().seconds() << std::endl;
                 uint32_t seconds = currMessage.time().seconds();
                 window.setTimer(seconds);
                 break;

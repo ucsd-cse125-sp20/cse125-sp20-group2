@@ -2,6 +2,8 @@
 #include <game/ServerGame.h>
 #include <string>
 #include <util/Config.h>
+#include <stdlib.h>     /* srand, rand */
+#include <time.h>       /* time */
 
 // Config loader variables
 // Declared here because static variables need to be declared outside of class
@@ -10,6 +12,7 @@ std::unordered_map<std::string, std::string>* Config::vars;
 // ./game [client / server]
 int main(int argc, char * argv[])
 {
+	srand(time(NULL));
 	// Load config data
 	Config::vars = new std::unordered_map<std::string, std::string>();
 	Config::load();

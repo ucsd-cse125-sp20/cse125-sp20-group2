@@ -33,6 +33,7 @@ bool BoundingBox::isCircleRectangleIntersecting(BoundingBox *cbb)
 
 bool BoundingBox::isCircleIntersecting(BoundingBox *bb)
 {
+    ///std::cout<<"Radiuses of colliding spheres:"<<bb->radius<<"  "<<this->radius<<std::endl;
     glm::vec3 circlePos1 = this->obj->getPosition();
     glm::vec3 circlePos2 = bb->obj->getPosition();
     float distance = sqrt((circlePos1.x - circlePos2.x) * (circlePos1.x - circlePos2.x) +

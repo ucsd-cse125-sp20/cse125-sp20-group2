@@ -298,8 +298,10 @@ void Window::render()
 		// Set respective model matrix for each object and send it to the shader.
 		glm::mat4 mat = glm::mat4(1.0);
 		mat = glm::translate(mat, obj->getPosition());
-		mat = glm::scale(mat, obj->getScaleVec());		
-		mat = glm::rotate(mat, (float)((obj->getRotation() * 3.14)/180), glm::vec3(0.0f, 1.0f, 0.0f));
+		mat = glm::scale(mat, obj->getScaleVec());	
+		/// TODO: change back
+		if (obj->getObjectType() != WALL) mat = glm::rotate(mat, obj->getRotation(), glm::vec3(0.0f, 1.0f, 0.0f));	
+		else mat = glm::rotate(mat, (float)((obj->getRotation() * 3.14)/180.0), glm::vec3(0.0f, 1.0f, 0.0f));
 		shader->setMat4("model", mat);
 
 		// Used to convert normal vectors to world space coordinates, without applying translations to them
@@ -308,33 +310,39 @@ void Window::render()
 		// Draw the model
 		obj->draw(*shader);
 	}
-	int32_t  minutes = this->timer / 60;
+	int32_t minutes = this->timer / 60;
 	int32_t seconds = this->timer % 60;
-
 	ui.setUpFrame();
-	ImGui::SetWindowFontScale(1.8);
+	ImGui::SetWindowFontScale(Config::getFloat("Font_Scale"));
 	// ImGui::PushFont(font1);
 	ui.UIGameInfo(this->round, minutes, seconds);
 	ui.UIScore(this->score);
 	
 	Ingredient* tmp;
 
-	if( this->inventory != NULL ) {
-		if( this->round == DUNGEON_NUM ) {
-			ui.UIInventory(this->inventory);
-			ImGui::SetNextWindowCollapsed(true, 0);
-		} else if ( this->round == DUNGEON_WAITING_NUM ) {
-			ui.UIDungeonInstructions();
-		}
-		else if ( this->round == KITCHEN_NUM ) {
-			tmp = ui.UIButtonInventory(this->inventory);
-			ui.UIInstructionSet(instructionStrings);
-		} else if ( this->round == KITCHEN_WAITING_NUM ) {
-			ui.UIKitchenInstructions();
-		} else if (this->round == LOBBY_NUM ) {
-			ui.UILobbyScreen();
-		}
+	if (this->round == DUNGEON_NUM && this->inventory != NULL)
+	{
+		ui.UIInventory(this->inventory);
+		ImGui::SetNextWindowCollapsed(true, 0);
 	}
+	else if (this->round == DUNGEON_WAITING_NUM && this->inventory != NULL)
+	{
+		ui.UIDungeonInstructions();
+	}
+	else if (this->round == KITCHEN_NUM && this->inventory != NULL )
+	{
+		tmp = ui.UIButtonInventory(this->inventory);
+		ui.UIInstructionSet(instructionStrings);
+	}
+	else if (this->round == KITCHEN_WAITING_NUM)
+	{
+		ui.UIKitchenInstructions();
+	}
+	else if (this->round == LOBBY_NUM)
+	{
+		ui.UILobbyScreen();
+	}
+
 	selectedIngredient = tmp != NULL? tmp: selectedIngredient;
 
 	if( this->cookingEventMsg.compare("") != 0 )

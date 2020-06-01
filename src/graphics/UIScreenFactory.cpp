@@ -100,7 +100,7 @@ void UIScreenFactory::UIGameInfo(int round, int32_t minutes, int32_t seconds) {
 			default: roundInfo = "TRANSITION";
 		}
 		UIText(roundInfo);
-		std::string str = "Time Left: " + std::to_string(minutes);
+		std::string str = "Time Left: ";
 		str = str.append(std::to_string(minutes));
 		str = str.append(" : ");
 		str = str.append(std::to_string(seconds));
@@ -110,10 +110,10 @@ void UIScreenFactory::UIGameInfo(int round, int32_t minutes, int32_t seconds) {
 }
 
 void UIScreenFactory::UIGameOver(bool gameWin) {
-	ImGui::SetNextWindowSize(ImVec2(200.0f, 200.0f));
-	ImGui::Begin("Game Over!");
-	if (gameWin) ImGui::Text("You win!");
-	else ImGui::Text("You lose!");
+	ImGui::SetNextWindowSize(ImVec2(io->DisplaySize.x-DISTANCE, io->DisplaySize.y-DISTANCE));
+	ImGui::Begin("TIME IS UP");
+	if (gameWin) ImGui::Text("You win! You are chosen as the next face of the burdgeoning communist fast-food industry");
+	else ImGui::Text("A comrade outperformed you and slackers like you in the glorious communist state are an enemy of the people. You were sent to a gulag to live out your days doing hard labor. Maybe you could still fulfill the prison labor quota.");
 	ImGui::End();
 }
 
