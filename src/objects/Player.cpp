@@ -7,14 +7,9 @@ Player::Player(int ID) : GameObject(ID)
     this->score = 0;
     this->objType = PLAYER;
     this->setModel(Config::get("Player_Model"));
-    this->loadCollisionSize();
-    this->inventory = new std::unordered_map<int, Ingredient*>();
-}
-
-void Player::loadCollisionSize()
-{
     this->baseRadius = Config::getFloat("Player_Radius");
     this->box->setCircleBoundingBox();
+    this->inventory = new std::unordered_map<int, Ingredient*>();
     this->updateMeasurements();
 }
 

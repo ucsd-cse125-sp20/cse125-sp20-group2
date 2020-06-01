@@ -4,6 +4,7 @@
 #include <objects/Player.h>
 #include <utility>
 #include <util/Config.h>
+#include <cmath>
 
 class MovementProcessor {
 public:
@@ -48,8 +49,8 @@ public:
             }
         }
 
-        modelRotationX += currentTurnSpeed * deltaTime;
-        float distance = currentRunSpeed * deltaTime;
+        modelRotationX += currentTurnSpeed * pow(deltaTime, 2);
+        float distance = currentRunSpeed * pow(deltaTime, 1.75);
         float dx = distance * sin(modelRotationX);
         float dz = distance * cos(modelRotationX);
         currentPos.x += dx;

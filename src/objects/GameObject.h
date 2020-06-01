@@ -72,7 +72,6 @@ protected:
     void loadCollisionSize();
 
 public:
-    /// TODO: Remove this later - default ctor gives hardcoded id
     GameObject();
 
     /**

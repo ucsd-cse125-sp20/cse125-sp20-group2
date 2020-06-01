@@ -7,3 +7,5 @@
 4. Run `wget https://raw.githubusercontent.com/msys2/MINGW-packages/master/mingw-w64-soil/PKGBUILD`
 5. Run `makepkg -si`
 6. Clone repo and try `make`. Note for the first time, you need to make twice.
+
+WARNING: USE MSYS2 MINGW 64-bit when launching MSYS2!

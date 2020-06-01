@@ -9,7 +9,6 @@ Ingredient::Ingredient(int ID) : GameObject(ID) {
 Ingredient::Ingredient() : GameObject() {
     this->objType = INGREDIENT;
 	this->setModel(Config::get("Wall_Model"));
-    
 }
     
 Ingredient::~Ingredient() {
