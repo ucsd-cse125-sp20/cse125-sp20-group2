@@ -12,8 +12,25 @@ DungeonMap* MapBuilder::getBasicDungeonMap() {
     for (int i = 1; i <= dungeonWallCount; i++)
     {
         Wall* wall = new Wall();
-        wall->setPosition(Config::getVec3("Dungeon_Wall_Pos_" +std::to_string(i)));
-        wall->applyScale(Config::getVec3("Dungeon_Wall_Scale_" +std::to_string(i)));
+        wall->setPosition(Config::getVec3("Dungeon_Wall_Pos_" + std::to_string(i)));
+        
+        // Get scale and rotation
+        std::string scaleVecString = Config::get("Dungeon_Wall_Scale_" + std::to_string(i));
+        std::string rotString = Config::get("Dungeon_Wall_Rot_" + std::to_string(i));
+
+        // Apply scale and rotation, if applicable
+        if (scaleVecString.compare(std::string("NOT FOUND")) != 0)
+        {
+            glm::vec3 scaleVec = Config::getVec3("Dungeon_Wall_Scale_" + std::to_string(i));
+            wall->applyScale(scaleVec);
+        }
+        if (rotString.compare(std::string("NOT FOUND")) != 0)
+        {
+            float rot = Config::getFloat("Dungeon_Wall_Rot_" + std::to_string(i));
+            wall->setRotation(rot);
+        }
+
+        // Add wall to list
         mp->wallList.push_back(wall);
     }
 

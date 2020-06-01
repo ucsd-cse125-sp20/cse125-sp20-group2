@@ -16,6 +16,11 @@ public:
      * Get a config variable
      * */
     static std::string get(std::string key) {
+
+        // Edge case: does not exist in config
+        if (vars->find(key) == vars->end()) return std::string("NOT FOUND");
+
+        // Return
         return vars->at(key);
     }
 
