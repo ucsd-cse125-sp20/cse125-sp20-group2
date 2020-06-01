@@ -41,10 +41,11 @@ GameObject::GameObject(int id) {
 	this->setObjectType(OBJECT);
 }
 
-/**GameObject:~GameObject() {
+GameObject::~GameObject() 
+{
 	if (model) delete model;
 	if (box) delete box;
-}*/
+}
 
 void GameObject::setObjectType(ObjectType newObjType) {
 	this->objType = newObjType;

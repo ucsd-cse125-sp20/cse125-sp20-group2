@@ -81,7 +81,7 @@ public:
      * */
     GameObject(int id);
 
-    /*~GameObject();*/
+    ~GameObject();
 
     // Model
     Model *model = NULL;
