@@ -46,7 +46,7 @@ void ClientGame::keyBindsHandler(GLFWwindow* glfwWindow, int key, int scancode, 
     }
 
     // Handles interact event
-    if (key == GLFW_KEY_E && action == GLFW_PRESS && this->window.getSelectedIngredient() != NULL && this->window.getRound() == KITCHEN )
+    if (key == GLFW_KEY_E && action == GLFW_PRESS && this->window.getSelectedIngredient() != NULL && this->window.getRound() == KITCHEN_NUM )
     {
         std::cout << "pressed interact key" << std::endl;
         Game::ClientMessage* cookMsg = MessageBuilder::toCookMessage(this->window.getSelectedIngredient());
@@ -213,7 +213,9 @@ void ClientGame::updateGameState()
 
             case Game::ServerMessage::EventCase::kInstruction:
             {
-                
+                int index = currMessage.instruction().index();
+                std::string msg = currMessage.instruction().instructionmsg();
+                window.instructionStrings.insert(window.instructionStrings.begin()+index, msg);
                 break;
             }
 

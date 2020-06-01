@@ -14,9 +14,18 @@ public:
 	ImVec2 window_pos;
 	ImVec2 window_pos_pivot;
 
-	int shopping_list_width;
-	int shopping_list_height;
-	GLuint shopping_list_texture;
+	int dungeon_waiting_width;
+	int dungeon_waiting_height;
+	GLuint dungeon_waiting_texture;
+
+	int kitchen_waiting_width;
+	int kitchen_waiting_height;
+	GLuint kitchen_waiting_texture;
+
+	int lobby_width;
+	int lobby_height;
+	GLuint lobby_texture;
+
 
 	Ingredient* highlighted = NULL;
 
@@ -27,12 +36,15 @@ public:
 
 	void loadImages();
 
-	void UIShoppingList();
+	void UIDungeonInstructions();
+	void UIKitchenInstructions();
+	void UILobbyScreen();
 	void UIGameInfo(int round, int32_t minutes, int32_t seconds);
 	void UIScore(int score);
 	void UIInventory(std::unordered_map<int, Ingredient*>* map);
 	Ingredient* UIButtonInventory(std::unordered_map<int, Ingredient*>* map);
 	void UICookingEvent(std::string);
+	void UIInstructionSet(std::vector<std::string>);
 
 	void UIGameOver(bool gameWin);
 
@@ -42,9 +54,6 @@ public:
 
 private:
 
-	const std::string lobby = "LOBBY";
-	const std::string dungeon = "DUNGEON";
-	const std::string kitchen = "KITCHEN";
 	int corner = 1;
 	const float DISTANCE = 10.0f;
 };

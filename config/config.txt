@@ -71,9 +71,9 @@ Player_Turn_Speed=1
 // Round time (in seconds)
 Kitchen_Round_Time=15
 Kitchen_Waiting_Round_Time=10
-Dungeon_Round_Time=120
+Dungeon_Round_Time=10
 Lobby_Round_Time=15
-Dungeon_Waiting_Round_Time=5
+Dungeon_Waiting_Round_Time=20
 
 Cook_Event_Time=5
 
@@ -118,8 +118,6 @@ Dungeon_Wall_Pos_3=45,0,0
 Dungeon_Wall_Scale_3=1,1,8
 Dungeon_Wall_Pos_4=-45,0,0
 Dungeon_Wall_Scale_4=1,1,8
-
-// 
 
 // Dungeon Spawn Positions
 Dungeon_Spawn_Count=4

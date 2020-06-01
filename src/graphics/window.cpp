@@ -320,12 +320,20 @@ void Window::render()
 	Ingredient* tmp;
 
 	if( this->inventory != NULL ) {
-		if( this->round == DUNGEON ) {
+		if( this->round == DUNGEON_NUM ) {
 			ui.UIInventory(this->inventory);
-			ui.UIShoppingList();
+			ImGui::SetNextWindowCollapsed(true, 0);
+		} else if ( this->round == DUNGEON_WAITING_NUM ) {
+			ui.UIDungeonInstructions();
 		}
-		else
+		else if ( this->round == KITCHEN_NUM ) {
 			tmp = ui.UIButtonInventory(this->inventory);
+			ui.UIInstructionSet(instructionStrings);
+		} else if ( this->round == KITCHEN_WAITING_NUM ) {
+			ui.UIKitchenInstructions();
+		} else if (this->round == LOBBY_NUM ) {
+			ui.UILobbyScreen();
+		}
 	}
 	selectedIngredient = tmp != NULL? tmp: selectedIngredient;
 

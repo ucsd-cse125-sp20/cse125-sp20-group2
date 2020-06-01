@@ -290,6 +290,9 @@ void ServerGame::onRoundChange()
         { 
             std::cout << "Initializing dungeon waiting" << std::endl;
 
+            // Initialize dungeon waiting time
+            GameProcessor::initDungeonWaiting(&this->gameState);
+
             // Create the other phases (all visible)
             GameProcessor::initDungeonPhase(&this->gameState, this);
             GameProcessor::initKitchenPhase(&this->gameState);
@@ -316,10 +319,11 @@ void ServerGame::onRoundChange()
             for(auto ingredientPair : gameState.ingredientObjects )
                 ingredientPair.second->setRender(false);
             // Send instructions from recipe to clients
-            int i =0;
+            int i = 0;
             for(auto inst : this->gameState.recipe->instructionList ) {
                 Game::ServerMessage* msg = MessageBuilder::toInstructionInfo(inst, i);
                 this->server.sendToAll(*msg);
+                delete msg;
                 i++;
             }
             // EndProcessor::initGameState(&this->gameState, this);
