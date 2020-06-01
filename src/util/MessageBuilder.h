@@ -171,6 +171,17 @@ public:
       return clientMsg;
   }
 
+  static Game::ServerMessage* toInstructionInfo(Instruction* inst, int index) 
+  {
+      Game::InstructionInfo* iinfo = new Game::InstructionInfo();
+      iinfo->set_index(index);
+      iinfo->set_instructionmsg(inst->instr);
+
+      Game::ServerMessage* serverMsg = new Game::ServerMessage();
+      serverMsg->set_allocated_instruction(iinfo);
+      return serverMsg;
+  }
+
   /*
   * Create a server message for time update
   * */

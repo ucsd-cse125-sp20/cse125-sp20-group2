@@ -17,12 +17,14 @@ DungeonMap* MapBuilder::getBasicDungeonMap() {
         mp->wallList.push_back(wall);
     }
 
-    for (int i = 1; i < )
-    
-    mp->spawningLocations.push_back(glm::vec3(10, 0, 0));
-    mp->spawningLocations.push_back(glm::vec3(-10, 0, 0));
-    mp->spawningLocations.push_back(glm::vec3(0, 10, 0));
-    mp->spawningLocations.push_back(glm::vec3(0, 0, 0));
+    // Get spawn count
+    int spawnCount = Config::getInt("Dungeon_Spawn_Count");
+
+    // Iterate over spawns and add to map
+    for (int i = 1; i <= spawnCount; i++)
+    {
+        mp->spawningLocations.push_back(Config::getVec3("Dungeon_Spawn_" + std::to_string(i)));
+    }
 
     ///TODO: Add different positions?
     mp->ingredientPositions.push_back(glm::vec3(8, 0, 0));

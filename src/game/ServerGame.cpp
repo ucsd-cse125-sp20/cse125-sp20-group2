@@ -1,6 +1,5 @@
 #include <game/ServerGame.h>
 #include <processors/GameProcessor.h>
-#include <processors/LobbyProcessor.h>
 #include <processors/EndProcessor.h>
 #include <stdlib.h>
 
@@ -85,36 +84,30 @@ void ServerGame::process(std::unordered_map<unsigned int, std::vector<Game::Clie
             switch (this->gameState.getRound()) {
                 case Game::RoundInfo::LOBBY:
                 {
-                    std::cout << "This is lobby phase" << std::endl;
-                    LobbyProcessor::Process(clientId, msg, this);
+                    GameProcessor::processLobby(clientId, msg, this);
                     GameProcessor::process(clientId, msg, this);
                     break;
                 }
                 case Game::RoundInfo::DUNGEON_WAITING:
                 {
-                    std::cout << "This is dungeon waiting phase" << std::endl;
                     break;
                 }
                 case Game::RoundInfo::DUNGEON:
                 {
-                    std::cout << "this is dungeon phase" << std::endl;
                     GameProcessor::process(clientId, msg, this);
                     break;
                 }
                 case Game::RoundInfo::KITCHEN_WAITING:
                 {
-                    std::cout << "This is kitchen waiting phase" << std::endl;
                     break;
                 }
                 case Game::RoundInfo::KITCHEN:
                 {
-                    std::cout << "this is kitchen phase" << std::endl;
                     GameProcessor::process(clientId, msg, this);
                     break;
                 }
                 case Game::RoundInfo::END:
                 {
-                    std::cout << "This is ending phase" << std::endl;
                     break;
                 }
                 default:
@@ -297,13 +290,15 @@ void ServerGame::onRoundChange()
         { 
             std::cout << "Initializing dungeon waiting" << std::endl;
 
-            // Create the other phases 
+            // Create the other phases (all visible)
             GameProcessor::initDungeonPhase(&this->gameState, this);
             GameProcessor::initKitchenPhase(&this->gameState);
 
-
+            // Make kitchen invisible
             this->gameState.kitchenMap->setRender(false);
-            LobbyProcessor::initDungeonWaiting(&this->gameState);
+
+            /// Position players on spawn points
+            GameProcessor::initPlayersLocations(gameState.dungeonMap, &gameState);
             break;
         }
         case Game::RoundInfo::DUNGEON:
@@ -320,6 +315,13 @@ void ServerGame::onRoundChange()
             this->gameState.dungeonMap->setRender(false);
             for(auto ingredientPair : gameState.ingredientObjects )
                 ingredientPair.second->setRender(false);
+            // Send instructions from recipe to clients
+            int i =0;
+            for(auto inst : this->gameState.recipe->instructionList ) {
+                Game::ServerMessage* msg = MessageBuilder::toInstructionInfo(inst, i);
+                this->server.sendToAll(*msg);
+                i++;
+            }
             // EndProcessor::initGameState(&this->gameState, this);
             break;
         }

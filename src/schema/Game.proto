@@ -42,6 +42,7 @@ message ServerMessage {
         RoundInfo round = 7;
         RoundWin win = 8;
         ValidateCooking validCook = 9;
+        InstructionInfo instruction = 10;
     }
 }
 
@@ -53,6 +54,11 @@ enum ObjectType {
     WALL = 4;
     TABLE = 5;
     PLATE = 6;
+}
+
+message InstructionInfo {
+    required string instructionMsg = 1;
+    required uint32 index = 2;
 }
 
 message Object {

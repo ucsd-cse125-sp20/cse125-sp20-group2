@@ -24,12 +24,12 @@ Window::Window(int width = Config::getFloat("Window_Width"), int height = Config
 	this->inventory = NULL;
 }
 
-void Window::addObject(unsigned int id, GameObject* object) {
+void Window::addObject(int id, GameObject* object) {
 	this->objectsToRender.insert({id, object});
 	objNum++;
 }
 
-void Window::removeObject(unsigned int index) {
+void Window::removeObject(int index) {
 	this->objectsToRender.erase(index);
 	objNum--;
 }
@@ -110,8 +110,7 @@ void Window::setupWindow() {
 	//impl = GlfwRenderer(glfwViewport);
 
 	ImGui_ImplOpenGL3_Init("#version 130");
-	//io.Fonts->AddFontFromFileTTF("assets/fonts/NikkyouSans-B6aV.ttf", Config::getInt("Font_Size_Pixels"));
-	//ImFont* font1 = io.Fonts->AddFontFromFileTTF("assets/fonts/NikkyouSans-B6aV.ttf", Config::getInt("Font_Size_Pixels"));
+	// ImFont* font1 = io.Fonts->AddFontFromFileTTF("assets/fonts/NikkyouSans-B6aV.ttf", Config::getInt("Font_Size_Pixels"));
 
 	//glfwViewport.refresh_font_texture();
 	ImGuiStyle * style = &ImGui::GetStyle();
@@ -314,6 +313,7 @@ void Window::render()
 
 	ui.setUpFrame();
 	ImGui::SetWindowFontScale(1.8);
+	// ImGui::PushFont(font1);
 	ui.UIGameInfo(this->round, minutes, seconds);
 	ui.UIScore(this->score);
 	
@@ -340,6 +340,7 @@ void Window::render()
 
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+	// ImGui::PopFont();
 
 	// // //
 	// GLFW stuff

@@ -11,6 +11,13 @@ ClientGame::ClientGame(std::string IP, int port) : client(IP, port), window(Conf
     glfwSetWindowUserPointer(this->window.glfwViewport, reinterpret_cast<void*> (this));
     glfwSetKeyCallback(this->window.glfwViewport, key_callback_wrapper);
 
+    // Create floor lol
+    GameObject* floor = new GameObject(-1);
+    floor->setModel("assets/models/floor.obj");
+    floor->setPosition(glm::vec3(0,-0.5,0));
+    floor->applyScale(glm::vec3(1));
+    window.addObject(-1, floor);
+
     runGame();
 }
 
@@ -201,6 +208,12 @@ void ClientGame::updateGameState()
                 window.camera->setTarget(window.objectsToRender[this->objectId]);
                 Player* p = (Player*) window.objectsToRender[this->objectId];
                 window.addInventory(p->getInventory());
+                break;
+            }
+
+            case Game::ServerMessage::EventCase::kInstruction:
+            {
+                
                 break;
             }
 

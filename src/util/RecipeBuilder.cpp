@@ -31,7 +31,7 @@ Recipe* RecipeBuilder::getBasicRecipe() {
     inst->instr = "Cut the meat";
     recipe->instructionList.push_back(inst);
 
-    *inst = new Instruction();
+    inst = new Instruction();
     inst->before = IngredientStatus::Cut;
     inst->after = IngredientStatus::Fried;
     inst->points = 10;
@@ -40,7 +40,7 @@ Recipe* RecipeBuilder::getBasicRecipe() {
     inst->instr = "Fry the meat";
     recipe->instructionList.push_back(inst);
 
-    *inst = new Instruction();
+    inst = new Instruction();
     inst->before = IngredientStatus::Raw;
     inst->after = IngredientStatus::Boiled;
     inst->points = 10;
@@ -49,7 +49,7 @@ Recipe* RecipeBuilder::getBasicRecipe() {
     inst->instr = "Boil the lettuce (because of e.coli)";
     recipe->instructionList.push_back(inst);
 
-    *inst = new Instruction();
+    inst = new Instruction();
     inst->before = IngredientStatus::Raw;
     inst->after = IngredientStatus::Cut;
     inst->points = 5;
@@ -58,7 +58,7 @@ Recipe* RecipeBuilder::getBasicRecipe() {
     inst->instr = "Cut the cheese";
     recipe->instructionList.push_back(inst);
 
-    *inst = new Instruction();
+    inst = new Instruction();
     inst->before = IngredientStatus::Raw;
     inst->after = IngredientStatus::Cut;
     inst->points = 5;

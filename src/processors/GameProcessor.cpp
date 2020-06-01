@@ -54,7 +54,7 @@ void GameProcessor::initDungeonPhase(GameState *gameState, ServerGame *server)
 
 void GameProcessor::initPlayersLocations(Map *map, GameState *gameState)
 {
-    // M// Move players to spawn locations
+    // Move players to spawn locations
     for (auto playerPair : gameState->getPlayerObjects())
     {
         Player *currPlayer = playerPair.second;
@@ -86,18 +86,14 @@ void GameProcessor::initKitchenPhase(GameState *gameState)
         gameState->plateObjects[(*it)->getID()] = *it;
     }
 
-    // Move players to spawn locations
+    // Adding all instructions to players to keep track of the instructions' status in the future
     for (auto playerPair : gameState->getPlayerObjects())
     {
         Player *currPlayer = playerPair.second;
-
-        // Adding all instructions to players to keep track of the instructions' status in the future
         for (auto instruction : gameState->getRecipe()->instructionList)
         {
             currPlayer->instructionSet.push_back(std::make_pair(instruction, false));
         }
-        currPlayer->setPosition(m->spawningLocations.back());
-        m->spawningLocations.pop_back();
     }
 }
 

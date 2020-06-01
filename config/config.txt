@@ -10,7 +10,7 @@ Tomato_Model=assets/models/tomato2.obj
 
 // Cookware model paths
 Pot_Model=assets/models/Pot.obj
-Knife_Model=assets/models/Knife.obj
+Cutting_Board_Model=assets/models/Knife.obj
 Pan_Model=assets/models/Pan.obj
 Plate_Model=assets/models/plate.obj
 
@@ -109,15 +109,17 @@ Dungeon_Wall_Count=4
 
 // Top and bottom Walls (external)
 Dungeon_Wall_Pos_1=0,0,15
-Dungeon_Wall_Scale_1=100,1,0.33
+Dungeon_Wall_Scale_1=94.7,1,0.33
 Dungeon_Wall_Pos_2=0,0,-15
-Dungeon_Wall_Scale_2=100,1,0.33
+Dungeon_Wall_Scale_2=94.7,1,0.33
 
 // Left and right walls (external)
 Dungeon_Wall_Pos_3=45,0,0
 Dungeon_Wall_Scale_3=1,1,8
 Dungeon_Wall_Pos_4=-45,0,0
 Dungeon_Wall_Scale_4=1,1,8
+
+// 
 
 // Dungeon Spawn Positions
 Dungeon_Spawn_Count=4
