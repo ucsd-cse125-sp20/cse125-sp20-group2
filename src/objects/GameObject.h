@@ -5,7 +5,6 @@
 #include <graphics/render/Model.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <constants/graphics_vars.h>
 #include <unordered_map>
 #include <collisions/BoundingBox.h>
 

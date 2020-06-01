@@ -98,8 +98,8 @@ bool BoundingBox::isIntersecting(BoundingBox *bb)
 void BoundingBox::updateCorners()
 {
     glm::vec3 position = obj->getPosition();
-    maxX = position.x + width / 2;
-    minX = position.x - width / 2;
-    maxZ = position.z + depth / 2;
-    minZ = position.z - depth / 2;
+    maxX = position.x + width / 2.0;
+    minX = position.x - width / 2.0;
+    maxZ = position.z + depth / 2.0;
+    minZ = position.z - depth / 2.0;
 }

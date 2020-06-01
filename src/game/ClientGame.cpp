@@ -90,6 +90,7 @@ void ClientGame::updateGameState()
                 float rotation = currMessage.object().rotation();
                 uint32_t id = currMessage.object().id();
                 bool render = currMessage.object().render();
+                Game::Vector3 scale = currMessage.object().scale();
 
                 GameObject* obj = NULL;
 
@@ -117,7 +118,7 @@ void ClientGame::updateGameState()
                         // Wall object.
                         case Game::WALL: obj = new Wall(id); break;
 
-                        // Table object.
+                        // Table object..
                         case Game::TABLE: obj = new Table(id); break;
 
                         // Plate object.
@@ -136,6 +137,7 @@ void ClientGame::updateGameState()
 
                 // Set object parameters
                 obj->setRotation(rotation);
+                if (currMessage.object().has_scale()) obj->applyScale(glm::vec3(scale.x(), scale.y(), scale.z()));
                 obj->setRender(render);
                 obj->setPosition(glm::vec3(location.x(), location.y(), location.z()));
                 window.removeCookingEventMessage();

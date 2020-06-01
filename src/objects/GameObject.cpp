@@ -79,7 +79,6 @@ void GameObject::setModel(std::string path) {
 	this->modelPath = path;
 }
 
-/// NOTE: If height is ever needed, we will add it here.
 void GameObject::updateMeasurements()
 {
 	// This code serves to update collisions. If either of these are missing, stop

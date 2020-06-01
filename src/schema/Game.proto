@@ -62,6 +62,7 @@ message Object {
     required ObjectType type = 4;
     required bool render = 5 [default = true];
     required string modelPath = 6 [default = ""];
+    optional Vector3 scale = 7;
 }
 
 message Score {

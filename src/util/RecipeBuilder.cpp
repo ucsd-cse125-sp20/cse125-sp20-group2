@@ -2,7 +2,7 @@
 
 Recipe* RecipeBuilder::getBasicRecipe() {
     Recipe* recipe = new Recipe();
-    recipe->name = "Bun Burger";
+    recipe->name = "Glorious Communist Burger";
 
     Ingredient *ing = createIngredient("Bun");
     recipe->ingredientList.push_back(ing);
@@ -24,11 +24,47 @@ Recipe* RecipeBuilder::getBasicRecipe() {
 
     Instruction *inst = new Instruction();
     inst->before = IngredientStatus::Raw;
+    inst->after = IngredientStatus::Cut;
+    inst->points = 5;
+    inst->cookware = CUTTING_BOARD;
+    inst->ingredient = MEAT;
+    inst->instr = "Cut the meat";
+    recipe->instructionList.push_back(inst);
+
+    *inst = new Instruction();
+    inst->before = IngredientStatus::Cut;
     inst->after = IngredientStatus::Fried;
     inst->points = 10;
     inst->cookware = PAN;
-    inst->ingredient = BUN;
+    inst->ingredient = MEAT;
     inst->instr = "Fry the meat";
+    recipe->instructionList.push_back(inst);
+
+    *inst = new Instruction();
+    inst->before = IngredientStatus::Raw;
+    inst->after = IngredientStatus::Boiled;
+    inst->points = 10;
+    inst->cookware = POT;
+    inst->ingredient = LETTUCE;
+    inst->instr = "Boil the lettuce (because of e.coli)";
+    recipe->instructionList.push_back(inst);
+
+    *inst = new Instruction();
+    inst->before = IngredientStatus::Raw;
+    inst->after = IngredientStatus::Cut;
+    inst->points = 5;
+    inst->cookware = CUTTING_BOARD;
+    inst->ingredient = CHEESE;
+    inst->instr = "Cut the cheese";
+    recipe->instructionList.push_back(inst);
+
+    *inst = new Instruction();
+    inst->before = IngredientStatus::Raw;
+    inst->after = IngredientStatus::Cut;
+    inst->points = 5;
+    inst->cookware = CUTTING_BOARD;
+    inst->ingredient = TOMATO;
+    inst->instr = "Cut the tomato";
     recipe->instructionList.push_back(inst);
 
     return recipe;

@@ -23,16 +23,22 @@ public:
             exit(1);
         }
 
-        /// TODO: Check if sending server message deallocates Vector
         Game::Vector3* vector = toVector(object->getPosition());
+        Game::Vector3* scaleVector = toVector(object->getScaleVec());
+        std::string* modelPath = new std::string(object->getModelPath());
 
         // Set position/location/id (universal aspects of all game objects)
         Game::Object* msgObj = new Game::Object();
-        msgObj->set_allocated_worldposition(vector);
+        
+        // Set non-allocated properties (primitive)
         msgObj->set_rotation(object->getRotation());
         msgObj->set_id(object->getID());
-        msgObj->set_allocated_modelpath(new std::string(object->getModelPath()));
         msgObj->set_render(object->getRender());
+
+        // Set allocated properties (create pointers before setting)
+        msgObj->set_allocated_worldposition(vector);
+        msgObj->set_allocated_modelpath(modelPath);
+        msgObj->set_allocated_scale(scaleVector);
         
         // Set type
         switch (object->getObjectType()) {

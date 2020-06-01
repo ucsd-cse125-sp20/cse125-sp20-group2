@@ -242,9 +242,10 @@ void ServerGame::onClientConnect(int clientId)
     // Add client to ready map
     this->gameState.readyStatus[clientId] = false;
 
-    /// TODO: If we go image lobby route, this will not load the player or client info initially. This needs client support.
     // Add player with respective client ID
     Player* player = this->gameState.addPlayer(clientId);
+    std::string configPath = "Player_" + std::to_string(clientId);
+    player->setModel(Config::get(configPath));
    
     // while player is colliding, generate new location
     for (GameObject* obj : this->gameState.getAllObjects())
@@ -261,7 +262,8 @@ void ServerGame::onClientConnect(int clientId)
     }
 
     // Send objects
-    for (GameObject* obj : this->gameState.getAllObjects()) {
+    for (GameObject* obj : this->gameState.getAllObjects()) 
+    {
         Game::ServerMessage* message = MessageBuilder::toServerMessage(obj);
         this->server.sendToAll(*message);
         delete message;
@@ -278,6 +280,7 @@ void ServerGame::onRoundChange()
     // Send updated state to the client
     Game::ServerMessage* gameStatus = MessageBuilder::toRoundUpdate(this->gameState.getRound());
     this->server.sendToAll(*gameStatus);
+    delete gameStatus;
 
     /// TODO: Handle unloading all objects. Should not unload the player object.
 

@@ -20,7 +20,7 @@ void GameProcessor::initDungeonPhase(GameState *gameState, ServerGame *server)
 
     // Give all connected players basic ingredients
     // Make sure all those ingredients are in gameState
-    for (auto &playerPair : gameState->getPlayerObjects())
+    for (auto & playerPair : gameState->getPlayerObjects())
     {
         unsigned int clientId = playerPair.first;
         Player *currPlayer = playerPair.second;

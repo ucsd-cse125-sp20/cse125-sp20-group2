@@ -26,9 +26,6 @@
 #include <graphics/render/Camera.h>
 #include <graphics/render/Model.h>
 
-// Etc
-#include <constants/graphics_vars.h>
-
 // Protobuf
 #include <schema/Game.pb.h>
 

@@ -110,7 +110,7 @@ void Window::setupWindow() {
 	//impl = GlfwRenderer(glfwViewport);
 
 	ImGui_ImplOpenGL3_Init("#version 130");
-	//ImFont* font1 = io.Fonts->AddFontFromFileTTF("assets/fontsNikkyouSans-B6aV.ttf", Config::getInt("Font_Size_Pixels"));
+	//io.Fonts->AddFontFromFileTTF("assets/fonts/NikkyouSans-B6aV.ttf", Config::getInt("Font_Size_Pixels"));
 	//glfwViewport.refresh_font_texture();
 	ImGuiStyle * style = &ImGui::GetStyle();
  
@@ -255,11 +255,12 @@ void Window::render()
 
 	// Apply lighting options
 	shader->setVec3("lightColor", glm::vec3(1.0, 1.0, 1.0f));
-	shader->setFloat("ambientStrength", ambientStrength);
-	shader->setVec3("lightPos", lightPos);
-	shader->setVec3("defaultObjColor", defaultObjColor);
-	shader->setFloat("noColorPrecision", noColorPrecision);
-	shader->setFloat("specularStrength", specularStrength);
+	shader->setFloat("ambientStrength", Config::getFloat("ambientStrength"));
+	shader->setVec3("lightPos", Config::getVec3("lightPos"));
+	shader->setVec3("defaultObjColor", Config::getVec3("defaultObjColor"));
+	shader->setFloat("noColorPrecision", Config::getFloat("noColorPrecision"));
+	shader->setFloat("specularStrength", Config::getFloat("specularStrength"));
+	shader->setFloat("colorScale", Config::getFloat("colorScale"));
 	shader->setVec3("viewPos", this->camera->pos);
 	
 	// Target following
@@ -296,8 +297,8 @@ void Window::render()
 		// Set respective model matrix for each object and send it to the shader.
 		glm::mat4 mat = glm::mat4(1.0);
 		mat = glm::translate(mat, obj->getPosition());
-		mat = glm::scale(mat, obj->getScaleVec());
-		mat = glm::rotate(mat, obj->getRotation(), UP);
+		mat = glm::scale(mat, obj->getScaleVec());		
+		mat = glm::rotate(mat, obj->getRotation(), glm::vec3(0.0f, 1.0f, 0.0f));
 		shader->setMat4("model", mat);
 
 		// Used to convert normal vectors to world space coordinates, without applying translations to them
