@@ -2,7 +2,7 @@ Taco=Salad
 
 // Ingredient model paths
 Bun_Model=assets/models/Bun2.obj
-Cheese_Model=assets/models/Cheese.obj
+Cheese_Model=assets/models/Cheese2.obj
 Lettuce_Model=assets/models/Lettuce2.obj
 Meat_Model=assets/models/meat_3.obj
 Onion_Model=assets/models/Onion.obj
