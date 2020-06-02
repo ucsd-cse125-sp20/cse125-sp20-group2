@@ -49,8 +49,8 @@ Maze_Model=assets/models/old/Basic_Dungeon_Map.obj
 
 // Cookware
 Table_Scaling=1,1,1
-Cookware_Scaling=0.5,0.5,0.5
-Plate_Scaling=0.25,0.25,0.25
+Cookware_Scaling=2.5,2.5,2.5
+Plate_Scaling=2.5,2.5,2.5
 
 // Terrain
 Wall_Scaling=1,1,1

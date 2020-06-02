@@ -377,6 +377,74 @@ void ClientGame::mapbuildingInput(GLFWwindow* glfwWindow, int key, int scancode,
         mapObjects.push(newPlayer);
     }
 
+    // Create pot
+    if (key == GLFW_KEY_4 && action == GLFW_PRESS)
+    {
+        // Get the player - we're placing a pot spawn point at the player.
+        GameObject* player = window.objectsToRender[objectId];
+
+        // Create the pot spawn point and place it at the player.
+        GameObject* pot = new Cookware(POT);
+        pot->setPosition(player->getRoundedPosition());
+
+        // Add it to the window.
+        window.addObject(pot->getID(), pot);
+
+        // Add it to the stack of map objects.
+        mapObjects.push(pot);
+    }
+
+    // Create pan
+    if (key == GLFW_KEY_5 && action == GLFW_PRESS)
+    {
+        // Get the player - we're placing a pan spawn point at the player.
+        GameObject* player = window.objectsToRender[objectId];
+
+        // Create the pan spawn point and place it at the player.
+        GameObject* pan = new Cookware(PAN);
+        pan->setPosition(player->getRoundedPosition());
+
+        // Add it to the window.
+        window.addObject(pan->getID(), pan);
+
+        // Add it to the stack of map objects.
+        mapObjects.push(pan);
+    }
+
+    // Create knife
+    if (key == GLFW_KEY_6 && action == GLFW_PRESS)
+    {
+        // Get the player - we're placing a knife spawn point at the player.
+        GameObject* player = window.objectsToRender[objectId];
+
+        // Create the knife spawn point and place it at the player.
+        GameObject* knife = new Cookware(CUTTING_BOARD);
+        knife->setPosition(player->getRoundedPosition());
+
+        // Add it to the window.
+        window.addObject(knife->getID(), knife);
+
+        // Add it to the stack of map objects.
+        mapObjects.push(knife);
+    }
+
+    // Create plate
+    if (key == GLFW_KEY_7 && action == GLFW_PRESS)
+    {
+        // Get the player - we're placing a plate spawn point at the player.
+        GameObject* player = window.objectsToRender[objectId];
+
+        // Create the plate spawn point and place it at the player.
+        GameObject* plate = new Plate();
+        plate->setPosition(player->getRoundedPosition());
+
+        // Add it to the window.
+        window.addObject(plate->getID(), plate);
+
+        // Add it to the stack of map objects.
+        mapObjects.push(plate);
+    }
+
     // Restore last removed object
     if (key == GLFW_KEY_R && action == GLFW_PRESS)
     {
@@ -509,6 +577,10 @@ void ClientGame::exportMapTxt()
     std::stack<GameObject*> walls;
     std::stack<GameObject*> ingredientLocations;
     std::stack<GameObject*> playerSpawns;
+    std::stack<GameObject*> pots;
+    std::stack<GameObject*> pans;
+    std::stack<GameObject*> knives;
+    std::stack<GameObject*> plates;
 
     // Iterate over map objects to distribute
     while(!mapObjects.empty())
@@ -524,6 +596,17 @@ void ClientGame::exportMapTxt()
             case WALL:          walls.push(obj); break;
             case INGREDIENT:    ingredientLocations.push(obj); break;
             case PLAYER:        playerSpawns.push(obj); break;
+            case COOKWARE:
+                {
+                    std::string cookwareName = ((Cookware*)obj)->getName();
+                    if (cookwareName.compare(POT) == 0)                 pots.push(obj);
+                    else if (cookwareName.compare(PAN) == 0)            pans.push(obj);
+                    else if (cookwareName.compare(CUTTING_BOARD) == 0)  knives.push(obj);
+                }
+            case PLATE:         plates.push(obj); break;
+            default:
+                std::cerr << "Undefined object appeared in map." << std::endl;
+                break;
         }
     }
 
@@ -601,6 +684,100 @@ void ClientGame::exportMapTxt()
 
         // Add next wall strings
         ofs << mapName + "_Spawn_" << i << "=";
+        ofs << pos.x << "," << pos.y << "," << pos.z << std::endl;
+        ofs.flush();
+
+        // NEXT
+        i++;
+    }
+    // Reset
+    i = 0;
+
+    std::cout << "Processing cookware locations." << std::endl;
+
+    // Add pot spawn count. TODO TODO
+    ofs << mapName + "_Pot_Count=" << pots.size() << std::endl;
+    ofs.flush();
+
+    // Iterate over ingredient locations and add to file
+    while (!pots.empty())
+    {
+        // Remove from stack
+        GameObject* loc = pots.top();
+        glm::vec3 pos = loc->getPosition();
+        pots.pop();
+
+        // Add next wall strings
+        ofs << mapName + "_Pot_" << i << "=";
+        ofs << pos.x << "," << pos.y << "," << pos.z << std::endl;
+        ofs.flush();
+
+        // NEXT
+        i++;
+    }
+    // Reset
+    i = 0;
+
+    // Add pan spawn count. TODO TODO
+    ofs << mapName + "_Pan_Count=" << pans.size() << std::endl;
+    ofs.flush();
+
+    // Iterate over ingredient locations and add to file
+    while (!pans.empty())
+    {
+        // Remove from stack
+        GameObject* loc = pans.top();
+        glm::vec3 pos = loc->getPosition();
+        pans.pop();
+
+        // Add next wall strings
+        ofs << mapName + "_Pan_" << i << "=";
+        ofs << pos.x << "," << pos.y << "," << pos.z << std::endl;
+        ofs.flush();
+
+        // NEXT
+        i++;
+    }
+    // Reset
+    i = 0;
+
+    // Add knives spawn count. TODO TODO
+    ofs << mapName + "_Knife_Count=" << knives.size() << std::endl;
+    ofs.flush();
+
+    // Iterate over ingredient locations and add to file
+    while (!knives.empty())
+    {
+        // Remove from stack
+        GameObject* loc = knives.top();
+        glm::vec3 pos = loc->getPosition();
+        knives.pop();
+
+        // Add next wall strings
+        ofs << mapName + "_Knife_" << i << "=";
+        ofs << pos.x << "," << pos.y << "," << pos.z << std::endl;
+        ofs.flush();
+
+        // NEXT
+        i++;
+    }
+    // Reset
+    i = 0;
+
+    // Add plate spawn count. TODO TODO
+    ofs << mapName + "_Plate_Count=" << plates.size() << std::endl;
+    ofs.flush();
+
+    // Iterate over ingredient locations and add to file
+    while (!plates.empty())
+    {
+        // Remove from stack
+        GameObject* loc = plates.top();
+        glm::vec3 pos = loc->getPosition();
+        plates.pop();
+
+        // Add next wall strings
+        ofs << mapName + "_Plate_" << i << "=";
         ofs << pos.x << "," << pos.y << "," << pos.z << std::endl;
         ofs.flush();
 
