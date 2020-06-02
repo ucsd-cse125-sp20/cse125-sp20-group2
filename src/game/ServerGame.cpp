@@ -200,7 +200,7 @@ void ServerGame::update()
     {
         // Time to spawn ingredient
         auto currTime = std::chrono::high_resolution_clock::now();
-        if (currTime > this->gameState.dungeonMap->ingredientSpawnTime && this->gameState.getIngredientObjects().size() < 15)
+        if (currTime > this->gameState.dungeonMap->ingredientSpawnTime)
         {
             std::cout << "spawning new ingredient because time is over" << std::endl;
 
