@@ -1,102 +1,56 @@
-newmtl Bun:lambert2SG
-illum 4
-Kd 0.00 0.00 0.00
-Ka 0.00 0.00 0.00
-Tf 1.00 1.00 1.00
-map_Kd bun_outside.jpg
-Ni 1.00
-newmtl Bun1:lambert2SG
-illum 4
-Kd 0.00 0.00 0.00
-Ka 0.00 0.00 0.00
-Tf 1.00 1.00 1.00
-map_Kd bun_outside.jpg
-Ni 1.00
-newmtl Bun2:lambert2SG
-illum 4
-Kd 0.00 0.00 0.00
-Ka 0.00 0.00 0.00
-Tf 1.00 1.00 1.00
-map_Kd bun_outside.jpg
-Ni 1.00
-newmtl Bun3:lambert2SG
-illum 4
-Kd 0.00 0.00 0.00
-Ka 0.00 0.00 0.00
-Tf 1.00 1.00 1.00
-map_Kd bun_outside.jpg
-Ni 1.00
-newmtl initialShadingGroup
-illum 4
-Kd 0.50 0.50 0.50
-Ka 0.00 0.00 0.00
-Tf 1.00 1.00 1.00
-Ni 1.00
-newmtl lambert2SG
-illum 4
-Kd 0.50 0.50 0.50
-Ka 0.00 0.00 0.00
-Tf 1.00 1.00 1.00
-Ni 1.00
-newmtl lambert3SG
+newmtl Burger2:lambert3SG
 illum 4
 Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
 map_Kd BunColor.png
 Ni 1.00
-newmtl lambert4SG
+newmtl Burger2:lambert4SG
 illum 4
 Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
 map_Kd BunColor.png
 Ni 1.00
-newmtl lambert7SG
+newmtl Burger2:lambert7SG
 illum 4
 Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
 map_Kd BurgerLettuceColor.png
 Ni 1.00
-newmtl lambert8SG
+newmtl Burger2:lambert8SG
 illum 4
 Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
 map_Kd BurgerTomatoColor.png
 Ni 1.00
-newmtl lambert9SG
+newmtl Burger2:lambert9SG
 illum 4
 Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
 map_Kd BurgerTomatoColor.png
 Ni 1.00
-newmtl lambert10SG
+newmtl Burger2:lambert10SG
 illum 4
 Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
 map_Kd BurgerTomatoColor.png
 Ni 1.00
-newmtl lambert11SG
+newmtl Burger2:lambert11SG
 illum 4
 Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
 map_Kd BurgerCheeseColor.png
 Ni 1.00
-newmtl lambert13SG
+newmtl Burger2:lambert13SG
 illum 4
 Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
 map_Kd BurgerMeatColor.png
-Ni 1.00
-newmtl pasted__lambert2SG
-illum 4
-Kd 0.50 0.50 0.50
-Ka 0.00 0.00 0.00
-Tf 1.00 1.00 1.00
 Ni 1.00
