@@ -13,7 +13,7 @@ ClientGame::ClientGame(std::string IP, int port) : client(IP, port), window(Conf
 
     // Create floor lol
     GameObject* floor = new GameObject(-1);
-    floor->setModel("assets/models/floor.obj");
+    floor->setModel(Config::get("Floor_Model"));
     floor->setPosition(glm::vec3(0,-0.5,0));
     floor->applyScale(glm::vec3(1));
     window.addObject(-1, floor);
