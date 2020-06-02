@@ -49,8 +49,8 @@ Maze_Model=assets/models/old/Basic_Dungeon_Map.obj
 
 // Cookware
 Table_Scaling=1,1,1
-Cookware_Scaling=0.5,0.5,0.5
-Plate_Scaling=0.25,0.25,0.25
+Cookware_Scaling=2.5,2.5,2.5
+Plate_Scaling=2.5,2.5,2.5
 
 // Terrain
 Wall_Scaling=1,1,1
@@ -104,8 +104,8 @@ Ingredient_Radius=0.5
 Player_Radius=0.75
 
 // Controls
-Player_Run_Speed=1
-Player_Turn_Speed=1
+Player_Run_Speed=3
+Player_Turn_Speed=2
 
 // Camera Controls
 Camera_Speed=0.25
@@ -121,7 +121,7 @@ Good_Quality_Color_Modifier=2.5,2,0.8,1
 // Round time (in seconds)
 Kitchen_Round_Time=15
 Kitchen_Waiting_Round_Time=10
-Dungeon_Round_Time=60
+Dungeon_Round_Time=5
 Lobby_Round_Time=15
 Dungeon_Waiting_Round_Time=10
 
@@ -196,3 +196,30 @@ Dungeon_Spawn_2=-1,0,-1
 Dungeon_Spawn_3=1,0,-1
 
 ////////////////////////////////////////////////////////////////////////////
+
+// // // // // // // // 
+// KITCHEN MAP PROPERTIES
+// // //
+
+// Kitchen Spawn Positions
+Kitchen_Spawn_Count=4
+Kitchen_Spawn_0=-1,0,1
+Kitchen_Spawn_1=1,0,1
+Kitchen_Spawn_2=-1,0,-1
+Kitchen_Spawn_3=1,0,-1
+
+// Plate Initial and Variation
+Plate_Init_Spawn=-9,0,-13
+Plate_Spacing=10
+
+// Cutting Board Inital and Variation
+Cutting_Board_Init_Spawn=-17,0,21
+Cutting_Board_Spacing=10
+
+// Pot Inital and Variation
+Pot_Init_Spawn=25,0,-5
+Pot_Spacing=10
+
+// Pan Inital and Variation
+Pan_Init_Spawn=-25,0,-16
+Pan_Spacing=10

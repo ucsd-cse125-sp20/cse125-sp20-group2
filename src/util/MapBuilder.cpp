@@ -64,33 +64,58 @@ KitchenMap* MapBuilder::getBasicKitchenMap(GameState* gameState) {
     KitchenMap* mp = new KitchenMap();
     mp->wallList.push_back(wall);
 
-    mp->spawningLocations.push_back(glm::vec3(10, 0, 0));
-    mp->spawningLocations.push_back(glm::vec3(-10, 0, 0));
-    mp->spawningLocations.push_back(glm::vec3(0, 0, -5));
-    mp->spawningLocations.push_back(glm::vec3(0, 0, 0));
+    // Get spawn count
+    int spawnCount = Config::getInt("Kitchen_Spawn_Count");
 
-    // Add cookware
-    Cookware* c = new Cookware(PAN);
-    c->setName(PAN);
-    c->setPosition(glm::vec3(3, 0, 0));
-    mp->cookwareObjects.push_back(c);
+    // Iterate over spawns and add to map
+    for (int i = 0; i < spawnCount; i++)
+    {
+        mp->spawningLocations.push_back(Config::getVec3("Kitchen_Spawn_" + std::to_string(i)));
+    }
 
-    // Add cookware
-    c = new Cookware(CUTTING_BOARD);
-    c->setName(PAN);
-    c->setPosition(glm::vec3(-3, 0, 0));
-    mp->cookwareObjects.push_back(c);
+    // Add plates (vary by x)
+    for (int i = 0; i < spawnCount; i++)
+    {
+        glm::vec3 currPos = Config::getVec3("Plate_Init_Spawn");
+        float variation = Config::getFloat("Plate_Spacing");
+        currPos.x += i * variation;
+        Plate* plate = new Plate();
+        plate->setPosition(currPos);
+        mp->plateObjects.push_back(plate);
+    }
 
-    // Add cookware
-    c = new Cookware(POT);
-    c->setName(PAN);
-    c->setPosition(glm::vec3(0, 0, -3));
-    mp->cookwareObjects.push_back(c);
+    // Add cutting boards (vary by x)
+    for (int i = 0; i < spawnCount; i++)
+    {
+        glm::vec3 currPos = Config::getVec3("Cutting_Board_Init_Spawn");
+        float variation = Config::getFloat("Cutting_Board_Spacing");
+        currPos.x += i * variation;
+        Cookware* c = new Cookware(CUTTING_BOARD);
+        c->setPosition(currPos);
+        mp->cookwareObjects.push_back(c);
+    }
 
-    // Add plate
-    Plate* p = new Plate();
-    p->setPosition(glm::vec3(7, 0, 0));
-    mp->plateObjects.push_back(p);
+    // Add pots (vary by z)
+    for (int i = 0; i < spawnCount; i++)
+    {
+        glm::vec3 currPos = Config::getVec3("Pot_Init_Spawn");
+        float variation = Config::getFloat("Pot_Spacing");
+        currPos.z += i * variation;
+        Cookware* c = new Cookware(POT);
+        c->setPosition(currPos);
+        mp->cookwareObjects.push_back(c);
+    }
+
+    // Add pans (vary by z)
+    for (int i = 0; i < spawnCount; i++)
+    {
+        glm::vec3 currPos = Config::getVec3("Pan_Init_Spawn");
+        float variation = Config::getFloat("Pan_Spacing");
+        currPos.z += i * variation;
+        Cookware* c = new Cookware(PAN);
+        c->setPosition(currPos);
+        mp->cookwareObjects.push_back(c);
+    }
 
     return mp;
 }

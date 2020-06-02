@@ -17,6 +17,7 @@ Cookware::Cookware() : GameObject() {
 }
 
 Cookware::Cookware(std::string model): GameObject() {
+    this->setName(model);
     this->setModel(Config::get(model + "_Model"));
     this->objType = COOKWARE;
     this->box = new BoundingBox(this);
