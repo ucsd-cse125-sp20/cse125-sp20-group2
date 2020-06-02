@@ -38,7 +38,7 @@ DungeonMap* MapBuilder::getBasicDungeonMap() {
     int spawnCount = Config::getInt("Dungeon_Spawn_Count");
 
     // Iterate over spawns and add to map
-    for (int i = 1; i <= spawnCount; i++)
+    for (int i = 0; i < spawnCount; i++)
     {
         mp->spawningLocations.push_back(Config::getVec3("Dungeon_Spawn_" + std::to_string(i)));
     }
