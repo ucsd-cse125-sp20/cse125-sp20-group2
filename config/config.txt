@@ -17,7 +17,7 @@ Burger_Model=assets/models/ingredients/Burger2.obj
 Pot_Model=assets/models/cookware/Pot.obj
 Cutting_Board_Model=assets/models/cookware/Knife.obj
 Pan_Model=assets/models/cookware/Pan.obj
-Plate_Model=assets/models/cookware/plate.obj
+Plate_Model=assets/models/cookware/plate2.obj
 
 // Terrain model paths
 Wall_Model=assets/models/terrain/wall.obj
