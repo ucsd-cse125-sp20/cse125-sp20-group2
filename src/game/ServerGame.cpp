@@ -381,11 +381,19 @@ void ServerGame::onRoundChange()
         case Game::RoundInfo::KITCHEN_WAITING:
         {
             std::cout << "initializing kitchen waiting" << std::endl;
-            gameState.setRoundTime(Config::getInt("Kitchen_Waiting_Round_Time"));
+
+            // Initialize kitchen waiting time
+            GameProcessor::initKitchenWaiting(&this->gameState);
+        
+            // Make kitchen visible, dungeon invisible (and ingredients)
             this->gameState.kitchenMap->setRender(true);
             this->gameState.dungeonMap->setRender(false);
             for(auto ingredientPair : gameState.ingredientObjects )
                 ingredientPair.second->setRender(false);
+
+            // Position players on spawn points
+            GameProcessor::initPlayersLocations(gameState.kitchenMap, &gameState);
+
             // Send instructions from recipe to clients
             int i = 0;
             for(auto inst : this->gameState.recipe->instructionList ) {

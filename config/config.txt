@@ -209,7 +209,7 @@ Kitchen_Spawn_2=-1,0,-1
 Kitchen_Spawn_3=1,0,-1
 
 // Plate Initial and Variation
-Plate_Init_Spawn=-9,0,-13
+Plate_Init_Spawn=-12,0,-13
 Plate_Spacing=10
 
 // Cutting Board Inital and Variation

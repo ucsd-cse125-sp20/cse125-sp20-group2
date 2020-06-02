@@ -13,6 +13,11 @@ void GameProcessor::initDungeonWaiting(GameState* gameState)
     gameState->setRoundTime(Config::getInt("Dungeon_Waiting_Round_Time"));
 }
 
+void GameProcessor::initKitchenWaiting(GameState* gameState)
+{
+    gameState->setRoundTime(Config::getInt("Kitchen_Waiting_Round_Time"));
+}
+
 void GameProcessor::initDungeonPhase(GameState *gameState, ServerGame *server)
 {
     // Create the map
