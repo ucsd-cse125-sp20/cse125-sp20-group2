@@ -104,7 +104,7 @@ Ingredient_Radius=0.5
 Player_Radius=0.75
 
 // Controls
-Player_Run_Speed=1
+Player_Run_Speed=4
 Player_Turn_Speed=1
 
 // Camera Controls
@@ -122,7 +122,7 @@ Good_Quality_Color_Modifier=2.5,2,0.8,1
 Kitchen_Round_Time=15
 Kitchen_Waiting_Round_Time=10
 Dungeon_Round_Time=60
-Lobby_Round_Time=15
+Lobby_Round_Time=15000
 Dungeon_Waiting_Round_Time=10
 
 Cook_Event_Time=5
@@ -138,8 +138,8 @@ Points_Multi=2
 
 // Etc
 Window_Title=Comrade's Kitchen
-Window_Width=900
-Window_Height=800
+Window_Width=1800
+Window_Height=1600
 
 Font_Scale=2
 

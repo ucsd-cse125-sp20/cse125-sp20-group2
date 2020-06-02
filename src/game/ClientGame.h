@@ -9,6 +9,7 @@
 #include <util/MessageBuilder.h>
 #include <util/Config.h>
 #include <util/MapBuilder.h>
+#include <stack>
 
 class ClientGame {
     public:
@@ -34,4 +35,11 @@ class ClientGame {
         void receiveUpdates();
         void updateGameState();
         void processInput();
+
+        ///TODO: DEV TOOL - SHOULD NOT BE IN THE FINAL RELEASE
+        std::stack<GameObject*> mapObjects;
+        GameObject* lastDeleted;
+
+        ///TODO: DEV TOOL - SHOULD NOT BE IN THE FINAL RELEASE
+        void mapbuildingInput(GLFWwindow* glfwWindow, int key, int scancode, int action, int mods);
 };

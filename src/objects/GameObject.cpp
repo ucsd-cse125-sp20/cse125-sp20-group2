@@ -204,3 +204,8 @@ bool GameObject::isColliding(GameObject* obj) {
 	}
 	return this->box->isIntersecting(obj->box);
 }
+
+glm::vec3 GameObject::getRoundedPosition()
+{
+    return glm::vec3((int)this->getPosition().x, (int)this->getPosition().y, (int)this->getPosition().z);
+}

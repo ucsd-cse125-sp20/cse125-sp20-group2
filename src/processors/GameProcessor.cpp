@@ -278,7 +278,8 @@ void GameProcessor::process(unsigned int clientId, Game::ClientMessage clientMsg
 
                     // Revert movement
                     player->setPosition(originalPos);
-                    player->setRunSpeed(0);
+                    player->setXSpeed(0);
+                    player->setZSpeed(0);
                     break;
                 }
             }

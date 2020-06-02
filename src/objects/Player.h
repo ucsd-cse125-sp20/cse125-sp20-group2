@@ -27,7 +27,9 @@ protected:
 
     std::string teamName;
 
-    float runSpeed = 0, turnSpeed = 0;
+    float xSpeed = 0, zSpeed = 0;
+
+    //float runSpeed = 0, turnSpeed = 0;
 
     std::unordered_map<int, Ingredient*>* inventory;
 
@@ -56,13 +58,17 @@ public:
 
     int getClientID();
 
-    void setRunSpeed( float newRunSpeed );
+    void setXSpeed( float speed );
 
-    void setTurnSpeed( float newTurnSpeed );
+    //void setTurnSpeed( float newTurnSpeed );
 
-    float getRunSpeed();
+    float getXSpeed();
 
-    float getTurnSpeed();
+    void setZSpeed ( float speed );
+
+    float getZSpeed ();
+
+    //float getTurnSpeed();
 
     std::string getTeamName();
 

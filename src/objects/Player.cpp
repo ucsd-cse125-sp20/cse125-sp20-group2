@@ -2,8 +2,10 @@
 
 Player::Player(int ID) : GameObject(ID)
 {
-    this->runSpeed = 0;
-    this->turnSpeed = 0;
+    //this->runSpeed = 0;
+    //this->turnSpeed = 0;
+    this->xSpeed = 0;
+    this->zSpeed = 0;
     this->score = 0;
     this->objType = PLAYER;
     this->setModel(Config::get("Player_Model"));
@@ -38,13 +40,25 @@ int Player::getScore()
     return this->score;
 }
 
-void Player::setRunSpeed(float newRunSpeed) { this->runSpeed = newRunSpeed; }
+void Player::setXSpeed( float speed )
+{
+    this->xSpeed = speed;
+}
 
-void Player::setTurnSpeed(float newTurnSpeed) { this->turnSpeed = newTurnSpeed; }
+float Player::getXSpeed()
+{
+    return this->xSpeed;
+}
 
-float Player::getRunSpeed() { return this->runSpeed; }
+void Player::setZSpeed ( float speed )
+{
+    this->zSpeed = speed;
+}
 
-float Player:: getTurnSpeed() { return this->turnSpeed; }
+float Player::getZSpeed ()
+{
+    return this->zSpeed;
+}
 
 void Player::addToInventory(Ingredient *ingredient)
 {

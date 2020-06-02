@@ -28,14 +28,14 @@ ClientGame::~ClientGame()
 
 void ClientGame::keyBindsHandler(GLFWwindow* glfwWindow, int key, int scancode, int action, int mods)
 {
-    // Handles ready up
+    /*// Handles ready up
     if (key == GLFW_KEY_R && action == GLFW_PRESS)
     {
         std::cout << "sending ready up message" << std::endl;
         Game::ClientMessage* readyMsg = MessageBuilder::toReadyMessage(true);
         this->client.send(*readyMsg);
         delete readyMsg;
-    }
+    }*/
 
     // Handles toggling free cam
     if (key == GLFW_KEY_F && action == GLFW_PRESS)
@@ -45,14 +45,17 @@ void ClientGame::keyBindsHandler(GLFWwindow* glfwWindow, int key, int scancode, 
         this->window.toggleCursor();
     }
 
-    // Handles interact event
+    /*// Handles interact event
     if (key == GLFW_KEY_E && action == GLFW_PRESS && this->window.getSelectedIngredient() != NULL && this->window.getRound() == KITCHEN_NUM )
     {
         std::cout << "pressed interact key" << std::endl;
         Game::ClientMessage* cookMsg = MessageBuilder::toCookMessage(this->window.getSelectedIngredient());
         this->client.send(*cookMsg);
         delete cookMsg;
-    }
+    }*/
+
+    ///TODO: DEV TOOL- SHOULD NOT BE IN THE FINAL RELEASE
+    mapbuildingInput(glfwWindow, key, scancode, action, mods);
 }
 
 void ClientGame::runGame() 
@@ -299,6 +302,7 @@ void ClientGame::processInput()
     {
         rotationMessage.set_direction(Game::Direction::RIGHT); 
     }
+
     // Send message only if it has a direction associated with it
     if (movementMessage.has_direction()) {
         this->client.send(movementMessage);
@@ -316,4 +320,46 @@ void ClientGame::processInput()
 		window.camera->processKeyMovement(LEFT);
     if (glfwGetKey(window.glfwViewport, GLFW_KEY_RIGHT) == GLFW_PRESS)
 		window.camera->processKeyMovement(RIGHT);
+}
+
+void ClientGame::mapbuildingInput(GLFWwindow* glfwWindow, int key, int scancode, int action, int mods)
+{
+    // Create wall
+    if (key == GLFW_KEY_1 && action == GLFW_PRESS)
+    {
+        // Get the player - we're placing a wall at the player.
+        GameObject* player = window.objectsToRender[objectId];
+
+        // Create the wall and place it at the player.
+        GameObject* wall = new Wall();
+        wall->setPosition(player->getRoundedPosition());
+
+        // Add it to the window.
+        window.addObject(wall->getID(), wall);
+
+        // Add it to the stack of map objects.
+        mapObjects.push(wall);
+    }
+
+    // Remove last created object
+    if (key == GLFW_KEY_E && action == GLFW_PRESS)
+    {
+        if (!mapObjects.empty())
+        {
+            lastDeleted = mapObjects.top();
+            window.removeObject(lastDeleted->getID());
+            mapObjects.pop();
+        }
+    }
+
+    // Restore last removed object
+    if (key == GLFW_KEY_R && action == GLFW_PRESS)
+    {
+        if (lastDeleted)
+        {
+            mapObjects.push(lastDeleted);
+            window.addObject(lastDeleted->getID(), lastDeleted);
+            lastDeleted = NULL;
+        }
+    }
 }

@@ -173,4 +173,6 @@ public:
      * Otherwise, returns false if no collision or either don't have a bounding box.
      * */
     bool isColliding(GameObject *);
+    
+    glm::vec3 getRoundedPosition();
 };
