@@ -38,7 +38,7 @@ class ClientGame {
 
         ///TODO: DEV TOOL - SHOULD NOT BE IN THE FINAL RELEASE
         std::stack<GameObject*> mapObjects;
-        GameObject* lastDeleted;
+        GameObject* lastDeleted = NULL;
 
         ///TODO: DEV TOOL - SHOULD NOT BE IN THE FINAL RELEASE
         void mapbuildingInput(GLFWwindow* glfwWindow, int key, int scancode, int action, int mods);

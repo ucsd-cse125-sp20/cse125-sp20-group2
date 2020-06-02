@@ -2,6 +2,7 @@
 #include <game/KeyResolver.h>
 #include <objects/Player.h>
 #include <objects/Plate.h>
+#include <util/RecipeBuilder.h>
 
 #define CLIENT_DELAY 1000
 
@@ -341,15 +342,21 @@ void ClientGame::mapbuildingInput(GLFWwindow* glfwWindow, int key, int scancode,
         mapObjects.push(wall);
     }
 
-    // Remove last created object
-    if (key == GLFW_KEY_E && action == GLFW_PRESS)
+    // Create tomato
+    if (key == GLFW_KEY_2 && action == GLFW_PRESS)
     {
-        if (!mapObjects.empty())
-        {
-            lastDeleted = mapObjects.top();
-            window.removeObject(lastDeleted->getID());
-            mapObjects.pop();
-        }
+        // Get the player - we're placing a tomato at the player.
+        GameObject* player = window.objectsToRender[objectId];
+
+        // Create the tomato and place it at the player.
+        GameObject* tomato = RecipeBuilder::createIngredient(TOMATO);
+        tomato->setPosition(player->getRoundedPosition());
+
+        // Add it to the window.
+        window.addObject(tomato->getID(), tomato);
+
+        // Add it to the stack of map objects.
+        mapObjects.push(tomato);
     }
 
     // Restore last removed object
@@ -360,6 +367,88 @@ void ClientGame::mapbuildingInput(GLFWwindow* glfwWindow, int key, int scancode,
             mapObjects.push(lastDeleted);
             window.addObject(lastDeleted->getID(), lastDeleted);
             lastDeleted = NULL;
+        }
+    }
+
+    // Operations that require a non-empty stack
+    if (!mapObjects.empty())
+    {
+        GameObject* obj = mapObjects.top();
+
+        // Remove object at top of stack
+        if (key == GLFW_KEY_E && action == GLFW_PRESS)
+        {
+            if (!mapObjects.empty())
+            {
+                lastDeleted = obj;
+                window.removeObject(lastDeleted->getID());
+                mapObjects.pop();
+            }
+        }
+
+        // Nudge object at top of stack
+        if (key == GLFW_KEY_Y && action == GLFW_PRESS)
+        {
+            // Nudge up
+            obj->setPosition( obj->getPosition() + glm::vec3(0, 0, -0.5) );
+        }
+        if (key == GLFW_KEY_H && action == GLFW_PRESS)
+        {
+            // Nudge down
+            obj->setPosition( obj->getPosition() + glm::vec3(0, 0, 0.5) );
+        }
+        if (key == GLFW_KEY_G && action == GLFW_PRESS)
+        {
+            // Nudge left
+            obj->setPosition( obj->getPosition() + glm::vec3(-0.5, 0, 0) );
+        }
+        if (key == GLFW_KEY_J && action == GLFW_PRESS)
+        {
+            // Nudge right
+            obj->setPosition( obj->getPosition() + glm::vec3(0.5, 0, 0) );
+        }
+
+        // Rotate object at top of stack 90 degrees
+        if (key == GLFW_KEY_T && action == GLFW_PRESS)
+        {
+            // Add 90 degrees
+            obj->setRotation( obj->getRotation() + 90 );
+        }
+
+        // Scale up object at top of stack (x)
+        if (key == GLFW_KEY_Z && action == GLFW_PRESS)
+        {
+            obj->applyScale( obj->getScaleVec() + glm::vec3(0.5, 0, 0) );
+        }
+
+        // Scale up object at top of stack (y)
+        if (key == GLFW_KEY_X && action == GLFW_PRESS)
+        {
+            obj->applyScale( obj->getScaleVec() + glm::vec3(0, 0.5, 0) );
+        }
+
+        // Scale up object at top of stack (z)
+        if (key == GLFW_KEY_C && action == GLFW_PRESS)
+        {
+            obj->applyScale( obj->getScaleVec() + glm::vec3(0, 0, 0.5) );
+        }
+
+        // Scale down object at top of stack (x)
+        if (key == GLFW_KEY_V && action == GLFW_PRESS)
+        {
+            obj->applyScale( obj->getScaleVec() + glm::vec3(-0.5, 0, 0) );
+        }
+
+        // Scale down object at top of stack (y)
+        if (key == GLFW_KEY_B && action == GLFW_PRESS)
+        {
+            obj->applyScale( obj->getScaleVec() + glm::vec3(0, -0.5, 0) );
+        }
+
+        // Scale down object at top of stack (z)
+        if (key == GLFW_KEY_N && action == GLFW_PRESS)
+        {
+            obj->applyScale( obj->getScaleVec() + glm::vec3(0, 0, -0.5) );
         }
     }
 }
