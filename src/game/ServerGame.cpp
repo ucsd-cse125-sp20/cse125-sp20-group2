@@ -212,6 +212,9 @@ void ServerGame::update()
             // Make a copy
             Ingredient* ingredientCopy = RecipeBuilder::createIngredient(currIngredient->getName());
 
+            // Random quality index
+            ingredientCopy->randomizeQualityIndex();
+
             // set spawn location
             int lowerX = this->gameState.dungeonMap->lowerX;
             int upperX = this->gameState.dungeonMap->upperX;

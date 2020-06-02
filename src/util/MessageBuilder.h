@@ -47,7 +47,9 @@ public:
             case 1:
                 msgObj->set_type(Game::ObjectType::PLAYER); break;
             case 2:
-                msgObj->set_type(Game::ObjectType::INGREDIENT); break;
+                msgObj->set_type(Game::ObjectType::INGREDIENT); 
+                msgObj->set_quality(((Ingredient*)object)->getQualityIndex());
+                break;
             case 3:
                 msgObj->set_type(Game::ObjectType::COOKWARE); break;
             case 4:

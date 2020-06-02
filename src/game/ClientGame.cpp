@@ -114,7 +114,9 @@ void ClientGame::updateGameState()
                         case Game::PLAYER: obj = new Player(id); break;
 
                         // Ingredient object.
-                        case Game::INGREDIENT: obj = new Ingredient(id); break;
+                        case Game::INGREDIENT: obj = new Ingredient(id); 
+                        ((Ingredient*)obj)->setQualityIndex(currMessage.object().quality());
+                        break;
 
                         // Cookware object.
                         case Game::COOKWARE: obj = new Cookware(id); break;

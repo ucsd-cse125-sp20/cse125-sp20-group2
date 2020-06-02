@@ -69,6 +69,7 @@ message Object {
     required bool render = 5 [default = true];
     required string modelPath = 6 [default = ""];
     optional Vector3 scale = 7;
+    optional uint32 quality = 8;
 }
 
 message Score {

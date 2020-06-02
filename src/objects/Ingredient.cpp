@@ -33,6 +33,30 @@ int Ingredient::getQualityIndex() {
     return this->qualityIndex;
 }
 
+void Ingredient::randomizeQualityIndex()
+{
+    // Generate a number from 1 - 100
+    int randNum = rand() % 100 + 1;
+
+    // Bad quality ingredients
+    if (randNum <= Config::getInt("Bad_Quality_Prob"))
+    {
+        this->qualityIndex = BAD_QUALITY;
+    }
+
+    // Medium quality ingredients
+    else if (randNum <= Config::getInt("Ok_Quality_Prob") + Config::getInt("Bad_Quality_Prob"))
+    {
+        this->qualityIndex = OK_QUALITY;
+    }
+
+    // Good quality ingredients
+    else
+    {
+        this->qualityIndex = GOOD_QUALITY;
+    }
+}
+
 IngredientStatus Ingredient::getStatus() {
     return this->status;
 }

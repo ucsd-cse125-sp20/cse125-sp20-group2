@@ -25,7 +25,7 @@ uniform vec3 defaultObjColor;
 uniform float noColorPrecision;
 
 // Color scaling
-uniform float colorScale;
+uniform vec4 colorScale;
 
 // Light direction
 uniform vec3 lightPos;

@@ -66,10 +66,6 @@ void Window::setupWindow() {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-	/*glfwWindowHint(GLFW_RED_BITS, 8);
-	glfwWindowHint(GLFW_GREEN_BITS, 8);
-	glfwWindowHint(GLFW_BLUE_BITS, 8);
-	glfwWindowHint(GLFW_ALPHA_BITS, 8);	*/
 	GLFWwindow* glfwViewport = glfwCreateWindow((int)Config::getFloat("Window_Width"), (int)Config::getFloat("Window_Height"), Config::get("Window_Title").c_str(), NULL, NULL);
 	
 	// Mouse centering
@@ -174,14 +170,18 @@ void Window::removeCookingEventMessage() {
 }
 
 void Window::close() {
-	ImGui_ImplOpenGL3_Shutdown();
-	ImGui_ImplGlfw_Shutdown();
-	ImGui::DestroyContext();
+	
+	// Cleanup IMGUI and GLFW resources.
 	if (glfwWindowShouldClose(glfwViewport))
 	{
+		ImGui_ImplOpenGL3_Shutdown();
+		ImGui_ImplGlfw_Shutdown();
+		ImGui::DestroyContext();
 		isClosed = true; 
 		glfwTerminate();
 	}
+
+	// For some reason, close was called before the window should close.
 	else std::cerr << "ERROR: Unable to close window!" << std::endl;
 }
 
@@ -261,7 +261,6 @@ void Window::render()
 	shader->setVec3("defaultObjColor", Config::getVec3("defaultObjColor"));
 	shader->setFloat("noColorPrecision", Config::getFloat("noColorPrecision"));
 	shader->setFloat("specularStrength", Config::getFloat("specularStrength"));
-	shader->setFloat("colorScale", Config::getFloat("colorScale"));
 	shader->setVec3("viewPos", this->camera->pos);
 	
 	// Target following
@@ -288,9 +287,32 @@ void Window::render()
 	// Render each GameObject
 
 	for (auto it = objectsToRender.begin(); it != objectsToRender.end(); ++it) {
+		
+		// Get the next object to render.
 		GameObject* obj = it->second;
 
+		// If we don't render the object, ignore it.
 		if (!obj->getRender()) continue;
+
+		// Get the color scaling
+		glm::vec4 colorScale = Config::getVec4("colorScale");
+
+		// If object is an ingredient, color will scale up with quality.
+		if (obj->getObjectType() == INGREDIENT)
+		{
+			int quality = ((Ingredient*)obj)->getQualityIndex();
+
+			// Modify color based on modifiers defined in the config.
+			switch (quality)
+			{
+				case BAD_QUALITY:
+					colorScale *= Config::getVec4("Bad_Quality_Color_Modifier");
+					break;
+				case GOOD_QUALITY:
+					colorScale *= Config::getVec4("Good_Quality_Color_Modifier");
+					break;
+			}
+		}
 
 		// load model if needed
 		if (!obj->model) obj->loadModel();
@@ -306,6 +328,9 @@ void Window::render()
 
 		// Used to convert normal vectors to world space coordinates, without applying translations to them
 		shader->setMat4("normalMatrix", glm::transpose(glm::inverse(mat)));
+
+		// Apply color scaling
+		shader->setVec4("colorScale", colorScale);
 
 		// Draw the model
 		obj->draw(*shader);

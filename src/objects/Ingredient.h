@@ -50,22 +50,49 @@ public:
 
     ~Ingredient();
 
+    /**
+     * Set the ingredient name, which is used by the UI.
+     * */
     void setName(std::string name);
 
+    /**
+     * Set the ingredient preparation status.
+     * */
     void setStatus(IngredientStatus status);
 
+    /**
+     * Get the ingredient quality.
+     * */
     int getQualityIndex();
 
+    /**
+     * Set the ingredient quality.
+     * */
     void setQualityIndex(int i);
 
+    /**
+     * Randomly set the ingredient quality.
+     * Probabilities defined in config.
+     * */
+    void randomizeQualityIndex();
+
+    /**
+     * Get the ingredient's status as a string.
+     * */
     std::string getStringStatus();
 
+    /**
+     * Set the ingredient's status from a string input.
+     * */
     void setStatusFromString(std::string);
 
     std::string getDetailedName();
 
     std::string getName();
 
+    /**
+     * Get the ingredient's preparation status.
+     * */
     IngredientStatus getStatus();
 
     void draw();

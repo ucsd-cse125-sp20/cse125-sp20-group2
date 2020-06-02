@@ -59,6 +59,37 @@ public:
     }
 
     /**
+     * Parses a vec4 from the config file in the format
+     * x,y,z,w .
+     * */
+    static glm::vec4 getVec4(std::string key) {
+
+        // Get string key
+        std::string str = vars->at(key);
+        
+        // Parse vector coordinate x
+        int pos = str.find(',');
+        float x = std::stof(str.substr(0, pos));
+        str.erase(0, pos + 1);
+
+        // Parse vector coordinate y
+        pos = str.find(',');
+        float y = std::stof(str.substr(0, pos));
+        str.erase(0, pos + 1);
+
+        // Parse vector coordinate z
+        pos = str.find(',');
+        float z = std::stof(str.substr(0, pos));
+        str.erase(0, pos + 1);
+
+        // Parse remainder of the string, assumed to be w
+        float w = std::stof(str);
+
+        // Return the full vector
+        return glm::vec4(x, y, z, w);
+    }
+
+    /**
      * Load config variables.
      * */
     static void load() 
