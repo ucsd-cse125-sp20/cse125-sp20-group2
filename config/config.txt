@@ -67,8 +67,8 @@ Camera_Yaw=-90.0
 Camera_Pitch=-35.0
 
 // Controls
-Player_Run_Speed=10
-Player_Turn_Speed=2
+Player_Run_Speed=1
+Player_Turn_Speed=1
 
 // Round time (in seconds)
 Kitchen_Round_Time=15
