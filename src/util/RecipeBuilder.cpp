@@ -75,5 +75,6 @@ Ingredient* RecipeBuilder::createIngredient( std::string model ) {
     obj->setName(model);
     obj->setModel(Config::get(model + "_Model"));
     obj->getBoundingBox()->setRadius(1);
+    obj->applyScale(Config::getVec3("Ingredient_Scaling"));
     return obj;
 }
