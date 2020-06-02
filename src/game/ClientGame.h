@@ -39,7 +39,11 @@ class ClientGame {
         ///TODO: DEV TOOL - SHOULD NOT BE IN THE FINAL RELEASE
         std::stack<GameObject*> mapObjects;
         GameObject* lastDeleted = NULL;
+        int playerIndex = -2;
 
         ///TODO: DEV TOOL - SHOULD NOT BE IN THE FINAL RELEASE
         void mapbuildingInput(GLFWwindow* glfwWindow, int key, int scancode, int action, int mods);
+
+        ///TODO: DEV TOOL - SHOULD NOT BE IN THE FINAL RELEASE
+        void exportMapTxt();
 };

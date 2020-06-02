@@ -3,6 +3,7 @@
 #include <objects/Player.h>
 #include <objects/Plate.h>
 #include <util/RecipeBuilder.h>
+#include <ostream>
 
 #define CLIENT_DELAY 1000
 
@@ -342,7 +343,7 @@ void ClientGame::mapbuildingInput(GLFWwindow* glfwWindow, int key, int scancode,
         mapObjects.push(wall);
     }
 
-    // Create tomato
+    // Create tomato (for ingredient spawn location)
     if (key == GLFW_KEY_2 && action == GLFW_PRESS)
     {
         // Get the player - we're placing a tomato at the player.
@@ -357,6 +358,23 @@ void ClientGame::mapbuildingInput(GLFWwindow* glfwWindow, int key, int scancode,
 
         // Add it to the stack of map objects.
         mapObjects.push(tomato);
+    }
+
+    // Create player (for spawn position)
+    if (key == GLFW_KEY_3 && action == GLFW_PRESS)
+    {
+        // Get the player - we're placing a player spawn point at the player.
+        GameObject* player = window.objectsToRender[objectId];
+
+        // Create the player spawn point and place it at the player.
+        GameObject* newPlayer = new Player(playerIndex--);
+        newPlayer->setPosition(player->getRoundedPosition());
+
+        // Add it to the window.
+        window.addObject(newPlayer->getID(), newPlayer);
+
+        // Add it to the stack of map objects.
+        mapObjects.push(newPlayer);
     }
 
     // Restore last removed object
@@ -411,44 +429,187 @@ void ClientGame::mapbuildingInput(GLFWwindow* glfwWindow, int key, int scancode,
         // Rotate object at top of stack 90 degrees
         if (key == GLFW_KEY_T && action == GLFW_PRESS)
         {
-            // Add 90 degrees
-            obj->setRotation( obj->getRotation() + 90 );
+            // Ignore player spawn points
+            if (obj->getObjectType() != PLAYER) obj->setRotation( obj->getRotation() + 90 );
         }
 
         // Scale up object at top of stack (x)
         if (key == GLFW_KEY_Z && action == GLFW_PRESS)
         {
-            obj->applyScale( obj->getScaleVec() + glm::vec3(0.5, 0, 0) );
+            // Ignore player spawn points
+            if (obj->getObjectType() != PLAYER) obj->applyScale( obj->getScaleVec() + glm::vec3(0.5, 0, 0) );
         }
 
         // Scale up object at top of stack (y)
         if (key == GLFW_KEY_X && action == GLFW_PRESS)
         {
-            obj->applyScale( obj->getScaleVec() + glm::vec3(0, 0.5, 0) );
+            // Ignore player spawn points
+            if (obj->getObjectType() != PLAYER) obj->applyScale( obj->getScaleVec() + glm::vec3(0, 0.5, 0) );
         }
 
         // Scale up object at top of stack (z)
         if (key == GLFW_KEY_C && action == GLFW_PRESS)
         {
-            obj->applyScale( obj->getScaleVec() + glm::vec3(0, 0, 0.5) );
+            // Ignore player spawn points
+            if (obj->getObjectType() != PLAYER) obj->applyScale( obj->getScaleVec() + glm::vec3(0, 0, 0.5) );
         }
 
         // Scale down object at top of stack (x)
         if (key == GLFW_KEY_V && action == GLFW_PRESS)
         {
-            obj->applyScale( obj->getScaleVec() + glm::vec3(-0.5, 0, 0) );
+            // Ignore player spawn points
+            if (obj->getObjectType() != PLAYER) obj->applyScale( obj->getScaleVec() + glm::vec3(-0.5, 0, 0) );
         }
 
         // Scale down object at top of stack (y)
         if (key == GLFW_KEY_B && action == GLFW_PRESS)
         {
-            obj->applyScale( obj->getScaleVec() + glm::vec3(0, -0.5, 0) );
+            // Ignore player spawn points
+            if (obj->getObjectType() != PLAYER) obj->applyScale( obj->getScaleVec() + glm::vec3(0, -0.5, 0) );
         }
 
         // Scale down object at top of stack (z)
         if (key == GLFW_KEY_N && action == GLFW_PRESS)
         {
-            obj->applyScale( obj->getScaleVec() + glm::vec3(0, 0, -0.5) );
+            // Ignore player spawn points
+            if (obj->getObjectType() != PLAYER) obj->applyScale( obj->getScaleVec() + glm::vec3(0, 0, -0.5) );
+        }
+
+        // Export map objects to file
+        if (key == GLFW_KEY_M && action == GLFW_PRESS)
+        {
+            exportMapTxt();
         }
     }
+}
+
+void ClientGame::exportMapTxt()
+{
+    // Index that we will reuse often.
+    int i = 1;
+
+    // Default map name
+    std::string mapName = "Dungeon";
+
+    // Map name prompt
+    std::cout << "Please type in the map name." << std::endl;
+    std::cin >> mapName;
+
+    // Output stream
+    std::ofstream ofs;
+    ofs.open (mapName + ".txt");
+
+    if (!ofs.is_open()) 
+    {
+        std::cerr << "An error occurred when trying to open this file for writing." << std::endl;
+        return;
+    }
+
+    // Stacks to take in all the game objects
+    std::stack<GameObject*> walls;
+    std::stack<GameObject*> ingredientLocations;
+    std::stack<GameObject*> playerSpawns;
+
+    // Iterate over map objects to distribute
+    while(!mapObjects.empty())
+    {
+        // Remove object from window and stack
+        GameObject* obj = mapObjects.top();
+        mapObjects.pop();
+        window.removeObject(obj->getID());
+
+        // Place in respective stack
+        switch (obj->getObjectType())
+        {
+            case WALL:          walls.push(obj); break;
+            case INGREDIENT:    ingredientLocations.push(obj); break;
+            case PLAYER:        playerSpawns.push(obj); break;
+        }
+    }
+
+    std::cout << "Processing walls." << std::endl;
+
+    // Add wall count.
+    ofs << mapName + "_Wall_Count=" << walls.size() << std::endl;
+    ofs.flush();
+
+    // Iterate over walls and add to file
+    while (!walls.empty())
+    {
+        // Remove from stack
+        GameObject* wall = walls.top();
+        glm::vec3 pos = wall->getPosition();
+        float rot = wall->getRotation();
+        glm::vec3 scale = wall->getScaleVec();
+        walls.pop();
+
+        // Add next wall strings
+        ofs << mapName + "_Wall_Pos_" << i << "=";
+        ofs << pos.x << "," << pos.y << "," << pos.z << std::endl;
+        ofs.flush();
+        ofs << mapName + "_Wall_Rot_" << i << "=";
+        ofs << rot << std::endl;
+        ofs.flush();
+        ofs << mapName + "_Wall_Scale_" << i << "=";
+        ofs << scale.x << "," << scale.y << "," << scale.z << std::endl;
+        ofs.flush();
+
+        // NEXT
+        i++;
+    }
+    // Reset
+    i = 0;
+
+    std::cout << "Processing ingredient spawn points." << std::endl;
+
+    // Add ingredient spawn count.
+    ofs << mapName + "_Ingredient_Count=" << ingredientLocations.size() << std::endl;
+    ofs.flush();
+
+    // Iterate over ingredient locations and add to file
+    while (!ingredientLocations.empty())
+    {
+        // Remove from stack
+        GameObject* loc = ingredientLocations.top();
+        glm::vec3 pos = loc->getPosition();
+        ingredientLocations.pop();
+
+        // Add next wall strings
+        ofs << mapName + "_Ingredient_Pos_" << i << "=";
+        ofs << pos.x << "," << pos.y << "," << pos.z << std::endl;
+        ofs.flush();
+
+        // NEXT
+        i++;
+    }
+    // Reset
+    i = 0;
+
+    std::cout << "Processing player spawn points." << std::endl;
+
+    // Add ingredient spawn count.
+    ofs << mapName + "_Spawn_Count=" << playerSpawns.size() << std::endl;
+    ofs.flush();
+
+    // Iterate over ingredient locations and add to file
+    while (!playerSpawns.empty())
+    {
+        // Remove from stack
+        GameObject* loc = playerSpawns.top();
+        glm::vec3 pos = loc->getPosition();
+        playerSpawns.pop();
+
+        // Add next wall strings
+        ofs << mapName + "_Spawn_" << i << "=";
+        ofs << pos.x << "," << pos.y << "," << pos.z << std::endl;
+        ofs.flush();
+
+        // NEXT
+        i++;
+    }
+
+    std::cout << "Finished." << std::endl;
+
+    // Close output stream
+    ofs.close();
 }

@@ -158,10 +158,10 @@ Font_Size_Pixels=15
 Dungeon_Wall_Count=10
 
 // Top and bottom Walls (external)
-Dungeon_Wall_Pos_1=0,0,15
+Dungeon_Wall_Pos_0=0,0,15
+Dungeon_Wall_Scale_0=94.7,1,0.33
+Dungeon_Wall_Pos_1=0,0,-15
 Dungeon_Wall_Scale_1=94.7,1,0.33
-Dungeon_Wall_Pos_2=0,0,-15
-Dungeon_Wall_Scale_2=94.7,1,0.33
 
 // Adjusted wall boundaries used for ingredient spawning
 Dungeon_Lower_X=-44
@@ -173,20 +173,20 @@ Dungeon_Upper_Z=11
 Dungeon_Ingredient_Spawn_Rate=3;
 
 // Left and right walls (external)
-Dungeon_Wall_Pos_3=45,0,0
+Dungeon_Wall_Pos_2=45,0,0
+Dungeon_Wall_Scale_2=1,1,8
+Dungeon_Wall_Pos_3=-45,0,0
 Dungeon_Wall_Scale_3=1,1,8
-Dungeon_Wall_Pos_4=-45,0,0
-Dungeon_Wall_Scale_4=1,1,8
 
 // Internal walls
-Dungeon_Wall_Pos_5=-36,0,-6
-Dungeon_Wall_Pos_6=-35,0,-5
-Dungeon_Wall_Rot_6=90
-Dungeon_Wall_Pos_7=36,0,6
-Dungeon_Wall_Pos_8=35,0,7
-Dungeon_Wall_Rot_8=90
-Dungeon_Wall_Pos_9=5,0,0
-Dungeon_Wall_Pos_10=-5,0,0
+Dungeon_Wall_Pos_4=-36,0,-6
+Dungeon_Wall_Pos_5=-35,0,-5
+Dungeon_Wall_Rot_5=90
+Dungeon_Wall_Pos_6=36,0,6
+Dungeon_Wall_Pos_7=35,0,7
+Dungeon_Wall_Rot_7=90
+Dungeon_Wall_Pos_8=5,0,0
+Dungeon_Wall_Pos_9=-5,0,0
 
 // Dungeon Spawn Positions
 Dungeon_Spawn_Count=4

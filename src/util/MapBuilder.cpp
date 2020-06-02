@@ -9,7 +9,7 @@ DungeonMap* MapBuilder::getBasicDungeonMap() {
     int dungeonWallCount = Config::getInt("Dungeon_Wall_Count");
     
     // Iterate over walls and add them to the map
-    for (int i = 1; i <= dungeonWallCount; i++)
+    for (int i = 0; i < dungeonWallCount; i++)
     {
         Wall* wall = new Wall();
         wall->setPosition(Config::getVec3("Dungeon_Wall_Pos_" + std::to_string(i)));
