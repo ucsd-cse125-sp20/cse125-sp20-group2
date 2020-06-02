@@ -312,6 +312,9 @@ void Window::render()
 					colorScale *= Config::getVec4("Good_Quality_Color_Modifier");
 					break;
 			}
+
+			// Rotate ingredient because why not
+			obj->setRotation(obj->getRotation() + Config::getFloat("Ingredient_Rotation_Speed"));
 		}
 
 		// load model if needed

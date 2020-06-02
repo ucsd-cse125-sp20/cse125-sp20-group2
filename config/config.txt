@@ -86,6 +86,9 @@ Camera_Pitch=-35.0
 // Indicate that there is no color when color values are less than...
 noColorPrecision=0.01
 
+// Ingredient rotation speed
+Ingredient_Rotation_Speed=0.05
+
 ////////////////////////////////////////////////////////////////////////////
 
 // // // // // // // // 
