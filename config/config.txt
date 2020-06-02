@@ -190,9 +190,9 @@ Dungeon_Wall_Pos_9=-5,0,0
 
 // Dungeon Spawn Positions
 Dungeon_Spawn_Count=4
-Dungeon_Spawn_1=-1,0,1
-Dungeon_Spawn_2=1,0,1
-Dungeon_Spawn_3=-1,0,-1
-Dungeon_Spawn_4=1,0,-1
+Dungeon_Spawn_0=-1,0,1
+Dungeon_Spawn_1=1,0,1
+Dungeon_Spawn_2=-1,0,-1
+Dungeon_Spawn_3=1,0,-1
 
 ////////////////////////////////////////////////////////////////////////////
