@@ -105,7 +105,7 @@ Player_Radius=0.75
 
 // Controls
 Player_Run_Speed=5
-Player_Turn_Speed=3
+Player_Turn_Speed=2
 
 // Camera Controls
 Camera_Speed=0.25
@@ -121,7 +121,7 @@ Good_Quality_Color_Modifier=2.5,2,0.8,1
 // Round time (in seconds)
 Kitchen_Round_Time=15
 Kitchen_Waiting_Round_Time=10
-Dungeon_Round_Time=300
+Dungeon_Round_Time=15
 Lobby_Round_Time=15
 Dungeon_Waiting_Round_Time=10
 

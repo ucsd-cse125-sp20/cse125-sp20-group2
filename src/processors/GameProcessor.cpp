@@ -153,6 +153,10 @@ void GameProcessor::process(unsigned int clientId, Game::ClientMessage clientMsg
 
             // Check if within range and if cookware is busy
             std::cout << "this is the range" << distance << std::endl;
+            if (ing == NULL)
+            {
+                std::cout << "ingredient is NULL" << std::endl;
+            }
             IngredientStatus origStatus = ing->getStatus();
 
             if (distance <= Config::getFloat("Cooking_Event_Min_Distance"))
