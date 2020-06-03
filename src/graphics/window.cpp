@@ -24,6 +24,7 @@ Window::Window(int width = Config::getFloat("Window_Width"), int height = Config
 	this->inventory = NULL;
 }
 
+
 void Window::addObject(int id, GameObject* object) {
 	this->objectsToRender.insert({id, object});
 	objNum++;
@@ -224,6 +225,7 @@ void Window::updateRound(Game::RoundInfo_RoundState roundState) {
             this->setRound(4);
 			break;
         }
+		default: {}
     } 
 }
 
@@ -381,7 +383,6 @@ void Window::render()
 		ui.UIGameOver(gameWin);
 	}
 	
-
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	// ImGui::PopFont();

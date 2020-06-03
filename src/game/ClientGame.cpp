@@ -57,6 +57,11 @@ void ClientGame::keyBindsHandler(GLFWwindow* glfwWindow, int key, int scancode, 
 
 void ClientGame::runGame() 
 {
+    // Background music
+    music.openFromFile("assets/audio/8Bit_Paradise.ogg");
+    music.setVolume(Config::getInt("Background_Music_Volume"));
+    music.play();
+
     while(!window.isClosed) 
     {
         // Take local input
@@ -180,6 +185,12 @@ void ClientGame::updateGameState()
                 pickup->setStatus(Ingredient::stringToIngredientStatus[currMessage.inventory().ingredientstatus()]);
                 window.removeCookingEventMessage();
 
+                if (soundBuffer.loadFromFile("assets/audio/Inventory_Pickup.wav")) {
+                    soundEffect.setBuffer(soundBuffer);
+                    soundEffect.setVolume(Config::getFloat("Sound_Effect_Volume"));
+                    soundEffect.play();
+                }
+
                 // Already exists
                 if (currInventory->count(currMessage.inventory().id()) > 0)
                 {
@@ -200,6 +211,11 @@ void ClientGame::updateGameState()
             {
                 std::cout << "got valid event from server" << std::endl;
                 window.addCookingEventMessage(currMessage.validcook().message());
+                if (soundBuffer.loadFromFile("assets/audio/Dish.wav")) {
+                     soundEffect.setBuffer(soundBuffer);
+                     soundEffect.setVolume(Config::getFloat("Sound_Effect_Volume"));
+                     soundEffect.play();
+                 };
                 break;   
             }
 
@@ -238,6 +254,12 @@ void ClientGame::updateGameState()
             case Game::ServerMessage::EventCase::kRound:
             {
                 window.updateRound(currMessage.round().type());         
+                if (currMessage.round().type() == Game::RoundInfo_RoundState_KITCHEN_WAITING) {
+                    music.stop();
+                    music.openFromFile("assets/audio/Cook.ogg");
+                    music.setVolume(Config::getInt("Background_Music_Volume"));
+                    music.play();
+                }
                 std::cout << " received round update message " << currMessage.DebugString() << std::endl;
                 break;
             }
@@ -249,10 +271,20 @@ void ClientGame::updateGameState()
                 window.gameOver = true;
 
                 // Win or lose
-                if (currMessage.win().clientid() == clientId)
+                if (currMessage.win().clientid() == clientId) {
                     window.gameWin = true;
-                else
+                    music.stop();
+                    music.openFromFile("assets/audio/SovietUnion.ogg");
+                    music.setVolume(Config::getInt("Background_Music_Volume"));
+                    music.play();
+                }
+                else {
                     window.gameWin = false;
+                    music.stop();
+                    music.openFromFile("assets/audio/TheDustyAttic.ogg");
+                    music.setVolume(Config::getInt("Background_Music_Volume"));
+                    music.play();
+                }
 
                 break;
             }

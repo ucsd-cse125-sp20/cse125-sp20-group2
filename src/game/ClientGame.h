@@ -9,6 +9,8 @@
 #include <util/MessageBuilder.h>
 #include <util/Config.h>
 #include <util/MapBuilder.h>
+#include <SFML/Audio.hpp>
+#include <util/Config.h>
 
 class ClientGame {
     public:
@@ -20,6 +22,9 @@ class ClientGame {
         // NOTE: This is the id that correlates to this client's player object. 
         unsigned int objectId;
         unsigned int round = 0;
+        sf::Music music;
+        sf::Sound soundEffect;
+        sf::SoundBuffer soundBuffer;
 
         ClientGame(std::string IP, int port);
         ~ClientGame();
