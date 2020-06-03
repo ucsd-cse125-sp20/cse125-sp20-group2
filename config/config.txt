@@ -13,6 +13,15 @@ Onion_Model=assets/models/ingredients/Onion.obj
 Tomato_Model=assets/models/ingredients/tomato2.obj
 Burger_Model=assets/models/ingredients/Burger2.obj
 
+// Individual burger part paths
+Burger_Top_Bun_Model=assets/models/burgerpieces/Bun2.obj
+Burger_Bottom_Bun_Model=assets/models/burgerpieces/Bun.obj
+Burger_Cheese_Model=assets/models/burgerpieces/Cheese.obj
+Burger_Lettuce_Model=assets/models/burgerpieces/Lettuce.obj
+Burger_Meat_Model=assets/models/burgerpieces/Meat.obj
+Burger_Onion_Model=assets/models/burgerpieces/Onion.obj
+Burger_Tomato_Model=assets/models/burgerpieces/Tomato.obj
+
 // Cookware model paths
 Pot_Model=assets/models/cookware/Pot.obj
 Cutting_Board_Model=assets/models/cookware/Knife.obj
