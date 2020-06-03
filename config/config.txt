@@ -18,6 +18,10 @@ Pot_Model=assets/models/cookware/Pot.obj
 Cutting_Board_Model=assets/models/cookware/Knife.obj
 Pan_Model=assets/models/cookware/Pan.obj
 Plate_Model=assets/models/cookware/plate2.obj
+Plate_0_Model=assets/models/cookware/plateblue.obj
+Plate_1_Model=assets/models/cookware/plategreen.obj
+Plate_2_Model=assets/models/cookware/platepurple.obj
+Plate_3_Model=assets/models/cookware/platered.obj
 
 // Terrain model paths
 Wall_Model=assets/models/terrain/wall.obj

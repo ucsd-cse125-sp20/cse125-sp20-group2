@@ -33,6 +33,7 @@
 #include <objects/GameObject.h>
 #include <objects/Player.h>
 #include <objects/Ingredient.h>
+#include <objects/Plate.h>
 
 #include <graphics/UIScreenFactory.h>
 

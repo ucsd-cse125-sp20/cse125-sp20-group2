@@ -33,3 +33,13 @@ Ingredient *Plate::removeFromPlate()
     this->plateContents.pop();
     return currIngredient;
 }
+
+void Plate::assignId(unsigned int clientId)
+{
+    this->clientId = clientId; 
+}
+
+unsigned int Plate::getClientId()
+{
+    return this->clientId;
+}

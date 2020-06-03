@@ -80,7 +80,12 @@ KitchenMap* MapBuilder::getBasicKitchenMap(GameState* gameState) {
         float variation = Config::getFloat("Plate_Spacing");
         currPos.x += i * variation;
         Plate* plate = new Plate();
+        plate->assignId(i);
         plate->setPosition(currPos);
+
+        // assign model based on id
+        plate->setModel("Plate_" + i + "_Model");
+
         mp->plateObjects.push_back(plate);
     }
 

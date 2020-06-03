@@ -32,4 +32,6 @@ class Plate : public GameObject
         * Assign a client Id to a plate
         * */
        void assignId(unsigned int clientId);
+
+       unsigned int getClientId();
 };
