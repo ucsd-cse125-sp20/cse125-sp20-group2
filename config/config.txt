@@ -100,12 +100,12 @@ Object_Default_Width=1
 Object_Default_Depth=1
 Wall_Width=1
 Wall_Depth=4.2
-Ingredient_Radius=0.5
+Ingredient_Radius=0.75
 Player_Radius=0.75
 
 // Controls
-Player_Run_Speed=3
-Player_Turn_Speed=2
+Player_Run_Speed=5
+Player_Turn_Speed=3
 
 // Camera Controls
 Camera_Speed=0.25
@@ -121,7 +121,7 @@ Good_Quality_Color_Modifier=2.5,2,0.8,1
 // Round time (in seconds)
 Kitchen_Round_Time=15
 Kitchen_Waiting_Round_Time=10
-Dungeon_Round_Time=5
+Dungeon_Round_Time=300
 Lobby_Round_Time=15
 Dungeon_Waiting_Round_Time=10
 
@@ -143,7 +143,7 @@ Window_Height=800
 
 Font_Scale=2
 
-Cooking_Event_Min_Distance=1.5
+Cooking_Event_Min_Distance=2
 Plate_Event_Min_Distance=1.5
 
 Font_Size_Pixels=15
@@ -170,7 +170,7 @@ Dungeon_Lower_Z=-15
 Dungeon_Upper_Z=11
 
 // Ingredient spawn rate (in seconds)
-Dungeon_Ingredient_Spawn_Rate=3;
+Dungeon_Ingredient_Spawn_Rate=1.0;
 
 // Left and right walls (external)
 Dungeon_Wall_Pos_2=45,0,0
@@ -209,11 +209,11 @@ Kitchen_Spawn_2=-1,0,-1
 Kitchen_Spawn_3=1,0,-1
 
 // Plate Initial and Variation
-Plate_Init_Spawn=-12,0,-13
+Plate_Init_Spawn=-15,0,-13
 Plate_Spacing=10
 
 // Cutting Board Inital and Variation
-Cutting_Board_Init_Spawn=-17,0,21
+Cutting_Board_Init_Spawn=-15,0,32
 Cutting_Board_Spacing=10
 
 // Pot Inital and Variation
@@ -221,5 +221,5 @@ Pot_Init_Spawn=25,0,-5
 Pot_Spacing=10
 
 // Pan Inital and Variation
-Pan_Init_Spawn=-25,0,-16
+Pan_Init_Spawn=-25,0,-5
 Pan_Spacing=10

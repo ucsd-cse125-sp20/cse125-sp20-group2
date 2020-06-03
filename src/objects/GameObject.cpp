@@ -11,6 +11,7 @@ GameObject::GameObject() {
 	this->applyScale(glm::vec3(1));
 	this->model = NULL;
 	this->box = new BoundingBox(this); 
+	this->updateMeasurements();
 	this->setPassable(false);
 	this->setObjectType(OBJECT);
 }
@@ -35,6 +36,7 @@ GameObject::GameObject(int id) {
 
 	// For collisions
 	this->box = new BoundingBox(this); 
+	this->updateMeasurements();
 	this->setPassable(false);
 
 	// Generic object type

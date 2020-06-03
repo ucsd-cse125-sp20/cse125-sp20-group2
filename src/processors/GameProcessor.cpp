@@ -133,7 +133,8 @@ void GameProcessor::process(unsigned int clientId, Game::ClientMessage clientMsg
     case Game::ClientMessage::EventCase::kCookEvent:
     {
         std::cout << "got a cookevent" << std::endl;
-        // Retrive the ingredient
+
+        // Retrieve the ingredient
         Ingredient *ing = server->gameState.getIngredientObject(clientMsg.cookevent().objectid());
         std::unordered_map<unsigned int, Cookware *> &cookwarePairs = server->gameState.cookwareObjects;
         bool validCookEvent;
@@ -142,16 +143,22 @@ void GameProcessor::process(unsigned int clientId, Game::ClientMessage clientMsg
         Player *p = server->gameState.getPlayerObject(clientId);
         glm::vec3 pPos = p->getPosition();
 
+        /// TODO: Find the minimum distance
         // Check for valid cookware in range
-        for (auto &cookwarePair : cookwarePairs)
+        for (auto & cookwarePair : cookwarePairs)
         {
-            Cookware *cookware = cookwarePair.second;
+            Cookware* cookware = cookwarePair.second;
             glm::vec3 cPos = cookware->getPosition();
             float distance = sqrt(pow((pPos.x - cPos.x), 2) + pow((pPos.y - cPos.y), 2) + pow((pPos.z - cPos.z), 2));
 
             // Check if within range and if cookware is busy
             std::cout << "this is the range" << distance << std::endl;
             IngredientStatus origStatus = ing->getStatus();
+
+            if (distance <= Config::getFloat("Cooking_Event_Min_Distance"))
+            {
+                std::cout << "found cookware that is withing range, not sure if implemented doe" << std::endl;
+            }
 
             if (distance <= Config::getFloat("Cooking_Event_Min_Distance") && !cookware->getBusy() && cookware->cookIngredient(ing))
             {

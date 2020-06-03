@@ -55,7 +55,7 @@ private:
 protected:
     // base model sizes
     float baseWidth, baseDepth;
-    float baseRadius;
+    float baseRadius = 1;
 
     // Sizing - may be needed for collisions, depends on model size and scale
     float width, height, depth;

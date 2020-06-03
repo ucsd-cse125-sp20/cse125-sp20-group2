@@ -2,12 +2,14 @@
 
 Ingredient::Ingredient(int ID) : GameObject(ID) {
     this->objType = INGREDIENT;
+    this->baseRadius = Config::getFloat("Ingredient_Radius");
 	this->setModel(Config::get("Wall_Model"));
 	this->setPosition(glm::vec3(1,0,1));
 }
 
 Ingredient::Ingredient() : GameObject() {
     this->objType = INGREDIENT;
+    this->baseRadius = Config::getFloat("Ingredient_Radius");
 	this->setModel(Config::get("Wall_Model"));
 }
     
