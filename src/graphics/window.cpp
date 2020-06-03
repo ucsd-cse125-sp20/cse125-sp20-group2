@@ -346,7 +346,7 @@ void Window::render()
 	ui.UIGameInfo(this->round, minutes, seconds);
 	ui.UIScore(this->score);
 	
-	Ingredient* tmp;
+	Ingredient* tmp = NULL;
 
 	if (this->round == DUNGEON_NUM && this->inventory != NULL)
 	{
