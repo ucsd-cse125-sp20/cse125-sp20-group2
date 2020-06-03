@@ -101,13 +101,13 @@ void Window::setupWindow() {
 	ImGui::StyleColorsDark();
 	
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	ImFont* font1 = io.Fonts->AddFontFromFileTTF("assets/fonts/Nikkyou-Sans.ttf", Config::getInt("Font_Size_Pixels"));
 	ImGui_ImplGlfw_InitForOpenGL(glfwViewport, true);
 
 	ui.loadImages();
 	//impl = GlfwRenderer(glfwViewport);
 
 	ImGui_ImplOpenGL3_Init("#version 130");
-	// ImFont* font1 = io.Fonts->AddFontFromFileTTF("assets/fonts/NikkyouSans-B6aV.ttf", Config::getInt("Font_Size_Pixels"));
 
 	//glfwViewport.refresh_font_texture();
 	ImGuiStyle * style = &ImGui::GetStyle();
@@ -343,13 +343,12 @@ void Window::render()
 	int32_t minutes = this->timer / 60;
 	int32_t seconds = this->timer % 60;
 	ui.setUpFrame();
-	ImGui::SetWindowFontScale(Config::getFloat("Font_Scale"));
-	// ImGui::PushFont(font1);
+	//ImGui::PushFont(font1);
 	ui.UIGameInfo(this->round, minutes, seconds);
 	ui.UIScore(this->score);
 	
 	Ingredient* tmp = NULL;
-
+	
 	if (this->round == DUNGEON_NUM && this->inventory != NULL)
 	{
 		ui.UIInventory(this->inventory);

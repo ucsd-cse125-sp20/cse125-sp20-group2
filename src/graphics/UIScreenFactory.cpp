@@ -73,6 +73,7 @@ void UIScreenFactory::UIInventory(std::unordered_map<int, Ingredient*>* map) {
 	ImGui::SetNextWindowPos(window_pos, ImGuiCond_Always, window_pos_pivot);
 	setWindowSize(ImVec2((float)150, (float)(250)));
 	ImGui::Begin("Inventory");
+	ImGui::SetWindowFontScale(Config::getFloat("Font_Scale"));
 	std::unordered_map<int, Ingredient*>::iterator it = map->begin();
 	ImGui::BeginChild("Scrolling");
 	while (it != map->end())
@@ -81,7 +82,7 @@ void UIScreenFactory::UIInventory(std::unordered_map<int, Ingredient*>* map) {
 		it++;
 	}
 	ImGui::EndChild();
-	UIEnd();
+	ImGui::End();
 }
 
 void UIScreenFactory::UIGameInfo(int round, int32_t minutes, int32_t seconds) {
@@ -92,6 +93,7 @@ void UIScreenFactory::UIGameInfo(int round, int32_t minutes, int32_t seconds) {
 	setWindowSize(ImVec2(150.0f, 100.0f));
 	if (ImGui::Begin("Game Info"))
 	{
+		ImGui::SetWindowFontScale(Config::getFloat("Font_Scale"));
 		std::string roundInfo;
 		switch(round) {
 			case LOBBY_NUM: roundInfo = LOBBY_STR; break;
@@ -106,12 +108,13 @@ void UIScreenFactory::UIGameInfo(int round, int32_t minutes, int32_t seconds) {
 		str = str.append(std::to_string(seconds));
 		UIText(str);
 	}
-	UIEnd();
+	ImGui::End();
 }
 
 void UIScreenFactory::UIGameOver(bool gameWin) {
 	ImGui::SetNextWindowSize(ImVec2(io->DisplaySize.x-DISTANCE, io->DisplaySize.y-DISTANCE));
 	ImGui::Begin("TIME IS UP");
+	ImGui::SetWindowFontScale(Config::getFloat("Font_Scale"));
 	if (gameWin) ImGui::Text("You win! You are chosen as the next face of the burdgeoning communist fast-food industry");
 	else ImGui::Text("A comrade outperformed you and slackers like you in the glorious communist state are an enemy of the people. You were sent to a gulag to live out your days doing hard labor. Maybe you could still fulfill the prison labor quota.");
 	ImGui::End();
@@ -125,6 +128,7 @@ Ingredient* UIScreenFactory::UIButtonInventory(std::unordered_map<int, Ingredien
 	ImGui::SetNextWindowPos(window_pos, ImGuiCond_Always, window_pos_pivot);
 	setWindowSize(ImVec2((float)150, (float)250));
 	ImGui::Begin("Inventory");
+	ImGui::SetWindowFontScale(Config::getFloat("Font_Scale"));
 	std::unordered_map<int, Ingredient*>::iterator it = map->begin();
 	ImGui::BeginChild("Scrolling");
 	while (it != map->end())
@@ -143,7 +147,7 @@ Ingredient* UIScreenFactory::UIButtonInventory(std::unordered_map<int, Ingredien
 		
 	}
 	ImGui::EndChild();
-	UIEnd();
+	ImGui::End();
 	return ret;
 }
 
@@ -155,31 +159,35 @@ void UIScreenFactory::UICookingEvent(std::string msg) {
 	setWindowSize(ImVec2(80.0f, 40.0f));
 	if (ImGui::Begin(" "))
 	{
+		ImGui::SetWindowFontScale(Config::getFloat("Font_Scale"));
 		UIText(msg);
 	}
-	UIEnd();
+	ImGui::End();
 }
 
 void UIScreenFactory::UIScore(int score) {
 	window_pos = ImVec2(io->DisplaySize.x / 2 - (DISTANCE/2), DISTANCE);
 	ImGui::SetNextWindowPos(window_pos, ImGuiCond_Always, window_pos_pivot);
-	setWindowSize(ImVec2(70.0f, 80.0f));
+	setWindowSize(ImVec2(80.0f, 80.0f));
 	if (ImGui::Begin("Score"))
 	{
+		ImGui::SetWindowFontScale(Config::getFloat("Font_Scale"));
 		std::string scoreStr = std::to_string(score);
 		UIText(scoreStr);
 	}
-	UIEnd();
+	ImGui::End();
 }
 
 void UIScreenFactory::UIDungeonInstructions() {
 	ImGui::Begin("Dungeon Instructions");
+	ImGui::SetWindowFontScale(Config::getFloat("Font_Scale"));
 	ImGui::Image((void*)(intptr_t)dungeon_waiting_texture, ImVec2(dungeon_waiting_width, dungeon_waiting_height));
 	ImGui::End();
 }
 
 void UIScreenFactory::UIInstructionSet(std::vector<std::string> instructions ) {
 	ImGui::Begin("Recipe Instructions");
+	ImGui::SetWindowFontScale(Config::getFloat("Font_Scale"));
 	ImGui::BeginChild("Scrolling");
 	for( auto str: instructions ) {
 		UIText(str);
@@ -190,22 +198,20 @@ void UIScreenFactory::UIInstructionSet(std::vector<std::string> instructions ) {
 
 void UIScreenFactory::UIKitchenInstructions() {
 	ImGui::Begin("Dungeon Instructions");
+	ImGui::SetWindowFontScale(Config::getFloat("Font_Scale"));
 	ImGui::Image((void*)(intptr_t)kitchen_waiting_texture, ImVec2(kitchen_waiting_width, kitchen_waiting_height));
 	ImGui::End();
 }
 
 void UIScreenFactory::UILobbyScreen() {
 	ImGui::Begin("Lobby Screen");
+	ImGui::SetWindowFontScale(Config::getFloat("Font_Scale"));
 	ImGui::Image((void*)(intptr_t)lobby_texture, ImVec2(lobby_width, lobby_height));
 	ImGui::End();
 }
 
 void UIScreenFactory::UIText(std::string str) {
 	ImGui::Text(str.c_str());
-}
-
-void UIScreenFactory::UIEnd() {
-	ImGui::End();
 }
 
 void UIScreenFactory::setWindowSize(ImVec2 size) {
