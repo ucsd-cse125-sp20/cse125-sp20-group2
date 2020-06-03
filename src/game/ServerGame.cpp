@@ -162,6 +162,10 @@ void ServerGame::update()
                 , currIngredient->getStatus(), currIngredient->getQualityIndex());
             this->specificMessages[currPlayer->getClientID()].push_back(serverMsg);
 
+            // Send over the updated cookware object
+            Game::ServerMessage* cookwareMsg = MessageBuilder::toServerMessage(cookEvent->cookware);
+            this->messages.push_back(cookwareMsg);
+
             int i = 0;
             for( auto instruction : this->gameState.recipe->instructionList ) {
                 if( (instruction->ingredient.compare(cookEvent->ingredient->getName()) == 0)

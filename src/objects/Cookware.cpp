@@ -4,7 +4,8 @@ Cookware::Cookware(int ID) : GameObject(ID) {
     this->setModel(Config::get("Pan_Model"));
     this->objType = COOKWARE;
     this->box = new BoundingBox(this);
-    this->box->setRadius(0.8);
+    this->box->setCircleBoundingBox();
+    this->baseRadius = Config::getFloat("Cookware_Radius");
     this->applyScale(Config::getVec3("Cookware_Scaling"));
 }
 
@@ -12,7 +13,8 @@ Cookware::Cookware() : GameObject() {
     this->setModel(Config::get("Pan_Model"));
     this->objType = COOKWARE;
     this->box = new BoundingBox(this);
-    this->box->setRadius(0.8);
+    this->box->setCircleBoundingBox();
+    this->baseRadius = Config::getFloat("Cookware_Radius");
     this->applyScale(Config::getVec3("Cookware_Scaling"));
 }
 
@@ -21,11 +23,26 @@ Cookware::Cookware(std::string model): GameObject() {
     this->setModel(Config::get(model + "_Model"));
     this->objType = COOKWARE;
     this->box = new BoundingBox(this);
-    this->box->setRadius(0.8);
+    this->box->setCircleBoundingBox();
+    this->baseRadius = Config::getFloat("Cookware_Radius");
     this->applyScale(Config::getVec3("Cookware_Scaling"));
 }
 
 void Cookware::setBusy(bool busy) {
+
+    // Set models based on busy or not
+    if (busy)
+    {
+        if (name == PAN)        this->setModel(Config::get("Oil_Pan_Model"));
+        else if (name == POT)   this->setModel(Config::get("Water_Pot_Model"));
+    }
+    else 
+    {
+        if (name == PAN)        this->setModel(Config::get("Pan_Model"));
+        else if (name == POT)   this->setModel(Config::get("Pot_Model"));
+    }
+
+    // set
     this->busy = busy;
 }
 

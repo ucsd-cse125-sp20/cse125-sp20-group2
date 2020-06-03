@@ -73,6 +73,11 @@ void BoundingBox::setRadius(float radius)
     this->radius = radius;
 }
 
+float BoundingBox::getRadius()
+{
+    return this->radius;
+}
+
 bool BoundingBox::isIntersecting(BoundingBox *bb)
 {
     if (bb == NULL) {

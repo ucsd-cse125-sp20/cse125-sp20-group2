@@ -27,6 +27,8 @@ public:
 
     void setRadius(float radius);
 
+    float getRadius();
+
     bool isIntersecting(BoundingBox *bb);
 
     void updateCorners();

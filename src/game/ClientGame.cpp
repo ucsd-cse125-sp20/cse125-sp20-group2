@@ -133,13 +133,23 @@ void ClientGame::updateGameState()
                         // Basic gameobject.
                         default: obj = new GameObject(id); break;
                     }
-
-                    /// Set model based on the model path provided by the server TODO: Might not be necessary???
-                    obj->setModel(currMessage.object().modelpath());
-
                     // Add object to window
                     window.addObject(id, obj);
                 }
+
+                /// Set model based on the model path provided by the server
+                std::string modelPath = currMessage.object().modelpath();
+
+                // We got an updated model, set old model to null
+                if (modelPath.compare(obj->getModelPath()) != 0)
+                {
+                    delete obj->model;
+                    obj->model = NULL;
+                }
+
+                // Set new model path so we can reload
+                obj->setModel(modelPath);
+
 
                 // Set object parameters
                 obj->setRotation(rotation);

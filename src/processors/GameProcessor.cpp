@@ -189,6 +189,7 @@ void GameProcessor::process(unsigned int clientId, Game::ClientMessage clientMsg
 
                 validCookEvent = true;
 
+                // Add message for current cooking option and change model to reflect cooking action
                 if (cookware->getName() == PAN)
                 {
                     msg = "Frying the ";
@@ -203,6 +204,9 @@ void GameProcessor::process(unsigned int clientId, Game::ClientMessage clientMsg
                 }
                 msg = msg + ing->getName();
             }
+
+            // Send back the updated cookware object
+            server->messages.push_back(MessageBuilder::toServerMessage(cookware));
         }
 
         /// TODO: may not be in the right spot, but see if close to any plates, and interact with them
@@ -240,10 +244,14 @@ void GameProcessor::process(unsigned int clientId, Game::ClientMessage clientMsg
                 CookEvent *cookEvent = *iter;
                 if (cookEvent->player == player)
                 {
+                    // Cancel cook event
                     std::cout << "found a player and their cookevent" << std::endl;
                     player->setFreeze(false);
                     cookEvent->cookware->setBusy(false);
                     iter = server->gameState.cookEvents.erase(iter);
+
+                    // Send updated cookware back
+                    server->messages.push_back(MessageBuilder::toServerMessage(cookEvent->cookware));
                     break;
                 }
                 else
