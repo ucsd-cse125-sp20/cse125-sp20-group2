@@ -7,6 +7,7 @@ GameObject::GameObject() {
 	this->ID = GameObject::counter;
 	GameObject::counter++;
 	this->setPosition(glm::vec3(0, 0, 0));
+	this->prevPosition = pos;
 	this->setRotation(0);
 	this->applyScale(glm::vec3(1));
 	this->model = NULL;
@@ -28,6 +29,7 @@ GameObject::GameObject(int id) {
 
 	// Set transformations, assuming origin with no rotation
 	this->setPosition(glm::vec3(0, 0, 0));
+	this->prevPosition = pos;
 	this->setRotation(0);
 	this->applyScale(glm::vec3(1));
 

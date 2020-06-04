@@ -124,8 +124,67 @@ Ingredient_Rotation_Speed=0.05
 ////////////////////////////////////////////////////////////////////////////
 
 // // // // // // // // 
+// ANIMATION VARIABLES
+// // //
+
+// The amount of frames before walking animation is cancelled
+Waddle_Animation_End_Delay=10
+
+Waddle_Frame_Count=21
+Waddle_0=assets/models/animations/Waddle/0.obj
+Waddle_1=assets/models/animations/Waddle/1.obj
+Waddle_2=assets/models/animations/Waddle/2.obj
+Waddle_3=assets/models/animations/Waddle/3.obj
+Waddle_4=assets/models/animations/Waddle/4.obj
+Waddle_5=assets/models/animations/Waddle/5.obj
+Waddle_6=assets/models/animations/Waddle/6.obj
+Waddle_7=assets/models/animations/Waddle/7.obj
+Waddle_8=assets/models/animations/Waddle/8.obj
+Waddle_9=assets/models/animations/Waddle/9.obj
+Waddle_10=assets/models/animations/Waddle/10.obj
+Waddle_11=assets/models/animations/Waddle/11.obj
+Waddle_12=assets/models/animations/Waddle/12.obj
+Waddle_13=assets/models/animations/Waddle/13.obj
+Waddle_14=assets/models/animations/Waddle/14.obj
+Waddle_15=assets/models/animations/Waddle/15.obj
+Waddle_16=assets/models/animations/Waddle/16.obj
+Waddle_17=assets/models/animations/Waddle/17.obj
+Waddle_18=assets/models/animations/Waddle/18.obj
+Waddle_19=assets/models/animations/Waddle/19.obj
+Waddle_20=assets/models/animations/Waddle/20.obj
+
+Idle_Frame_Count=1
+Idle_0=assets/models/characters/characterblue.obj
+
+Cook_Frame_Count=21
+Cook_0=assets/models/animations/Cook/0.obj
+Cook_1=assets/models/animations/Cook/1.obj
+Cook_2=assets/models/animations/Cook/2.obj
+Cook_3=assets/models/animations/Cook/3.obj
+Cook_4=assets/models/animations/Cook/4.obj
+Cook_5=assets/models/animations/Cook/5.obj
+Cook_6=assets/models/animations/Cook/6.obj
+Cook_7=assets/models/animations/Cook/7.obj
+Cook_8=assets/models/animations/Cook/8.obj
+Cook_9=assets/models/animations/Cook/9.obj
+Cook_10=assets/models/animations/Cook/10.obj
+Cook_11=assets/models/animations/Cook/11.obj
+Cook_12=assets/models/animations/Cook/12.obj
+Cook_13=assets/models/animations/Cook/13.obj
+Cook_14=assets/models/animations/Cook/14.obj
+Cook_15=assets/models/animations/Cook/15.obj
+Cook_16=assets/models/animations/Cook/16.obj
+Cook_17=assets/models/animations/Cook/17.obj
+Cook_18=assets/models/animations/Cook/18.obj
+Cook_19=assets/models/animations/Cook/19.obj
+Cook_20=assets/models/animations/Cook/20.obj
+
+////////////////////////////////////////////////////////////////////////////
+
+// // // // // // // // 
 // SOUND VARIABLES
 // // //
+
 Background_Music_Volume=2
 Sound_Effect_Volume=50
 
@@ -161,10 +220,10 @@ Good_Quality_Color_Modifier=2.5,2,0.8,1
 
 // Round time (in seconds)
 Kitchen_Round_Time=150
-Kitchen_Waiting_Round_Time=15
-Dungeon_Round_Time=15
-Lobby_Round_Time=15
-Dungeon_Waiting_Round_Time=15
+Kitchen_Waiting_Round_Time=3
+Dungeon_Round_Time=5
+Lobby_Round_Time=5
+Dungeon_Waiting_Round_Time=3
 
 Cook_Event_Time=5
 

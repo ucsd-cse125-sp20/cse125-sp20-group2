@@ -18,8 +18,10 @@ Window::Window(int width = Config::getFloat("Window_Width"), int height = Config
 	this->setupWindow();
 	//this->ui = UIScreenFactory();
 	this->shader = new Shader(Config::get("Vertex_Shader"), Config::get("Fragment_Shader"));
-	this->UIshader = new Shader("src//graphics//shaders//ui_vert_shader.glsl", "src//graphics//shaders//ui_frag_shader.glsl"); 
+	
 	///TODO: Need to add to Config?
+	this->UIshader = new Shader("src//graphics//shaders//ui_vert_shader.glsl", "src//graphics//shaders//ui_frag_shader.glsl"); 
+
 	this->camera = new Camera(Config::getVec3("Camera_Location"));
 	this->inventory = NULL;
 }
@@ -287,10 +289,13 @@ void Window::render()
 	// // //
 	// Render each GameObject
 
-	for (auto it = objectsToRender.begin(); it != objectsToRender.end(); ++it) {
+	for (auto it = objectsToRender.begin(); it != objectsToRender.end(); ++it) 
+	{
 		
 		// Get the next object to render.
 		GameObject* obj = it->second;
+
+		handleAnimations(obj);
 
 		// If we don't render the object, ignore it.
 		if (!obj->getRender()) continue;
@@ -405,4 +410,34 @@ void Window::cameraViewUpdate() {
 	lastY = ypos;
 
 	camera->processMouseMovement(xoffset, yoffset);
+}
+
+void Window::handleAnimations(GameObject* object)
+{
+	///TODO: Only players are animated currently.
+	if (object->getObjectType() != PLAYER) return;
+
+	// Make sure animator has animations loaded for the given object
+	if (animator.animsLoadedFor.find(object) == animator.animsLoadedFor.end() || !animator.isAnimsLoadedFor(object))
+	{
+		// Add animations for player
+		animator.addAnimation(object, "Waddle", new Animation("Waddle"));
+		animator.addAnimation(object, "Cook", new Animation("Cook"));
+		animator.addAnimation(object, "Idle", new Animation("Idle"));
+
+		// Different colors
+		/*switch (((Player*)object)->getClientID())
+		{
+			case 0:
+				animator.addAnimation(object, "WADDLE", new Animation("Waddle"));
+		}*/
+
+		animator.setCurrentAnimation(object, "Waddle");
+
+		// Load animations as needed
+		animator.loadAnimations(object);
+	}
+
+	// Animate object. Different possible states are handled in this function.
+	animator.play(object);
 }

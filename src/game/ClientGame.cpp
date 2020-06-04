@@ -89,6 +89,20 @@ void ClientGame::receiveUpdates()
 
 void ClientGame::updateGameState()
 {
+    // Assumption: players are not moving if position has not changed for some number of frames.
+    for (auto it = players.begin(); it != players.end(); ++it)
+    {
+        Player* player = it->second;
+        if (player->noMoveCounter == Config::getInt("Waddle_Animation_End_Delay"))
+        {
+            player->moving = false;
+        }
+        else
+        {
+            player->noMoveCounter++;
+        }
+    }
+
     // Process messages to update client game state
     for (Game::ServerMessage currMessage : client.messages)
     {
@@ -119,7 +133,10 @@ void ClientGame::updateGameState()
                     switch(currMessage.object().type())
                     {
                         // Player object.
-                        case Game::PLAYER: obj = new Player(id); break;
+                        case Game::PLAYER: 
+                            obj = new Player(id); 
+                            players[id] = ((Player*) obj);
+                            break;
 
                         // Ingredient object.
                         case Game::INGREDIENT: obj = new Ingredient(id); 
@@ -158,12 +175,33 @@ void ClientGame::updateGameState()
                 // Set new model path so we can reload
                 obj->setModel(modelPath);
 
-
                 // Set object parameters
                 obj->setRotation(rotation);
                 if (currMessage.object().has_scale()) obj->applyScale(glm::vec3(scale.x(), scale.y(), scale.z()));
                 obj->setRender(render);
+                obj->prevPosition = obj->getPosition();
                 obj->setPosition(glm::vec3(location.x(), location.y(), location.z()));
+
+                // Object type specific updates
+                switch (obj->getObjectType())
+                {
+                    case PLAYER:
+                        
+                        // Is player cooking or not
+                        ((Player*)obj)->cooking = currMessage.object().cooking();
+                        
+                        // Is player moving?
+                        if (obj->getPosition() != ((Player*)obj)->prevPosition)
+                        {
+                            ((Player *) obj)->moving = true;
+                            ((Player *) obj)->noMoveCounter = 0;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+
+                // Removing cooking event message
                 window.removeCookingEventMessage();
                 break;
             }

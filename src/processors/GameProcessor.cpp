@@ -157,6 +157,9 @@ void GameProcessor::process(unsigned int clientId, Game::ClientMessage clientMsg
             {
                 std::cout << "Cooking" << std::endl;
 
+                // Player is now cooking
+                p->cooking = true;
+
                 validCookEvent = true;
                 // Cookware is busy now
                 cookware->setBusy(true);
@@ -196,6 +199,10 @@ void GameProcessor::process(unsigned int clientId, Game::ClientMessage clientMsg
 
             // Send back the updated cookware object
             server->messages.push_back(MessageBuilder::toServerMessage(cookware));
+
+            ///TODO: MAKE SURE THIS IS OKAY
+            // Send back the player
+            server->messages.push_back(MessageBuilder::toServerMessage(p));
         }
 
         /// TODO: may not be in the right spot, but see if close to any plates, and interact with them
@@ -264,7 +271,8 @@ void GameProcessor::process(unsigned int clientId, Game::ClientMessage clientMsg
     {
         // Get the Player Object of the current client id
         Player *player = server->gameState.getPlayerObject(clientId);
-        //
+
+        // Get origin position of player
         glm::vec3 originalPos = player->getPosition();
 
         // Cancel cooking event if frozen
@@ -278,6 +286,7 @@ void GameProcessor::process(unsigned int clientId, Game::ClientMessage clientMsg
                 {
                     // Cancel cook event
                     std::cout << "found a player and their cookevent" << std::endl;
+                    player->cooking = false;
                     player->setFreeze(false);
                     cookEvent->cookware->setBusy(false);
                     iter = server->gameState.cookEvents.erase(iter);
@@ -298,8 +307,7 @@ void GameProcessor::process(unsigned int clientId, Game::ClientMessage clientMsg
         for (GameObject *currObject : objects)
         {
             // Don't collide with yourself kiddo
-            if (currObject == player)
-                continue;
+            if (currObject == player) continue;
 
             if (player->isColliding(currObject))
             {

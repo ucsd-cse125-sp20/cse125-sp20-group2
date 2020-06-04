@@ -25,6 +25,7 @@
 #include <graphics/render/Shader.h>
 #include <graphics/render/Camera.h>
 #include <graphics/render/Model.h>
+#include <graphics/animations/Animator.h>
 
 // Protobuf
 #include <schema/Game.pb.h>
@@ -35,6 +36,7 @@
 #include <objects/Ingredient.h>
 #include <objects/Plate.h>
 
+// UI
 #include <graphics/UIScreenFactory.h>
 
 class Window
@@ -98,4 +100,8 @@ private:
     unsigned int objNum;        // Increment when get response back from server
     int width;
     int height;
+
+    Animator animator;
+
+    void handleAnimations(GameObject*);
 };

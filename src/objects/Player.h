@@ -38,6 +38,11 @@ protected:
     Team team;
 
 public:
+    ///TODO: this is extremely janky. try to find a different way to determine movement
+    int noMoveCounter;
+    bool moving;
+    bool cooking;
+
     Player(int ID);
 
     void setFreeze(bool f);
