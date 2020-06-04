@@ -107,7 +107,7 @@ KitchenMap* MapBuilder::getBasicKitchenMap(GameState* gameState) {
     int prisonSpawnCount = Config::getInt("Cell_Spawn_Count");
     for (int i = 0; i < prisonSpawnCount; i++)
     {
-        mp->spawningLocations.push_back(Config::getVec3("Cell_Wall_Spawn_" + std::to_string(i)));
+        mp->prisonLocations.push_back(Config::getVec3("Cell_Wall_Spawn_" + std::to_string(i)));
     }
 
     // Iterate over spawns and add to map

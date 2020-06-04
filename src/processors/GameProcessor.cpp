@@ -399,7 +399,7 @@ void GameProcessor::initEndPhase(GameState *gameState, ServerGame *server)
 void GameProcessor::movePlayersPrison(GameState* gameState)
 {
     Player* winningPlayer = gameState->getWinningPlayer();
-    std::vector<glm::vec3> & spawningLocations = gameState->kitchenMap->spawningLocations;
+    std::vector<glm::vec3> & prisonLocations = gameState->kitchenMap->prisonLocations;
 
     for (auto & currPlayerPair : gameState->getPlayerObjects())
     {
@@ -410,8 +410,8 @@ void GameProcessor::movePlayersPrison(GameState* gameState)
         }
         else
         {
-            currPlayer->setPosition(spawningLocations.back());
-            spawningLocations.pop_back();
+            currPlayer->setPosition(prisonLocations.back());
+            prisonLocations.pop_back();
         }
     }
 }
