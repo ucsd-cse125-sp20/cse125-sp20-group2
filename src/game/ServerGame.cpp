@@ -1,6 +1,5 @@
 #include <game/ServerGame.h>
 #include <processors/GameProcessor.h>
-#include <processors/EndProcessor.h>
 #include <stdlib.h>
 #include <algorithm>
 
@@ -429,6 +428,7 @@ void ServerGame::onRoundChange()
         case Game::RoundInfo::END:
         {
             std::cout << "initializing end" << std::endl;
+            GameProcessor::initEndPhase(&gameState, this);
             break;
         }
         default: 

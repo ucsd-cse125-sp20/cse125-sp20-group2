@@ -109,12 +109,12 @@ bool GameState::gameOver()
         // Game over if some time is over
         case Game::RoundInfo_RoundState_KITCHEN:
         {
-            return false;
             break;
         }
         // Never in game over
         case Game::RoundInfo_RoundState_END:
         {
+            return false;
             break;
         }
         

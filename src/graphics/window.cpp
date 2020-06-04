@@ -109,7 +109,6 @@ void Window::setupWindow() {
 
 	ImGui_ImplOpenGL3_Init("#version 130");
 
-	//glfwViewport.refresh_font_texture();
 	ImGuiStyle * style = &ImGui::GetStyle();
  
 	style->WindowPadding = ImVec2(15, 15);
@@ -343,7 +342,6 @@ void Window::render()
 	int32_t minutes = this->timer / 60;
 	int32_t seconds = this->timer % 60;
 	ui.setUpFrame();
-	//ImGui::PushFont(font1);
 	ui.UIGameInfo(this->round, minutes, seconds);
 	ui.UIScore(this->score);
 	
@@ -384,7 +382,6 @@ void Window::render()
 	
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-	// ImGui::PopFont();
 
 	// // //
 	// GLFW stuff
