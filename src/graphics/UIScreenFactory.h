@@ -49,7 +49,6 @@ public:
 	void UIGameOver(bool gameWin);
 
 	void UIText(std::string str);
-	void UIEnd();
 	void setWindowSize(ImVec2 size);
 
 private:

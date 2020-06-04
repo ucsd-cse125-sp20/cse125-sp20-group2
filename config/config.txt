@@ -123,8 +123,8 @@ Ingredient_Rotation_Speed=0.05
 // // // // // // // // 
 // SOUND VARIABLES
 // // //
-Background_Music_Volume=10
-Sound_Effect_Volume=10
+Background_Music_Volume=20
+Sound_Effect_Volume=50
 
 ////////////////////////////////////////////////////////////////////////////
 
@@ -179,7 +179,7 @@ Window_Title=Comrade's Kitchen
 Window_Width=900
 Window_Height=800
 
-Font_Scale=2
+Font_Scale=1
 
 Cooking_Event_Min_Distance=3.2
 Plate_Event_Min_Distance=4
