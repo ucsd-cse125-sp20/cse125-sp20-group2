@@ -200,8 +200,9 @@ void UIScreenFactory::UIDungeonInstructions() {
 	ImGui::End();
 }
 
-void UIScreenFactory::UIInstructionSet(std::vector<std::string> instructions ) {
-	ImGui::Begin("Recipe Instructions");
+void UIScreenFactory::UIInstructionSet(std::vector<std::string> instructions, std::string recipeName ) {
+	std::string title = "Recipe" + recipeName;
+	ImGui::Begin(title.c_str());
 	ImGui::SetWindowFontScale(Config::getFloat("Font_Scale"));
 	ImGui::BeginChild("Scrolling");
 	for( auto str: instructions ) {

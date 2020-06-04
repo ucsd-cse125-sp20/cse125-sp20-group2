@@ -83,6 +83,8 @@ public:
     Camera* camera;
     std::vector<std::string> instructionStrings;
 
+    std::string recipeName;
+
 private:
     Shader* shader;
     Shader* UIshader;

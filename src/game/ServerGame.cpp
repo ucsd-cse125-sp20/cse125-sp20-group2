@@ -429,9 +429,13 @@ void ServerGame::onRoundChange()
             // Send instructions from recipe to clients
             int i = 0;
             for(auto inst : this->gameState.recipe->instructionList ) {
-                Game::ServerMessage* msg = MessageBuilder::toInstructionInfo(inst, i);
-                this->server.sendToAll(*msg);
-                delete msg;
+                Game::ServerMessage* msg = NULL;
+
+                if(i == 0)
+                    msg = MessageBuilder::toInstructionInfo(inst, i,  this->gameState.recipe->name);
+                else
+                    msg = MessageBuilder::toInstructionInfo(inst, i);
+                this->messages.push_back(msg);
                 i++;
             }
             // EndProcessor::initGameState(&this->gameState, this);

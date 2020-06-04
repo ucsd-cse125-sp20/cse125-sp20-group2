@@ -359,7 +359,7 @@ void Window::render()
 	else if (this->round == KITCHEN_NUM && this->inventory != NULL )
 	{
 		tmp = ui.UIButtonInventory(this->inventory);
-		ui.UIInstructionSet(instructionStrings);
+		ui.UIInstructionSet(instructionStrings, this->recipeName);
 	}
 	else if (this->round == KITCHEN_WAITING_NUM)
 	{

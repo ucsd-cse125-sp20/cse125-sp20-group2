@@ -3,6 +3,11 @@
 /// THIS IS THE DEMO CONFIG
 
 // // // // // // // // 
+// DEMO RECIPE CHOICE
+// // //
+Recipe_Choice=1
+
+// // // // // // // // 
 // MODEL PATHS
 // // //
 

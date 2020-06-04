@@ -249,6 +249,8 @@ void ClientGame::updateGameState()
             {
                 int index = currMessage.instruction().index();
                 std::string msg = currMessage.instruction().instructionmsg();
+                if(currMessage.instruction().has_recipename() )
+                    window.recipeName = currMessage.instruction().recipename();
                 window.instructionStrings.insert(window.instructionStrings.begin()+index, msg);
                 break;
             }

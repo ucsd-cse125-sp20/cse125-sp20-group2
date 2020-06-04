@@ -47,7 +47,7 @@ public:
 	void UIInventory(std::unordered_map<int, Ingredient*>* map);
 	Ingredient* UIButtonInventory(std::unordered_map<int, Ingredient*>* map);
 	void UICookingEvent(std::string);
-	void UIInstructionSet(std::vector<std::string>);
+	void UIInstructionSet(std::vector<std::string>, std::string recipeName);
 
 	void UIGameOver(bool gameWin);
 

@@ -22,7 +22,15 @@ void GameProcessor::initDungeonPhase(GameState *gameState, ServerGame *server)
 {
     // Create the map
     DungeonMap *m = MapBuilder::getBasicDungeonMap();
-    Recipe *r = RecipeBuilder::getBasicRecipe();
+
+    int recipeChoice = Config::getInt("Recipe_Choice");
+    Recipe *r;
+    switch(recipeChoice) {
+        case 1: r = RecipeBuilder::getBasicRecipe(); break;
+        case 2: r = RecipeBuilder::getAnotherRecipe(); break;
+        default: r = RecipeBuilder::getBasicRecipe();
+    }
+    
     MapBuilder::assignIngredientPositions(r, m);
     gameState->dungeonMap = m;
     gameState->addWalls(m);
