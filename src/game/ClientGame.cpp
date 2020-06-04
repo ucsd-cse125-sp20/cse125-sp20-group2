@@ -18,6 +18,22 @@ ClientGame::ClientGame(std::string IP, int port) : client(IP, port), window(Conf
     floor->applyScale(glm::vec3(2));
     window.addObject(-1, floor);
 
+    // // Create rusty cage (just for testing)
+    // GameObject* cage = new GameObject(-2);
+    // cage->setModel(Config::get("Cage_Bar_Model"));
+    // cage->setPosition(glm::vec3(4, -0.5, 0));
+    // cage->applyScale(glm::vec3(2));
+    // window.addObject(-2, cage);
+
+
+
+    // // Create top / bottom of cage
+    // GameObject* cageTopBot = new GameObject(-3);
+    // cageTopBot->setModel(Config::get("Cage_Topbot_Model"));
+    // cageTopBot->setPosition(glm::vec3(0, -0.5, 0));
+    // cageTopBot->applyScale(glm::vec3(2));
+    // window.addObject(-3, cageTopBot); 
+
     runGame();
 }
 

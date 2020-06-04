@@ -52,6 +52,8 @@ Tile_Model=assets/models/terrain/tile.obj
 Tile4_Model=assets/models/terrain/tile4.obj
 Tile9_Model=assets/models/terrain/tile9.obj
 Floor_Model=assets/models/terrain/floor.obj
+Cage_Bar_Model=assets/models/terrain/rustycage_bars.obj
+Cage_Topbot_Model=assets/models/terrain/rustycage_topbot.obj
 
 // Character model paths
 Player_0=assets/models/characters/characterblue.obj
@@ -165,9 +167,9 @@ Bad_Quality_Color_Modifier=0.2,0.8,0.3,1
 Good_Quality_Color_Modifier=2.5,2,0.8,1
 
 // Round time (in seconds)
-Kitchen_Round_Time=150
+Kitchen_Round_Time=600
 Kitchen_Waiting_Round_Time=15
-Dungeon_Round_Time=15
+Dungeon_Round_Time=10
 Lobby_Round_Time=15
 Dungeon_Waiting_Round_Time=15
 
@@ -220,8 +222,8 @@ Dungeon_Wall_Scale_1=94.7,1,0.33
 // Adjusted wall boundaries used for ingredient spawning
 Dungeon_Lower_X=-44
 Dungeon_Upper_X=44
-Dungeon_Lower_Z=-15
-Dungeon_Upper_Z=11
+Dungeon_Lower_Z=-29
+Dungeon_Upper_Z=29
 
 // Ingredient spawn rate (in seconds)
 Dungeon_Ingredient_Spawn_Rate=1.0;
@@ -261,6 +263,19 @@ Kitchen_Spawn_0=-1,0,1
 Kitchen_Spawn_1=1,0,1
 Kitchen_Spawn_2=-1,0,-1
 Kitchen_Spawn_3=1,0,-1
+
+Cell_Wall_Count=4
+Cell_Scale=3
+Cell_Wall_0=6,0,-30
+Cell_Wall_1=-6,0,-30
+Cell_Wall_2=0,0,-36
+Cell_Wall_3=0,0,-24
+Cell_Base=0,-0.5,-30
+
+Cell_Spawn_Count=3
+Cell_Wall_Spawn_0=1,-0.5,-29
+Cell_Wall_Spawn_1=-1,-0.5,-29
+Cell_Wall_Spawn_2=0,-0.5,-28
 
 // Plate Initial and Variation
 Plate_Init_Spawn=-15,0,-13

@@ -59,13 +59,56 @@ DungeonMap* MapBuilder::getBasicDungeonMap() {
 }
 
 KitchenMap* MapBuilder::getBasicKitchenMap(GameState* gameState) {
-    Wall* wall = new Wall();
-    wall->setPosition(glm::vec3(0, 0, 5));
+    
+    // Create kitchenmap container
     KitchenMap* mp = new KitchenMap();
-    mp->wallList.push_back(wall);
+
+    // Create the prison cell :)))
+    int cellWallCount = Config::getInt("Cell_Wall_Count");
+    for (int i = 0; i < cellWallCount; i++)
+    {
+        // Adjust bounding box and model and position
+        Wall* cellWall = new Wall();
+        cellWall->setPosition(Config::getVec3("Cell_Wall_" + std::to_string(i)));
+        cellWall->setModel(Config::get("Cage_Bar_Model"));
+        cellWall->applyScale(glm::vec3(Config::getInt("Cell_Scale")));
+
+        BoundingBox* wallBoundBox = cellWall->getBoundingBox();
+
+        // Top and bottom walls
+        if (i >= 2)
+        {
+            cellWall->setRotation(90);
+            wallBoundBox->setDepth(0.1);
+            wallBoundBox->updateCorners();
+        }
+        // Left and right walls
+        else
+        {
+            wallBoundBox->setWidth(0.1);
+            wallBoundBox->updateCorners();
+        }
+
+        mp->wallList.push_back(cellWall);
+    }
+
+    // Create the base for the cell
+    Wall* cellBase = new Wall();
+    cellBase->setPosition(Config::getVec3("Cell_Base"));
+    cellBase->setModel(Config::get("Cage_Topbot_Model"));
+    cellBase->applyScale(glm::vec3(Config::getInt("Cell_Scale")));
+    cellBase->setPassable(true);
+    mp->wallList.push_back(cellBase);
 
     // Get spawn count
     int spawnCount = Config::getInt("Kitchen_Spawn_Count");
+
+    // For testing, spawn player in prison
+    int prisonSpawnCount = Config::getInt("Cell_Spawn_Count");
+    for (int i = 0; i < prisonSpawnCount; i++)
+    {
+        mp->spawningLocations.push_back(Config::getVec3("Cell_Wall_Spawn_" + std::to_string(i)));
+    }
 
     // Iterate over spawns and add to map
     for (int i = 0; i < spawnCount; i++)

@@ -308,6 +308,9 @@ void GameProcessor::process(unsigned int clientId, Game::ClientMessage clientMsg
             // Don't collide with yourself kiddo
             if (currObject == player)
                 continue;
+            
+            if (currObject->isPassable())
+                continue;
 
             if (player->isColliding(currObject))
             {
@@ -385,6 +388,30 @@ Ingredient *GameProcessor::spawnIngredient(GameState *gameState, Recipe *recipe)
 
 void GameProcessor::initEndPhase(GameState *gameState, ServerGame *server)
 {
+    // Indicate who won and who lost
     Game::ServerMessage *winMessage = MessageBuilder::toWinningMessage(gameState->getWinningPlayer()->getClientID());
     server->messages.push_back(winMessage);
+
+    // Spawn losing players in prison cell
+    GameProcessor::movePlayersPrison(gameState);
+}
+
+void GameProcessor::movePlayersPrison(GameState* gameState)
+{
+    Player* winningPlayer = gameState->getWinningPlayer();
+    std::vector<glm::vec3> & spawningLocations = gameState->kitchenMap->spawningLocations;
+
+    for (auto & currPlayerPair : gameState->getPlayerObjects())
+    {
+        Player* currPlayer = currPlayerPair.second;
+        if (currPlayer == winningPlayer)
+        {
+            continue;
+        }
+        else
+        {
+            currPlayer->setPosition(spawningLocations.back());
+            spawningLocations.pop_back();
+        }
+    }
 }
