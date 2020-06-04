@@ -277,7 +277,7 @@ void ClientGame::updateGameState()
                 if (currMessage.win().clientid() == clientId) {
                     window.gameWin = true;
                     music.stop();
-                    music.openFromFile("assets/audio/SovietUnion.ogg");
+                    music.openFromFile("assets/audio/SovietAnthem.ogg");
                     music.setVolume(Config::getInt("Background_Music_Volume"));
                     music.play();
                 }

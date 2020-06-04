@@ -71,7 +71,7 @@ void UIScreenFactory::UIInventory(std::unordered_map<int, Ingredient*>* map) {
 	window_pos = ImVec2((corner & 1) ? io->DisplaySize.x - DISTANCE : DISTANCE, (corner & 2) ? io->DisplaySize.y - DISTANCE : DISTANCE);
 	window_pos_pivot = ImVec2((corner & 1) ? 1.0f : 0.0f, (corner & 2) ? 1.0f : 0.0f);
 	ImGui::SetNextWindowPos(window_pos, ImGuiCond_Always, window_pos_pivot);
-	setWindowSize(ImVec2((float)150, (float)(250)));
+	// setWindowSize(ImVec2((float)150, (float)(250)));
 	ImGui::Begin("Inventory");
 	ImGui::SetWindowFontScale(Config::getFloat("Font_Scale"));
 	std::unordered_map<int, Ingredient*>::iterator it = map->begin();
@@ -126,7 +126,7 @@ Ingredient* UIScreenFactory::UIButtonInventory(std::unordered_map<int, Ingredien
 	window_pos = ImVec2((corner & 1) ? io->DisplaySize.x - DISTANCE : DISTANCE, (corner & 2) ? io->DisplaySize.y - DISTANCE : DISTANCE);
 	window_pos_pivot = ImVec2((corner & 1) ? 1.0f : 0.0f, (corner & 2) ? 1.0f : 0.0f);
 	ImGui::SetNextWindowPos(window_pos, ImGuiCond_Always, window_pos_pivot);
-	setWindowSize(ImVec2((float)150, (float)250));
+	// setWindowSize(ImVec2((float)250, (float)250));
 	ImGui::Begin("Inventory");
 	ImGui::SetWindowFontScale(Config::getFloat("Font_Scale"));
 	std::unordered_map<int, Ingredient*>::iterator it = map->begin();
