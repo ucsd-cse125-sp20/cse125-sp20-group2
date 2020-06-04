@@ -23,10 +23,12 @@ Recipe* RecipeBuilder::getBasicRecipe() {
     ing = createIngredient(TOMATO);
     recipe->ingredientList.push_back(ing);
 
+    int points = Config::getInt("Individual_Instruction_Points");
+
     Instruction *inst = new Instruction();
     inst->before = IngredientStatus::Raw;
     inst->after = IngredientStatus::Cut;
-    inst->points = 5;
+    inst->points = points;
     inst->cookware = CUTTING_BOARD;
     inst->ingredient = MEAT;
     inst->instr = "Cut the meat";
@@ -35,7 +37,7 @@ Recipe* RecipeBuilder::getBasicRecipe() {
     inst = new Instruction();
     inst->before = IngredientStatus::Cut;
     inst->after = IngredientStatus::Fried;
-    inst->points = 10;
+    inst->points = points;
     inst->cookware = PAN;
     inst->ingredient = MEAT;
     inst->instr = "Fry the meat";
@@ -44,7 +46,7 @@ Recipe* RecipeBuilder::getBasicRecipe() {
     inst = new Instruction();
     inst->before = IngredientStatus::Raw;
     inst->after = IngredientStatus::Boiled;
-    inst->points = 10;
+    inst->points = points;
     inst->cookware = POT;
     inst->ingredient = LETTUCE;
     inst->instr = "Boil the lettuce (because of e.coli)";
@@ -53,7 +55,7 @@ Recipe* RecipeBuilder::getBasicRecipe() {
     inst = new Instruction();
     inst->before = IngredientStatus::Raw;
     inst->after = IngredientStatus::Cut;
-    inst->points = 5;
+    inst->points = points;
     inst->cookware = CUTTING_BOARD;
     inst->ingredient = CHEESE;
     inst->instr = "Cut the cheese";
@@ -62,7 +64,7 @@ Recipe* RecipeBuilder::getBasicRecipe() {
     inst = new Instruction();
     inst->before = IngredientStatus::Raw;
     inst->after = IngredientStatus::Cut;
-    inst->points = 5;
+    inst->points = points;
     inst->cookware = CUTTING_BOARD;
     inst->ingredient = TOMATO;
     inst->instr = "Cut the tomato";

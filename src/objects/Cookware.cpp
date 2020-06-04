@@ -33,13 +33,15 @@ void Cookware::setBusy(bool busy) {
     // Set models based on busy or not
     if (busy)
     {
-        if (name == PAN)        this->setModel(Config::get("Oil_Pan_Model"));
-        else if (name == POT)   this->setModel(Config::get("Water_Pot_Model"));
+        if (name == PAN)                this->setModel(Config::get("Oil_Pan_Model"));
+        else if (name == POT)           this->setModel(Config::get("Water_Pot_Model"));
+        else if (name == CUTTING_BOARD) this->setModel(Config::get("Tomato_Cutting_Board_Model"));
     }
     else 
     {
-        if (name == PAN)        this->setModel(Config::get("Pan_Model"));
-        else if (name == POT)   this->setModel(Config::get("Pot_Model"));
+        if (name == PAN)                this->setModel(Config::get("Pan_Model"));
+        else if (name == POT)           this->setModel(Config::get("Pot_Model"));
+        else if (name == CUTTING_BOARD) this->setModel(Config::get("Cutting_Board_Model"));
     }
 
     // set

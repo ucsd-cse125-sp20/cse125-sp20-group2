@@ -25,6 +25,9 @@ public:
 	int lobby_width;
 	int lobby_height;
 	GLuint lobby_texture;
+	bool lobbyFirst = true;
+	bool kitchenFirst = true;
+	bool dungeonFirst = true;
 
 
 	Ingredient* highlighted = NULL;

@@ -2,6 +2,7 @@
 
 #include <unordered_map>
 #include <string>
+#include <iostream>
 #include <fstream>
 #include <sstream>
 #include <glm/glm.hpp>
@@ -25,6 +26,10 @@ public:
     }
 
     static int getInt(std::string key) {
+
+        // HEY YOU'RE TRYING TO GET SOMETHING YOU DON'T HAVE
+        if (vars->find(key) == vars->end()) std::cerr << "Cannot find key: " << key << " in config." << std::endl;
+
         return std::stoi(vars->at(key));
     }
 
@@ -37,6 +42,9 @@ public:
      * x,y,z .
      * */
     static glm::vec3 getVec3(std::string key) {
+
+        // HEY YOU'RE TRYING TO GET SOMETHING YOU DON'T HAVE
+        if (vars->find(key) == vars->end()) std::cerr << "Cannot find key: " << key << " in config." << std::endl;
 
         // Get string key
         std::string str = vars->at(key);
@@ -63,6 +71,9 @@ public:
      * x,y,z,w .
      * */
     static glm::vec4 getVec4(std::string key) {
+
+        // HEY YOU'RE TRYING TO GET SOMETHING YOU DON'T HAVE
+        if (vars->find(key) == vars->end()) std::cerr << "Cannot find key: " << key << " in config." << std::endl;
 
         // Get string key
         std::string str = vars->at(key);

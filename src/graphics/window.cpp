@@ -372,9 +372,6 @@ void Window::render()
 
 	selectedIngredient = tmp != NULL? tmp: selectedIngredient;
 
-	if( this->cookingEventMsg.compare("") != 0 )
-		ui.UICookingEvent(this->cookingEventMsg);
-
 	if (gameOver)
 	{
 		ui.UIGameOver(gameWin);

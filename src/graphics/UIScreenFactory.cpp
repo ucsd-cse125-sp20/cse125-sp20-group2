@@ -90,13 +90,16 @@ void UIScreenFactory::UIGameInfo(int round, int32_t minutes, int32_t seconds) {
 	window_pos = ImVec2((corner & 1) ? io->DisplaySize.x - DISTANCE : DISTANCE, (corner & 2) ? io->DisplaySize.y - DISTANCE : DISTANCE);
 	window_pos_pivot = ImVec2((corner & 1) ? 1.0f : 0.0f, (corner & 2) ? 1.0f : 0.0f);
 	ImGui::SetNextWindowPos(window_pos, ImGuiCond_Always, window_pos_pivot);
-	setWindowSize(ImVec2(150.0f, 100.0f));
+	setWindowSize(ImVec2(Config::getFloat("Game_Info_Window_Width"), Config::getFloat("Game_Info_Window_Height")));
 	if (ImGui::Begin("Game Info"))
 	{
 		ImGui::SetWindowFontScale(Config::getFloat("Font_Scale"));
 		std::string roundInfo;
 		switch(round) {
-			case LOBBY_NUM: roundInfo = LOBBY_STR; break;
+			case LOBBY_NUM: 
+				UIText(LOBBY_STR);
+				ImGui::End();
+				return;
 			case DUNGEON_NUM: roundInfo = DUNGEON_STR; break;
 			case KITCHEN_NUM: roundInfo = kitchen; break;
 			default: roundInfo = "TRANSITION";
@@ -135,7 +138,11 @@ Ingredient* UIScreenFactory::UIButtonInventory(std::unordered_map<int, Ingredien
 	{
 		if (this->highlighted == it->second) {
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(ImColor(255, 0, 0)));
-			ImGui::Button(it->second->getDetailedName().c_str());
+			if( ImGui::Button(it->second->getDetailedName().c_str()) ) {
+				ret = it->second;
+				std::cout<<"Ingredient clicked"<<std::endl;
+				this->highlighted = it->second;
+			}
 			ImGui::PopStyleColor();
 		}
 		else if (ImGui::Button(it->second->getDetailedName().c_str())) {
@@ -152,26 +159,30 @@ Ingredient* UIScreenFactory::UIButtonInventory(std::unordered_map<int, Ingredien
 }
 
 void UIScreenFactory::UICookingEvent(std::string msg) {
+	/**
 	corner = 3;
 	window_pos_pivot = ImVec2((corner & 1) ? 1.0f : 0.0f, (corner & 2) ? 1.0f : 0.0f);
 	window_pos = ImVec2(io->DisplaySize.x / 2 - DISTANCE, 2*DISTANCE);
 	ImGui::SetNextWindowPos(window_pos, ImGuiCond_Always, window_pos_pivot);
-	setWindowSize(ImVec2(80.0f, 40.0f));
+	setWindowSize(ImVec2(Config::getInt("Cooking_Event_"), 40.0f));
 	if (ImGui::Begin(" "))
 	{
 		ImGui::SetWindowFontScale(Config::getFloat("Font_Scale"));
 		UIText(msg);
 	}
 	ImGui::End();
+	**/
 }
 
 void UIScreenFactory::UIScore(int score) {
+	corner = 0;
 	window_pos = ImVec2(io->DisplaySize.x / 2 - (DISTANCE/2), DISTANCE);
+	window_pos_pivot = ImVec2((corner & 1) ? 1.0f : 0.0f, (corner & 2) ? 1.0f : 0.0f);
 	ImGui::SetNextWindowPos(window_pos, ImGuiCond_Always, window_pos_pivot);
-	setWindowSize(ImVec2(80.0f, 80.0f));
+	setWindowSize(ImVec2(Config::getFloat("Score_Window_Width"), Config::getFloat("Score_Window_Height")));
 	if (ImGui::Begin("Score"))
 	{
-		ImGui::SetWindowFontScale(Config::getFloat("Font_Scale"));
+		ImGui::SetWindowFontScale(Config::getFloat("Score_Font_Scale"));
 		std::string scoreStr = std::to_string(score);
 		UIText(scoreStr);
 	}
@@ -179,6 +190,10 @@ void UIScreenFactory::UIScore(int score) {
 }
 
 void UIScreenFactory::UIDungeonInstructions() {
+	if( dungeonFirst ) {
+		ImGui::SetNextWindowCollapsed(false, 0);
+		dungeonFirst = false;
+	}
 	ImGui::Begin("Dungeon Instructions");
 	ImGui::SetWindowFontScale(Config::getFloat("Font_Scale"));
 	ImGui::Image((void*)(intptr_t)dungeon_waiting_texture, ImVec2(dungeon_waiting_width, dungeon_waiting_height));
@@ -197,6 +212,10 @@ void UIScreenFactory::UIInstructionSet(std::vector<std::string> instructions ) {
 }
 
 void UIScreenFactory::UIKitchenInstructions() {
+	if( kitchenFirst ) {
+		ImGui::SetNextWindowCollapsed(false, 0);
+		kitchenFirst = false;
+	}
 	ImGui::Begin("Dungeon Instructions");
 	ImGui::SetWindowFontScale(Config::getFloat("Font_Scale"));
 	ImGui::Image((void*)(intptr_t)kitchen_waiting_texture, ImVec2(kitchen_waiting_width, kitchen_waiting_height));
@@ -204,6 +223,10 @@ void UIScreenFactory::UIKitchenInstructions() {
 }
 
 void UIScreenFactory::UILobbyScreen() {
+	if( lobbyFirst ) {
+		ImGui::SetNextWindowCollapsed(false, 0);
+		lobbyFirst = false;
+	}
 	ImGui::Begin("Lobby Screen");
 	ImGui::SetWindowFontScale(Config::getFloat("Font_Scale"));
 	ImGui::Image((void*)(intptr_t)lobby_texture, ImVec2(lobby_width, lobby_height));

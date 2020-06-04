@@ -76,6 +76,7 @@ void ServerGame::preprocess(std::unordered_map<unsigned int, std::vector<Game::C
             }
         }
 
+        // OLD CODE
         // std::vector<Game::ClientMessage> & msgList = it.second;
         // auto uniquePortion = std::unique(msgList.begin(), msgList.end(), google::protobuf::util::MessageDifferencer::Equals);
         // msgList.erase(uniquePortion, msgList.end());

@@ -120,7 +120,6 @@ void GameProcessor::processLobby(unsigned int clientId, Game::ClientMessage clie
         }
         default:
         {
-            std::cout << "ignored by lobby processing" << std::endl;
             break;
         }
     }
@@ -329,10 +328,9 @@ void GameProcessor::process(unsigned int clientId, Game::ClientMessage clientMsg
                     Game::ServerMessage *mapUpdate = MessageBuilder::toServerMessage(currIngredient);
                     server->messages.push_back(mapUpdate);
                 }
+                // Colliding with world object, revert changes
                 else
                 {
-                    std::cout << "Detecting collision with an object" << std::endl;
-
                     // Revert movement
                     player->setPosition(originalPos);
                     player->setRunSpeed(0);

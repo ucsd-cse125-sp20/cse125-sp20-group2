@@ -186,7 +186,10 @@ void ClientGame::updateGameState()
                 pickup->setName(currMessage.inventory().name());
                 pickup->setQualityIndex(currMessage.inventory().qualityindex());
                 pickup->setStatus(Ingredient::stringToIngredientStatus[currMessage.inventory().ingredientstatus()]);
-                window.removeCookingEventMessage();
+                
+                if(soundEffect.getStatus() == sf::SoundSource::Playing) {
+                    soundEffect.stop();
+                }
 
                 if (soundBuffer.loadFromFile("assets/audio/Inventory_Pickup.wav")) {
                     soundEffect.setBuffer(soundBuffer);
@@ -213,12 +216,15 @@ void ClientGame::updateGameState()
             case Game::ServerMessage::EventCase::kValidCook:
             {
                 std::cout << "got valid event from server" << std::endl;
-                window.addCookingEventMessage(currMessage.validcook().message());
-                if (soundBuffer.loadFromFile("assets/audio/Dish.wav")) {
-                     soundEffect.setBuffer(soundBuffer);
-                     soundEffect.setVolume(Config::getFloat("Sound_Effect_Volume"));
-                     soundEffect.play();
-                 };
+                switch(currMessage.validcook().message().at(0)) {
+                    case 'C': soundBuffer.loadFromFile("assets/audio/Cutting.wav"); break;
+                    case 'F': soundBuffer.loadFromFile("assets/audio/Frying.wav"); break;
+                    case 'B': soundBuffer.loadFromFile("assets/audio/PotBoiling.wav"); break;
+                    default: soundBuffer.loadFromFile("assets/audio/Dish.wav"); break;
+                }
+                soundEffect.setBuffer(soundBuffer);
+                soundEffect.setVolume(Config::getFloat("Sound_Effect_Volume"));
+                soundEffect.play();
                 break;   
             }
 
