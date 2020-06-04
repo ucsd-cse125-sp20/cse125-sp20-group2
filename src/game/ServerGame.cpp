@@ -58,9 +58,27 @@ void ServerGame::preprocess(std::unordered_map<unsigned int, std::vector<Game::C
 {
     for (auto & it : clientMsgs)
     {
-        std::vector<Game::ClientMessage> & msgList = it.second;
-        auto uniquePortion = std::unique(msgList.begin(), msgList.end(), google::protobuf::util::MessageDifferencer::Equals);
-        msgList.erase(uniquePortion, msgList.end());
+        std::vector<Game::ClientMessage> copy = it.second;
+        std::vector<Game::Direction> directionCache;
+
+        std::vector<Game::ClientMessage> & msgs = it.second;
+        msgs.clear();
+
+        for (Game::ClientMessage msg : copy) {
+            if (!msg.has_direction()) {
+                msgs.push_back(msg);
+                continue;
+            }
+
+            if (!std::count(directionCache.begin(), directionCache.end(), msg.direction())) {
+                msgs.push_back(msg);
+                directionCache.push_back(msg.direction());
+            }
+        }
+
+        // std::vector<Game::ClientMessage> & msgList = it.second;
+        // auto uniquePortion = std::unique(msgList.begin(), msgList.end(), google::protobuf::util::MessageDifferencer::Equals);
+        // msgList.erase(uniquePortion, msgList.end());
     }
 }
 
