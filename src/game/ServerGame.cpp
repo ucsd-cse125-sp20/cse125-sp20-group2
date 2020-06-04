@@ -2,6 +2,7 @@
 #include <processors/GameProcessor.h>
 #include <processors/EndProcessor.h>
 #include <stdlib.h>
+#include <algorithm>
 
 ServerGame::ServerGame(int port) : server(port)
 {

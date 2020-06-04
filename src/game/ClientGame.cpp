@@ -52,6 +52,9 @@ void ClientGame::keyBindsHandler(GLFWwindow* glfwWindow, int key, int scancode, 
         Game::ClientMessage* cookMsg = MessageBuilder::toCookMessage(this->window.getSelectedIngredient());
         this->client.send(*cookMsg);
         delete cookMsg;
+
+        // Prevent spamming the event key, have to select ingredient again
+        this->window.selectedIngredient = NULL;
     }
 }
 

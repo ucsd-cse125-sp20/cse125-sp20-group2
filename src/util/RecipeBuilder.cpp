@@ -1,25 +1,26 @@
 #include <util/RecipeBuilder.h>
+#include <constants/gameplay_vars.h>
 
 Recipe* RecipeBuilder::getBasicRecipe() {
     Recipe* recipe = new Recipe();
     recipe->name = "Glorious Communist Burger";
 
-    Ingredient *ing = createIngredient("Bun");
+    Ingredient *ing = createIngredient(BUN);
     recipe->ingredientList.push_back(ing);
 
-    ing = createIngredient("Meat");
+    ing = createIngredient(MEAT);
     recipe->ingredientList.push_back(ing);
 
-    ing = createIngredient("Onion");
+    ing = createIngredient(ONION);
     recipe->ingredientList.push_back(ing);
 
-    ing = createIngredient("Cheese");
+    ing = createIngredient(CHEESE);
     recipe->ingredientList.push_back(ing);
     
-    ing = createIngredient("Lettuce");
+    ing = createIngredient(LETTUCE);
     recipe->ingredientList.push_back(ing);
     
-    ing = createIngredient("Tomato");
+    ing = createIngredient(TOMATO);
     recipe->ingredientList.push_back(ing);
 
     Instruction *inst = new Instruction();

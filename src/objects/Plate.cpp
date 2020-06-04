@@ -7,6 +7,7 @@ Plate::Plate() : GameObject()
     this->box = new BoundingBox(this);
     this->box->setRadius(0.5);
     this->applyScale(Config::getVec3("Plate_Scaling"));
+    this->ingredientOffset = 2;
 }
 
 Plate::Plate(int ID) : GameObject(ID)
@@ -16,6 +17,7 @@ Plate::Plate(int ID) : GameObject(ID)
     this->box = new BoundingBox(this);
     this->box->setRadius(0.5);
     this->applyScale(Config::getVec3("Plate_Scaling"));
+    this->ingredientOffset = 2;
 }
 
 Plate::~Plate()
@@ -34,12 +36,12 @@ Ingredient *Plate::removeFromPlate()
     return currIngredient;
 }
 
-void Plate::assignId(unsigned int clientId)
+void Plate::assignId(int clientId)
 {
     this->clientId = clientId; 
 }
 
-unsigned int Plate::getClientId()
+int Plate::getClientId()
 {
     return this->clientId;
 }

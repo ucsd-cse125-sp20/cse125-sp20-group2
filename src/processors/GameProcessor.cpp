@@ -152,17 +152,7 @@ void GameProcessor::process(unsigned int clientId, Game::ClientMessage clientMsg
             float distance = sqrt(pow((pPos.x - cPos.x), 2) + pow((pPos.y - cPos.y), 2) + pow((pPos.z - cPos.z), 2));
 
             // Check if within range and if cookware is busy
-            std::cout << "this is the range" << distance << std::endl;
-            if (ing == NULL)
-            {
-                std::cout << "ingredient is NULL" << std::endl;
-            }
             IngredientStatus origStatus = ing->getStatus();
-
-            if (distance <= Config::getFloat("Cooking_Event_Min_Distance"))
-            {
-                std::cout << "found cookware that is withing range, not sure if implemented doe" << std::endl;
-            }
 
             if (distance <= Config::getFloat("Cooking_Event_Min_Distance") && !cookware->getBusy() && cookware->cookIngredient(ing))
             {
@@ -210,21 +200,64 @@ void GameProcessor::process(unsigned int clientId, Game::ClientMessage clientMsg
         }
 
         /// TODO: may not be in the right spot, but see if close to any plates, and interact with them
-        for (auto &platePair : server->gameState.plateObjects)
+        for (auto & platePair : server->gameState.plateObjects)
         {
             Plate *plate = platePair.second;
             glm::vec3 cPos = plate->getPosition();
 
             float distance = sqrt(pow((pPos.x - cPos.x), 2) + pow((pPos.y - cPos.y), 2) + pow((pPos.z - cPos.z), 2));
-            if (distance < Config::getFloat("Plate_Event_Min_Distance"))
+
+            std::cout << "plate's clientid: " + std::to_string(plate->getClientId()) + "distance to plate: " + std::to_string(distance) << std::endl;
+
+            if (distance <= Config::getFloat("Plate_Event_Min_Distance"))
             {
                 std::cout << "you are interacting with a plate" << std::endl;
+
+                // Determine whether or not it can be added to the plate (check client id)
+                if (plate->getClientId() == p->getClientID())
+                {
+                    std::cout << "you are interacting with the correct plate, my friend" << std::endl;
+
+                    // Transfer ingredient from player to the plate
+                    Player* currPlayer = server->gameState.getPlayerObject(clientId);
+                    Ingredient* currIngredient = server->gameState.getIngredientObject(clientMsg.cookevent().objectid());
+                    currPlayer->removeFromInventory(currIngredient);
+
+                    // Change the modelPath, update the location
+                    std::string ingredientName = currIngredient->getName();
+                    std::string updatedModelPath = Config::get("Burger_" + ingredientName + "_Model");
+                    currIngredient->setModel(updatedModelPath);
+
+                    glm::vec3 platePosition = plate->getPosition();
+                    platePosition.y += plate->ingredientOffset;
+                    plate->ingredientOffset += Config::getFloat("Burger_Piece_Offset");
+                    currIngredient->setPosition(platePosition);
+
+                    // Send message so that clients can render it (may have to disable bounding box, look at later)
+                    currIngredient->setRender(true);
+                    currIngredient->applyScale(Config::getVec3("Burger_Piece_Scaling"));
+                    Game::ServerMessage* ingredientRenderMsg = MessageBuilder::toServerMessage(currIngredient);
+                    server->messages.push_back(ingredientRenderMsg);
+
+                    // Send message to remove ingredient from client inventory
+                    Game::ServerMessage* inventoryUpdateMsg = MessageBuilder::toInventoryServerMessage(currIngredient->getID(),
+                                                                                                       false,
+                                                                                                       currIngredient->getName(),
+                                                                                                       currIngredient->getStatus(),
+                                                                                                       currIngredient->getQualityIndex());
+                    server->specificMessages[clientId].push_back(inventoryUpdateMsg);
+
+                    // Update score and send to player
+                    currPlayer->addToScore(Config::getInt("Plate_Score"));
+                    Game::ServerMessage* scoreMsg = MessageBuilder::toScore(currPlayer->getScore());
+                    server->specificMessages[clientId].push_back(scoreMsg);
+                }
             }
         }
 
+        // Update the player on what's going on
         Game::ServerMessage *newServerMsg = MessageBuilder::toValidCookingEvent(msg, validCookEvent);
         server->specificMessages[clientId].push_back(newServerMsg);
-
         break;
     }
     // The message is a movement event

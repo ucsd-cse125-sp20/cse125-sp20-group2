@@ -8,7 +8,7 @@ class Plate : public GameObject
 {
     private:
         // The client who owns the plates
-        unsigned int clientId;
+        int clientId;
 
         // The contents of the plate
         std::stack<Ingredient *> plateContents;
@@ -17,6 +17,9 @@ class Plate : public GameObject
         Plate();
         Plate(int ID);
         ~Plate();
+
+        // Used for ingredient offset
+        float ingredientOffset;
 
         /*
         * Adds the specified ingredient to the plate
@@ -31,7 +34,7 @@ class Plate : public GameObject
         /*
         * Assign a client Id to a plate
         * */
-       void assignId(unsigned int clientId);
+       void assignId(int clientId);
 
-       unsigned int getClientId();
+       int getClientId();
 };
