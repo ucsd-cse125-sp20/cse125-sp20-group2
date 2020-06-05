@@ -67,10 +67,10 @@ Cage_Bar_Model=assets/models/terrain/rustycage_bars.obj
 Cage_Topbot_Model=assets/models/terrain/rustycage_topbot.obj
 
 // Character model paths
-Player_0=assets/models/characters/characterblue.obj
-Player_1=assets/models/characters/charactergreen.obj
-Player_2=assets/models/characters/characterpurple.obj
-Player_3=assets/models/characters/characterred.obj
+Player_0=assets/models/characters/Blue.obj
+Player_1=assets/models/characters/Green.obj
+Player_2=assets/models/characters/Purple.obj
+Player_3=assets/models/characters/Red.obj
 Winner=assets/models/ingredients/Winner.obj
 
 // Etc model paths
