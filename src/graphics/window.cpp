@@ -101,7 +101,6 @@ void Window::setupWindow() {
 	ImGui::StyleColorsDark();
 	
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	ImFont* font1 = io.Fonts->AddFontFromFileTTF("assets/fonts/Nikkyou-Sans.ttf", Config::getInt("Font_Size_Pixels"));
 	ImGui_ImplGlfw_InitForOpenGL(glfwViewport, true);
 
 	ui.loadImages();
@@ -204,26 +203,27 @@ Ingredient* Window::getSelectedIngredient() {
 void Window::updateRound(Game::RoundInfo_RoundState roundState) {
 	switch (roundState) {
         case Game::RoundInfo_RoundState_LOBBY: {
-            this->setRound(0);
+            this->setRound(LOBBY_NUM);
+            break;
+        }
+		case Game::RoundInfo_RoundState_DUNGEON_WAITING: {
+            this->setRound(DUNGEON_WAITING_NUM);
             break;
         }
         case Game::RoundInfo_RoundState_DUNGEON: {
-            this->setRound(1);
+            this->setRound(DUNGEON_NUM);
             break;
         } 
-        case Game::RoundInfo_RoundState_DUNGEON_WAITING: {
-            this->setRound(2);
-            break;
+		    case Game::RoundInfo_RoundState_KITCHEN_WAITING: {
+            this->setRound(KITCHEN_WAITING_NUM);
+			break;
         }
         case Game::RoundInfo_RoundState_KITCHEN:
         {
-            this->setRound(3);
+            this->setRound(KITCHEN_NUM);
             break;
         }
-        case Game::RoundInfo_RoundState_KITCHEN_WAITING: {
-            this->setRound(4);
-			break;
-        }
+
 		default: {}
     } 
 }
@@ -346,13 +346,14 @@ void Window::render()
 	ui.UIScore(this->score);
 	
 	Ingredient* tmp = NULL;
+
+	std::cout<<"Round in client is: "<< std::to_string(this->round) <<std::endl;
 	
 	if (this->round == DUNGEON_NUM && this->inventory != NULL)
 	{
 		ui.UIInventory(this->inventory);
-		ImGui::SetNextWindowCollapsed(true, 0);
 	}
-	else if (this->round == DUNGEON_WAITING_NUM && this->inventory != NULL)
+	else if (this->round == DUNGEON_WAITING_NUM)
 	{
 		ui.UIDungeonInstructions();
 	}

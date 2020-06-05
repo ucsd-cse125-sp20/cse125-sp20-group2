@@ -10,7 +10,9 @@ enum class IngredientStatus
     Raw,
     Cut,
     Boiled, 
-    Fried
+    Fried,
+    // Vodka is delicious
+    Delicious
 };
 
 /**

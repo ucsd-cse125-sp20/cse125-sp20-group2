@@ -18,22 +18,6 @@ ClientGame::ClientGame(std::string IP, int port) : client(IP, port), window(Conf
     floor->applyScale(glm::vec3(2));
     window.addObject(-1, floor);
 
-    // // Create rusty cage (just for testing)
-    // GameObject* cage = new GameObject(-2);
-    // cage->setModel(Config::get("Cage_Bar_Model"));
-    // cage->setPosition(glm::vec3(4, -0.5, 0));
-    // cage->applyScale(glm::vec3(2));
-    // window.addObject(-2, cage);
-
-
-
-    // // Create top / bottom of cage
-    // GameObject* cageTopBot = new GameObject(-3);
-    // cageTopBot->setModel(Config::get("Cage_Topbot_Model"));
-    // cageTopBot->setPosition(glm::vec3(0, -0.5, 0));
-    // cageTopBot->applyScale(glm::vec3(2));
-    // window.addObject(-3, cageTopBot); 
-
     runGame();
 }
 
@@ -79,6 +63,7 @@ void ClientGame::runGame()
     // Background music
     music.openFromFile("assets/audio/8Bit_Paradise.ogg");
     music.setVolume(Config::getInt("Background_Music_Volume"));
+    music.setLoop(true);
     music.play();
 
     while(!window.isClosed) 
@@ -174,9 +159,35 @@ void ClientGame::updateGameState()
                 // Set new model path so we can reload
                 obj->setModel(modelPath);
 
-
                 // Set object parameters
                 obj->setRotation(rotation);
+
+                // The player is being scaled up which means the player picked up the vodka
+                if (currMessage.object().has_scale() && currMessage.object().id() == this->objectId)
+                {
+                    glm::vec3 originalScale = obj->getScaleVec();
+                    glm::vec3 newScale (scale.x(), scale.y(), scale.z());
+
+                    // Amazing coding practice here
+                    if (originalScale.x < newScale.x) {
+                        // Play soviet national anthem
+                        music.stop();
+                        music.openFromFile("assets/audio/SovietAnthem.ogg");
+                        music.setVolume(Config::getInt("Background_Music_Volume"));
+                        music.setLoop(true);
+                        music.play();
+                    }
+                    else if (originalScale.x > newScale.x)
+                    {
+                        // Background music
+                        music.stop();
+                        music.openFromFile("assets/audio/8Bit_Paradise.ogg");
+                        music.setVolume(Config::getInt("Background_Music_Volume"));
+                        music.setLoop(true);
+                        music.play();
+                    } 
+                }
+
                 if (currMessage.object().has_scale()) obj->applyScale(glm::vec3(scale.x(), scale.y(), scale.z()));
                 obj->setRender(render);
                 obj->setPosition(glm::vec3(location.x(), location.y(), location.z()));
@@ -231,7 +242,8 @@ void ClientGame::updateGameState()
 
             case Game::ServerMessage::EventCase::kValidCook:
             {
-                std::cout << "got valid event from server" << std::endl;
+                std::cout << "got valid cooking event from server" << std::endl;
+                std::cout<<currMessage.validcook().message().at(0)<<std::endl;
                 switch(currMessage.validcook().message().at(0)) {
                     case 'C': soundBuffer.loadFromFile("assets/audio/Cutting.wav"); break;
                     case 'F': soundBuffer.loadFromFile("assets/audio/Frying.wav"); break;
@@ -285,6 +297,7 @@ void ClientGame::updateGameState()
                     music.stop();
                     music.openFromFile("assets/audio/Cook.ogg");
                     music.setVolume(Config::getInt("Background_Music_Volume"));
+                    music.setLoop(true);
                     music.play();
                 }
                 std::cout << " received round update message " << currMessage.DebugString() << std::endl;
@@ -302,6 +315,7 @@ void ClientGame::updateGameState()
                     window.gameWin = true;
                     music.stop();
                     music.openFromFile("assets/audio/SovietAnthem.ogg");
+                    music.setLoop(true);
                     music.setVolume(Config::getInt("Background_Music_Volume"));
                     music.play();
                 }
@@ -309,6 +323,7 @@ void ClientGame::updateGameState()
                     window.gameWin = false;
                     music.stop();
                     music.openFromFile("assets/audio/TheDustyAttic.ogg");
+                    music.setLoop(true);
                     music.setVolume(Config::getInt("Background_Music_Volume"));
                     music.play();
                 }

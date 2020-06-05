@@ -70,6 +70,9 @@ public:
     // This is a mapping of gameObjId to plate objects
     std::unordered_map<unsigned int, Plate*> plateObjects;
 
+    // This is a priority queue of timer to clientId, to keep track of power ups
+    std::unordered_map<unsigned int, std::chrono::high_resolution_clock::time_point> clientPowerUpTimes;
+
     Recipe* recipe; 
 
     /**

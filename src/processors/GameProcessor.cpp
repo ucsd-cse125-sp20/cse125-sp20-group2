@@ -47,6 +47,12 @@ void GameProcessor::initDungeonPhase(GameState *gameState, ServerGame *server)
         {
             // Set low quality, add to player, add to gamestate, make invisible
             Ingredient *currIngredient = RecipeBuilder::createIngredient(ingredientCopy->getName());
+
+            // If delicious like vodka, do not add in. 
+            if (currIngredient->getStatus() == IngredientStatus::Delicious) {
+                continue;
+            }
+
             currIngredient->setQualityIndex(BAD_QUALITY);
             currIngredient->renderInvisible();
 
@@ -318,22 +324,29 @@ void GameProcessor::process(unsigned int clientId, Game::ClientMessage clientMsg
                 if (currObject->getObjectType() == INGREDIENT)
                 {
                     std::cout << "Colliding with ingredients" << std::endl;
-                    Ingredient *currIngredient = (Ingredient *)currObject;
-                    ///TODO: Add this back?
+                    Ingredient *currIngredient = (Ingredient *) currObject;
+
                     currIngredient->renderInvisible();
-                    player->addToInventory(currIngredient);
-                    player->addToScore(1);
-
-                    // Creating message for collecting ingredient
-                    Game::ServerMessage *newServerMsg = MessageBuilder::toInventoryServerMessage(currIngredient->getID(), true, currIngredient->getName(),
-                                                                                                 currIngredient->getStatus(), currIngredient->getQualityIndex());
-                    server->specificMessages[player->getClientID()].push_back(newServerMsg);
-                    newServerMsg = MessageBuilder::toServerMessage(currIngredient);
-                    server->messages.push_back(newServerMsg);
-
-                    // Create message for score update
-                    Game::ServerMessage *scoreUpdate = MessageBuilder::toScore(player->getScore());
-                    server->specificMessages[player->getClientID()].push_back(scoreUpdate);
+                    // Vodka Logic
+                    if (currIngredient->getStatus() == IngredientStatus::Delicious) {
+                        player->applyScale(glm::vec3(Config::getInt("Player_Size_Increase")));
+                        server->gameState.clientPowerUpTimes[player->getClientID()] = std::chrono::high_resolution_clock::now() + std::chrono::seconds (15);
+                    } else {
+                        ///TODO: Add this back?
+                        player->addToInventory(currIngredient);
+                        player->addToScore(1);
+                        
+                        // Creating message for collecting ingredient
+                        Game::ServerMessage *newServerMsg = MessageBuilder::toInventoryServerMessage(currIngredient->getID(), true, currIngredient->getName(),
+                                                                                                    currIngredient->getStatus(), currIngredient->getQualityIndex());
+                        server->specificMessages[player->getClientID()].push_back(newServerMsg);
+                        newServerMsg = MessageBuilder::toServerMessage(currIngredient);
+                        server->messages.push_back(newServerMsg);
+                        
+                        // Create message for score update
+                        Game::ServerMessage *scoreUpdate = MessageBuilder::toScore(player->getScore());
+                        server->specificMessages[player->getClientID()].push_back(scoreUpdate);
+                    }
 
                     // Send updated map stuff
                     Game::ServerMessage *mapUpdate = MessageBuilder::toServerMessage(currIngredient);

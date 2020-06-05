@@ -5,7 +5,7 @@
 // // // // // // // // 
 // DEMO RECIPE CHOICE
 // // //
-Recipe_Choice=1
+Recipe_Choice=2
 
 // // // // // // // // 
 // MODEL PATHS
@@ -19,6 +19,7 @@ Meat_Model=assets/models/ingredients/meat_3.obj
 Onion_Model=assets/models/ingredients/Onion.obj
 Tomato_Model=assets/models/ingredients/tomato2.obj
 Burger_Model=assets/models/ingredients/Burger2.obj
+Vodka_Model=assets/models/ingredients/Vodka.obj
 
 // Individual burger part paths
 Burger_Top_Bun_Model=assets/models/burgerpieces/TopBun3.obj
@@ -178,6 +179,7 @@ Cook_Event_Time=5
 // multipliers
 Points_Multi=2
 Individual_Instruction_Points=50
+Player_Size_Increase=4
 
 ////////////////////////////////////////////////////////////////////////////
 

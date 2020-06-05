@@ -279,6 +279,29 @@ void ServerGame::update()
             this->gameState.dungeonMap->ingredientSpawnTime = instantTime + deltaTime;
         }
     }
+    
+    // Check power up times, remove if over
+    for (auto it = this->gameState.clientPowerUpTimes.begin(); it != this->gameState.clientPowerUpTimes.end();)
+    {
+        auto endTime = it->second;
+        auto nowTime = std::chrono::high_resolution_clock::now();
+
+        // Power up is over, remove from map
+        if (nowTime > endTime)
+        {
+            std::cout << "time is over, removing power up" << std::endl;
+            Player* player = this->gameState.getPlayerObject(it->first);
+            player->applyScale(glm::vec3(1));
+            this->gameState.clientPowerUpTimes.erase(it++);
+
+            Game::ServerMessage* serverMsg = MessageBuilder::toServerMessage(player);
+            this->messages.push_back(serverMsg);
+        }
+        else
+        {
+            ++it;
+        }
+    }
 }
 
 void ServerGame::sendPendingMessages()

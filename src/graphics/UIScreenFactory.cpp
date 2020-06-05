@@ -118,8 +118,15 @@ void UIScreenFactory::UIGameOver(bool gameWin) {
 	ImGui::SetNextWindowSize(ImVec2(io->DisplaySize.x-DISTANCE, io->DisplaySize.y-DISTANCE));
 	ImGui::Begin("TIME IS UP");
 	ImGui::SetWindowFontScale(Config::getFloat("Font_Scale"));
-	if (gameWin) ImGui::Text("You win! You are chosen as the next face of the burdgeoning communist fast-food industry");
-	else ImGui::Text("A comrade outperformed you and slackers like you in the glorious communist state are an enemy of the people. You were sent to a gulag to live out your days doing hard labor. Maybe you could still fulfill the prison labor quota.");
+	if (gameWin) {
+		ImGui::Text("You win!");
+		ImGui::Text("You are chosen as the next face of the burdgeoning communist fast-food industry");
+	}
+	else {
+		ImGui::Text("A comrade outperformed you!");
+		ImGui::Text("You will live your life in the gulag");
+	}
+
 	ImGui::End();
 }
 
@@ -201,7 +208,11 @@ void UIScreenFactory::UIDungeonInstructions() {
 }
 
 void UIScreenFactory::UIInstructionSet(std::vector<std::string> instructions, std::string recipeName ) {
-	std::string title = "Recipe" + recipeName;
+	corner = 2;
+	window_pos = ImVec2((corner & 1) ? io->DisplaySize.x - DISTANCE : DISTANCE, (corner & 2) ? io->DisplaySize.y - 5*DISTANCE : DISTANCE);
+	window_pos_pivot = ImVec2((corner & 1) ? 1.0f : 0.0f, (corner & 2) ? 1.0f : 0.0f);
+	std::string title = recipeName + " Recipe";
+	ImGui::SetNextWindowPos(window_pos, ImGuiCond_Always, window_pos_pivot);
 	ImGui::Begin(title.c_str());
 	ImGui::SetWindowFontScale(Config::getFloat("Font_Scale"));
 	ImGui::BeginChild("Scrolling");
@@ -217,7 +228,7 @@ void UIScreenFactory::UIKitchenInstructions() {
 		ImGui::SetNextWindowCollapsed(false, 0);
 		kitchenFirst = false;
 	}
-	ImGui::Begin("Dungeon Instructions");
+	ImGui::Begin("Kitchen Instructions");
 	ImGui::SetWindowFontScale(Config::getFloat("Font_Scale"));
 	ImGui::Image((void*)(intptr_t)kitchen_waiting_texture, ImVec2(kitchen_waiting_width, kitchen_waiting_height));
 	ImGui::End();
