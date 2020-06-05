@@ -22,14 +22,24 @@ Burger_Model=assets/models/ingredients/Burger2.obj
 Vodka_Model=assets/models/ingredients/Vodka.obj
 
 // Individual burger part paths
-Burger_Top_Bun_Model=assets/models/burgerpieces/TopBun3.obj
-Burger_Bottom_Bun_Model=assets/models/burgerpieces/BotBun3.obj
-Burger_Bun_Model=assets/models/burgerpieces/BotBun3.obj
-Burger_Cheese_Model=assets/models/burgerpieces/Cheese3.obj
-Burger_Lettuce_Model=assets/models/burgerpieces/Lettuce3.obj
-Burger_Meat_Model=assets/models/burgerpieces/Meat3.obj
-Burger_Onion_Model=assets/models/burgerpieces/Onion3.obj
-Burger_Tomato_Model=assets/models/burgerpieces/Tomato3.obj
+//Burger_Top_Bun_Model=assets/models/burgerpieces/TopBun3.obj
+//Burger_Bottom_Bun_Model=assets/models/burgerpieces/BotBun3.obj
+//Burger_Bun_Model=assets/models/burgerpieces/BotBun3.obj
+//Burger_Cheese_Model=assets/models/burgerpieces/Cheese3.obj
+//Burger_Lettuce_Model=assets/models/burgerpieces/Lettuce3.obj
+//Burger_Meat_Model=assets/models/burgerpieces/Meat3.obj
+//Burger_Onion_Model=assets/models/burgerpieces/Onion3.obj
+//Burger_Tomato_Model=assets/models/burgerpieces/Tomato3.obj
+
+// SMOOTH individual burger part paths
+Burger_Top_Bun_Model=assets/models/smoothpieces/TopBun.obj
+Burger_Bottom_Bun_Model=assets/models/smoothpieces/BotBum.obj
+Burger_Bun_Model=assets/models/smoothpieces/BotBum.obj
+Burger_Cheese_Model=assets/models/smoothpieces/Cheese.obj
+Burger_Lettuce_Model=assets/models/smoothpieces/Lettuce.obj
+Burger_Meat_Model=assets/models/smoothpieces/Meat.obj
+Burger_Onion_Model=assets/models/smoothpieces/Onion.obj
+Burger_Tomato_Model=assets/models/smoothpieces/Tomato.obj
 
 // Cookware model paths
 Pot_Model=assets/models/cookware/Pot.obj
