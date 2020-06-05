@@ -262,6 +262,19 @@ void GameProcessor::process(unsigned int clientId, Game::ClientMessage clientMsg
 
                     // Change the modelPath, update the location
                     std::string ingredientName = currIngredient->getName();
+                    if (ingredientName == BUN)
+                    {
+                        // Randomize top bun vs bottom bun
+                        int randNum = rand() % 2;
+                        if (randNum < 1)
+                        {
+                            ingredientName = "Bottom_" + ingredientName;
+                        }
+                        else
+                        {
+                            ingredientName = "Top_" + ingredientName;
+                        }
+                    }
                     std::string updatedModelPath = Config::get("Burger_" + ingredientName + "_Model");
                     currIngredient->setModel(updatedModelPath);
 

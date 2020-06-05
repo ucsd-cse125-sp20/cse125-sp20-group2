@@ -115,12 +115,18 @@ void UIScreenFactory::UIGameInfo(int round, int32_t minutes, int32_t seconds) {
 }
 
 void UIScreenFactory::UIGameOver(bool gameWin) {
-	ImGui::SetNextWindowSize(ImVec2(io->DisplaySize.x-DISTANCE, io->DisplaySize.y-DISTANCE));
+	corner = 0;
+	window_pos = ImVec2(15*DISTANCE, 15*DISTANCE);
+	window_pos_pivot = ImVec2((corner & 1) ? 1.0f : 0.0f, (corner & 2) ? 1.0f : 0.0f);
+	ImGui::SetNextWindowPos(window_pos, ImGuiCond_Always, window_pos_pivot);
+	setWindowSize(ImVec2(Config::getFloat("End_Screen_Window_Width"), Config::getFloat("End_Screen_Window_Height")));
 	ImGui::Begin("TIME IS UP");
-	ImGui::SetWindowFontScale(Config::getFloat("Font_Scale"));
+	ImGui::SetWindowFontScale(Config::getFloat("End_Screen_Font_Scale"));
 	if (gameWin) {
 		ImGui::Text("You win!");
-		ImGui::Text("You are chosen as the next face of the burdgeoning communist fast-food industry");
+		ImGui::Text("You are chosen as the next face");
+		ImGui::Text("of the burdgeoning communist fast-food industry");
+		ImGui::Text("Comrade Gamsey is proud");
 	}
 	else {
 		ImGui::Text("A comrade outperformed you!");
