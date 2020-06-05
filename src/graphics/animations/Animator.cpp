@@ -45,8 +45,6 @@ void Animator::play(GameObject* object)
             else                                    currentState[object] = "Idle";
             break;
 
-        /// TODO: if applicable, add more animation cases
-
         // Default case - really should not happen
         default:
             std::cerr << "Bruh how did u get here" << std::endl;

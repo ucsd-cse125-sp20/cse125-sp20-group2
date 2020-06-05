@@ -117,6 +117,7 @@ void ClientGame::updateGameState()
                 uint32_t id = currMessage.object().id();
                 bool render = currMessage.object().render();
                 Game::Vector3 scale = currMessage.object().scale();
+                std::string modelPath = currMessage.object().modelpath();
 
                 GameObject* obj = NULL;
 
@@ -134,14 +135,39 @@ void ClientGame::updateGameState()
                     {
                         // Player object.
                         case Game::PLAYER: 
+                            
+                            // Create new player
                             obj = new Player(id); 
                             players[id] = ((Player*) obj);
+
+                            // Set client id based on model path
+                            if (modelPath.compare("assets/models/characters/characterblue.obj") == 0)
+                            {
+                                ((Player*)obj)->setClientID(0);
+                            }
+                            else if (modelPath.compare("assets/models/characters/charactergreen.obj") == 0)
+                            {
+                                ((Player*)obj)->setClientID(1);
+                            }
+                            else if (modelPath.compare("assets/models/characters/characterpurple.obj") == 0)
+                            {
+                                ((Player*)obj)->setClientID(2);
+                            }
+                            else if (modelPath.compare("assets/models/characters/characterred.obj") == 0)
+                            {
+                                ((Player*)obj)->setClientID(3);
+                            }
+                            else
+                            {
+                                std::cerr << "Object Error: Only 4 players are supported." << std::endl;
+                            }
                             break;
 
                         // Ingredient object.
-                        case Game::INGREDIENT: obj = new Ingredient(id); 
-                        ((Ingredient*)obj)->setQualityIndex(currMessage.object().quality());
-                        break;
+                        case Game::INGREDIENT: 
+                            obj = new Ingredient(id); 
+                            ((Ingredient*)obj)->setQualityIndex(currMessage.object().quality());
+                            break;
 
                         // Cookware object.
                         case Game::COOKWARE: obj = new Cookware(id); break;
@@ -161,9 +187,6 @@ void ClientGame::updateGameState()
                     // Add object to window
                     window.addObject(id, obj);
                 }
-
-                /// Set model based on the model path provided by the server
-                std::string modelPath = currMessage.object().modelpath();
 
                 // We got an updated model, set old model to null
                 if (modelPath.compare(obj->getModelPath()) != 0)

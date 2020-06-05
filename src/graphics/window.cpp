@@ -414,25 +414,39 @@ void Window::cameraViewUpdate() {
 
 void Window::handleAnimations(GameObject* object)
 {
-	///TODO: Only players are animated currently.
+	// Only players are animated currently.
 	if (object->getObjectType() != PLAYER) return;
 
 	// Make sure animator has animations loaded for the given object
 	if (animator.animsLoadedFor.find(object) == animator.animsLoadedFor.end() || !animator.isAnimsLoadedFor(object))
 	{
-		// Add animations for player
-		animator.addAnimation(object, "Waddle", new Animation("Waddle"));
-		animator.addAnimation(object, "Cook", new Animation("Cook"));
-		animator.addAnimation(object, "Idle", new Animation("Idle"));
 
 		// Different colors
-		/*switch (((Player*)object)->getClientID())
+		switch (((Player*)object)->getClientID())
 		{
 			case 0:
-				animator.addAnimation(object, "WADDLE", new Animation("Waddle"));
-		}*/
+				animator.addAnimation(object, "Waddle", new Animation("Blue_Waddle"));
+				animator.addAnimation(object, "Cook", new Animation("Blue_Cook"));
+				animator.addAnimation(object, "Idle", new Animation("Blue_Idle"));
+				break;
+			case 1:
+				animator.addAnimation(object, "Waddle", new Animation("Green_Waddle"));
+				animator.addAnimation(object, "Cook", new Animation("Green_Cook"));
+				animator.addAnimation(object, "Idle", new Animation("Green_Idle"));
+				break;
+			case 2:
+				animator.addAnimation(object, "Waddle", new Animation("Purple_Waddle"));
+				animator.addAnimation(object, "Cook", new Animation("Purple_Cook"));
+				animator.addAnimation(object, "Idle", new Animation("Purple_Idle"));
+				break;
+			case 3:
+				animator.addAnimation(object, "Waddle", new Animation("Red_Waddle"));
+				animator.addAnimation(object, "Cook", new Animation("Red_Cook"));
+				animator.addAnimation(object, "Idle", new Animation("Red_Idle"));
+				break;
+		}
 
-		animator.setCurrentAnimation(object, "Waddle");
+		animator.setCurrentAnimation(object, "Idle");
 
 		// Load animations as needed
 		animator.loadAnimations(object);
