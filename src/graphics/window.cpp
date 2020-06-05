@@ -22,6 +22,7 @@ Window::Window(int width = Config::getFloat("Window_Width"), int height = Config
 	///TODO: Need to add to Config?
 	this->camera = new Camera(Config::getVec3("Camera_Location"));
 	this->inventory = NULL;
+	this->vodkaActive = false;
 }
 
 
@@ -249,7 +250,7 @@ void Window::render()
 	deltaTime = currentFrame - lastFrame;
 	lastFrame = currentFrame;
 
-	// Make BG light gray
+	// // Make BG light gray
 	glClearColor(0.8f, 0.8f, 0.8f, 0.8f);
 
 	// Clear color + depth buffers
@@ -297,6 +298,12 @@ void Window::render()
 
 		// Get the color scaling
 		glm::vec4 colorScale = Config::getVec4("colorScale");
+
+		// Make screen red if vodka active
+		if (vodkaActive)
+		{
+			colorScale *= glm::vec4(1, 0.4, 0.4, 1);
+		}
 
 		// If object is an ingredient, color will scale up with quality.
 		if (obj->getObjectType() == INGREDIENT)

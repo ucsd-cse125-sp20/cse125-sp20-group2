@@ -168,7 +168,7 @@ void ClientGame::updateGameState()
                     glm::vec3 originalScale = obj->getScaleVec();
                     glm::vec3 newScale (scale.x(), scale.y(), scale.z());
 
-                    // Amazing coding practice here
+                    // Bigger player
                     if (originalScale.x < newScale.x) {
                         // Play soviet national anthem
                         music.stop();
@@ -176,7 +176,12 @@ void ClientGame::updateGameState()
                         music.setVolume(Config::getInt("Background_Music_Volume"));
                         music.setLoop(true);
                         music.play();
+
+                        // Turn screen red
+                        this->window.vodkaActive = true;
                     }
+                    
+                    // Smaller player
                     else if (originalScale.x > newScale.x && this->window.getRound() == DUNGEON_NUM)
                     {
                         // Background music
@@ -185,6 +190,9 @@ void ClientGame::updateGameState()
                         music.setVolume(Config::getInt("Background_Music_Volume"));
                         music.setLoop(true);
                         music.play();
+
+                        // Revert screen color
+                        this->window.vodkaActive = false;
                     } 
                 }
 

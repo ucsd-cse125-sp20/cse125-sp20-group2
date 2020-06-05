@@ -47,6 +47,8 @@ public:
     std::unordered_map<int, Ingredient*>* inventory;
     Ingredient* selectedIngredient = NULL;
 
+    bool vodkaActive;
+
     void render();
 
     /**
