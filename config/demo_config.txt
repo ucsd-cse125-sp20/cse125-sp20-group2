@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////
 
-/// THIS IS THE DEMO CONFIG
+/// THIS IS THE CONFIG
 
 // // // // // // // // 
 // DEMO RECIPE CHOICE
@@ -19,16 +19,27 @@ Meat_Model=assets/models/ingredients/meat_3.obj
 Onion_Model=assets/models/ingredients/Onion.obj
 Tomato_Model=assets/models/ingredients/tomato2.obj
 Burger_Model=assets/models/ingredients/Burger2.obj
+Vodka_Model=assets/models/ingredients/Vodka.obj
 
 // Individual burger part paths
-Burger_Top_Bun_Model=assets/models/burgerpieces/TopBun3.obj
-Burger_Bottom_Bun_Model=assets/models/burgerpieces/BotBun3.obj
-Burger_Bun_Model=assets/models/burgerpieces/BotBun3.obj
-Burger_Cheese_Model=assets/models/burgerpieces/Cheese3.obj
-Burger_Lettuce_Model=assets/models/burgerpieces/Lettuce3.obj
-Burger_Meat_Model=assets/models/burgerpieces/Meat3.obj
-Burger_Onion_Model=assets/models/burgerpieces/Onion3.obj
-Burger_Tomato_Model=assets/models/burgerpieces/Tomato3.obj
+//Burger_Top_Bun_Model=assets/models/burgerpieces/TopBun3.obj
+//Burger_Bottom_Bun_Model=assets/models/burgerpieces/BotBun3.obj
+//Burger_Bun_Model=assets/models/burgerpieces/BotBun3.obj
+//Burger_Cheese_Model=assets/models/burgerpieces/Cheese3.obj
+//Burger_Lettuce_Model=assets/models/burgerpieces/Lettuce3.obj
+//Burger_Meat_Model=assets/models/burgerpieces/Meat3.obj
+//Burger_Onion_Model=assets/models/burgerpieces/Onion3.obj
+//Burger_Tomato_Model=assets/models/burgerpieces/Tomato3.obj
+
+// SMOOTH individual burger part paths
+Burger_Top_Bun_Model=assets/models/smoothpieces/TopBun.obj
+Burger_Bottom_Bun_Model=assets/models/smoothpieces/BotBum.obj
+Burger_Bun_Model=assets/models/smoothpieces/BotBum.obj
+Burger_Cheese_Model=assets/models/smoothpieces/Cheese.obj
+Burger_Lettuce_Model=assets/models/smoothpieces/Lettuce.obj
+Burger_Meat_Model=assets/models/smoothpieces/Meat.obj
+Burger_Onion_Model=assets/models/smoothpieces/Onion.obj
+Burger_Tomato_Model=assets/models/smoothpieces/Tomato.obj
 
 // Cookware model paths
 Pot_Model=assets/models/cookware/Pot.obj
@@ -52,12 +63,15 @@ Tile_Model=assets/models/terrain/tile.obj
 Tile4_Model=assets/models/terrain/tile4.obj
 Tile9_Model=assets/models/terrain/tile9.obj
 Floor_Model=assets/models/terrain/floor.obj
+Cage_Bar_Model=assets/models/terrain/rustycage_bars.obj
+Cage_Topbot_Model=assets/models/terrain/rustycage_topbot.obj
 
 // Character model paths
 Player_0=assets/models/characters/characterblue.obj
 Player_1=assets/models/characters/charactergreen.obj
 Player_2=assets/models/characters/characterpurple.obj
 Player_3=assets/models/characters/characterred.obj
+Winner=assets/models/ingredients/Winner.obj
 
 // Etc model paths
 Player_Model=assets/models/old/Basic_Character_Model.obj
@@ -81,10 +95,6 @@ Wall_Scaling=1,1,1
 
 // Ingredients
 Ingredient_Scaling=1,1,1
-
-// // //
-// TODO: use this when placing burger pieces on the plate
-// // //
 
 // Burger piece scaling
 Burger_Piece_Scaling=2,2,2
@@ -131,8 +141,9 @@ Ingredient_Rotation_Speed=0.05
 // // // // // // // // 
 // SOUND VARIABLES
 // // //
-Background_Music_Volume=20
-Sound_Effect_Volume=50
+Background_Music_Volume=2
+Sound_Effect_Volume=40
+Beep_Sound_Effect_Volume=20
 
 ////////////////////////////////////////////////////////////////////////////
 
@@ -168,15 +179,16 @@ Good_Quality_Color_Modifier=2.5,2,0.8,1
 Kitchen_Round_Time=150
 Kitchen_Waiting_Round_Time=15
 Dungeon_Round_Time=150
-Lobby_Round_Time=15
+Lobby_Round_Time=10
 Dungeon_Waiting_Round_Time=15
 
 Cook_Event_Time=5
 
 // multipliers
 Points_Multi=2
-Base_Correct_Ingredient_Score=10
 Individual_Instruction_Points=50
+Base_Correct_Ingredient_Score=10
+Player_Size_Increase=4
 
 ////////////////////////////////////////////////////////////////////////////
 
@@ -186,8 +198,8 @@ Individual_Instruction_Points=50
 
 // Etc
 Window_Title=Comrade's Kitchen
-Window_Width=900
-Window_Height=800
+Window_Width=1920
+Window_Height=1080
 
 Score_Window_Height=80
 Score_Window_Width=100
@@ -195,8 +207,8 @@ Score_Window_Width=100
 Game_Info_Window_Width=150
 Game_Info_Window_Height=100
 
-End_Screen_Window_Width=150
-End_Screen_Window_Height=150
+End_Screen_Window_Width=700
+End_Screen_Window_Height=300
 
 Font_Scale=1
 Score_Font_Scale=1.4
@@ -225,11 +237,12 @@ Dungeon_Wall_Scale_1=94.7,1,0.33
 // Adjusted wall boundaries used for ingredient spawning
 Dungeon_Lower_X=-44
 Dungeon_Upper_X=44
-Dungeon_Lower_Z=-15
-Dungeon_Upper_Z=11
+Dungeon_Lower_Z=-29
+Dungeon_Upper_Z=29
 
 // Ingredient spawn rate (in seconds)
 Dungeon_Ingredient_Spawn_Rate=1.0;
+Vodka_Chance=10
 
 // Left and right walls (external)
 Dungeon_Wall_Pos_2=45,0,0
@@ -266,6 +279,19 @@ Kitchen_Spawn_0=-1,0,1
 Kitchen_Spawn_1=1,0,1
 Kitchen_Spawn_2=-1,0,-1
 Kitchen_Spawn_3=1,0,-1
+
+Cell_Wall_Count=4
+Cell_Scale=3
+Cell_Wall_0=6,0,-30
+Cell_Wall_1=-6,0,-30
+Cell_Wall_2=0,0,-36
+Cell_Wall_3=0,0,-24
+Cell_Base=0,-0.5,-30
+
+Cell_Spawn_Count=3
+Cell_Wall_Spawn_0=1,-0.5,-29
+Cell_Wall_Spawn_1=-1,-0.5,-29
+Cell_Wall_Spawn_2=0,-0.5,-28
 
 // Plate Initial and Variation
 Plate_Init_Spawn=-15,0,-13

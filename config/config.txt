@@ -67,10 +67,11 @@ Cage_Bar_Model=assets/models/terrain/rustycage_bars.obj
 Cage_Topbot_Model=assets/models/terrain/rustycage_topbot.obj
 
 // Character model paths
-Player_0=assets/models/characters/characterblue.obj
-Player_1=assets/models/characters/charactergreen.obj
-Player_2=assets/models/characters/characterpurple.obj
-Player_3=assets/models/characters/characterred.obj
+Player_0=assets/models/characters/Blue.obj
+Player_1=assets/models/characters/Green.obj
+Player_2=assets/models/characters/Purple.obj
+Player_3=assets/models/characters/Red.obj
+Winner=assets/models/ingredients/Winner.obj
 
 // Etc model paths
 Player_Model=assets/models/old/Basic_Character_Model.obj
@@ -141,7 +142,7 @@ Ingredient_Rotation_Speed=0.05
 // SOUND VARIABLES
 // // //
 Background_Music_Volume=2
-Sound_Effect_Volume=50
+Sound_Effect_Volume=40
 Beep_Sound_Effect_Volume=20
 
 ////////////////////////////////////////////////////////////////////////////
@@ -175,10 +176,10 @@ Bad_Quality_Color_Modifier=0.2,0.8,0.3,1
 Good_Quality_Color_Modifier=2.5,2,0.8,1
 
 // Round time (in seconds)
-Kitchen_Round_Time=10
+Kitchen_Round_Time=150
 Kitchen_Waiting_Round_Time=15
-Dungeon_Round_Time=10
-Lobby_Round_Time=15
+Dungeon_Round_Time=150
+Lobby_Round_Time=10
 Dungeon_Waiting_Round_Time=15
 
 Cook_Event_Time=5
@@ -241,7 +242,7 @@ Dungeon_Upper_Z=29
 
 // Ingredient spawn rate (in seconds)
 Dungeon_Ingredient_Spawn_Rate=1.0;
-Vodka_Chance=5
+Vodka_Chance=10
 
 // Left and right walls (external)
 Dungeon_Wall_Pos_2=45,0,0

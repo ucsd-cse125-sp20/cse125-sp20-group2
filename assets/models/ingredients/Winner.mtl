@@ -1,0 +1,753 @@
+newmtl _lambert2SG2
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd characterColor3.png
+Ni 1.00
+newmtl _lambert3SG4
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd characterColor3.png
+Ni 1.00
+newmtl _lambert4SG4
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd characterColor3.png
+Ni 1.00
+newmtl lambert3SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd BunColor.png
+Ni 1.00
+newmtl lambert4SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd BunColor.png
+Ni 1.00
+newmtl lambert7SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd BurgerLettuceColor.png
+Ni 1.00
+newmtl lambert8SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd BurgerTomatoColor.png
+Ni 1.00
+newmtl lambert9SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd BurgerTomatoColor.png
+Ni 1.00
+newmtl lambert10SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd BurgerTomatoColor.png
+Ni 1.00
+newmtl lambert11SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd BurgerCheeseColor.png
+Ni 1.00
+newmtl lambert13SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd BurgerMeatColor.png
+Ni 1.00
+newmtl lambert14SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__lambert3SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd BunColor.png
+Ni 1.00
+newmtl pasted__lambert4SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd BunColor.png
+Ni 1.00
+newmtl pasted__lambert7SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd BurgerLettuceColor.png
+Ni 1.00
+newmtl pasted__lambert8SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd BurgerTomatoColor.png
+Ni 1.00
+newmtl pasted__lambert9SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd BurgerTomatoColor.png
+Ni 1.00
+newmtl pasted__lambert10SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd BurgerTomatoColor.png
+Ni 1.00
+newmtl pasted__lambert11SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd BurgerCheeseColor.png
+Ni 1.00
+newmtl pasted__lambert13SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd BurgerMeatColor.png
+Ni 1.00
+newmtl pasted__lambert14SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__lambert14SG1
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__lambert14SG2
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__lambert14SG3
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__lambert14SG8
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__pasted__lambert3SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd BunColor.png
+Ni 1.00
+newmtl pasted__pasted__lambert3SG2
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd BunColor.png
+Ni 1.00
+newmtl pasted__pasted__lambert3SG4
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd BunColor.png
+Ni 1.00
+newmtl pasted__pasted__lambert4SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd BunColor.png
+Ni 1.00
+newmtl pasted__pasted__lambert4SG2
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd BunColor.png
+Ni 1.00
+newmtl pasted__pasted__lambert4SG4
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd BunColor.png
+Ni 1.00
+newmtl pasted__pasted__lambert7SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd BurgerLettuceColor.png
+Ni 1.00
+newmtl pasted__pasted__lambert7SG2
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd BurgerLettuceColor.png
+Ni 1.00
+newmtl pasted__pasted__lambert7SG4
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd BurgerLettuceColor.png
+Ni 1.00
+newmtl pasted__pasted__lambert8SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd BurgerTomatoColor.png
+Ni 1.00
+newmtl pasted__pasted__lambert8SG2
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd BurgerTomatoColor.png
+Ni 1.00
+newmtl pasted__pasted__lambert8SG4
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd BurgerTomatoColor.png
+Ni 1.00
+newmtl pasted__pasted__lambert9SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd BurgerTomatoColor.png
+Ni 1.00
+newmtl pasted__pasted__lambert9SG2
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd BurgerTomatoColor.png
+Ni 1.00
+newmtl pasted__pasted__lambert9SG4
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd BurgerTomatoColor.png
+Ni 1.00
+newmtl pasted__pasted__lambert10SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd BurgerTomatoColor.png
+Ni 1.00
+newmtl pasted__pasted__lambert10SG2
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd BurgerTomatoColor.png
+Ni 1.00
+newmtl pasted__pasted__lambert10SG4
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd BurgerTomatoColor.png
+Ni 1.00
+newmtl pasted__pasted__lambert11SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd BurgerCheeseColor.png
+Ni 1.00
+newmtl pasted__pasted__lambert11SG2
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd BurgerCheeseColor.png
+Ni 1.00
+newmtl pasted__pasted__lambert11SG4
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd BurgerCheeseColor.png
+Ni 1.00
+newmtl pasted__pasted__lambert13SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd BurgerMeatColor.png
+Ni 1.00
+newmtl pasted__pasted__lambert13SG2
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd BurgerMeatColor.png
+Ni 1.00
+newmtl pasted__pasted__lambert13SG4
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd BurgerMeatColor.png
+Ni 1.00
+newmtl pasted__pasted__lambert14SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__pasted__lambert14SG1
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__pasted__lambert14SG2
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__pasted__lambert14SG3
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__pasted__lambert14SG5
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__pasted__lambert14SG10
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__pasted__lambert14SG12
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__pasted__lambert14SG14
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__pasted__pasted__lambert3SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd BunColor.png
+Ni 1.00
+newmtl pasted__pasted__pasted__lambert4SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd BunColor.png
+Ni 1.00
+newmtl pasted__pasted__pasted__lambert7SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd BurgerLettuceColor.png
+Ni 1.00
+newmtl pasted__pasted__pasted__lambert8SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd BurgerTomatoColor.png
+Ni 1.00
+newmtl pasted__pasted__pasted__lambert9SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd BurgerTomatoColor.png
+Ni 1.00
+newmtl pasted__pasted__pasted__lambert10SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd BurgerTomatoColor.png
+Ni 1.00
+newmtl pasted__pasted__pasted__lambert11SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd BurgerCheeseColor.png
+Ni 1.00
+newmtl pasted__pasted__pasted__lambert13SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd BurgerMeatColor.png
+Ni 1.00
+newmtl pasted__pasted__pasted__lambert14SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__pasted__pasted__lambert14SG1
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__pasted__pasted__lambert14SG2
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__pasted__pasted__lambert14SG3
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__pasted__pasted__lambert14SG4
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__pasted__pasted__lambert14SG6
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__pasted__pasted__lambert14SG9
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__pasted__pasted__lambert14SG11
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__pasted__pasted__lambert14SG16
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__pasted__pasted__lambert14SG17
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__pasted__pasted__lambert14SG18
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__pasted__pasted__lambert14SG19
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__pasted__pasted__lambert14SG24
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__pasted__pasted__lambert14SG26
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__pasted__pasted__lambert14SG27
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__pasted__pasted__lambert14SG28
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__pasted__pasted__lambert14SG29
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__pasted__pasted__pasted__lambert14SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__pasted__pasted__pasted__lambert14SG1
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__pasted__pasted__pasted__lambert14SG2
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__pasted__pasted__pasted__lambert14SG3
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__pasted__pasted__pasted__lambert14SG4
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__pasted__pasted__pasted__lambert14SG6
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__pasted__pasted__pasted__lambert14SG9
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__pasted__pasted__pasted__lambert14SG11
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__pasted__pasted__pasted__lambert14SG13
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__pasted__pasted__pasted__lambert14SG18
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__pasted__pasted__pasted__pasted__lambert14SG3
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__pasted__pasted__pasted__pasted__lambert14SG4
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__pasted__pasted__pasted__pasted__lambert14SG6
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__pasted__pasted__pasted__pasted__lambert14SG9
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__pasted__pasted__pasted__pasted__lambert14SG10
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__pasted__pasted__pasted__pasted__lambert14SG12
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__pasted__pasted__pasted__pasted__lambert14SG15
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__pasted__pasted__pasted__pasted__lambert14SG17
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__pasted__pasted__pasted__pasted__lambert14SG18
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__pasted__pasted__pasted__pasted__lambert14SG20
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__pasted__pasted__pasted__pasted__pasted__lambert14SG3
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__pasted__pasted__pasted__pasted__pasted__lambert14SG4
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl pasted__pasted__pasted__pasted__pasted__pasted__lambert14SG6
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OnionColor.png
+Ni 1.00
+newmtl phong1SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd SAWCW_color.png
+Ni 1.00
+Ks 0.50 0.50 0.50
+Ns 18.00
+newmtl phong5SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd vodka_color.PNG
+Ni 1.00
+Ks 0.50 0.50 0.50
+Ns 18.00
