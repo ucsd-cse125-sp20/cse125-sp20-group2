@@ -44,6 +44,8 @@ public:
     void reset();
 
 private:
+    int progress;
+    int progressWait;
     bool loaded;
     unsigned int frameCount;
     unsigned int currentFrameNumber;

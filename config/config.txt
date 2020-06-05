@@ -145,6 +145,9 @@ Ingredient_Rotation_Speed=0.05
 // ANIMATION VARIABLES
 // // //
 
+// Animation framerate (model change every n frames)
+Animation_Frame_Rate=3
+
 // The amount of frames before walking animation is cancelled
 Waddle_Animation_End_Delay=10
 
