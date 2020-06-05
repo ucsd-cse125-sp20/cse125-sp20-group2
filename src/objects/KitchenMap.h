@@ -12,6 +12,7 @@ class KitchenMap : public Map {
         std::vector<Cookware*> cookwareObjects;
         std::vector<Table*> tableList;
         std::vector<Plate*> plateObjects;
+        std::vector<glm::vec3> prisonLocations;
 
         void toggleRender();
         void setRender(bool render);

@@ -71,4 +71,9 @@ class GameProcessor
          * Used to spawn another ingredient on the map randomly
          * */
         static Ingredient* spawnIngredient(GameState* gameState, Recipe* recipe);
+
+        /**
+         * Used to move the losing players to the prison on transition to end round
+         * */
+        static void movePlayersPrison(GameState* gameState);
 };

@@ -127,6 +127,7 @@ void ServerGame::process(std::unordered_map<unsigned int, std::vector<Game::Clie
                 }
                 case Game::RoundInfo::END:
                 {
+                    GameProcessor::process(clientId, msg, this);
                     break;
                 }
                 default:
@@ -233,16 +234,29 @@ void ServerGame::update()
         {
             std::cout << "spawning new ingredient because time is over" << std::endl;
 
-            // Get a random ingredient
-            std::vector<Ingredient*> & ingredientList = this->gameState.recipe->ingredientList;
-            int randomIdx = rand() % ingredientList.size();
-            Ingredient* currIngredient = ingredientList.at(randomIdx);
+            int randNum = rand() % 100;
+            Ingredient* ingredientCopy = NULL;
 
-            // Make a copy
-            Ingredient* ingredientCopy = RecipeBuilder::createIngredient(currIngredient->getName());
+            // Spawn powerup
+            if (randNum < Config::getInt("Vodka_Chance"))
+            {
+                ingredientCopy = RecipeBuilder::createIngredient(VODKA);
+                ingredientCopy->setStatus(IngredientStatus::Delicious);
+            }
+            // Spawn ingredient
+            else
+            {
+                // Get random ingredient
+                std::vector<Ingredient*> & ingredientList = this->gameState.recipe->ingredientList;
+                int randomIdx = rand() % ingredientList.size();
+                Ingredient* currIngredient = ingredientList.at(randomIdx);
 
-            // Random quality index
-            ingredientCopy->randomizeQualityIndex();
+                // Make a copy
+                ingredientCopy = RecipeBuilder::createIngredient(currIngredient->getName());
+
+                // Random quality index
+                ingredientCopy->randomizeQualityIndex();
+            }
 
             // set spawn location
             int lowerX = this->gameState.dungeonMap->lowerX;
@@ -250,16 +264,9 @@ void ServerGame::update()
             int lowerZ = this->gameState.dungeonMap->lowerZ;
             int upperZ = this->gameState.dungeonMap->upperZ;
 
-            std::cout << "ingredient id: " + std::to_string(ingredientCopy->getID()) << std::endl;
-
-            // Give ingredient initial position
-            ingredientCopy->setPosition(glm::vec3(36,0,-6));
-
             bool isColliding = true;
             while (isColliding)
-            {
-                std::cout << "randomly generating location in ingredient" << std::endl;
-                
+            {   
                 // Choose a position
                 int x = (rand() % (upperX - lowerX + 1)) + lowerX;
                 int z = (rand() % (upperZ - lowerZ + 1)) + lowerZ;
@@ -271,18 +278,11 @@ void ServerGame::update()
                 {
                     if (ingredientCopy->isColliding(obj)) 
                     {
-                        std::cout << "type: " + obj->getObjectType() << std::endl;
-                        std::cout << "colliding with the wall for some reason" << std::endl;
                         isColliding = true;
                         break;
                     }
                 }
             }
-
-            // std::cout << ingredientCopy->getPosition() << std::endl; // test if vec3 is overrided
-            std::cout << "ingredient name: " + ingredientCopy->getName() << std::endl;
-            std::cout << "x value for ingredient: " + std::to_string(ingredientCopy->getPosition().x) << std::endl;
-            std::cout << "z value for ingredient: " + std::to_string(ingredientCopy->getPosition().z) << std::endl;
 
             // Add to gameState, add to pending messages
             gameState.addIngredient(ingredientCopy);
@@ -293,6 +293,29 @@ void ServerGame::update()
             auto instantTime = std::chrono::high_resolution_clock::now();
             auto deltaTime = this->gameState.dungeonMap->timeDelta;
             this->gameState.dungeonMap->ingredientSpawnTime = instantTime + deltaTime;
+        }
+    }
+
+    // Check power up times, remove if over
+    for (auto it = this->gameState.clientPowerUpTimes.begin(); it != this->gameState.clientPowerUpTimes.end();)
+    {
+        auto endTime = it->second;
+        auto nowTime = std::chrono::high_resolution_clock::now();
+
+        // Power up is over, remove from map
+        if (nowTime > endTime)
+        {
+            std::cout << "time is over, removing power up" << std::endl;
+            Player* player = this->gameState.getPlayerObject(it->first);
+            player->applyScale(glm::vec3(1));
+            this->gameState.clientPowerUpTimes.erase(it++);
+
+            Game::ServerMessage* serverMsg = MessageBuilder::toServerMessage(player);
+            this->messages.push_back(serverMsg);
+        }
+        else
+        {
+            ++it;
         }
     }
 }
@@ -435,9 +458,13 @@ void ServerGame::onRoundChange()
             // Send instructions from recipe to clients
             int i = 0;
             for(auto inst : this->gameState.recipe->instructionList ) {
-                Game::ServerMessage* msg = MessageBuilder::toInstructionInfo(inst, i);
-                this->server.sendToAll(*msg);
-                delete msg;
+                Game::ServerMessage* msg = NULL;
+
+                if(i == 0)
+                    msg = MessageBuilder::toInstructionInfo(inst, i,  this->gameState.recipe->name);
+                else
+                    msg = MessageBuilder::toInstructionInfo(inst, i);
+                this->messages.push_back(msg);
                 i++;
             }
             // EndProcessor::initGameState(&this->gameState, this);

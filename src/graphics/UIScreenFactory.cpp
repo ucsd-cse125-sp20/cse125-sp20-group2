@@ -118,8 +118,15 @@ void UIScreenFactory::UIGameOver(bool gameWin) {
 	ImGui::SetNextWindowSize(ImVec2(io->DisplaySize.x-DISTANCE, io->DisplaySize.y-DISTANCE));
 	ImGui::Begin("TIME IS UP");
 	ImGui::SetWindowFontScale(Config::getFloat("Font_Scale"));
-	if (gameWin) ImGui::Text("You win! You are chosen as the next face of the burdgeoning communist fast-food industry");
-	else ImGui::Text("A comrade outperformed you and slackers like you in the glorious communist state are an enemy of the people. You were sent to a gulag to live out your days doing hard labor. Maybe you could still fulfill the prison labor quota.");
+	if (gameWin) {
+		ImGui::Text("You win!");
+		ImGui::Text("You are chosen as the next face of the burdgeoning communist fast-food industry");
+	}
+	else {
+		ImGui::Text("A comrade outperformed you!");
+		ImGui::Text("You will live your life in the gulag");
+	}
+
 	ImGui::End();
 }
 
@@ -134,27 +141,31 @@ Ingredient* UIScreenFactory::UIButtonInventory(std::unordered_map<int, Ingredien
 	ImGui::SetWindowFontScale(Config::getFloat("Font_Scale"));
 	std::unordered_map<int, Ingredient*>::iterator it = map->begin();
 	ImGui::BeginChild("Scrolling");
+	int i = 1;
 	while (it != map->end())
 	{
+		std::string buttonText = std::to_string(i) + ". " + it->second->getDetailedName();
 		if (this->highlighted == it->second) {
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(ImColor(255, 0, 0)));
-			if( ImGui::Button(it->second->getDetailedName().c_str()) ) {
+			if( ImGui::Button(buttonText.c_str()) ) {
 				ret = it->second;
 				std::cout<<"Ingredient clicked"<<std::endl;
 				this->highlighted = it->second;
 			}
 			ImGui::PopStyleColor();
 		}
-		else if (ImGui::Button(it->second->getDetailedName().c_str())) {
+		else if (ImGui::Button(buttonText.c_str())) {
 			ret = it->second;
 			std::cout<<"Ingredient clicked"<<std::endl;
 			this->highlighted = it->second;
 		}
 		it++;
+		i++;
 		
 	}
 	ImGui::EndChild();
 	ImGui::End();
+
 	return ret;
 }
 
@@ -200,12 +211,21 @@ void UIScreenFactory::UIDungeonInstructions() {
 	ImGui::End();
 }
 
-void UIScreenFactory::UIInstructionSet(std::vector<std::string> instructions ) {
-	ImGui::Begin("Recipe Instructions");
+void UIScreenFactory::UIInstructionSet(std::vector<std::string> instructions, std::string recipeName ) {
+	corner = 2;
+	window_pos = ImVec2((corner & 1) ? io->DisplaySize.x - DISTANCE : DISTANCE, (corner & 2) ? io->DisplaySize.y - 5*DISTANCE : DISTANCE);
+	window_pos_pivot = ImVec2((corner & 1) ? 1.0f : 0.0f, (corner & 2) ? 1.0f : 0.0f);
+	std::string title = recipeName + " Recipe";
+	ImGui::SetNextWindowPos(window_pos, ImGuiCond_Always, window_pos_pivot);
+	ImGui::Begin(title.c_str());
 	ImGui::SetWindowFontScale(Config::getFloat("Font_Scale"));
 	ImGui::BeginChild("Scrolling");
+	int i = 1;
+	std::string buttonText;
 	for( auto str: instructions ) {
-		UIText(str);
+		buttonText = std::to_string(i) + ". " + str;
+		UIText(buttonText);
+		i++;
 	}
 	ImGui::EndChild();
 	ImGui::End();
@@ -216,7 +236,7 @@ void UIScreenFactory::UIKitchenInstructions() {
 		ImGui::SetNextWindowCollapsed(false, 0);
 		kitchenFirst = false;
 	}
-	ImGui::Begin("Dungeon Instructions");
+	ImGui::Begin("Kitchen Instructions");
 	ImGui::SetWindowFontScale(Config::getFloat("Font_Scale"));
 	ImGui::Image((void*)(intptr_t)kitchen_waiting_texture, ImVec2(kitchen_waiting_width, kitchen_waiting_height));
 	ImGui::End();

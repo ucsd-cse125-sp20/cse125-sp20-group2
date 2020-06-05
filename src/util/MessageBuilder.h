@@ -186,6 +186,18 @@ public:
       return serverMsg;
   }
 
+  static Game::ServerMessage* toInstructionInfo(Instruction* inst, int index, std::string recipeName) 
+  {
+      Game::InstructionInfo* iinfo = new Game::InstructionInfo();
+      iinfo->set_index(index);
+      iinfo->set_instructionmsg(inst->instr);
+      iinfo->set_recipename(recipeName);
+
+      Game::ServerMessage* serverMsg = new Game::ServerMessage();
+      serverMsg->set_allocated_instruction(iinfo);
+      return serverMsg;
+  }
+
   /*
   * Create a server message for time update
   * */

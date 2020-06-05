@@ -63,6 +63,7 @@ void ClientGame::runGame()
     // Background music
     music.openFromFile("assets/audio/8Bit_Paradise.ogg");
     music.setVolume(Config::getInt("Background_Music_Volume"));
+    music.setLoop(true);
     music.play();
 
     while(!window.isClosed) 
@@ -200,6 +201,43 @@ void ClientGame::updateGameState()
 
                 // Set object parameters
                 obj->setRotation(rotation);
+
+                // The player is being scaled up which means the player picked up the vodka
+                if (currMessage.object().has_scale() && currMessage.object().id() == this->objectId)
+                {
+                    glm::vec3 originalScale = obj->getScaleVec();
+                    glm::vec3 newScale (scale.x(), scale.y(), scale.z());
+
+                    // Bigger player
+                    if (originalScale.x < newScale.x) {
+                        // Play soviet national anthem
+                        music.stop();
+                        music.openFromFile("assets/audio/SovietAnthem.ogg");
+                        music.setVolume(Config::getInt("Background_Music_Volume"));
+                        music.setLoop(true);
+                        music.play();
+
+                        // Turn screen red
+                        this->window.vodkaActive = true;
+                    }
+
+                    // Smaller player
+                    else if (originalScale.x > newScale.x)
+                    {
+                        if (this->window.getRound() == DUNGEON_NUM) 
+                        {
+                            // Background music
+                            music.stop();
+                            music.openFromFile("assets/audio/8Bit_Paradise.ogg");
+                            music.setVolume(Config::getInt("Background_Music_Volume"));
+                            music.setLoop(true);
+                            music.play();
+                        }
+                        // Revert screen color
+                        this->window.vodkaActive = false; 
+                    }
+                }
+
                 if (currMessage.object().has_scale()) obj->applyScale(glm::vec3(scale.x(), scale.y(), scale.z()));
                 obj->setRender(render);
                 obj->prevPosition = obj->getPosition();
@@ -276,15 +314,46 @@ void ClientGame::updateGameState()
 
             case Game::ServerMessage::EventCase::kValidCook:
             {
-                std::cout << "got valid event from server" << std::endl;
+                std::cout << "got valid cooking event from server" << std::endl;
+                std::cout<<currMessage.validcook().message().at(0)<<std::endl;
                 switch(currMessage.validcook().message().at(0)) {
-                    case 'C': soundBuffer.loadFromFile("assets/audio/Cutting.wav"); break;
-                    case 'F': soundBuffer.loadFromFile("assets/audio/Frying.wav"); break;
-                    case 'B': soundBuffer.loadFromFile("assets/audio/PotBoiling.wav"); break;
-                    default: soundBuffer.loadFromFile("assets/audio/Dish.wav"); break;
+                    case 'C': { 
+                        soundBuffer.loadFromFile("assets/audio/Cutting.wav"); 
+                        soundEffect.setBuffer(soundBuffer);
+                        soundEffect.setVolume(Config::getFloat("Sound_Effect_Volume"));
+                        break;
+                    }
+                    case 'F': {
+                        soundBuffer.loadFromFile("assets/audio/Frying.wav"); 
+                        soundEffect.setBuffer(soundBuffer);
+                        soundEffect.setVolume(Config::getFloat("Sound_Effect_Volume"));
+                        break;
+                    }
+                    case 'B': {
+                        soundBuffer.loadFromFile("assets/audio/PotBoiling.wav"); 
+                        soundEffect.setBuffer(soundBuffer);
+                        soundEffect.setVolume(Config::getFloat("Sound_Effect_Volume"));
+                        break; 
+                    }
+                    case 'P': {
+                        soundBuffer.loadFromFile("assets/audio/Dish.wav"); 
+                        soundEffect.setBuffer(soundBuffer);
+                        soundEffect.setVolume(Config::getFloat("Sound_Effect_Volume"));
+                        break; 
+                    }
+                    default: {
+                        switch(rand()%6) {
+                            case 0: soundBuffer.loadFromFile("assets/audio/nyet1.wav"); break;
+                            case 1: soundBuffer.loadFromFile("assets/audio/nyet2.wav"); break;
+                            case 2: soundBuffer.loadFromFile("assets/audio/nyet3.wav"); break;
+                            case 3: soundBuffer.loadFromFile("assets/audio/nyet4.wav"); break;
+                            case 4: soundBuffer.loadFromFile("assets/audio/nyet5.wav"); break;
+                            case 5: soundBuffer.loadFromFile("assets/audio/nyet6.wav"); break;
+                        }
+                        soundEffect.setBuffer(soundBuffer);
+                        soundEffect.setVolume(Config::getFloat("Sound_Effect_Volume"));
+                    }
                 }
-                soundEffect.setBuffer(soundBuffer);
-                soundEffect.setVolume(Config::getFloat("Sound_Effect_Volume"));
                 soundEffect.play();
                 break;   
             }
@@ -310,6 +379,8 @@ void ClientGame::updateGameState()
             {
                 int index = currMessage.instruction().index();
                 std::string msg = currMessage.instruction().instructionmsg();
+                if(currMessage.instruction().has_recipename() )
+                    window.recipeName = currMessage.instruction().recipename();
                 window.instructionStrings.insert(window.instructionStrings.begin()+index, msg);
                 break;
             }
@@ -328,6 +399,7 @@ void ClientGame::updateGameState()
                     music.stop();
                     music.openFromFile("assets/audio/Cook.ogg");
                     music.setVolume(Config::getInt("Background_Music_Volume"));
+                    music.setLoop(true);
                     music.play();
                 }
                 std::cout << " received round update message " << currMessage.DebugString() << std::endl;
@@ -345,6 +417,7 @@ void ClientGame::updateGameState()
                     window.gameWin = true;
                     music.stop();
                     music.openFromFile("assets/audio/SovietAnthem.ogg");
+                    music.setLoop(true);
                     music.setVolume(Config::getInt("Background_Music_Volume"));
                     music.play();
                 }
@@ -352,6 +425,7 @@ void ClientGame::updateGameState()
                     window.gameWin = false;
                     music.stop();
                     music.openFromFile("assets/audio/TheDustyAttic.ogg");
+                    music.setLoop(true);
                     music.setVolume(Config::getInt("Background_Music_Volume"));
                     music.play();
                 }

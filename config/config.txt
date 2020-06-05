@@ -3,6 +3,11 @@
 /// THIS IS THE CONFIG
 
 // // // // // // // // 
+// DEMO RECIPE CHOICE
+// // //
+Recipe_Choice=2
+
+// // // // // // // // 
 // MODEL PATHS
 // // //
 
@@ -14,6 +19,7 @@ Meat_Model=assets/models/ingredients/meat_3.obj
 Onion_Model=assets/models/ingredients/Onion.obj
 Tomato_Model=assets/models/ingredients/tomato2.obj
 Burger_Model=assets/models/ingredients/Burger2.obj
+Vodka_Model=assets/models/ingredients/Vodka.obj
 
 // Individual burger part paths
 Burger_Top_Bun_Model=assets/models/burgerpieces/TopBun3.obj
@@ -47,6 +53,8 @@ Tile_Model=assets/models/terrain/tile.obj
 Tile4_Model=assets/models/terrain/tile4.obj
 Tile9_Model=assets/models/terrain/tile9.obj
 Floor_Model=assets/models/terrain/floor.obj
+Cage_Bar_Model=assets/models/terrain/rustycage_bars.obj
+Cage_Topbot_Model=assets/models/terrain/rustycage_topbot.obj
 
 // Character model paths
 Player_0=assets/models/characters/characterblue.obj
@@ -349,6 +357,7 @@ Red_Cook_20=assets/models/animations/Red_Cook/20.obj
 
 Background_Music_Volume=2
 Sound_Effect_Volume=50
+Beep_Sound_Effect_Volume=20
 
 ////////////////////////////////////////////////////////////////////////////
 
@@ -382,16 +391,18 @@ Good_Quality_Color_Modifier=2.5,2,0.8,1
 
 // Round time (in seconds)
 Kitchen_Round_Time=150
-Kitchen_Waiting_Round_Time=3
-Dungeon_Round_Time=5
-Lobby_Round_Time=5
-Dungeon_Waiting_Round_Time=3
+Kitchen_Waiting_Round_Time=15
+Dungeon_Round_Time=150
+Lobby_Round_Time=15
+Dungeon_Waiting_Round_Time=15
 
 Cook_Event_Time=5
 
 // multipliers
 Points_Multi=2
 Individual_Instruction_Points=50
+Base_Correct_Ingredient_Score=10
+Player_Size_Increase=4
 
 ////////////////////////////////////////////////////////////////////////////
 
@@ -436,11 +447,12 @@ Dungeon_Wall_Scale_1=94.7,1,0.33
 // Adjusted wall boundaries used for ingredient spawning
 Dungeon_Lower_X=-44
 Dungeon_Upper_X=44
-Dungeon_Lower_Z=-15
-Dungeon_Upper_Z=11
+Dungeon_Lower_Z=-29
+Dungeon_Upper_Z=29
 
 // Ingredient spawn rate (in seconds)
 Dungeon_Ingredient_Spawn_Rate=1.0;
+Vodka_Chance=5
 
 // Left and right walls (external)
 Dungeon_Wall_Pos_2=45,0,0
@@ -477,6 +489,19 @@ Kitchen_Spawn_0=-1,0,1
 Kitchen_Spawn_1=1,0,1
 Kitchen_Spawn_2=-1,0,-1
 Kitchen_Spawn_3=1,0,-1
+
+Cell_Wall_Count=4
+Cell_Scale=3
+Cell_Wall_0=6,0,-30
+Cell_Wall_1=-6,0,-30
+Cell_Wall_2=0,0,-36
+Cell_Wall_3=0,0,-24
+Cell_Base=0,-0.5,-30
+
+Cell_Spawn_Count=3
+Cell_Wall_Spawn_0=1,-0.5,-29
+Cell_Wall_Spawn_1=-1,-0.5,-29
+Cell_Wall_Spawn_2=0,-0.5,-28
 
 // Plate Initial and Variation
 Plate_Init_Spawn=-15,0,-13

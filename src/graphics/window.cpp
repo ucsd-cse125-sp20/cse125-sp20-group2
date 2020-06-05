@@ -24,6 +24,7 @@ Window::Window(int width = Config::getFloat("Window_Width"), int height = Config
 
 	this->camera = new Camera(Config::getVec3("Camera_Location"));
 	this->inventory = NULL;
+	this->vodkaActive = false;
 }
 
 
@@ -71,6 +72,11 @@ void Window::setupWindow() {
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 	GLFWwindow* glfwViewport = glfwCreateWindow((int)Config::getFloat("Window_Width"), (int)Config::getFloat("Window_Height"), Config::get("Window_Title").c_str(), NULL, NULL);
 	
+	// Set 
+	icons[0].pixels = SOIL_load_image("assets/images/communismicon.png", &icons[0].width, &icons[0].height, 0, SOIL_LOAD_RGBA);
+	glfwSetWindowIcon(glfwViewport, 1, icons);
+	SOIL_free_image_data(icons[0].pixels);
+
 	// Mouse centering
 	glfwSetCursorPos(glfwViewport, lastX, lastY);
 
@@ -103,7 +109,6 @@ void Window::setupWindow() {
 	ImGui::StyleColorsDark();
 	
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	ImFont* font1 = io.Fonts->AddFontFromFileTTF("assets/fonts/Nikkyou-Sans.ttf", Config::getInt("Font_Size_Pixels"));
 	ImGui_ImplGlfw_InitForOpenGL(glfwViewport, true);
 
 	ui.loadImages();
@@ -206,26 +211,27 @@ Ingredient* Window::getSelectedIngredient() {
 void Window::updateRound(Game::RoundInfo_RoundState roundState) {
 	switch (roundState) {
         case Game::RoundInfo_RoundState_LOBBY: {
-            this->setRound(0);
+            this->setRound(LOBBY_NUM);
+            break;
+        }
+		case Game::RoundInfo_RoundState_DUNGEON_WAITING: {
+            this->setRound(DUNGEON_WAITING_NUM);
             break;
         }
         case Game::RoundInfo_RoundState_DUNGEON: {
-            this->setRound(1);
+            this->setRound(DUNGEON_NUM);
             break;
         } 
-        case Game::RoundInfo_RoundState_DUNGEON_WAITING: {
-            this->setRound(2);
-            break;
+		    case Game::RoundInfo_RoundState_KITCHEN_WAITING: {
+            this->setRound(KITCHEN_WAITING_NUM);
+			break;
         }
         case Game::RoundInfo_RoundState_KITCHEN:
         {
-            this->setRound(3);
+            this->setRound(KITCHEN_NUM);
             break;
         }
-        case Game::RoundInfo_RoundState_KITCHEN_WAITING: {
-            this->setRound(4);
-			break;
-        }
+
 		default: {}
     } 
 }
@@ -251,7 +257,7 @@ void Window::render()
 	deltaTime = currentFrame - lastFrame;
 	lastFrame = currentFrame;
 
-	// Make BG light gray
+	// // Make BG light gray
 	glClearColor(0.8f, 0.8f, 0.8f, 0.8f);
 
 	// Clear color + depth buffers
@@ -302,6 +308,12 @@ void Window::render()
 
 		// Get the color scaling
 		glm::vec4 colorScale = Config::getVec4("colorScale");
+
+		// Make screen red if vodka active
+		if (vodkaActive)
+		{
+			colorScale *= glm::vec4(1, 0.4, 0.4, 1);
+		}
 
 		// If object is an ingredient, color will scale up with quality.
 		if (obj->getObjectType() == INGREDIENT)
@@ -355,16 +367,15 @@ void Window::render()
 	if (this->round == DUNGEON_NUM && this->inventory != NULL)
 	{
 		ui.UIInventory(this->inventory);
-		ImGui::SetNextWindowCollapsed(true, 0);
 	}
-	else if (this->round == DUNGEON_WAITING_NUM && this->inventory != NULL)
+	else if (this->round == DUNGEON_WAITING_NUM)
 	{
 		ui.UIDungeonInstructions();
 	}
 	else if (this->round == KITCHEN_NUM && this->inventory != NULL )
 	{
 		tmp = ui.UIButtonInventory(this->inventory);
-		ui.UIInstructionSet(instructionStrings);
+		ui.UIInstructionSet(instructionStrings, this->recipeName);
 	}
 	else if (this->round == KITCHEN_WAITING_NUM)
 	{

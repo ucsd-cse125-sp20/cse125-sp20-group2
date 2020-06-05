@@ -49,6 +49,8 @@ public:
     std::unordered_map<int, Ingredient*>* inventory;
     Ingredient* selectedIngredient = NULL;
 
+    bool vodkaActive;
+
     void render();
 
     /**
@@ -84,6 +86,9 @@ public:
     bool gameWin = false;
     Camera* camera;
     std::vector<std::string> instructionStrings;
+
+    std::string recipeName;
+    GLFWimage icons[1];
 
 private:
     Shader* shader;

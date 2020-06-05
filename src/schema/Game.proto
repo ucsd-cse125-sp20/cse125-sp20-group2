@@ -59,6 +59,7 @@ enum ObjectType {
 message InstructionInfo {
     required string instructionMsg = 1;
     required uint32 index = 2;
+    optional string recipeName = 3;
 }
 
 message Object {
