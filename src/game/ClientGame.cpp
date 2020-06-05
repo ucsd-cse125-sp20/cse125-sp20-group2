@@ -280,12 +280,13 @@ void ClientGame::updateGameState()
                         break; 
                     }
                     default: {
-                        switch(rand()%5) {
+                        switch(rand()%6) {
                             case 0: soundBuffer.loadFromFile("assets/audio/nyet1.wav"); break;
                             case 1: soundBuffer.loadFromFile("assets/audio/nyet2.wav"); break;
                             case 2: soundBuffer.loadFromFile("assets/audio/nyet3.wav"); break;
                             case 3: soundBuffer.loadFromFile("assets/audio/nyet4.wav"); break;
                             case 4: soundBuffer.loadFromFile("assets/audio/nyet5.wav"); break;
+                            case 5: soundBuffer.loadFromFile("assets/audio/nyet6.wav"); break;
                         }
                         soundEffect.setBuffer(soundBuffer);
                         soundEffect.setVolume(Config::getFloat("Sound_Effect_Volume"));
