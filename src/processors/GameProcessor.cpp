@@ -192,10 +192,14 @@ void GameProcessor::process(unsigned int clientId, Game::ClientMessage clientMsg
             }
         }
 
+
         // Found the closest cookware within range
         if (closestCookware != NULL)
         {
             std::cout << "Cooking" << std::endl;
+
+            // Player cooking
+            p->cooking = true;
 
             validCookEvent = true;
 
@@ -235,7 +239,12 @@ void GameProcessor::process(unsigned int clientId, Game::ClientMessage clientMsg
             msg = msg + ing->getName();
 
             // Send back the updated cookware object
+
             server->messages.push_back(MessageBuilder::toServerMessage(closestCookware));
+
+            // Send back the player
+            server->messages.push_back(MessageBuilder::toServerMessage(p));
+
         }
 
         /// TODO: may not be in the right spot, but see if close to any plates, and interact with them
@@ -327,7 +336,8 @@ void GameProcessor::process(unsigned int clientId, Game::ClientMessage clientMsg
     {
         // Get the Player Object of the current client id
         Player *player = server->gameState.getPlayerObject(clientId);
-        //
+
+        // Get origin position of player
         glm::vec3 originalPos = player->getPosition();
 
         // Cancel cooking event if frozen
@@ -341,6 +351,7 @@ void GameProcessor::process(unsigned int clientId, Game::ClientMessage clientMsg
                 {
                     // Cancel cook event
                     std::cout << "found a player and their cookevent" << std::endl;
+                    player->cooking = false;
                     player->setFreeze(false);
                     cookEvent->cookware->setBusy(false);
                     iter = server->gameState.cookEvents.erase(iter);
@@ -361,8 +372,7 @@ void GameProcessor::process(unsigned int clientId, Game::ClientMessage clientMsg
         for (GameObject *currObject : objects)
         {
             // Don't collide with yourself kiddo
-            if (currObject == player)
-                continue;
+            if (currObject == player) continue;
 
             if (currObject->isPassable())
                 continue;

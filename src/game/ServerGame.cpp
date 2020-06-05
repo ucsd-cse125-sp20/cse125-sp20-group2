@@ -170,6 +170,9 @@ void ServerGame::update()
             Ingredient* currIngredient = cookEvent->ingredient;
             Player* currPlayer = cookEvent->player;
 
+            // No longer cooking
+            cookEvent->player->cooking = false;
+
             // Unfreeze the player
             cookEvent->player->setFreeze(false);
 
@@ -209,6 +212,9 @@ void ServerGame::update()
                 }
                 i++;
             }
+
+            // Push back player to indicate cooking finish
+            messages.push_back(MessageBuilder::toServerMessage(currPlayer));
 
             delete cookEvent;
             it = cookEvents.erase(it);

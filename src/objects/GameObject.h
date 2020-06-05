@@ -25,8 +25,8 @@ enum ObjectType
 class GameObject
 {
 
-    /// TODO: remove this later - hardcoded id
 public:
+    glm::vec3 prevPosition;
     static int counter;
 
 private:
@@ -84,7 +84,7 @@ public:
     ~GameObject();
 
     // Model
-    Model *model = NULL;
+    Model* model = NULL;
 
     ObjectType getObjectType();
 

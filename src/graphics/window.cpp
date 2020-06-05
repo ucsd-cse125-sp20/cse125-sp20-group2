@@ -18,8 +18,10 @@ Window::Window(int width = Config::getFloat("Window_Width"), int height = Config
 	this->setupWindow();
 	//this->ui = UIScreenFactory();
 	this->shader = new Shader(Config::get("Vertex_Shader"), Config::get("Fragment_Shader"));
-	this->UIshader = new Shader("src//graphics//shaders//ui_vert_shader.glsl", "src//graphics//shaders//ui_frag_shader.glsl"); 
+	
 	///TODO: Need to add to Config?
+	this->UIshader = new Shader("src//graphics//shaders//ui_vert_shader.glsl", "src//graphics//shaders//ui_frag_shader.glsl"); 
+
 	this->camera = new Camera(Config::getVec3("Camera_Location"));
 	this->inventory = NULL;
 	this->vodkaActive = false;
@@ -293,10 +295,13 @@ void Window::render()
 	// // //
 	// Render each GameObject
 
-	for (auto it = objectsToRender.begin(); it != objectsToRender.end(); ++it) {
+	for (auto it = objectsToRender.begin(); it != objectsToRender.end(); ++it) 
+	{
 		
 		// Get the next object to render.
 		GameObject* obj = it->second;
+
+		handleAnimations(obj);
 
 		// If we don't render the object, ignore it.
 		if (!obj->getRender()) continue;
@@ -416,4 +421,48 @@ void Window::cameraViewUpdate() {
 	lastY = ypos;
 
 	camera->processMouseMovement(xoffset, yoffset);
+}
+
+void Window::handleAnimations(GameObject* object)
+{
+	// Only players are animated currently.
+	if (object->getObjectType() != PLAYER) return;
+
+	// Make sure animator has animations loaded for the given object
+	if (animator.animsLoadedFor.find(object) == animator.animsLoadedFor.end() || !animator.isAnimsLoadedFor(object))
+	{
+
+		// Different colors
+		switch (((Player*)object)->getClientID())
+		{
+			case 0:
+				animator.addAnimation(object, "Waddle", new Animation("Blue_Waddle"));
+				animator.addAnimation(object, "Cook", new Animation("Blue_Cook"));
+				animator.addAnimation(object, "Idle", new Animation("Blue_Idle"));
+				break;
+			case 1:
+				animator.addAnimation(object, "Waddle", new Animation("Green_Waddle"));
+				animator.addAnimation(object, "Cook", new Animation("Green_Cook"));
+				animator.addAnimation(object, "Idle", new Animation("Green_Idle"));
+				break;
+			case 2:
+				animator.addAnimation(object, "Waddle", new Animation("Purple_Waddle"));
+				animator.addAnimation(object, "Cook", new Animation("Purple_Cook"));
+				animator.addAnimation(object, "Idle", new Animation("Purple_Idle"));
+				break;
+			case 3:
+				animator.addAnimation(object, "Waddle", new Animation("Red_Waddle"));
+				animator.addAnimation(object, "Cook", new Animation("Red_Cook"));
+				animator.addAnimation(object, "Idle", new Animation("Red_Idle"));
+				break;
+		}
+
+		animator.setCurrentAnimation(object, "Idle");
+
+		// Load animations as needed
+		animator.loadAnimations(object);
+	}
+
+	// Animate object. Different possible states are handled in this function.
+	animator.play(object);
 }

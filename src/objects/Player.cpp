@@ -10,7 +10,10 @@ Player::Player(int ID) : GameObject(ID)
     this->baseRadius = Config::getFloat("Player_Radius");
     this->box->setCircleBoundingBox();
     this->inventory = new std::unordered_map<int, Ingredient*>();
+    this->moving = false;
+    this->cooking = false;
     this->updateMeasurements();
+    this->noMoveCounter = 0;
 }
 
 void Player::setScore(int newScore)

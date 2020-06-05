@@ -58,6 +58,9 @@ const std::unordered_map<unsigned int, Ingredient*>& GameState::getIngredientObj
 
 Player* GameState::getPlayerObject(unsigned int clientId)
 {
+    // Edge case: Player does not exist in the playerObjects map.
+    if (playerObjects.find(clientId) == playerObjects.end()) return NULL;
+
     return this->playerObjects[clientId];
 }
 
