@@ -86,6 +86,7 @@ public:
     std::vector<std::string> instructionStrings;
 
     std::string recipeName;
+    GLFWimage icons[1];
 
 private:
     Shader* shader;

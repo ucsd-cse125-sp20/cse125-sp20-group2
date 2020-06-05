@@ -70,6 +70,11 @@ void Window::setupWindow() {
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 	GLFWwindow* glfwViewport = glfwCreateWindow((int)Config::getFloat("Window_Width"), (int)Config::getFloat("Window_Height"), Config::get("Window_Title").c_str(), NULL, NULL);
 	
+	// Set 
+	icons[0].pixels = SOIL_load_image("assets/images/communismicon.png", &icons[0].width, &icons[0].height, 0, SOIL_LOAD_RGBA);
+	glfwSetWindowIcon(glfwViewport, 1, icons);
+	SOIL_free_image_data(icons[0].pixels);
+
 	// Mouse centering
 	glfwSetCursorPos(glfwViewport, lastX, lastY);
 
