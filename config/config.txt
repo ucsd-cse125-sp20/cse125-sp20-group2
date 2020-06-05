@@ -136,6 +136,7 @@ Ingredient_Rotation_Speed=0.05
 // // //
 Background_Music_Volume=2
 Sound_Effect_Volume=50
+Beep_Sound_Effect_Volume=20
 
 ////////////////////////////////////////////////////////////////////////////
 
@@ -170,7 +171,7 @@ Good_Quality_Color_Modifier=2.5,2,0.8,1
 // Round time (in seconds)
 Kitchen_Round_Time=600
 Kitchen_Waiting_Round_Time=15
-Dungeon_Round_Time=10
+Dungeon_Round_Time=60
 Lobby_Round_Time=15
 Dungeon_Waiting_Round_Time=15
 
@@ -179,6 +180,7 @@ Cook_Event_Time=5
 // multipliers
 Points_Multi=2
 Individual_Instruction_Points=50
+Base_Correct_Ingredient_Score=10
 Player_Size_Increase=4
 
 ////////////////////////////////////////////////////////////////////////////
@@ -229,6 +231,7 @@ Dungeon_Upper_Z=29
 
 // Ingredient spawn rate (in seconds)
 Dungeon_Ingredient_Spawn_Rate=1.0;
+Vodka_Chance=5
 
 // Left and right walls (external)
 Dungeon_Wall_Pos_2=45,0,0

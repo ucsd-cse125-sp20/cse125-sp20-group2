@@ -141,27 +141,31 @@ Ingredient* UIScreenFactory::UIButtonInventory(std::unordered_map<int, Ingredien
 	ImGui::SetWindowFontScale(Config::getFloat("Font_Scale"));
 	std::unordered_map<int, Ingredient*>::iterator it = map->begin();
 	ImGui::BeginChild("Scrolling");
+	int i = 1;
 	while (it != map->end())
 	{
+		std::string buttonText = std::to_string(i) + ". " + it->second->getDetailedName();
 		if (this->highlighted == it->second) {
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(ImColor(255, 0, 0)));
-			if( ImGui::Button(it->second->getDetailedName().c_str()) ) {
+			if( ImGui::Button(buttonText.c_str()) ) {
 				ret = it->second;
 				std::cout<<"Ingredient clicked"<<std::endl;
 				this->highlighted = it->second;
 			}
 			ImGui::PopStyleColor();
 		}
-		else if (ImGui::Button(it->second->getDetailedName().c_str())) {
+		else if (ImGui::Button(buttonText.c_str())) {
 			ret = it->second;
 			std::cout<<"Ingredient clicked"<<std::endl;
 			this->highlighted = it->second;
 		}
 		it++;
+		i++;
 		
 	}
 	ImGui::EndChild();
 	ImGui::End();
+
 	return ret;
 }
 
@@ -216,8 +220,12 @@ void UIScreenFactory::UIInstructionSet(std::vector<std::string> instructions, st
 	ImGui::Begin(title.c_str());
 	ImGui::SetWindowFontScale(Config::getFloat("Font_Scale"));
 	ImGui::BeginChild("Scrolling");
+	int i = 1;
+	std::string buttonText;
 	for( auto str: instructions ) {
-		UIText(str);
+		buttonText = std::to_string(i) + ". " + str;
+		UIText(buttonText);
+		i++;
 	}
 	ImGui::EndChild();
 	ImGui::End();

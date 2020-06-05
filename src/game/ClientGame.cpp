@@ -177,7 +177,7 @@ void ClientGame::updateGameState()
                         music.setLoop(true);
                         music.play();
                     }
-                    else if (originalScale.x > newScale.x)
+                    else if (originalScale.x > newScale.x && this->window.getRound() == DUNGEON_NUM)
                     {
                         // Background music
                         music.stop();
@@ -245,13 +245,42 @@ void ClientGame::updateGameState()
                 std::cout << "got valid cooking event from server" << std::endl;
                 std::cout<<currMessage.validcook().message().at(0)<<std::endl;
                 switch(currMessage.validcook().message().at(0)) {
-                    case 'C': soundBuffer.loadFromFile("assets/audio/Cutting.wav"); break;
-                    case 'F': soundBuffer.loadFromFile("assets/audio/Frying.wav"); break;
-                    case 'B': soundBuffer.loadFromFile("assets/audio/PotBoiling.wav"); break;
-                    default: soundBuffer.loadFromFile("assets/audio/Dish.wav"); break;
+                    case 'C': { 
+                        soundBuffer.loadFromFile("assets/audio/Cutting.wav"); 
+                        soundEffect.setBuffer(soundBuffer);
+                        soundEffect.setVolume(Config::getFloat("Sound_Effect_Volume"));
+                        break;
+                    }
+                    case 'F': {
+                        soundBuffer.loadFromFile("assets/audio/Frying.wav"); 
+                        soundEffect.setBuffer(soundBuffer);
+                        soundEffect.setVolume(Config::getFloat("Sound_Effect_Volume"));
+                        break;
+                    }
+                    case 'B': {
+                        soundBuffer.loadFromFile("assets/audio/PotBoiling.wav"); 
+                        soundEffect.setBuffer(soundBuffer);
+                        soundEffect.setVolume(Config::getFloat("Sound_Effect_Volume"));
+                        break; 
+                    }
+                    case 'P': {
+                        soundBuffer.loadFromFile("assets/audio/Dish.wav"); 
+                        soundEffect.setBuffer(soundBuffer);
+                        soundEffect.setVolume(Config::getFloat("Sound_Effect_Volume"));
+                        break; 
+                    }
+                    default: {
+                        switch(rand()%5) {
+                            case 0: soundBuffer.loadFromFile("assets/audio/nyet1.wav"); break;
+                            case 1: soundBuffer.loadFromFile("assets/audio/nyet2.wav"); break;
+                            case 2: soundBuffer.loadFromFile("assets/audio/nyet3.wav"); break;
+                            case 3: soundBuffer.loadFromFile("assets/audio/nyet4.wav"); break;
+                            case 4: soundBuffer.loadFromFile("assets/audio/nyet5.wav"); break;
+                        }
+                        soundEffect.setBuffer(soundBuffer);
+                        soundEffect.setVolume(Config::getFloat("Sound_Effect_Volume"));
+                    }
                 }
-                soundEffect.setBuffer(soundBuffer);
-                soundEffect.setVolume(Config::getFloat("Sound_Effect_Volume"));
                 soundEffect.play();
                 break;   
             }

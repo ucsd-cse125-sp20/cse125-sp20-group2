@@ -8,12 +8,12 @@ void GameProcessor::initLobbyPhase(GameState *gameState)
     // gameState->addWalls(m);
 }
 
-void GameProcessor::initDungeonWaiting(GameState* gameState)
+void GameProcessor::initDungeonWaiting(GameState *gameState)
 {
     gameState->setRoundTime(Config::getInt("Dungeon_Waiting_Round_Time"));
 }
 
-void GameProcessor::initKitchenWaiting(GameState* gameState)
+void GameProcessor::initKitchenWaiting(GameState *gameState)
 {
     gameState->setRoundTime(Config::getInt("Kitchen_Waiting_Round_Time"));
 }
@@ -25,12 +25,18 @@ void GameProcessor::initDungeonPhase(GameState *gameState, ServerGame *server)
 
     int recipeChoice = Config::getInt("Recipe_Choice");
     Recipe *r;
-    switch(recipeChoice) {
-        case 1: r = RecipeBuilder::getBasicRecipe(); break;
-        case 2: r = RecipeBuilder::getAnotherRecipe(); break;
-        default: r = RecipeBuilder::getBasicRecipe();
+    switch (recipeChoice)
+    {
+    case 1:
+        r = RecipeBuilder::getBasicRecipe();
+        break;
+    case 2:
+        r = RecipeBuilder::getAnotherRecipe();
+        break;
+    default:
+        r = RecipeBuilder::getBasicRecipe();
     }
-    
+
     MapBuilder::assignIngredientPositions(r, m);
     gameState->dungeonMap = m;
     gameState->addWalls(m);
@@ -48,8 +54,9 @@ void GameProcessor::initDungeonPhase(GameState *gameState, ServerGame *server)
             // Set low quality, add to player, add to gamestate, make invisible
             Ingredient *currIngredient = RecipeBuilder::createIngredient(ingredientCopy->getName());
 
-            // If delicious like vodka, do not add in. 
-            if (currIngredient->getStatus() == IngredientStatus::Delicious) {
+            // If delicious like vodka, do not add in.
+            if (currIngredient->getStatus() == IngredientStatus::Delicious)
+            {
                 continue;
             }
 
@@ -125,17 +132,17 @@ void GameProcessor::processLobby(unsigned int clientId, Game::ClientMessage clie
 {
     switch (clientMsg.event_case())
     {
-        case Game::ClientMessage::EventCase::kReady:
-        {
-            std::cout << "received ready up event in processing lobby" << std::endl;
-            bool clientStatus = clientMsg.ready().ready();
-            server->gameState.readyStatus[clientId] = clientStatus;
-            break;
-        }
-        default:
-        {
-            break;
-        }
+    case Game::ClientMessage::EventCase::kReady:
+    {
+        std::cout << "received ready up event in processing lobby" << std::endl;
+        bool clientStatus = clientMsg.ready().ready();
+        server->gameState.readyStatus[clientId] = clientStatus;
+        break;
+    }
+    default:
+    {
+        break;
+    }
     }
 }
 
@@ -156,60 +163,79 @@ void GameProcessor::process(unsigned int clientId, Game::ClientMessage clientMsg
         Player *p = server->gameState.getPlayerObject(clientId);
         glm::vec3 pPos = p->getPosition();
 
-        /// TODO: Find the minimum distance
-        // Check for valid cookware in range
-        for (auto & cookwarePair : cookwarePairs)
+        // Get the closest cookware within range
+        Cookware *closestCookware = NULL;
+        float bestDistance = 0;
+        IngredientStatus origStatus = ing->getStatus();
+
+        for (auto &cookwarePair : cookwarePairs)
         {
-            Cookware* cookware = cookwarePair.second;
-            glm::vec3 cPos = cookware->getPosition();
-            float distance = sqrt(pow((pPos.x - cPos.x), 2) + pow((pPos.y - cPos.y), 2) + pow((pPos.z - cPos.z), 2));
+            Cookware *currCookware = cookwarePair.second;
+            glm::vec3 cPos = currCookware->getPosition();
+            float currDistance = sqrt(pow((pPos.x - cPos.x), 2) + pow((pPos.y - cPos.y), 2) + pow((pPos.z - cPos.z), 2));
 
             // Check if within range and if cookware is busy
-            IngredientStatus origStatus = ing->getStatus();
-
-            if (distance <= Config::getFloat("Cooking_Event_Min_Distance") && !cookware->getBusy() && cookware->cookIngredient(ing))
+            if (currDistance <= Config::getFloat("Cooking_Event_Min_Distance") && !currCookware->getBusy() && currCookware->cookIngredient(ing))
             {
-                std::cout << "Cooking" << std::endl;
-
-                validCookEvent = true;
-                // Cookware is busy now
-                cookware->setBusy(true);
-
-                IngredientStatus futureStatus = ing->getStatus();
-                // Set status back to original because cooking event just started
-                ing->setStatus(origStatus);
-                p->setFreeze(true);
-                CookEvent *event = new CookEvent();
-                event->player = p;
-                event->ingredient = ing;
-                event->cookware = cookware;
-                event->before = origStatus;
-                event->after = futureStatus;
-
-                event->terminationTime = std::chrono::high_resolution_clock::now() + std::chrono::seconds(Config::getInt("Cook_Event_Time"));
-
-                server->gameState.cookEvents.push_back(event);
-
-                validCookEvent = true;
-
-                // Add message for current cooking option and change model to reflect cooking action
-                if (cookware->getName() == PAN)
+                // If cookware is null, found first one within range
+                if (closestCookware == NULL)
                 {
-                    msg = "Frying the ";
+                    closestCookware = currCookware;
+                    bestDistance = currDistance;
                 }
-                else if (cookware->getName() == POT)
+                // else do comparison to determine if current cookware is closer
+                else if (currDistance < bestDistance)
                 {
-                    msg = "Boiling the ";
+                    closestCookware = currCookware;
+                    bestDistance = currDistance;
                 }
-                else if (cookware->getName() == CUTTING_BOARD)
-                {
-                    msg = "Cutting the ";
-                }
-                msg = msg + ing->getName();
             }
+        }
+
+        // Found the closest cookware within range
+        if (closestCookware != NULL)
+        {
+            std::cout << "Cooking" << std::endl;
+
+            validCookEvent = true;
+
+            // Cookware is busy now
+            closestCookware->setBusy(true);
+
+            IngredientStatus futureStatus = ing->getStatus();
+            // Set status back to original because cooking event just started
+            ing->setStatus(origStatus);
+            p->setFreeze(true);
+            CookEvent *event = new CookEvent();
+            event->player = p;
+            event->ingredient = ing;
+            event->cookware = closestCookware;
+            event->before = origStatus;
+            event->after = futureStatus;
+
+            event->terminationTime = std::chrono::high_resolution_clock::now() + std::chrono::seconds(Config::getInt("Cook_Event_Time"));
+
+            server->gameState.cookEvents.push_back(event);
+
+            validCookEvent = true;
+
+            // Add message for current cooking option and change model to reflect cooking action
+            if (closestCookware->getName() == PAN)
+            {
+                msg = "Frying the ";
+            }
+            else if (closestCookware->getName() == POT)
+            {
+                msg = "Boiling the ";
+            }
+            else if (closestCookware->getName() == CUTTING_BOARD)
+            {
+                msg = "Cutting the ";
+            }
+            msg = msg + ing->getName();
 
             // Send back the updated cookware object
-            server->messages.push_back(MessageBuilder::toServerMessage(cookware));
+            server->messages.push_back(MessageBuilder::toServerMessage(closestCookware));
         }
 
         /// TODO: may not be in the right spot, but see if close to any plates, and interact with them
@@ -219,8 +245,6 @@ void GameProcessor::process(unsigned int clientId, Game::ClientMessage clientMsg
             glm::vec3 cPos = plate->getPosition();
 
             float distance = sqrt(pow((pPos.x - cPos.x), 2) + pow((pPos.y - cPos.y), 2) + pow((pPos.z - cPos.z), 2));
-
-            std::cout << "plate's clientid: " + std::to_string(plate->getClientId()) + "distance to plate: " + std::to_string(distance) << std::endl;
 
             if (distance <= Config::getFloat("Plate_Event_Min_Distance"))
             {
@@ -232,8 +256,8 @@ void GameProcessor::process(unsigned int clientId, Game::ClientMessage clientMsg
                     std::cout << "you are interacting with the correct plate, my friend" << std::endl;
 
                     // Transfer ingredient from player to the plate
-                    Player* currPlayer = server->gameState.getPlayerObject(clientId);
-                    Ingredient* currIngredient = server->gameState.getIngredientObject(clientMsg.cookevent().objectid());
+                    Player *currPlayer = server->gameState.getPlayerObject(clientId);
+                    Ingredient *currIngredient = server->gameState.getIngredientObject(clientMsg.cookevent().objectid());
                     currPlayer->removeFromInventory(currIngredient);
 
                     // Change the modelPath, update the location
@@ -249,11 +273,11 @@ void GameProcessor::process(unsigned int clientId, Game::ClientMessage clientMsg
                     // Send message so that clients can render it (may have to disable bounding box, look at later)
                     currIngredient->setRender(true);
                     currIngredient->applyScale(Config::getVec3("Burger_Piece_Scaling"));
-                    Game::ServerMessage* ingredientRenderMsg = MessageBuilder::toServerMessage(currIngredient);
+                    Game::ServerMessage *ingredientRenderMsg = MessageBuilder::toServerMessage(currIngredient);
                     server->messages.push_back(ingredientRenderMsg);
 
                     // Send message to remove ingredient from client inventory
-                    Game::ServerMessage* inventoryUpdateMsg = MessageBuilder::toInventoryServerMessage(currIngredient->getID(),
+                    Game::ServerMessage *inventoryUpdateMsg = MessageBuilder::toInventoryServerMessage(currIngredient->getID(),
                                                                                                        false,
                                                                                                        currIngredient->getName(),
                                                                                                        currIngredient->getStatus(),
@@ -261,9 +285,21 @@ void GameProcessor::process(unsigned int clientId, Game::ClientMessage clientMsg
                     server->specificMessages[clientId].push_back(inventoryUpdateMsg);
 
                     // Update score and send to player
-                    currPlayer->addToScore(Config::getInt("Plate_Score"));
-                    Game::ServerMessage* scoreMsg = MessageBuilder::toScore(currPlayer->getScore());
+                    int score = 1;
+                    for (auto &ingredient : server->gameState.recipe->ingredientList)
+                    {
+                        if (currIngredient->getName() == ingredient->getName() &&
+                            currIngredient->getStatus() == ingredient->getStatus())
+                        {
+                            score = currIngredient->getQualityIndex() * Config::getInt("Base_Correct_Ingredient_Score");
+                        }
+                    }
+                    currPlayer->addToScore(score);
+                    Game::ServerMessage *scoreMsg = MessageBuilder::toScore(currPlayer->getScore());
                     server->specificMessages[clientId].push_back(scoreMsg);
+
+                    // Set message to plate so that the client knows sound to play
+                    msg = PLATE_STR;
                 }
             }
         }
@@ -314,7 +350,7 @@ void GameProcessor::process(unsigned int clientId, Game::ClientMessage clientMsg
             // Don't collide with yourself kiddo
             if (currObject == player)
                 continue;
-            
+
             if (currObject->isPassable())
                 continue;
 
@@ -324,25 +360,28 @@ void GameProcessor::process(unsigned int clientId, Game::ClientMessage clientMsg
                 if (currObject->getObjectType() == INGREDIENT)
                 {
                     std::cout << "Colliding with ingredients" << std::endl;
-                    Ingredient *currIngredient = (Ingredient *) currObject;
+                    Ingredient *currIngredient = (Ingredient *)currObject;
 
                     currIngredient->renderInvisible();
                     // Vodka Logic
-                    if (currIngredient->getStatus() == IngredientStatus::Delicious) {
+                    if (currIngredient->getStatus() == IngredientStatus::Delicious)
+                    {
                         player->applyScale(glm::vec3(Config::getInt("Player_Size_Increase")));
-                        server->gameState.clientPowerUpTimes[player->getClientID()] = std::chrono::high_resolution_clock::now() + std::chrono::seconds (15);
-                    } else {
+                        server->gameState.clientPowerUpTimes[player->getClientID()] = std::chrono::high_resolution_clock::now() + std::chrono::seconds(15);
+                    }
+                    else
+                    {
                         ///TODO: Add this back?
                         player->addToInventory(currIngredient);
                         player->addToScore(1);
-                        
+
                         // Creating message for collecting ingredient
                         Game::ServerMessage *newServerMsg = MessageBuilder::toInventoryServerMessage(currIngredient->getID(), true, currIngredient->getName(),
-                                                                                                    currIngredient->getStatus(), currIngredient->getQualityIndex());
+                                                                                                     currIngredient->getStatus(), currIngredient->getQualityIndex());
                         server->specificMessages[player->getClientID()].push_back(newServerMsg);
                         newServerMsg = MessageBuilder::toServerMessage(currIngredient);
                         server->messages.push_back(newServerMsg);
-                        
+
                         // Create message for score update
                         Game::ServerMessage *scoreUpdate = MessageBuilder::toScore(player->getScore());
                         server->specificMessages[player->getClientID()].push_back(scoreUpdate);
@@ -409,14 +448,14 @@ void GameProcessor::initEndPhase(GameState *gameState, ServerGame *server)
     GameProcessor::movePlayersPrison(gameState);
 }
 
-void GameProcessor::movePlayersPrison(GameState* gameState)
+void GameProcessor::movePlayersPrison(GameState *gameState)
 {
-    Player* winningPlayer = gameState->getWinningPlayer();
-    std::vector<glm::vec3> & prisonLocations = gameState->kitchenMap->prisonLocations;
+    Player *winningPlayer = gameState->getWinningPlayer();
+    std::vector<glm::vec3> &prisonLocations = gameState->kitchenMap->prisonLocations;
 
-    for (auto & currPlayerPair : gameState->getPlayerObjects())
+    for (auto &currPlayerPair : gameState->getPlayerObjects())
     {
-        Player* currPlayer = currPlayerPair.second;
+        Player *currPlayer = currPlayerPair.second;
         if (currPlayer == winningPlayer)
         {
             continue;

@@ -228,25 +228,35 @@ void ServerGame::update()
         {
             std::cout << "spawning new ingredient because time is over" << std::endl;
 
-            // Get a random ingredient
-            std::vector<Ingredient*> & ingredientList = this->gameState.recipe->ingredientList;
-            int randomIdx = rand() % ingredientList.size();
-            Ingredient* currIngredient = ingredientList.at(randomIdx);
+            int randNum = rand() % 100;
+            Ingredient* ingredientCopy = NULL;
 
-            // Make a copy
-            Ingredient* ingredientCopy = RecipeBuilder::createIngredient(currIngredient->getName());
+            // Spawn powerup
+            if (randNum < Config::getInt("Vodka_Chance"))
+            {
+                ingredientCopy = RecipeBuilder::createIngredient(VODKA);
+                ingredientCopy->setStatus(IngredientStatus::Delicious);
+            }
+            // Spawn ingredient
+            else
+            {
+                // Get random ingredient
+                std::vector<Ingredient*> & ingredientList = this->gameState.recipe->ingredientList;
+                int randomIdx = rand() % ingredientList.size();
+                Ingredient* currIngredient = ingredientList.at(randomIdx);
 
-            // Random quality index
-            ingredientCopy->randomizeQualityIndex();
+                // Make a copy
+                ingredientCopy = RecipeBuilder::createIngredient(currIngredient->getName());
+
+                // Random quality index
+                ingredientCopy->randomizeQualityIndex();
+            }
 
             // set spawn location
             int lowerX = this->gameState.dungeonMap->lowerX;
             int upperX = this->gameState.dungeonMap->upperX;
             int lowerZ = this->gameState.dungeonMap->lowerZ;
             int upperZ = this->gameState.dungeonMap->upperZ;
-
-            // Give ingredient initial position
-            ingredientCopy->setPosition(glm::vec3(36,0,-6));
 
             bool isColliding = true;
             while (isColliding)
@@ -279,7 +289,7 @@ void ServerGame::update()
             this->gameState.dungeonMap->ingredientSpawnTime = instantTime + deltaTime;
         }
     }
-    
+
     // Check power up times, remove if over
     for (auto it = this->gameState.clientPowerUpTimes.begin(); it != this->gameState.clientPowerUpTimes.end();)
     {

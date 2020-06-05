@@ -142,10 +142,6 @@ Recipe* RecipeBuilder::getBasicRecipe() {
     ing->setStatus(IngredientStatus::Raw);
     recipe->ingredientList.push_back(ing);
 
-    ing = createIngredient(VODKA);
-    ing->setStatus(IngredientStatus::Delicious);
-    recipe->ingredientList.push_back(ing);
-
     int points = Config::getInt("Individual_Instruction_Points");
 
     Instruction *inst = new Instruction();
@@ -207,7 +203,6 @@ Recipe* RecipeBuilder::getBasicRecipe() {
 
 Ingredient* RecipeBuilder::createIngredient( std::string model ) {
     Ingredient* obj = new Ingredient();
-    if (model == VODKA) obj->setStatus(IngredientStatus::Delicious);
     obj->setName(model);
     obj->setModel(Config::get(model + "_Model"));
     obj->getBoundingBox()->setRadius(1);

@@ -175,6 +175,7 @@ Cook_Event_Time=5
 
 // multipliers
 Points_Multi=2
+Base_Correct_Ingredient_Score=10
 Individual_Instruction_Points=50
 
 ////////////////////////////////////////////////////////////////////////////

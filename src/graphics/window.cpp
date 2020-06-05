@@ -346,8 +346,6 @@ void Window::render()
 	ui.UIScore(this->score);
 	
 	Ingredient* tmp = NULL;
-
-	std::cout<<"Round in client is: "<< std::to_string(this->round) <<std::endl;
 	
 	if (this->round == DUNGEON_NUM && this->inventory != NULL)
 	{

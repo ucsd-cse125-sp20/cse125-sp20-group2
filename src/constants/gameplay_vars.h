@@ -9,6 +9,7 @@ const int KITCHEN_NUM = 4;
 const std::string POT = "Pot";
 const std::string PAN = "Pan";
 const std::string CUTTING_BOARD = "Cutting_Board";
+const std::string PLATE_STR = "Plate";
 
 const std::string BUN = "Bun";
 const std::string ONION = "Onion";
