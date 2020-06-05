@@ -18,6 +18,16 @@ ClientGame::ClientGame(std::string IP, int port) : client(IP, port), window(Conf
     floor->applyScale(glm::vec3(2));
     window.addObject(-1, floor);
 
+    // Winner model invisible
+    winner = new GameObject(-2);
+    glm::vec3 prisonLocation = Config::getVec3("Cell_Base");
+    prisonLocation.y = prisonLocation.y + 12;
+    winner->setModel(Config::get("Winner"));
+    winner->setPosition(prisonLocation);
+    winner->applyScale(glm::vec3(1));
+    winner->setRender(false);
+    window.addObject(-2, winner);
+
     runGame();
 }
 
@@ -349,6 +359,7 @@ void ClientGame::updateGameState()
             {
                 std::cout << " received win event " << std::endl;
                 window.gameOver = true;
+                winner->setRender(true);
 
                 // Win or lose
                 if (currMessage.win().clientid() == clientId) {
