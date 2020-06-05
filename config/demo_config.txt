@@ -195,8 +195,12 @@ Score_Window_Width=100
 Game_Info_Window_Width=150
 Game_Info_Window_Height=100
 
+End_Screen_Window_Width=150
+End_Screen_Window_Height=150
+
 Font_Scale=1
 Score_Font_Scale=1.4
+End_Screen_Font_Scale=2
 
 Cooking_Event_Min_Distance=3.2
 Plate_Event_Min_Distance=4

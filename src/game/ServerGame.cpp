@@ -231,9 +231,11 @@ void ServerGame::update()
             int randNum = rand() % 100;
             Ingredient* ingredientCopy = NULL;
 
+            std::cout << "random number is: " + std::to_string(randNum) << std::endl;
             // Spawn powerup
             if (randNum < Config::getInt("Vodka_Chance"))
             {
+                std::cout << "SPAWNING VODKA" << std::endl;
                 ingredientCopy = RecipeBuilder::createIngredient(VODKA);
                 ingredientCopy->setStatus(IngredientStatus::Delicious);
             }
