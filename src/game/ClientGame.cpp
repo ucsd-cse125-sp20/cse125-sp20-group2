@@ -180,20 +180,22 @@ void ClientGame::updateGameState()
                         // Turn screen red
                         this->window.vodkaActive = true;
                     }
-                    
-                    // Smaller player
-                    else if (originalScale.x > newScale.x && this->window.getRound() == DUNGEON_NUM)
-                    {
-                        // Background music
-                        music.stop();
-                        music.openFromFile("assets/audio/8Bit_Paradise.ogg");
-                        music.setVolume(Config::getInt("Background_Music_Volume"));
-                        music.setLoop(true);
-                        music.play();
 
+                    // Smaller player
+                    else if (originalScale.x > newScale.x)
+                    {
+                        if (this->window.getRound() == DUNGEON_NUM) 
+                        {
+                            // Background music
+                            music.stop();
+                            music.openFromFile("assets/audio/8Bit_Paradise.ogg");
+                            music.setVolume(Config::getInt("Background_Music_Volume"));
+                            music.setLoop(true);
+                            music.play();
+                        }
                         // Revert screen color
-                        this->window.vodkaActive = false;
-                    } 
+                        this->window.vodkaActive = false; 
+                    }
                 }
 
                 if (currMessage.object().has_scale()) obj->applyScale(glm::vec3(scale.x(), scale.y(), scale.z()));
