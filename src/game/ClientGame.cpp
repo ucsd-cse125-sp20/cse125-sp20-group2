@@ -90,6 +90,20 @@ void ClientGame::receiveUpdates()
 
 void ClientGame::updateGameState()
 {
+    // Assumption: players are not moving if position has not changed for some number of frames.
+    for (auto it = players.begin(); it != players.end(); ++it)
+    {
+        Player* player = it->second;
+        if (player->noMoveCounter == Config::getInt("Waddle_Animation_End_Delay"))
+        {
+            player->moving = false;
+        }
+        else
+        {
+            player->noMoveCounter++;
+        }
+    }
+
     // Process messages to update client game state
     for (Game::ServerMessage currMessage : client.messages)
     {
@@ -104,6 +118,7 @@ void ClientGame::updateGameState()
                 uint32_t id = currMessage.object().id();
                 bool render = currMessage.object().render();
                 Game::Vector3 scale = currMessage.object().scale();
+                std::string modelPath = currMessage.object().modelpath();
 
                 GameObject* obj = NULL;
 
@@ -120,12 +135,40 @@ void ClientGame::updateGameState()
                     switch(currMessage.object().type())
                     {
                         // Player object.
-                        case Game::PLAYER: obj = new Player(id); break;
+                        case Game::PLAYER: 
+                            
+                            // Create new player
+                            obj = new Player(id); 
+                            players[id] = ((Player*) obj);
+
+                            // Set client id based on model path
+                            if (modelPath.compare("assets/models/characters/characterblue.obj") == 0)
+                            {
+                                ((Player*)obj)->setClientID(0);
+                            }
+                            else if (modelPath.compare("assets/models/characters/charactergreen.obj") == 0)
+                            {
+                                ((Player*)obj)->setClientID(1);
+                            }
+                            else if (modelPath.compare("assets/models/characters/characterpurple.obj") == 0)
+                            {
+                                ((Player*)obj)->setClientID(2);
+                            }
+                            else if (modelPath.compare("assets/models/characters/characterred.obj") == 0)
+                            {
+                                ((Player*)obj)->setClientID(3);
+                            }
+                            else
+                            {
+                                std::cerr << "Object Error: Only 4 players are supported." << std::endl;
+                            }
+                            break;
 
                         // Ingredient object.
-                        case Game::INGREDIENT: obj = new Ingredient(id); 
-                        ((Ingredient*)obj)->setQualityIndex(currMessage.object().quality());
-                        break;
+                        case Game::INGREDIENT: 
+                            obj = new Ingredient(id); 
+                            ((Ingredient*)obj)->setQualityIndex(currMessage.object().quality());
+                            break;
 
                         // Cookware object.
                         case Game::COOKWARE: obj = new Cookware(id); break;
@@ -145,9 +188,6 @@ void ClientGame::updateGameState()
                     // Add object to window
                     window.addObject(id, obj);
                 }
-
-                /// Set model based on the model path provided by the server
-                std::string modelPath = currMessage.object().modelpath();
 
                 // We got an updated model, set old model to null
                 if (modelPath.compare(obj->getModelPath()) != 0)
@@ -200,7 +240,29 @@ void ClientGame::updateGameState()
 
                 if (currMessage.object().has_scale()) obj->applyScale(glm::vec3(scale.x(), scale.y(), scale.z()));
                 obj->setRender(render);
+                obj->prevPosition = obj->getPosition();
                 obj->setPosition(glm::vec3(location.x(), location.y(), location.z()));
+
+                // Object type specific updates
+                switch (obj->getObjectType())
+                {
+                    case PLAYER:
+                        
+                        // Is player cooking or not
+                        ((Player*)obj)->cooking = currMessage.object().cooking();
+                        
+                        // Is player moving?
+                        if (obj->getPosition() != ((Player*)obj)->prevPosition)
+                        {
+                            ((Player *) obj)->moving = true;
+                            ((Player *) obj)->noMoveCounter = 0;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+
+                // Removing cooking event message
                 window.removeCookingEventMessage();
                 break;
             }

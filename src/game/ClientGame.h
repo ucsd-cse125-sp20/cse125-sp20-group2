@@ -33,6 +33,8 @@ class ClientGame {
         // Used to register single key presses
         void keyBindsHandler(GLFWwindow* window, int key, int scancode, int action, int mods);
 
+        std::unordered_map<unsigned int, Player*> players;
+
     private:
         NetworkClient client;
         Window window;

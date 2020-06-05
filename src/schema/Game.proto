@@ -71,6 +71,7 @@ message Object {
     required string modelPath = 6 [default = ""];
     optional Vector3 scale = 7;
     optional uint32 quality = 8;
+    optional bool cooking = 9;
 }
 
 message Score {

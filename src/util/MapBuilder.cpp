@@ -129,8 +129,6 @@ KitchenMap* MapBuilder::getBasicKitchenMap(GameState* gameState) {
         // assign model based on id
         plate->setModel(Config::get("Plate_" + std::to_string(i) + "_Model"));
 
-        std::cout << "WOW IT'S A " << "Plate_" + std::to_string(i) + "_Model" << std::endl;
-
         mp->plateObjects.push_back(plate);
     }
 
