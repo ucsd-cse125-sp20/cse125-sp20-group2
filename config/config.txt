@@ -141,7 +141,7 @@ Ingredient_Rotation_Speed=0.05
 // // // // // // // // 
 // SOUND VARIABLES
 // // //
-Background_Music_Volume=2
+Background_Music_Volume=20
 Sound_Effect_Volume=40
 Beep_Sound_Effect_Volume=20
 
