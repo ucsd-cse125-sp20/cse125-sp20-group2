@@ -169,9 +169,9 @@ Bad_Quality_Color_Modifier=0.2,0.8,0.3,1
 Good_Quality_Color_Modifier=2.5,2,0.8,1
 
 // Round time (in seconds)
-Kitchen_Round_Time=600
+Kitchen_Round_Time=150
 Kitchen_Waiting_Round_Time=15
-Dungeon_Round_Time=60
+Dungeon_Round_Time=150
 Lobby_Round_Time=15
 Dungeon_Waiting_Round_Time=15
 
