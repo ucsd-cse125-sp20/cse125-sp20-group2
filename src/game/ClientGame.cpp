@@ -299,7 +299,7 @@ void ClientGame::updateGameState()
                             case 5: soundBuffer.loadFromFile("assets/audio/nyet6.wav"); break;
                         }
                         soundEffect.setBuffer(soundBuffer);
-                        soundEffect.setVolume(Config::getFloat("Sound_Effect_Volume"));
+                        soundEffect.setVolume(Config::getFloat("Nyet_Effect_Volume"));
                     }
                 }
                 soundEffect.play();

@@ -143,6 +143,7 @@ Ingredient_Rotation_Speed=0.05
 // // //
 Background_Music_Volume=20
 Sound_Effect_Volume=40
+Nyet_Effect_Volume=100
 Beep_Sound_Effect_Volume=20
 
 ////////////////////////////////////////////////////////////////////////////
