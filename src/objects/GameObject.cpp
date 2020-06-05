@@ -1,20 +1,19 @@
 #include <objects/GameObject.h>
 
-/// TODO: remove this later
+// Hardcoded counter allows us to create IDs
 int GameObject::counter = 1000000;
 
-/// TODO: Remove this later
 GameObject::GameObject() {
 	this->ID = GameObject::counter;
 	GameObject::counter++;
 	this->setPosition(glm::vec3(0, 0, 0));
 	this->setRotation(0);
-	this->applyScale(glm::vec3(0.2));
+	this->applyScale(glm::vec3(1));
 	this->model = NULL;
 	this->box = new BoundingBox(this); 
+	this->updateMeasurements();
 	this->setPassable(false);
 	this->setObjectType(OBJECT);
-	this->loadCollisionSize();
 }
 
 /**
@@ -30,29 +29,24 @@ GameObject::GameObject(int id) {
 	// Set transformations, assuming origin with no rotation
 	this->setPosition(glm::vec3(0, 0, 0));
 	this->setRotation(0);
-	this->applyScale(glm::vec3(0.2));
+	this->applyScale(glm::vec3(1));
 
 	// Model should be set afterward
 	this->model = NULL;
 
 	// For collisions
 	this->box = new BoundingBox(this); 
+	this->updateMeasurements();
 	this->setPassable(false);
 
 	// Generic object type
 	this->setObjectType(OBJECT);
 }
 
-/**GameObject:~GameObject() {
+GameObject::~GameObject() 
+{
 	if (model) delete model;
 	if (box) delete box;
-}*/
-
-void GameObject::loadCollisionSize()
-{
-	this->baseWidth = Config::getFloat("Object_Default_Width");
-	this->baseDepth = Config::getFloat("Object_Default_Depth");
-	this->updateMeasurements();
 }
 
 void GameObject::setObjectType(ObjectType newObjType) {
@@ -79,7 +73,6 @@ void GameObject::setModel(std::string path) {
 	this->modelPath = path;
 }
 
-/// NOTE: If height is ever needed, we will add it here.
 void GameObject::updateMeasurements()
 {
 	// This code serves to update collisions. If either of these are missing, stop
@@ -142,7 +135,6 @@ void GameObject::setRender(bool render) {
 	this->render = render;
 }
 
-
 // Apply scaling to the model.
 void GameObject::applyScale(glm::vec3 scale) {
 	this->scaleVec = scale;
@@ -153,21 +145,41 @@ glm::vec3 GameObject::getPosition() {
 	return this->pos;
 }
 
-float GameObject::getRotation() {
+float GameObject::getRotation() 
+{
 	return this->rotation;
 }
 
 // Set rotation and rotate the model to the new angle.
-void GameObject::setRotation(float rot) {
+void GameObject::setRotation(float rot) 
+{
+	// Set rotation
 	this->rotation = rot;
+
+	// Objects
+	if ((int)rot % 90 != 0 && objType == WALL)
+	{
+		std::cout << "Warning: Trying to rotate wall on a non-right angle." << std::endl;
+	}
+
+	// Bounding box rotation
+	if (rot == 90 || rot == 270)
+	{
+		float oldWidth = baseWidth;
+		baseWidth = baseDepth;
+		baseDepth = oldWidth;
+		this->updateMeasurements();
+	}
 }
 
 // Will probably be used on item pickup in dungeon phase
-void GameObject::setItem(int index, GameObject* item) {
+void GameObject::setItem(int index, GameObject* item) 
+{
 	this->inventory[index] = item;
 }
 
-GameObject* GameObject::getItem(int index) {
+GameObject* GameObject::getItem(int index) 
+{
 	return this->inventory[index];
 }
 
@@ -189,7 +201,7 @@ glm::vec3 GameObject::getScaleVec() {
 }
 
 bool GameObject::isColliding(GameObject* obj) {
-	if (this->box == NULL || obj->box == NULL) {
+	if (this->box == NULL || obj->box == NULL || !obj->render || !this->render ) {
 		return false;
 	}
 	return this->box->isIntersecting(obj->box);

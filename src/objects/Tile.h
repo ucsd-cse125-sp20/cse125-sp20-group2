@@ -7,5 +7,6 @@ class Tile : public GameObject
 {
     private:
     public:
+        Tile();
         Tile(int Id);
 };

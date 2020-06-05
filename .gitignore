@@ -2,7 +2,6 @@
 *.slo
 *.lo
 *.o
-*.obj
 src/schema/Game.pb.*
 
 # Executables
@@ -12,5 +11,6 @@ src/schema/Game.pb.*
 
 # Visual Studio Code
 .vscode/
-
 *.ini
+
+# Textures and Models

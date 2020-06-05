@@ -3,100 +3,48 @@
 #define PLAYER_RADIUS 0.05
 
 GameState::GameState() {
-    /// TODO, implement timer logic
-    // auto xMinutes = std::chrono::minutes(5);
-    auto xMinutes = std::chrono::seconds(15);
-    this->round = 0;
-    this->roundEnd = std::chrono::high_resolution_clock::now() + xMinutes;
-    this->oldTime = 0;
+    this->round = Game::RoundInfo::LOBBY;
 }
 
 GameState::~GameState() {
-    for (auto gameObjectPair : this->gameObjects)
+    for (auto objects : this->getAllObjects())
     {
-        delete gameObjectPair.second;
-    }
-    for (auto playerObjectPair : this->playerObjects)
-    {
-        delete playerObjectPair.second;
+        delete objects;
     }
 }
 
-void GameState::addPlayer(unsigned int clientId) {
+Player* GameState::addPlayer(unsigned int clientId) {
     std::cout << "Called add user in GameState w/ clientID: " << clientId << std::endl;
 
     // First, create player w/ id
     int objId = this->objCounter++;
     Player* newPlayerObject = new Player(objId);
-    newPlayerObject->setPosition(glm::vec3(0, 0, 0));
     newPlayerObject->setClientID(clientId);
 
     // Next, add player to map
     this->playerObjects[clientId] = newPlayerObject;
-
-    // OLD CODE
-    // Which id should be used to refer to the player
-    // (Can we just use clientId to refer to player object)?
-    // int id = addObject(Game::ObjectType::PLAYER);
-    // this->clientIdToGameObjId[clientId] = id;
-
-    // return id;
-
-    std::cout << "Returning from add player" << std::endl;
+    return newPlayerObject;
 }
 
-void GameState::addMap(Map *map) {
-
-    this->map = map;
+void GameState::addWalls(Map *map) {
     for(auto it = map->wallList.begin(); it!= map->wallList.end(); it++) {
-        this->gameObjects[(*it)->getID()] = *it;
+        this->worldObjects[(*it)->getID()] = *it;
     }
 }
 
-void GameState::addRecipe(Recipe *recipe) {
+void GameState::addIngredient(Ingredient* ing)
+{
+    this->ingredientObjects[ing->getID()] = ing;
+} 
 
+void GameState::addRecipe(Recipe *recipe) 
+{
     this->recipe = recipe;
-    for(auto it = recipe->ingredientList.begin(); it!= recipe->ingredientList.end(); it++) {
-        this->gameObjects[(*it)->getID()] = *it;
-    }
 }
 
-// Adds the object to the object map
-int GameState::addObject(Game::ObjectType objectType)
+Recipe* GameState::getRecipe()
 {
-    switch (objectType) {
-        // Create player object, add to map
-        case Game::ObjectType::PLAYER:
-        {
-            std::cout << "Creating a player object on the server side" << std::endl;
-            int objId = this->objCounter++;
-            Player* player = new Player(objId);
-            player->getBoundingBox()->setRadius(PLAYER_RADIUS);
-            this->gameObjects[objId] = player;
-            std::cout << "Returning the player object id" <<std::endl;
-            return objId;
-        }
-        // Create fruit object, add to map TODO
-        case Game::ObjectType::INGREDIENT:
-        {
-            std::cout << "Creating a ingredient object on the server side" << std::endl;
-            int objId = this->objCounter++;
-            IngredientObject* ingredient = new IngredientObject(objId);
-            ingredient->getBoundingBox()->setRadius(PLAYER_RADIUS/2);
-            this->ingredientObjects[objId] = ingredient;
-            std::cout << "Returning the ingredient object id" <<std::endl;
-            return objId;
-        }
-        default:
-            break;
-    }
-    return -1;
-}
-
-const std::unordered_map<unsigned int, GameObject*>& GameState::getObjects()
-{
-    // the class contains a unordered map called this->gameObjects
-    return this->gameObjects;
+    return this->recipe;
 }
 
 const std::unordered_map<unsigned int, Player*>& GameState::getPlayerObjects()
@@ -104,38 +52,18 @@ const std::unordered_map<unsigned int, Player*>& GameState::getPlayerObjects()
     return this->playerObjects;
 }
 
-const std::unordered_map<unsigned int, IngredientObject*>& GameState::getIngredientObjects() {
+const std::unordered_map<unsigned int, Ingredient*>& GameState::getIngredientObjects() {
     return this->ingredientObjects;
 }
-
-// If I called this, and assigned it to the following, what would happen?
-//std::unordered_map<unsigned int, GameObject*> myMap = getObjects() (copy?)
-//std::unordered_map<unsigned int, GameObject*>& myMap = getObjects() (reference?)
 
 Player* GameState::getPlayerObject(unsigned int clientId)
 {
     return this->playerObjects[clientId];
-
-    // OLD CODE
-    // int objId = this->clientIdToGameObjId[clientId];
-    // return this->gameObjects[objId];
 }
 
-GameObject* GameState::getGameObject(unsigned int objId) 
-{
-    return this->gameObjects[objId];
-}
-
-IngredientObject* GameState::getIngredientObject(unsigned int ingredientId)
+Ingredient* GameState::getIngredientObject(unsigned int ingredientId)
 {
     return this->ingredientObjects[ingredientId];
-}
-
-void GameState::removeObject(unsigned int objId)
-{
-    GameObject* object = this->gameObjects[objId];
-    delete object;
-    this->gameObjects.erase(objId);
 }
 
 void GameState::removePlayer(unsigned int clientId)
@@ -144,28 +72,77 @@ void GameState::removePlayer(unsigned int clientId)
     Player* playerObject = this->playerObjects[clientId];
     delete playerObject;
     this->playerObjects.erase(clientId);
-
-    // OLD CODE
-    // int objId = this->clientIdToGameObjId[clientId];
-
-    // GameObject* object = this->gameObjects[objId];
-    // free(object);
-
-    // this->clientIdToGameObjId.erase(clientId);
-    // this->gameObjects.erase(objId);
 }
 
 void GameState::removeIngredient(unsigned int ingredientId)
 {
-    IngredientObject* ingredient = this->ingredientObjects[ingredientId];
+    Ingredient* ingredient = this->ingredientObjects[ingredientId];
     delete ingredient;
     this->ingredientObjects.erase(ingredientId);
 }
 
+/// TODO: REPAIR GAME OVER LOGIC
 bool GameState::gameOver()
 {
+    switch (this->round)
+    {
+        // Game over if all players are ready
+        case Game::RoundInfo_RoundState_LOBBY:
+        {
+            return this->allClientsReady();
+        }
+         // Game over if some time is over
+        case Game::RoundInfo_RoundState_DUNGEON_WAITING:
+        {
+            break;
+        }
+        // Game over if some time is over
+        case Game::RoundInfo_RoundState_DUNGEON:
+        {
+            break;
+        }
+        // Game over if 15 seconds is over
+        case Game::RoundInfo_RoundState_KITCHEN_WAITING:
+        {
+            break;
+        }
+        // Game over if some time is over
+        case Game::RoundInfo_RoundState_KITCHEN:
+        {
+            break;
+        }
+        // Never in game over
+        case Game::RoundInfo_RoundState_END:
+        {
+            return false;
+            break;
+        }
+        
+        default:
+            break;
+    }
+
     auto currTime = std::chrono::high_resolution_clock::now();
     return currTime > this->roundEnd;
+}
+
+bool GameState::allClientsReady()
+{
+    // If no clients connected, return false
+    if (this->readyStatus.size() == 0)
+    {
+        return false;
+    }
+
+    for (auto clientPair : this->readyStatus)
+    {
+        bool clientIsReady = clientPair.second;
+        if (!clientIsReady)
+        {
+            return false;
+        }
+    }
+    return true;
 }
 
 int GameState::getRoundTime()
@@ -182,4 +159,118 @@ bool GameState::timeHasUpdated()
     bool result = roundTime != this->oldTime;
     this->oldTime = roundTime;
     return result;
+}
+
+void GameState::removeAllObjects()
+{
+    this->ingredientObjects.clear();
+    this->playerObjects.clear();
+}
+
+std::vector<GameObject*> GameState::getAllObjects()
+{
+    std::vector<GameObject*> gameObjectList;
+
+    for (const auto & ingredientPair : this->ingredientObjects)
+    {
+        gameObjectList.push_back(ingredientPair.second);
+    }
+
+    for (const auto & playerPair : this->playerObjects)
+    {
+        gameObjectList.push_back(playerPair.second);
+    }
+
+    for (const auto & worldPair : this->worldObjects)
+    {
+        gameObjectList.push_back(worldPair.second);
+    }
+
+    for (const auto & cookwarePair : this->cookwareObjects)
+    {
+        gameObjectList.push_back(cookwarePair.second);
+    }
+
+    for (const auto & platePair : this->plateObjects)
+    {
+        gameObjectList.push_back(platePair.second);
+    }
+
+    return gameObjectList;
+}
+
+Game::RoundInfo::RoundState GameState::getRound()
+{
+    return this->round;
+}
+
+
+void GameState::setRound(Game::RoundInfo::RoundState round)
+{
+    this->round = round;
+}
+
+/// TODO: RESET BACK SO THAT LOBBY GOES TO DUNGEON WAITING INSTEAD OF DUNGEON
+void GameState::advanceRound()
+{
+    switch (this->round)
+    {
+        case Game::RoundInfo::LOBBY :
+        {
+            this->round = Game::RoundInfo::DUNGEON_WAITING;
+            break;
+        }
+        case Game::RoundInfo::DUNGEON_WAITING :
+        {
+            this->round = Game::RoundInfo::DUNGEON;
+            break;
+        }
+        case Game::RoundInfo::DUNGEON :
+        {
+            this->round = Game::RoundInfo::KITCHEN_WAITING;
+            break;
+        }
+        case Game::RoundInfo::KITCHEN_WAITING :
+        {
+            this->round = Game::RoundInfo::KITCHEN;
+            break;
+        }
+        case Game::RoundInfo::KITCHEN :
+        {
+            this->round = Game::RoundInfo::END;
+            break;
+        }
+        case Game::RoundInfo::END :
+        {
+            this->round = Game::RoundInfo::LOBBY;
+            break;
+        }
+        default:
+            break;
+    }
+}
+
+void GameState::setRoundTime(unsigned int seconds)
+{
+    auto xMinutes = std::chrono::seconds(seconds);
+    this->roundEnd = std::chrono::high_resolution_clock::now() + xMinutes;
+    this->oldTime = 0;
+}
+
+Player* GameState::getWinningPlayer()
+{
+    int maxScore = -1;
+    Player* maxPlayer = NULL;
+    for (auto playerPair : this->playerObjects)
+    {
+        Player* currPlayer = playerPair.second;
+        int currScore = currPlayer->getScore();
+
+        if (currScore > maxScore)
+        {
+            maxScore = currScore;
+            maxPlayer = currPlayer;
+        }
+    }
+    return maxPlayer;
 }

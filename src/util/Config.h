@@ -2,6 +2,7 @@
 
 #include <unordered_map>
 #include <string>
+#include <iostream>
 #include <fstream>
 #include <sstream>
 #include <glm/glm.hpp>
@@ -16,10 +17,19 @@ public:
      * Get a config variable
      * */
     static std::string get(std::string key) {
+
+        // Edge case: does not exist in config
+        if (vars->find(key) == vars->end()) return std::string("NOT FOUND");
+
+        // Return
         return vars->at(key);
     }
 
     static int getInt(std::string key) {
+
+        // HEY YOU'RE TRYING TO GET SOMETHING YOU DON'T HAVE
+        if (vars->find(key) == vars->end()) std::cerr << "Cannot find key: " << key << " in config." << std::endl;
+
         return std::stoi(vars->at(key));
     }
 
@@ -32,6 +42,9 @@ public:
      * x,y,z .
      * */
     static glm::vec3 getVec3(std::string key) {
+
+        // HEY YOU'RE TRYING TO GET SOMETHING YOU DON'T HAVE
+        if (vars->find(key) == vars->end()) std::cerr << "Cannot find key: " << key << " in config." << std::endl;
 
         // Get string key
         std::string str = vars->at(key);
@@ -51,6 +64,40 @@ public:
 
         // Return the full vector
         return glm::vec3(x, y, z);
+    }
+
+    /**
+     * Parses a vec4 from the config file in the format
+     * x,y,z,w .
+     * */
+    static glm::vec4 getVec4(std::string key) {
+
+        // HEY YOU'RE TRYING TO GET SOMETHING YOU DON'T HAVE
+        if (vars->find(key) == vars->end()) std::cerr << "Cannot find key: " << key << " in config." << std::endl;
+
+        // Get string key
+        std::string str = vars->at(key);
+        
+        // Parse vector coordinate x
+        int pos = str.find(',');
+        float x = std::stof(str.substr(0, pos));
+        str.erase(0, pos + 1);
+
+        // Parse vector coordinate y
+        pos = str.find(',');
+        float y = std::stof(str.substr(0, pos));
+        str.erase(0, pos + 1);
+
+        // Parse vector coordinate z
+        pos = str.find(',');
+        float z = std::stof(str.substr(0, pos));
+        str.erase(0, pos + 1);
+
+        // Parse remainder of the string, assumed to be w
+        float w = std::stof(str);
+
+        // Return the full vector
+        return glm::vec4(x, y, z, w);
     }
 
     /**

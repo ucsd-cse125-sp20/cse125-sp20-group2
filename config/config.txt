@@ -1,42 +1,312 @@
-Taco=Salad
+////////////////////////////////////////////////////////////////////////////
 
-// Model paths
-Bun_Model=assets/models/Bun.obj
-Burger_Model=assets/models/Burger.obj
-Cheese_Model=assets/models/Cheese.obj
-Grid_Square_Model=assets/models/grid_square.obj
-Grid_Wire_Model=assets/models/grid_wire.obj
-Lettuce_Model=assets/models/Lettuce.obj
-Maze_Model=assets/models/Basic_Dungeon_Map.obj
-Meat_Model=assets/models/meat.obj
-Onion_Model=assets/models/Onion.obj
-Player_Model=assets/models/Basic_Character_Model.obj
-Tomato_Model=assets/models/tomato.obj
-Wall_Model=assets/models/wall.obj
+/// THIS IS THE CONFIG
 
-// Image paths
+// // // // // // // // 
+// DEMO RECIPE CHOICE
+// // //
+Recipe_Choice=2
 
+// // // // // // // // 
+// MODEL PATHS
+// // //
 
-// Model sizings
-Object_Default_Width=1
-Object_Default_Depth=1
-Ingredient_Radius=0.5
-Player_Radius=0.75
+// Ingredient model paths
+Bun_Model=assets/models/ingredients/Bun2.obj
+Cheese_Model=assets/models/ingredients/Cheese2.obj
+Lettuce_Model=assets/models/ingredients/Lettuce3.obj
+Meat_Model=assets/models/ingredients/meat_3.obj
+Onion_Model=assets/models/ingredients/Onion.obj
+Tomato_Model=assets/models/ingredients/tomato2.obj
+Burger_Model=assets/models/ingredients/Burger2.obj
+Vodka_Model=assets/models/ingredients/Vodka.obj
+
+// Individual burger part paths
+//Burger_Top_Bun_Model=assets/models/burgerpieces/TopBun3.obj
+//Burger_Bottom_Bun_Model=assets/models/burgerpieces/BotBun3.obj
+//Burger_Bun_Model=assets/models/burgerpieces/BotBun3.obj
+//Burger_Cheese_Model=assets/models/burgerpieces/Cheese3.obj
+//Burger_Lettuce_Model=assets/models/burgerpieces/Lettuce3.obj
+//Burger_Meat_Model=assets/models/burgerpieces/Meat3.obj
+//Burger_Onion_Model=assets/models/burgerpieces/Onion3.obj
+//Burger_Tomato_Model=assets/models/burgerpieces/Tomato3.obj
+
+// SMOOTH individual burger part paths
+Burger_Top_Bun_Model=assets/models/smoothpieces/TopBun.obj
+Burger_Bottom_Bun_Model=assets/models/smoothpieces/BotBum.obj
+Burger_Bun_Model=assets/models/smoothpieces/BotBum.obj
+Burger_Cheese_Model=assets/models/smoothpieces/Cheese.obj
+Burger_Lettuce_Model=assets/models/smoothpieces/Lettuce.obj
+Burger_Meat_Model=assets/models/smoothpieces/Meat.obj
+Burger_Onion_Model=assets/models/smoothpieces/Onion.obj
+Burger_Tomato_Model=assets/models/smoothpieces/Tomato.obj
+
+// Cookware model paths
+Pot_Model=assets/models/cookware/Pot.obj
+Water_Pot_Model=assets/models/cookware/WaterPot.obj
+Cutting_Board_Model=assets/models/cookware/Knife.obj
+Tomato_Cutting_Board_Model=assets/models/cookware/knife_tomato.obj
+Pan_Model=assets/models/cookware/Pan.obj
+Oil_Pan_Model=assets/models/cookware/OilPan.obj
+Plate_Model=assets/models/cookware/plate2.obj
+Plate_0_Model=assets/models/cookware/plateblue.obj
+Plate_1_Model=assets/models/cookware/plategreen.obj
+Plate_2_Model=assets/models/cookware/platepurple.obj
+Plate_3_Model=assets/models/cookware/platered.obj
+
+// Terrain model paths
+Wall_Model=assets/models/terrain/wall.obj
+Table_Model=assets/models/terrain/wall.obj
+Dirty_Pillar_Model=assets/models/terrain/dirtypillar.obj
+Dirty_Wall_Model=assets/models/terrain/dirtywall.obj
+Tile_Model=assets/models/terrain/tile.obj
+Tile4_Model=assets/models/terrain/tile4.obj
+Tile9_Model=assets/models/terrain/tile9.obj
+Floor_Model=assets/models/terrain/floor.obj
+Cage_Bar_Model=assets/models/terrain/rustycage_bars.obj
+Cage_Topbot_Model=assets/models/terrain/rustycage_topbot.obj
+
+// Character model paths
+Player_0=assets/models/characters/characterblue.obj
+Player_1=assets/models/characters/charactergreen.obj
+Player_2=assets/models/characters/characterpurple.obj
+Player_3=assets/models/characters/characterred.obj
+
+// Etc model paths
+Player_Model=assets/models/old/Basic_Character_Model.obj
+Grid_Square_Model=assets/models/old/grid_square.obj
+Grid_Wire_Model=assets/models/old/grid_wire.obj
+Maze_Model=assets/models/old/Basic_Dungeon_Map.obj
+
+////////////////////////////////////////////////////////////////////////////
+
+// // // // // // // // 
+// MODEL SCALING
+// // //
+
+// Cookware
+Table_Scaling=1,1,1
+Cookware_Scaling=2.5,2.5,2.5
+Plate_Scaling=2.5,2.5,2.5
+
+// Terrain
+Wall_Scaling=1,1,1
+
+// Ingredients
+Ingredient_Scaling=1,1,1
+
+// Burger piece scaling
+Burger_Piece_Scaling=2,2,2
+
+// Burger piece offset
+Burger_Piece_Offset=0.2
+
+// Burger piece size (on the plate)
+Burger_Piece_Scaling=1,1,1
+
+////////////////////////////////////////////////////////////////////////////
+
+// // // // // // // // 
+// GRAPHICS VARIABLES
+// // //
 
 // Shaders
 Vertex_Shader=src/graphics/shaders/vert_shader.glsl
 Fragment_Shader=src/graphics/shaders/frag_shader.glsl
 
-// Etc
-Window_Title=Comrade's Kitchen
-Window_Width=1800
-Window_Height=1600
+// Lighting options
+ambientStrength=1.1
+specularStrength=0.1
+defaultObjColor=0.2,0.4,0.7
+lightPos=1.2,1.0,2.0
+colorScale=0.5,0.5,0.5,1
+
+// Camera properties
+Camera_FOV=60.0
+Camera_Location=0,15,24
+
+// Camera rotations (yaw = rotation about y-axis, pitch = rotation about x-axis)
+Camera_Yaw=-90.0
+Camera_Pitch=-35.0
+
+// Indicate that there is no color when color values are less than...
+noColorPrecision=0.01
+
+// Ingredient rotation speed
+Ingredient_Rotation_Speed=0.05
+
+////////////////////////////////////////////////////////////////////////////
+
+// // // // // // // // 
+// SOUND VARIABLES
+// // //
+Background_Music_Volume=2
+Sound_Effect_Volume=50
+Beep_Sound_Effect_Volume=20
+
+////////////////////////////////////////////////////////////////////////////
+
+// // // // // // // // 
+// GAMEPLAY VARIABLES
+// // //
+
+// Bounding box sizings
+Object_Default_Width=1
+Object_Default_Depth=1
+Wall_Width=1
+Wall_Depth=4.2
+Ingredient_Radius=0.75
+Player_Radius=0.75
+Cookware_Radius=0.6
 
 // Controls
-Camera_Speed=0.25
-Camera_Location=0,7,7
-Player_Run_Speed=1
-Player_Turn_Speed=1
+Player_Run_Speed=5
+Player_Turn_Speed=2
 
-// Misc Coordinates
-Origin=0,0,0
+// Camera Controls
+Camera_Speed=0.25
+
+// Quality probabilities
+Bad_Quality_Prob=2
+Ok_Quality_Prob=88
+
+// Quality color modifiers (format of modification is Red, Green, Blue, Alpha. Please do not modify Alpha values.)
+Bad_Quality_Color_Modifier=0.2,0.8,0.3,1
+Good_Quality_Color_Modifier=2.5,2,0.8,1
+
+// Round time (in seconds)
+Kitchen_Round_Time=10
+Kitchen_Waiting_Round_Time=15
+Dungeon_Round_Time=10
+Lobby_Round_Time=15
+Dungeon_Waiting_Round_Time=15
+
+Cook_Event_Time=5
+
+// multipliers
+Points_Multi=2
+Individual_Instruction_Points=50
+Base_Correct_Ingredient_Score=10
+Player_Size_Increase=4
+
+////////////////////////////////////////////////////////////////////////////
+
+// // // // // // // // 
+// UI VARIABLES
+// // //
+
+// Etc
+Window_Title=Comrade's Kitchen
+Window_Width=1920
+Window_Height=1080
+
+Score_Window_Height=80
+Score_Window_Width=100
+
+Game_Info_Window_Width=150
+Game_Info_Window_Height=100
+
+End_Screen_Window_Width=700
+End_Screen_Window_Height=300
+
+Font_Scale=1
+Score_Font_Scale=1.4
+End_Screen_Font_Scale=2
+
+Cooking_Event_Min_Distance=3.2
+Plate_Event_Min_Distance=4
+
+Font_Size_Pixels=15
+
+////////////////////////////////////////////////////////////////////////////
+
+// // // // // // // // 
+// DUNGEON MAP PROPERTIES
+// // //
+
+// Dungeon walls
+Dungeon_Wall_Count=10
+
+// Top and bottom Walls (external)
+Dungeon_Wall_Pos_0=0,0,30
+Dungeon_Wall_Scale_0=94.7,1,0.33
+Dungeon_Wall_Pos_1=0,0,-30
+Dungeon_Wall_Scale_1=94.7,1,0.33
+
+// Adjusted wall boundaries used for ingredient spawning
+Dungeon_Lower_X=-44
+Dungeon_Upper_X=44
+Dungeon_Lower_Z=-29
+Dungeon_Upper_Z=29
+
+// Ingredient spawn rate (in seconds)
+Dungeon_Ingredient_Spawn_Rate=1.0;
+Vodka_Chance=5
+
+// Left and right walls (external)
+Dungeon_Wall_Pos_2=45,0,0
+Dungeon_Wall_Scale_2=1,1,15
+Dungeon_Wall_Pos_3=-45,0,0
+Dungeon_Wall_Scale_3=1,1,15
+
+// Internal walls
+Dungeon_Wall_Pos_4=-36,0,-6
+Dungeon_Wall_Pos_5=-35,0,-5
+Dungeon_Wall_Rot_5=90
+Dungeon_Wall_Pos_6=36,0,6
+Dungeon_Wall_Pos_7=35,0,7
+Dungeon_Wall_Rot_7=90
+Dungeon_Wall_Pos_8=5,0,0
+Dungeon_Wall_Pos_9=-5,0,0
+
+// Dungeon Spawn Positions
+Dungeon_Spawn_Count=4
+Dungeon_Spawn_0=-1,0,1
+Dungeon_Spawn_1=1,0,1
+Dungeon_Spawn_2=-1,0,-1
+Dungeon_Spawn_3=1,0,-1
+
+////////////////////////////////////////////////////////////////////////////
+
+// // // // // // // // 
+// KITCHEN MAP PROPERTIES
+// // //
+
+// Kitchen Spawn Positions
+Kitchen_Spawn_Count=4
+Kitchen_Spawn_0=-1,0,1
+Kitchen_Spawn_1=1,0,1
+Kitchen_Spawn_2=-1,0,-1
+Kitchen_Spawn_3=1,0,-1
+
+Cell_Wall_Count=4
+Cell_Scale=3
+Cell_Wall_0=6,0,-30
+Cell_Wall_1=-6,0,-30
+Cell_Wall_2=0,0,-36
+Cell_Wall_3=0,0,-24
+Cell_Base=0,-0.5,-30
+
+Cell_Spawn_Count=3
+Cell_Wall_Spawn_0=1,-0.5,-29
+Cell_Wall_Spawn_1=-1,-0.5,-29
+Cell_Wall_Spawn_2=0,-0.5,-28
+
+// Plate Initial and Variation
+Plate_Init_Spawn=-15,0,-13
+Plate_Spacing=10
+
+// Cutting Board Inital and Variation
+Cutting_Board_Init_Spawn=-15,0,32
+Cutting_Board_Spacing=10
+
+// Pot Inital and Variation
+Pot_Init_Spawn=25,0,-5
+Pot_Spacing=10
+
+// Pan Inital and Variation
+Pan_Init_Spawn=-25,0,-5
+Pan_Spacing=10
+
+// Plate Score
+Plate_Score=5

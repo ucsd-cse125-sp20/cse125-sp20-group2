@@ -2,6 +2,7 @@
 
 #include <schema/Game.pb.h>
 #include <objects/GameObject.h>
+#include <objects/Ingredient.h>
 
 /**
  * This is a utility function to convert to ProtocolBuffer messages
@@ -22,16 +23,22 @@ public:
             exit(1);
         }
 
-        /// TODO: Check if sending server message deallocates Vector
         Game::Vector3* vector = toVector(object->getPosition());
+        Game::Vector3* scaleVector = toVector(object->getScaleVec());
+        std::string* modelPath = new std::string(object->getModelPath());
 
         // Set position/location/id (universal aspects of all game objects)
         Game::Object* msgObj = new Game::Object();
-        msgObj->set_allocated_worldposition(vector);
+        
+        // Set non-allocated properties (primitive)
         msgObj->set_rotation(object->getRotation());
         msgObj->set_id(object->getID());
-        msgObj->set_allocated_modelpath(new std::string(object->getModelPath()));
         msgObj->set_render(object->getRender());
+
+        // Set allocated properties (create pointers before setting)
+        msgObj->set_allocated_worldposition(vector);
+        msgObj->set_allocated_modelpath(modelPath);
+        msgObj->set_allocated_scale(scaleVector);
         
         // Set type
         switch (object->getObjectType()) {
@@ -40,11 +47,17 @@ public:
             case 1:
                 msgObj->set_type(Game::ObjectType::PLAYER); break;
             case 2:
-                msgObj->set_type(Game::ObjectType::INGREDIENT); break;
+                msgObj->set_type(Game::ObjectType::INGREDIENT); 
+                msgObj->set_quality(((Ingredient*)object)->getQualityIndex());
+                break;
             case 3:
                 msgObj->set_type(Game::ObjectType::COOKWARE); break;
             case 4:
                 msgObj->set_type(Game::ObjectType::WALL); break;
+            case 5:
+                msgObj->set_type(Game::ObjectType::TABLE); break;
+            case 6:
+                msgObj->set_type(Game::ObjectType::PLATE); break;
         }
 
         // Put allocated object into message to be sent
@@ -56,11 +69,13 @@ public:
     /**
      * Convert inventory id to message for inventory pickup event
      * */
-    static Game::ServerMessage* toInventoryServerMessage(int id, bool add, std::string name) {
+    static Game::ServerMessage* toInventoryServerMessage(int id, bool add, std::string name, IngredientStatus status, int qualityIndex) {
         Game::Inventory* msgObj = new Game::Inventory();
         msgObj->set_id(id);
         msgObj->set_add(add);
         msgObj->set_name(name);
+        msgObj->set_ingredientstatus(Ingredient::IngredientStatusToString[status]);
+        msgObj->set_qualityindex(qualityIndex);
         Game::ServerMessage* message = new Game::ServerMessage();
         message->set_allocated_inventory(msgObj);
         return message;
@@ -105,4 +120,103 @@ public:
         message->set_allocated_score(score);
         return message;
     }
+
+    /**
+     * Creates a ServerMessage to update the round state
+     * */ 
+    static Game::ServerMessage* toRoundUpdate(Game::RoundInfo::RoundState currState)
+    {
+        Game::RoundInfo* roundInfo = new Game::RoundInfo();
+        roundInfo->set_type(currState);
+
+        Game::ServerMessage* message = new Game::ServerMessage();
+        message->set_allocated_round(roundInfo);
+        return message;
+    }
+
+    /*
+    * Creates a client ready / unready message
+    * */
+    static Game::ClientMessage* toReadyMessage(bool isReady)
+    {
+        Game::ReadyState* readyMsg = new Game::ReadyState();
+        readyMsg->set_ready(isReady);
+
+        Game::ClientMessage* clientMsg = new Game::ClientMessage();
+        clientMsg->set_allocated_ready(readyMsg);
+        return clientMsg;
+    }
+
+    /*
+    * Creates a winning message indicating that a client has won
+    * */
+   static Game::ServerMessage* toWinningMessage(uint32_t clientId)
+   {
+       Game::RoundWin* winMsg = new Game::RoundWin();
+       winMsg->set_clientid(clientId);
+
+       Game::ServerMessage* serverMsg = new Game::ServerMessage();
+       serverMsg->set_allocated_win(winMsg);
+       return serverMsg;
+   }
+
+   /*
+   * Creates a client message for cooking event
+   * */
+  static Game::ClientMessage* toCookMessage(Ingredient* ingredient)
+  {
+      Game::CookEvent* cookMsg = new Game::CookEvent();
+      cookMsg->set_objectid(ingredient->getID());
+
+      Game::ClientMessage* clientMsg = new Game::ClientMessage();
+      clientMsg->set_allocated_cookevent(cookMsg);
+      return clientMsg;
+  }
+
+  static Game::ServerMessage* toInstructionInfo(Instruction* inst, int index) 
+  {
+      Game::InstructionInfo* iinfo = new Game::InstructionInfo();
+      iinfo->set_index(index);
+      iinfo->set_instructionmsg(inst->instr);
+
+      Game::ServerMessage* serverMsg = new Game::ServerMessage();
+      serverMsg->set_allocated_instruction(iinfo);
+      return serverMsg;
+  }
+
+  static Game::ServerMessage* toInstructionInfo(Instruction* inst, int index, std::string recipeName) 
+  {
+      Game::InstructionInfo* iinfo = new Game::InstructionInfo();
+      iinfo->set_index(index);
+      iinfo->set_instructionmsg(inst->instr);
+      iinfo->set_recipename(recipeName);
+
+      Game::ServerMessage* serverMsg = new Game::ServerMessage();
+      serverMsg->set_allocated_instruction(iinfo);
+      return serverMsg;
+  }
+
+  /*
+  * Create a server message for time update
+  * */
+ static Game::ServerMessage* toTimeMessage(int time)
+ {
+     Game::TimeUpdate* timeUpdateMessage = new Game::TimeUpdate();
+     timeUpdateMessage->set_seconds(time);
+
+     Game::ServerMessage* serverMsg = new Game::ServerMessage();
+     serverMsg->set_allocated_time(timeUpdateMessage);
+     return serverMsg;
+ }
+
+ static Game::ServerMessage* toValidCookingEvent(std::string msg, bool b)
+ {
+     Game::ValidateCooking* validMsg = new Game::ValidateCooking();
+     validMsg->set_message(msg);
+     validMsg->set_valid(b);
+
+     Game::ServerMessage* serverMsg = new Game::ServerMessage();
+     serverMsg->set_allocated_validcook(validMsg);
+     return serverMsg;
+ }
 };

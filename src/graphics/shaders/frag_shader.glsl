@@ -24,6 +24,9 @@ uniform float specularStrength;
 uniform vec3 defaultObjColor;
 uniform float noColorPrecision;
 
+// Color scaling
+uniform vec4 colorScale;
+
 // Light direction
 uniform vec3 lightPos;
 
@@ -47,9 +50,9 @@ void main()
 	vec3 specular = specularStrength * spec * lightColor;  
 
 	// Calculate object color from textures (replace with something else if needed...)
-	vec4 objectColor = mix(texture(texture1, TexCoord), texture(texture2, TexCoord), 0.2);
+	vec4 objectColor = mix(texture(texture1, TexCoord), texture(texture2, TexCoord), 0.2) * colorScale;
 	
-	// If no textures, use default color (white)
+	// If no textures, use default color (defined in config)
 	if (objectColor.x < noColorPrecision && objectColor.y < noColorPrecision && objectColor.z < noColorPrecision) {
 		objectColor = vec4(defaultObjColor.x, defaultObjColor.y, defaultObjColor.z, 0);
 	}

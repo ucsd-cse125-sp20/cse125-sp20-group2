@@ -1,10 +1,23 @@
 #include <game/ClientGame.h>
-
+#include <game/KeyResolver.h>
+#include <objects/Player.h>
+#include <objects/Plate.h>
 
 #define CLIENT_DELAY 1000
 
 ClientGame::ClientGame(std::string IP, int port) : client(IP, port), window(Config::getFloat("Window_Width"), Config::getFloat("Window_Height"))
 {
+    // Configure keybinds
+    glfwSetWindowUserPointer(this->window.glfwViewport, reinterpret_cast<void*> (this));
+    glfwSetKeyCallback(this->window.glfwViewport, key_callback_wrapper);
+
+    // Create floor lol
+    GameObject* floor = new GameObject(-1);
+    floor->setModel(Config::get("Floor_Model"));
+    floor->setPosition(glm::vec3(0,-0.5,0));
+    floor->applyScale(glm::vec3(2));
+    window.addObject(-1, floor);
+
     runGame();
 }
 
@@ -13,16 +26,51 @@ ClientGame::~ClientGame()
 
 }
 
+void ClientGame::keyBindsHandler(GLFWwindow* glfwWindow, int key, int scancode, int action, int mods)
+{
+    // Handles ready up
+    if (key == GLFW_KEY_R && action == GLFW_PRESS)
+    {
+        std::cout << "sending ready up message" << std::endl;
+        Game::ClientMessage* readyMsg = MessageBuilder::toReadyMessage(true);
+        this->client.send(*readyMsg);
+        delete readyMsg;
+    }
+
+    // Handles toggling free cam
+    if (key == GLFW_KEY_F && action == GLFW_PRESS)
+    {
+        std::cout << "locking / unlocking the camera" << std::endl;
+        this->window.camera->toggleFreeCam();
+        this->window.toggleCursor();
+    }
+
+    // Handles interact event
+    if (key == GLFW_KEY_E && action == GLFW_PRESS && this->window.getSelectedIngredient() != NULL && this->window.getRound() == KITCHEN_NUM )
+    {
+        std::cout << "pressed interact key" << std::endl;
+        Game::ClientMessage* cookMsg = MessageBuilder::toCookMessage(this->window.getSelectedIngredient());
+        this->client.send(*cookMsg);
+        delete cookMsg;
+
+        // Prevent spamming the event key, have to select ingredient again
+        this->window.selectedIngredient = NULL;
+    }
+}
+
 void ClientGame::runGame() 
 {
-    while(!window.isClosed) {
+    // Background music
+    music.openFromFile("assets/audio/8Bit_Paradise.ogg");
+    music.setVolume(Config::getInt("Background_Music_Volume"));
+    music.setLoop(true);
+    music.play();
+
+    while(!window.isClosed) 
+    {
         // Take local input
         // Send to the server
         processInput();
-
-        // may not need this
-        // Send input to server
-        //sendMsgs();
 
         // Receive updated state from server
         receiveUpdates();
@@ -32,17 +80,7 @@ void ClientGame::runGame()
 
         // Render world
         window.render();
-
-        // Sleep
-        //std::this_thread::sleep_for(std::chrono::milliseconds(CLIENT_DELAY));
     }
-}
-
-void ClientGame::sendMsgs()
-{
-    Game::ClientMessage clientMessage;
-    clientMessage.set_direction(Game::Direction::UP);
-    client.send(clientMessage);
 }
 
 void ClientGame::receiveUpdates()
@@ -65,6 +103,7 @@ void ClientGame::updateGameState()
                 float rotation = currMessage.object().rotation();
                 uint32_t id = currMessage.object().id();
                 bool render = currMessage.object().render();
+                Game::Vector3 scale = currMessage.object().scale();
 
                 GameObject* obj = NULL;
 
@@ -84,29 +123,85 @@ void ClientGame::updateGameState()
                         case Game::PLAYER: obj = new Player(id); break;
 
                         // Ingredient object.
-                        case Game::INGREDIENT: obj = new IngredientObject(id); break;
+                        case Game::INGREDIENT: obj = new Ingredient(id); 
+                        ((Ingredient*)obj)->setQualityIndex(currMessage.object().quality());
+                        break;
 
                         // Cookware object.
-                        case Game::COOKWARE: obj = new CookwareObject(id); break;
-
+                        case Game::COOKWARE: obj = new Cookware(id); break;
+                        
                         // Wall object.
                         case Game::WALL: obj = new Wall(id); break;
+
+                        // Table object..
+                        case Game::TABLE: obj = new Table(id); break;
+
+                        // Plate object.
+                        case Game::PLATE: obj = new Plate(id); break;
 
                         // Basic gameobject.
                         default: obj = new GameObject(id); break;
                     }
-
-                    /// Set model based on the model path provided by the server TODO: Might not be necessary???
-                    obj->setModel(currMessage.object().modelpath());
-
                     // Add object to window
                     window.addObject(id, obj);
                 }
 
+                /// Set model based on the model path provided by the server
+                std::string modelPath = currMessage.object().modelpath();
+
+                // We got an updated model, set old model to null
+                if (modelPath.compare(obj->getModelPath()) != 0)
+                {
+                    delete obj->model;
+                    obj->model = NULL;
+                }
+
+                // Set new model path so we can reload
+                obj->setModel(modelPath);
+
                 // Set object parameters
                 obj->setRotation(rotation);
+
+                // The player is being scaled up which means the player picked up the vodka
+                if (currMessage.object().has_scale() && currMessage.object().id() == this->objectId)
+                {
+                    glm::vec3 originalScale = obj->getScaleVec();
+                    glm::vec3 newScale (scale.x(), scale.y(), scale.z());
+
+                    // Bigger player
+                    if (originalScale.x < newScale.x) {
+                        // Play soviet national anthem
+                        music.stop();
+                        music.openFromFile("assets/audio/SovietAnthem.ogg");
+                        music.setVolume(Config::getInt("Background_Music_Volume"));
+                        music.setLoop(true);
+                        music.play();
+
+                        // Turn screen red
+                        this->window.vodkaActive = true;
+                    }
+
+                    // Smaller player
+                    else if (originalScale.x > newScale.x)
+                    {
+                        if (this->window.getRound() == DUNGEON_NUM) 
+                        {
+                            // Background music
+                            music.stop();
+                            music.openFromFile("assets/audio/8Bit_Paradise.ogg");
+                            music.setVolume(Config::getInt("Background_Music_Volume"));
+                            music.setLoop(true);
+                            music.play();
+                        }
+                        // Revert screen color
+                        this->window.vodkaActive = false; 
+                    }
+                }
+
+                if (currMessage.object().has_scale()) obj->applyScale(glm::vec3(scale.x(), scale.y(), scale.z()));
                 obj->setRender(render);
                 obj->setPosition(glm::vec3(location.x(), location.y(), location.z()));
+                window.removeCookingEventMessage();
                 break;
             }
 
@@ -121,18 +216,84 @@ void ClientGame::updateGameState()
             {
                 // Get player associated with this client
                 Player* player = (Player*)window.objectsToRender[objectId];
+                auto currInventory = player->getInventory();
 
-                // Get id of the object to be picked up.
-                IngredientObject* pickup = (IngredientObject*)window.objectsToRender[currMessage.inventory().id()];
-
+                // Get id of the object to be picked up, set the conditions
+                Ingredient* pickup = (Ingredient*)window.objectsToRender[currMessage.inventory().id()];
                 pickup->setName(currMessage.inventory().name());
+                pickup->setQualityIndex(currMessage.inventory().qualityindex());
+                pickup->setStatus(Ingredient::stringToIngredientStatus[currMessage.inventory().ingredientstatus()]);
+                
+                if(soundEffect.getStatus() == sf::SoundSource::Playing) {
+                    soundEffect.stop();
+                }
 
-                // Add object to player inventory.
-                if (currMessage.inventory().add())  player->addToInventory(pickup);
-                else    player->removeFromInventory(pickup);
+                if (soundBuffer.loadFromFile("assets/audio/Inventory_Pickup.wav")) {
+                    soundEffect.setBuffer(soundBuffer);
+                    soundEffect.setVolume(Config::getFloat("Sound_Effect_Volume"));
+                    soundEffect.play();
+                }
+
+                // Already exists
+                if (currInventory->count(currMessage.inventory().id()) > 0)
+                {
+                    if (!currMessage.inventory().add()) 
+                        player->removeFromInventory(pickup);
+                }
+                // Doesn't exist in inventory
+                else
+                {
+                    player->addToInventory(pickup);
+                }
+                
                 std::cout << "Picked up: " << pickup->getName() << std::endl;
-
                 break;
+            }
+
+            case Game::ServerMessage::EventCase::kValidCook:
+            {
+                std::cout << "got valid cooking event from server" << std::endl;
+                std::cout<<currMessage.validcook().message().at(0)<<std::endl;
+                switch(currMessage.validcook().message().at(0)) {
+                    case 'C': { 
+                        soundBuffer.loadFromFile("assets/audio/Cutting.wav"); 
+                        soundEffect.setBuffer(soundBuffer);
+                        soundEffect.setVolume(Config::getFloat("Sound_Effect_Volume"));
+                        break;
+                    }
+                    case 'F': {
+                        soundBuffer.loadFromFile("assets/audio/Frying.wav"); 
+                        soundEffect.setBuffer(soundBuffer);
+                        soundEffect.setVolume(Config::getFloat("Sound_Effect_Volume"));
+                        break;
+                    }
+                    case 'B': {
+                        soundBuffer.loadFromFile("assets/audio/PotBoiling.wav"); 
+                        soundEffect.setBuffer(soundBuffer);
+                        soundEffect.setVolume(Config::getFloat("Sound_Effect_Volume"));
+                        break; 
+                    }
+                    case 'P': {
+                        soundBuffer.loadFromFile("assets/audio/Dish.wav"); 
+                        soundEffect.setBuffer(soundBuffer);
+                        soundEffect.setVolume(Config::getFloat("Sound_Effect_Volume"));
+                        break; 
+                    }
+                    default: {
+                        switch(rand()%6) {
+                            case 0: soundBuffer.loadFromFile("assets/audio/nyet1.wav"); break;
+                            case 1: soundBuffer.loadFromFile("assets/audio/nyet2.wav"); break;
+                            case 2: soundBuffer.loadFromFile("assets/audio/nyet3.wav"); break;
+                            case 3: soundBuffer.loadFromFile("assets/audio/nyet4.wav"); break;
+                            case 4: soundBuffer.loadFromFile("assets/audio/nyet5.wav"); break;
+                            case 5: soundBuffer.loadFromFile("assets/audio/nyet6.wav"); break;
+                        }
+                        soundEffect.setBuffer(soundBuffer);
+                        soundEffect.setVolume(Config::getFloat("Sound_Effect_Volume"));
+                    }
+                }
+                soundEffect.play();
+                break;   
             }
 
             // Client info messages
@@ -152,15 +313,61 @@ void ClientGame::updateGameState()
                 break;
             }
 
-            case Game::ServerMessage::EventCase::kRoundUpdate:
+            case Game::ServerMessage::EventCase::kInstruction:
             {
-                std::cout << "secs left " << currMessage.roundupdate().seconds() << std::endl;
-                uint32_t seconds = currMessage.roundupdate().seconds();
-                if( seconds == 0) {
-                    this->round++;
-                    window.setRound(this->round);
-                }
+                int index = currMessage.instruction().index();
+                std::string msg = currMessage.instruction().instructionmsg();
+                if(currMessage.instruction().has_recipename() )
+                    window.recipeName = currMessage.instruction().recipename();
+                window.instructionStrings.insert(window.instructionStrings.begin()+index, msg);
+                break;
+            }
+
+            case Game::ServerMessage::EventCase::kTime:
+            {
+                uint32_t seconds = currMessage.time().seconds();
                 window.setTimer(seconds);
+                break;
+            }
+
+            case Game::ServerMessage::EventCase::kRound:
+            {
+                window.updateRound(currMessage.round().type());         
+                if (currMessage.round().type() == Game::RoundInfo_RoundState_KITCHEN_WAITING) {
+                    music.stop();
+                    music.openFromFile("assets/audio/Cook.ogg");
+                    music.setVolume(Config::getInt("Background_Music_Volume"));
+                    music.setLoop(true);
+                    music.play();
+                }
+                std::cout << " received round update message " << currMessage.DebugString() << std::endl;
+                break;
+            }
+
+            /// TODO: NEED TO CHANGE LATER
+            case Game::ServerMessage::EventCase::kWin:
+            {
+                std::cout << " received win event " << std::endl;
+                window.gameOver = true;
+
+                // Win or lose
+                if (currMessage.win().clientid() == clientId) {
+                    window.gameWin = true;
+                    music.stop();
+                    music.openFromFile("assets/audio/SovietAnthem.ogg");
+                    music.setLoop(true);
+                    music.setVolume(Config::getInt("Background_Music_Volume"));
+                    music.play();
+                }
+                else {
+                    window.gameWin = false;
+                    music.stop();
+                    music.openFromFile("assets/audio/TheDustyAttic.ogg");
+                    music.setLoop(true);
+                    music.setVolume(Config::getInt("Background_Music_Volume"));
+                    music.play();
+                }
+
                 break;
             }
 
@@ -186,24 +393,42 @@ void ClientGame::processInput()
 	}
 
     // Message to send
-    Game::ClientMessage msg;
+    Game::ClientMessage movementMessage;
+    Game::ClientMessage rotationMessage;
 
     // Get key inputs and set direction of message
-	if (glfwGetKey(window.glfwViewport, GLFW_KEY_W) == GLFW_PRESS)
+    if (glfwGetKey(window.glfwViewport, GLFW_KEY_W) == GLFW_PRESS &&
+    glfwGetKey(window.glfwViewport, GLFW_KEY_S) == GLFW_PRESS) {
+        // Do nothing: The movements should cancel each other out.
+    }
+    else if (glfwGetKey(window.glfwViewport, GLFW_KEY_W) == GLFW_PRESS)
     {
-        msg.set_direction(Game::Direction::UP);  
+        movementMessage.set_direction(Game::Direction::UP);  
     }
 	else if (glfwGetKey(window.glfwViewport, GLFW_KEY_S) == GLFW_PRESS) 
     {
-        msg.set_direction(Game::Direction::DOWN); 
+        movementMessage.set_direction(Game::Direction::DOWN); 
     }
-	if (glfwGetKey(window.glfwViewport, GLFW_KEY_A) == GLFW_PRESS)
+
+    
+    if (glfwGetKey(window.glfwViewport, GLFW_KEY_A) == GLFW_PRESS &&
+    glfwGetKey(window.glfwViewport, GLFW_KEY_D) == GLFW_PRESS) {
+        // Do nothing: The movements should cancel each other out.
+    }
+	else if (glfwGetKey(window.glfwViewport, GLFW_KEY_A) == GLFW_PRESS)
     {
-        msg.set_direction(Game::Direction::LEFT); 
+        rotationMessage.set_direction(Game::Direction::LEFT); 
     }
 	else if (glfwGetKey(window.glfwViewport, GLFW_KEY_D) == GLFW_PRESS)
     {
-        msg.set_direction(Game::Direction::RIGHT); 
+        rotationMessage.set_direction(Game::Direction::RIGHT); 
+    }
+    // Send message only if it has a direction associated with it
+    if (movementMessage.has_direction()) {
+        this->client.send(movementMessage);
+    }
+    if (rotationMessage.has_direction()) {
+        this->client.send(rotationMessage);
     }
 
     // Camera movement options (client-side only)
@@ -215,12 +440,4 @@ void ClientGame::processInput()
 		window.camera->processKeyMovement(LEFT);
     if (glfwGetKey(window.glfwViewport, GLFW_KEY_RIGHT) == GLFW_PRESS)
 		window.camera->processKeyMovement(RIGHT);
-	if (glfwGetKey(window.glfwViewport, GLFW_KEY_F) == GLFW_PRESS)
-		window.camera->toggleFreeCam();
-
-    
-    // Send message only if it has a direction associated with it
-    if (msg.has_direction()) {
-        this->client.send(msg);
-    }
 }

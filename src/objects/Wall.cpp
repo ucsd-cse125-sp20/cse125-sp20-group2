@@ -1,14 +1,19 @@
 #include <objects/Wall.h>
 
 Wall::Wall() : GameObject() {
-    ///TODO: Wall sizing should not be hardcoded.
-	this->setModel(Config::get("Wall_Model"));
-    this->applyScale(glm::vec3(3, 2, 2));
+	this->setModel(Config::get("Dirty_Wall_Model"));
+    this->applyScale(Config::getVec3("Wall_Scaling"));
+    this->baseWidth = Config::getFloat("Wall_Width");
+	this->baseDepth = Config::getFloat("Wall_Depth");
+	this->updateMeasurements();
     this->objType = WALL;
 }
 
 Wall::Wall(int id) : GameObject(id) {
-	this->setModel(Config::get("Wall_Model"));
-    this->applyScale(glm::vec3(3, 2, 2));
+	this->setModel(Config::get("Dirty_Wall_Model"));
+    this->applyScale(Config::getVec3("Wall_Scaling"));
+    this->baseWidth = Config::getFloat("Wall_Width");
+	this->baseDepth = Config::getFloat("Wall_Depth");
+	this->updateMeasurements();
     this->objType = WALL;
 }

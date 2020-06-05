@@ -1,11 +1,20 @@
 #pragma once
 
 #include <objects/GameObject.h>
-#include <objects/IngredientObject.h>
+#include <objects/Ingredient.h>
+#include <util/Recipe.h>
 #include <unordered_map>
 #include <string>
 #include <util/Instruction.h>
 #include <deque>
+
+enum Team
+{
+    BLUE = 0,
+    GREEN = 1,
+    PURPLE = 2,
+    RED = 3
+};
 
 class Player : public GameObject 
 {
@@ -14,18 +23,28 @@ protected:
 
     int score  = 0;
 
+    bool freeze;
+
     std::string teamName;
 
     float runSpeed = 0, turnSpeed = 0;
 
-    std::unordered_map<int, IngredientObject*>* inventory;
+    std::unordered_map<int, Ingredient*>* inventory;
 
     std::deque<Instruction*> completedInstructions;
 
     void loadCollisionSize();
 
+    Team team;
+
 public:
     Player(int ID);
+
+    void setFreeze(bool f);
+
+    bool getFreeze();
+
+    std::vector<std::pair<Instruction*, bool>> instructionSet;
 
     std::deque<Instruction*> getCompletedInstructions();
 
@@ -53,11 +72,15 @@ public:
 
     int getScore();
 
-    void addToInventory( IngredientObject* ingredient );
+    void addToInventory( Ingredient* ingredient );
 
-    void removeFromInventory( IngredientObject* ingredient );
+    void removeFromInventory( Ingredient* ingredient );
 
-    std::unordered_map<int, IngredientObject*>* getInventory();
+    std::unordered_map<int, Ingredient*>* getInventory();
 
     void drawInventory(GLuint shaderProgram);
+
+    Team getTeam();
+
+    void setTeam(Team team);
 };

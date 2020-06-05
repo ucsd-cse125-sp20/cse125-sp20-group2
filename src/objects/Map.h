@@ -1,11 +1,11 @@
 #pragma once
 
 #include <objects/Wall.h>
-#include <objects/IngredientObject.h>
+#include <objects/Ingredient.h>
 
 class Map {
-public:
-    std::vector<Wall*> wallList;
-    std::vector<glm::vec3> ingredientPositions;
-    std::vector<glm::vec3> spawningLocations;
+    public:
+        // Walls include tables
+        std::vector<Wall*> wallList;
+        std::vector<glm::vec3> spawningLocations;
 };

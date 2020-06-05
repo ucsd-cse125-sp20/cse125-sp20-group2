@@ -33,6 +33,7 @@ public:
 	void setMat4(const std::string& name, glm::mat4 mat) const;
 	void setMat3(const std::string& name, glm::mat3 mat) const;
 	void setVec3(const std::string& name, const glm::vec3& value) const;
+	void setVec4(const std::string& name, const glm::vec4& value) const;
 
 private:
 	// Prints out the compile error if shader compilation was unsuccessful.

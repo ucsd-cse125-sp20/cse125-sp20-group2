@@ -26,16 +26,16 @@
 #include <graphics/render/Camera.h>
 #include <graphics/render/Model.h>
 
-// Etc
-#include <constants/graphics_vars.h>
+// Protobuf
+#include <schema/Game.pb.h>
 
 // Objects
 #include <objects/GameObject.h>
 #include <objects/Player.h>
-#include <objects/IngredientObject.h>
+#include <objects/Ingredient.h>
+#include <objects/Plate.h>
 
-#include <gui/imgui_impl_glfw.h>
-#include <gui/imgui_impl_opengl3.h>
+#include <graphics/UIScreenFactory.h>
 
 class Window
 {
@@ -43,16 +43,20 @@ public:
     bool isClosed;
     Window(int width, int height);
 
-    std::unordered_map<unsigned int, GameObject*> objectsToRender;
-    std::unordered_map<int, IngredientObject*>* inventory;
+    std::unordered_map<int, GameObject*> objectsToRender;
+    std::unordered_map<int, Ingredient*>* inventory;
+    Ingredient* selectedIngredient = NULL;
+
+    bool vodkaActive;
+
     void render();
 
     /**
      * @param object the game object to add to the map of objects
      * */
-    void addObject(unsigned int id, GameObject* object);
+    void addObject(int id, GameObject* object);
     
-    void removeObject(unsigned int index);
+    void removeObject(int index);
 
     void setTimer(int64_t timer);
 
@@ -60,16 +64,38 @@ public:
 
     void setRound(int round);
 
-    void addInventory(std::unordered_map<int, IngredientObject*>* inventory);
+    int getRound();
+
+    Ingredient* getSelectedIngredient();
+
+    void updateRound(Game::RoundInfo_RoundState);
+
+    void addInventory(std::unordered_map<int, Ingredient*>* inventory);
+
+    void toggleCursor();
+
+    void addCookingEventMessage(std::string);
+
+    void removeCookingEventMessage();
 
     void close();
     GLFWwindow* glfwViewport;
-    Player* player;     // FIXME - IN THE FUTURE, WINDOW SHOULD NOT KNOW ABOUT THE PLAYER
+    bool gameOver = false;
+    bool gameWin = false;
     Camera* camera;
+    std::vector<std::string> instructionStrings;
+
+    std::string recipeName;
+    GLFWimage icons[1];
+
 private:
     Shader* shader;
     Shader* UIshader;
-    int64_t timer;
+    UIScreenFactory ui;
+    // ImFont* font1;
+
+    std::string cookingEventMsg = "";
+    int64_t timer = 0;
     int round;
     int score = 0;
     void setupWindow();

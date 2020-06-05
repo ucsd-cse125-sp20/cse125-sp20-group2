@@ -5,5 +5,6 @@
 class RecipeBuilder {
 public:
     static Recipe* getBasicRecipe();
-    static IngredientObject* createIngredient(std::string modelPath);
+    static Recipe* getAnotherRecipe();
+    static Ingredient* createIngredient(std::string modelPath);
 };
