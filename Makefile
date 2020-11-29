@@ -9,7 +9,7 @@ OUT = gg
 SRC_DIR = src
 HDR_DIR = src
 OUT_DIR = build
-BIN_DIR = bin
+BIN_DIR = KomradesKitchen/assets
 
 CC = g++
 FLAG = -ggdb -Wall -pthread -Isrc -g
@@ -35,4 +35,5 @@ $(OUT_DIR)/%.o: $(SRC_DIR)/%.cpp
 	$(CC) $(FLAG) -c $< -o $@
 
 clean:
-	rm -rf $(OUT_DIR) $(BIN_DIR)
+	rm -rf $(OUT_DIR)
+	rm $(BIN_DIR)/gg.exe
