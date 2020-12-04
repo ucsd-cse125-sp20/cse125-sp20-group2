@@ -2,82 +2,110 @@
 
 /// THIS IS THE CONFIG
 
-// // // // // // // // 
-// DEMO RECIPE CHOICE
-// // //
 Recipe_Choice=2
 
+////////////////////////////////////////////////////////////////////////////
+
 // // // // // // // // 
-// MODEL PATHS
+// PATHS
 // // //
 
 // Ingredient model paths
-Bun_Model=assets/models/ingredients/Bun2.obj
-Cheese_Model=assets/models/ingredients/Cheese2.obj
-Lettuce_Model=assets/models/ingredients/Lettuce3.obj
-Meat_Model=assets/models/ingredients/meat_3.obj
-Onion_Model=assets/models/ingredients/Onion.obj
-Tomato_Model=assets/models/ingredients/tomato2.obj
-Burger_Model=assets/models/ingredients/Burger2.obj
-Vodka_Model=assets/models/ingredients/Vodka.obj
+Bun_Model=graphics/models/ingredients/Bun2.obj
+Cheese_Model=graphics/models/ingredients/Cheese2.obj
+Lettuce_Model=graphics/models/ingredients/Lettuce3.obj
+Meat_Model=graphics/models/ingredients/meat_3.obj
+Onion_Model=graphics/models/ingredients/Onion.obj
+Tomato_Model=graphics/models/ingredients/tomato2.obj
+Burger_Model=graphics/models/ingredients/Burger2.obj
+Vodka_Model=graphics/models/ingredients/Vodka.obj
 
 // Individual burger part paths
-//Burger_Top_Bun_Model=assets/models/burgerpieces/TopBun3.obj
-//Burger_Bottom_Bun_Model=assets/models/burgerpieces/BotBun3.obj
-//Burger_Bun_Model=assets/models/burgerpieces/BotBun3.obj
-//Burger_Cheese_Model=assets/models/burgerpieces/Cheese3.obj
-//Burger_Lettuce_Model=assets/models/burgerpieces/Lettuce3.obj
-//Burger_Meat_Model=assets/models/burgerpieces/Meat3.obj
-//Burger_Onion_Model=assets/models/burgerpieces/Onion3.obj
-//Burger_Tomato_Model=assets/models/burgerpieces/Tomato3.obj
+//Burger_Top_Bun_Model=graphics/models/burgerpieces/TopBun3.obj
+//Burger_Bottom_Bun_Model=graphics/models/burgerpieces/BotBun3.obj
+//Burger_Bun_Model=graphics/models/burgerpieces/BotBun3.obj
+//Burger_Cheese_Model=graphics/models/burgerpieces/Cheese3.obj
+//Burger_Lettuce_Model=graphics/models/burgerpieces/Lettuce3.obj
+//Burger_Meat_Model=graphics/models/burgerpieces/Meat3.obj
+//Burger_Onion_Model=graphics/models/burgerpieces/Onion3.obj
+//Burger_Tomato_Model=graphics/models/burgerpieces/Tomato3.obj
 
 // SMOOTH individual burger part paths
-Burger_Top_Bun_Model=assets/models/smoothpieces/TopBun.obj
-Burger_Bottom_Bun_Model=assets/models/smoothpieces/BotBum.obj
-Burger_Bun_Model=assets/models/smoothpieces/BotBum.obj
-Burger_Cheese_Model=assets/models/smoothpieces/Cheese.obj
-Burger_Lettuce_Model=assets/models/smoothpieces/Lettuce.obj
-Burger_Meat_Model=assets/models/smoothpieces/Meat.obj
-Burger_Onion_Model=assets/models/smoothpieces/Onion.obj
-Burger_Tomato_Model=assets/models/smoothpieces/Tomato.obj
+Burger_Top_Bun_Model=graphics/models/smoothpieces/TopBun.obj
+Burger_Bottom_Bun_Model=graphics/models/smoothpieces/BotBum.obj
+Burger_Bun_Model=graphics/models/smoothpieces/BotBum.obj
+Burger_Cheese_Model=graphics/models/smoothpieces/Cheese.obj
+Burger_Lettuce_Model=graphics/models/smoothpieces/Lettuce.obj
+Burger_Meat_Model=graphics/models/smoothpieces/Meat.obj
+Burger_Onion_Model=graphics/models/smoothpieces/Onion.obj
+Burger_Tomato_Model=graphics/models/smoothpieces/Tomato.obj
 
 // Cookware model paths
-Pot_Model=assets/models/cookware/Pot.obj
-Water_Pot_Model=assets/models/cookware/WaterPot.obj
-Cutting_Board_Model=assets/models/cookware/Knife.obj
-Tomato_Cutting_Board_Model=assets/models/cookware/knife_tomato.obj
-Pan_Model=assets/models/cookware/Pan.obj
-Oil_Pan_Model=assets/models/cookware/OilPan.obj
-Plate_Model=assets/models/cookware/plate2.obj
-Plate_0_Model=assets/models/cookware/plateblue.obj
-Plate_1_Model=assets/models/cookware/plategreen.obj
-Plate_2_Model=assets/models/cookware/platepurple.obj
-Plate_3_Model=assets/models/cookware/platered.obj
+Pot_Model=graphics/models/cookware/Pot.obj
+Water_Pot_Model=graphics/models/cookware/WaterPot.obj
+Cutting_Board_Model=graphics/models/cookware/Knife.obj
+Tomato_Cutting_Board_Model=graphics/models/cookware/knife_tomato.obj
+Pan_Model=graphics/models/cookware/Pan.obj
+Oil_Pan_Model=graphics/models/cookware/OilPan.obj
+Plate_Model=graphics/models/cookware/plate2.obj
+Plate_0_Model=graphics/models/cookware/plateblue.obj
+Plate_1_Model=graphics/models/cookware/plategreen.obj
+Plate_2_Model=graphics/models/cookware/platepurple.obj
+Plate_3_Model=graphics/models/cookware/platered.obj
 
 // Terrain model paths
-Wall_Model=assets/models/terrain/wall.obj
-Table_Model=assets/models/terrain/wall.obj
-Dirty_Pillar_Model=assets/models/terrain/dirtypillar.obj
-Dirty_Wall_Model=assets/models/terrain/dirtywall.obj
-Tile_Model=assets/models/terrain/tile.obj
-Tile4_Model=assets/models/terrain/tile4.obj
-Tile9_Model=assets/models/terrain/tile9.obj
-Floor_Model=assets/models/terrain/floor.obj
-Cage_Bar_Model=assets/models/terrain/rustycage_bars.obj
-Cage_Topbot_Model=assets/models/terrain/rustycage_topbot.obj
+Wall_Model=graphics/models/terrain/wall.obj
+Table_Model=graphics/models/terrain/wall.obj
+Dirty_Pillar_Model=graphics/models/terrain/dirtypillar.obj
+Dirty_Wall_Model=graphics/models/terrain/dirtywall.obj
+Tile_Model=graphics/models/terrain/tile.obj
+Tile4_Model=graphics/models/terrain/tile4.obj
+Tile9_Model=graphics/models/terrain/tile9.obj
+Floor_Model=graphics/models/terrain/floor.obj
+Cage_Bar_Model=graphics/models/terrain/rustycage_bars.obj
+Cage_Topbot_Model=graphics/models/terrain/rustycage_topbot.obj
 
 // Character model paths
-Player_0=assets/models/characters/Blue.obj
-Player_1=assets/models/characters/Green.obj
-Player_2=assets/models/characters/Purple.obj
-Player_3=assets/models/characters/Red.obj
-Winner=assets/models/ingredients/Winner.obj
+Player_0=graphics/models/characters/Blue.obj
+Player_1=graphics/models/characters/Green.obj
+Player_2=graphics/models/characters/Purple.obj
+Player_3=graphics/models/characters/Red.obj
+Winner=graphics/models/ingredients/Winner.obj
 
 // Etc model paths
-Player_Model=assets/models/old/Basic_Character_Model.obj
-Grid_Square_Model=assets/models/old/grid_square.obj
-Grid_Wire_Model=assets/models/old/grid_wire.obj
-Maze_Model=assets/models/old/Basic_Dungeon_Map.obj
+Player_Model=graphics/models/old/Basic_Character_Model.obj
+Grid_Square_Model=graphics/models/old/grid_square.obj
+Grid_Wire_Model=graphics/models/old/grid_wire.obj
+Maze_Model=graphics/models/old/Basic_Dungeon_Map.obj
+
+// Shaders
+Vertex_Shader=graphics/shaders/vert_shader.glsl
+Fragment_Shader=graphics/shaders/frag_shader.glsl
+UI_Vertex_Shader=graphics/shaders/ui_vert_shader.glsl
+UI_Fragment_Shader=graphics/shaders/ui_frag_shader.glsl
+
+// Images
+Dungeon_Waiting_Screen=graphics/images/DungeonWaitingScreen.png
+Kitchen_Waiting_Screen=graphics/images/KitchenWaitingScreen.png
+Lobby_Screen=graphics/images/LobbyScreen.png
+Sickle_And_star=graphics/images/communismicon.png
+
+// Audio
+8bit_Paradise=audio/8Bit_Paradise.ogg
+Soviet_Anthem=audio/SovietAnthem.ogg
+Inventory_Pickup=audio/Inventory_Pickup.wav
+Cutting_Sound=audio/Cutting.wav
+Frying_Sound=audio/Frying.wav
+Pot_Boiling_Sound=audio/PotBoiling.wav
+Dish_Sound=audio/Dish.wav
+Nyet1=audio/nyet1.wav
+Nyet2=audio/nyet1.wav
+Nyet3=audio/nyet1.wav
+Nyet4=audio/nyet1.wav
+Nyet5=audio/nyet1.wav
+Nyet6=audio/nyet1.wav
+Cooking_Theme=audio/Cook.ogg
+The_Dusty_Attic=audio/TheDustyAttic.ogg
 
 ////////////////////////////////////////////////////////////////////////////
 
@@ -110,10 +138,6 @@ Burger_Piece_Scaling=1,1,1
 // // // // // // // // 
 // GRAPHICS VARIABLES
 // // //
-
-// Shaders
-Vertex_Shader=src/graphics/shaders/vert_shader.glsl
-Fragment_Shader=src/graphics/shaders/frag_shader.glsl
 
 // Lighting options
 ambientStrength=1.1
@@ -178,10 +202,10 @@ Good_Quality_Color_Modifier=2.5,2,0.8,1
 
 // Round time (in seconds)
 Kitchen_Round_Time=150
-Kitchen_Waiting_Round_Time=15
-Dungeon_Round_Time=150
+Kitchen_Waiting_Round_Time=5
+Dungeon_Round_Time=30
 Lobby_Round_Time=10
-Dungeon_Waiting_Round_Time=15
+Dungeon_Waiting_Round_Time=5
 
 Cook_Event_Time=5
 

@@ -71,7 +71,7 @@ void ClientGame::keyBindsHandler(GLFWwindow* glfwWindow, int key, int scancode, 
 void ClientGame::runGame() 
 {
     // Background music
-    music.openFromFile("assets/audio/8Bit_Paradise.ogg");
+    music.openFromFile(Config::get("8bit_Paradise"));
     music.setVolume(Config::getInt("Background_Music_Volume"));
     music.setLoop(true);
     music.play();
@@ -182,7 +182,7 @@ void ClientGame::updateGameState()
                     if (originalScale.x < newScale.x) {
                         // Play soviet national anthem
                         music.stop();
-                        music.openFromFile("assets/audio/SovietAnthem.ogg");
+                        music.openFromFile(Config::get("Soviet_Anthem"));
                         music.setVolume(Config::getInt("Background_Music_Volume"));
                         music.setLoop(true);
                         music.play();
@@ -198,7 +198,7 @@ void ClientGame::updateGameState()
                         {
                             // Background music
                             music.stop();
-                            music.openFromFile("assets/audio/8Bit_Paradise.ogg");
+                            music.openFromFile(Config::get("8bit_Paradise"));
                             music.setVolume(Config::getInt("Background_Music_Volume"));
                             music.setLoop(true);
                             music.play();
@@ -238,7 +238,7 @@ void ClientGame::updateGameState()
                     soundEffect.stop();
                 }
 
-                if (soundBuffer.loadFromFile("assets/audio/Inventory_Pickup.wav")) {
+                if (soundBuffer.loadFromFile(Config::get("Inventory_Pickup"))) {
                     soundEffect.setBuffer(soundBuffer);
                     soundEffect.setVolume(Config::getFloat("Sound_Effect_Volume"));
                     soundEffect.play();
@@ -266,37 +266,37 @@ void ClientGame::updateGameState()
                 std::cout<<currMessage.validcook().message().at(0)<<std::endl;
                 switch(currMessage.validcook().message().at(0)) {
                     case 'C': { 
-                        soundBuffer.loadFromFile("assets/audio/Cutting.wav"); 
+                        soundBuffer.loadFromFile(Config::get("Cutting_Sound")); 
                         soundEffect.setBuffer(soundBuffer);
                         soundEffect.setVolume(Config::getFloat("Sound_Effect_Volume"));
                         break;
                     }
                     case 'F': {
-                        soundBuffer.loadFromFile("assets/audio/Frying.wav"); 
+                        soundBuffer.loadFromFile(Config::get("Frying_Sound")); 
                         soundEffect.setBuffer(soundBuffer);
                         soundEffect.setVolume(Config::getFloat("Sound_Effect_Volume"));
                         break;
                     }
                     case 'B': {
-                        soundBuffer.loadFromFile("assets/audio/PotBoiling.wav"); 
+                        soundBuffer.loadFromFile(Config::get("Pot_Boiling_Sound")); 
                         soundEffect.setBuffer(soundBuffer);
                         soundEffect.setVolume(Config::getFloat("Sound_Effect_Volume"));
                         break; 
                     }
                     case 'P': {
-                        soundBuffer.loadFromFile("assets/audio/Dish.wav"); 
+                        soundBuffer.loadFromFile(Config::get("Dish_Sound")); 
                         soundEffect.setBuffer(soundBuffer);
                         soundEffect.setVolume(Config::getFloat("Sound_Effect_Volume"));
                         break; 
                     }
                     default: {
                         switch(rand()%6) {
-                            case 0: soundBuffer.loadFromFile("assets/audio/nyet1.wav"); break;
-                            case 1: soundBuffer.loadFromFile("assets/audio/nyet2.wav"); break;
-                            case 2: soundBuffer.loadFromFile("assets/audio/nyet3.wav"); break;
-                            case 3: soundBuffer.loadFromFile("assets/audio/nyet4.wav"); break;
-                            case 4: soundBuffer.loadFromFile("assets/audio/nyet5.wav"); break;
-                            case 5: soundBuffer.loadFromFile("assets/audio/nyet6.wav"); break;
+                            case 0: soundBuffer.loadFromFile(Config::get("Nyet1")); break;
+                            case 1: soundBuffer.loadFromFile(Config::get("Nyet2")); break;
+                            case 2: soundBuffer.loadFromFile(Config::get("Nyet3")); break;
+                            case 3: soundBuffer.loadFromFile(Config::get("Nyet4")); break;
+                            case 4: soundBuffer.loadFromFile(Config::get("Nyet5")); break;
+                            case 5: soundBuffer.loadFromFile(Config::get("Nyet6")); break;
                         }
                         soundEffect.setBuffer(soundBuffer);
                         soundEffect.setVolume(Config::getFloat("Nyet_Effect_Volume"));
@@ -345,7 +345,7 @@ void ClientGame::updateGameState()
                 window.updateRound(currMessage.round().type());         
                 if (currMessage.round().type() == Game::RoundInfo_RoundState_KITCHEN_WAITING) {
                     music.stop();
-                    music.openFromFile("assets/audio/Cook.ogg");
+                    music.openFromFile(Config::get("Cooking_Theme"));
                     music.setVolume(Config::getInt("Background_Music_Volume"));
                     music.setLoop(true);
                     music.play();
@@ -365,7 +365,7 @@ void ClientGame::updateGameState()
                 if (currMessage.win().clientid() == clientId) {
                     window.gameWin = true;
                     music.stop();
-                    music.openFromFile("assets/audio/SovietAnthem.ogg");
+                    music.openFromFile(Config::get("Soviet_Anthem"));
                     music.setLoop(true);
                     music.setVolume(Config::getInt("Background_Music_Volume"));
                     music.play();
@@ -373,7 +373,7 @@ void ClientGame::updateGameState()
                 else {
                     window.gameWin = false;
                     music.stop();
-                    music.openFromFile("assets/audio/TheDustyAttic.ogg");
+                    music.openFromFile(Config::get("The_Dusty_Attic"));
                     music.setLoop(true);
                     music.setVolume(Config::getInt("Background_Music_Volume"));
                     music.play();

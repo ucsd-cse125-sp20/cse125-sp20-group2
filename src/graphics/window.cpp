@@ -16,10 +16,8 @@ Window::Window(int width = Config::getFloat("Window_Width"), int height = Config
 	this->width = width;
 	this->height = height;
 	this->setupWindow();
-	//this->ui = UIScreenFactory();
 	this->shader = new Shader(Config::get("Vertex_Shader"), Config::get("Fragment_Shader"));
-	this->UIshader = new Shader("src//graphics//shaders//ui_vert_shader.glsl", "src//graphics//shaders//ui_frag_shader.glsl"); 
-	///TODO: Need to add to Config?
+	this->UIshader = new Shader(Config::get("UI_Vertex_Shader"), Config::get("UI_Fragment_Shader")); 
 	this->camera = new Camera(Config::getVec3("Camera_Location"));
 	this->inventory = NULL;
 	this->vodkaActive = false;
@@ -71,7 +69,7 @@ void Window::setupWindow() {
 	GLFWwindow* glfwViewport = glfwCreateWindow((int)Config::getFloat("Window_Width"), (int)Config::getFloat("Window_Height"), Config::get("Window_Title").c_str(), NULL, NULL);
 	
 	// Set 
-	icons[0].pixels = SOIL_load_image("assets/images/communismicon.png", &icons[0].width, &icons[0].height, 0, SOIL_LOAD_RGBA);
+	icons[0].pixels = SOIL_load_image(Config::get("Sickle_And_Star").c_str(), &icons[0].width, &icons[0].height, 0, SOIL_LOAD_RGBA);
 	glfwSetWindowIcon(glfwViewport, 1, icons);
 	SOIL_free_image_data(icons[0].pixels);
 
