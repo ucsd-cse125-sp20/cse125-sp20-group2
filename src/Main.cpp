@@ -7,14 +7,17 @@
 
 // Config loader variables
 // Declared here because static variables need to be declared outside of class
-std::unordered_map<std::string, std::string>* Config::vars;
+std::unordered_map<std::string, std::string>* Config::client_vars;
+std::unordered_map<std::string, std::string>* Config::server_vars;
+std::unordered_map<std::string, std::string>* Config::updated_client_vars;
+std::unordered_map<std::string, std::string>* Config::updated_server_vars;
 
 // ./game [client / server]
 int main(int argc, char * argv[])
 {
 	srand(time(NULL));
+	
 	// Load config data
-	Config::vars = new std::unordered_map<std::string, std::string>();
 	Config::load();
 
 	// Invalid usage - wrong # of args
