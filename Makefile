@@ -36,4 +36,4 @@ $(OUT_DIR)/%.o: $(SRC_DIR)/%.cpp
 
 clean:
 	rm -rf $(OUT_DIR)
-	rm $(BIN_DIR)/gg.exe
+	rm -f $(BIN_DIR)/gg.exe
