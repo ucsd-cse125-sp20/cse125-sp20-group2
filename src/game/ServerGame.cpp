@@ -11,7 +11,7 @@ ServerGame::ServerGame(int port) : server(port)
     // Set up function to initialize players
     std::function<void(int)> notifyClients = std::bind(&ServerGame::onClientConnect, this, std::placeholders::_1);
     this->server.setOnClientConnect(notifyClients);
-    run();
+    //run();
 }
 
 ServerGame::~ServerGame()

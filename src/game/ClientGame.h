@@ -28,6 +28,7 @@ class ClientGame {
 
         ClientGame(std::string IP, int port);
         ~ClientGame();
+        void setupAndRun();
         void runGame();
 
         // Used to register single key presses
@@ -35,7 +36,7 @@ class ClientGame {
 
     private:
         NetworkClient client;
-        Window window;
+        Window* window;
         GameObject* winner;
         void receiveUpdates();
         void updateGameState();
