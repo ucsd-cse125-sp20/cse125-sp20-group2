@@ -4,6 +4,7 @@
 #include <vector>
 #include <thread>
 #include <functional>
+#include <queue>
 #include <schema/Game.pb.h>
 
 class ServerNetwork
@@ -40,7 +41,17 @@ public:
      * */
     std::unordered_map<unsigned int, std::vector<Game::ClientMessage>> readAllMessages();
 
+    /**
+     * Sets a callback to ServerGame to set up a player
+     * once they have connected
+     * */
     void setOnClientConnect(std::function<void(int)> func);
+
+    /**
+     * Sets a callback to ServerGame to remove a player
+     * once they have disconnected
+     * */
+    void setOnClientDisconnect(std::function<void(int)> func);
 
 private:
     /**
@@ -57,11 +68,11 @@ private:
      * This holds temporary data while reading from the socket.
      * */
     char network_data[DEFAULT_BUFLEN];
-    
+
     /**
-     * Next id to assign to client.
+     * Used to keep track of the client id's avaliable for use
      * */
-    unsigned int nextId = 0;
+    std::queue<unsigned int> clientIdQueue;
 
     /**
      * This is the list of users who are connected.
@@ -90,5 +101,22 @@ private:
      * IMPORTANT: This is called on another thread.
      * */
     std::function<void(int)> onClientConnect;
-    
+
+    /**
+     * This function is called when a client has disconnected.
+     * */
+    std::function<void(int)> onClientDisconnect;
+
+    /**
+     * Makes changes to remove client both from servernetwork and servergame
+     * Closes the socket, removes the clientId from sessions,
+     * tells servergame to remove the player, and puts the clientId up for others
+     * */
+    void removeClient(unsigned int clientId);
+
+    /**
+     * Makes changes to add client both to servernetwork and servergame
+     * adds the clientId to sessions and tells servergame to add the player
+     * */
+    void addClient(unsigned int clientId, SOCKET clientSocket);
 };
