@@ -167,7 +167,7 @@ Beep_Sound_Effect_Volume=20
 // // //
 
 // Etc
-Window_Title=Comrade's Kitchen
+Window_Title=Komrade's Kitchen
 Window_Width=1920
 Window_Height=1080
 
