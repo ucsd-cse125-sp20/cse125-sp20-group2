@@ -81,9 +81,11 @@ void Window::setupWindow() {
 		std::cerr << "Failed to create GLFW window" << std::endl;
 		glfwTerminate();
 	}
-
+	
 	// Current context is window
 	glfwMakeContextCurrent(glfwViewport);
+
+	std::cout << (glfwGetCurrentContext()? "Window exists" : "Window does not exist") << std::endl;
 
 	// Register callback functions
 	glfwSetFramebufferSizeCallback(glfwViewport, framebuffer_size_callback);
@@ -238,11 +240,10 @@ void Window::setScore(int score) {
 
 void Window::render()
 {
-	if (glfwViewport == NULL) {
+	if (!glfwViewport) {
 		std::cerr << "ERROR: No window!" << std::endl;
 	}
-
-
+	
 	// // //
 	// User shader program
 	shader->use();

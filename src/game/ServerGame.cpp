@@ -15,8 +15,6 @@ ServerGame::ServerGame(int port) : server(port)
     // Set up a function to remove players
     std::function<void(int)> removeClients = std::bind(&ServerGame::onClientDisconnect, this, std::placeholders::_1);
     this->server.setOnClientDisconnect(removeClients);
-
-    run();
 }
 
 ServerGame::~ServerGame()
