@@ -4,16 +4,17 @@
 # 	$(LIB) must be last after list of objects when building
 # 	When modifying header files, be sure to make clean
 # 	SOIL Must be before opengl32
+#	-mwindows will hide the console when the program is run
 
 OUT = gg
 SRC_DIR = src
 HDR_DIR = src
 OUT_DIR = build
-BIN_DIR = bin
+BIN_DIR = KomradesKitchen/assets
 
 CC = g++
-FLAG = -ggdb -Wall -pthread -Isrc -g
-LIBS = -lws2_32 -lsfml-audio -lwsock32 -lprotobuf -lassimp -lglfw3 -lgdi32 -lSOIL -lopengl32
+FLAG = -ggdb -Wall -pthread -Isrc -g -mwindows
+LIBS = -lws2_32 -lsfml-audio -lwsock32 -lprotobuf -lassimp -lglfw3 -lgdi32 -luser32 -lSOIL -lopengl32
 SRC := $(shell find $(SRC_DIR) -name "*.cpp")
 HDR := $(shell find $(HDR_DIR) -name "*.h")
 OBJ := $(SRC:$(SRC_DIR)/%.cpp=$(OUT_DIR)/%.o) # Replace variables src/%.cpp to out/%.o in SRC variable
@@ -35,4 +36,5 @@ $(OUT_DIR)/%.o: $(SRC_DIR)/%.cpp
 	$(CC) $(FLAG) -c $< -o $@
 
 clean:
-	rm -rf $(OUT_DIR) $(BIN_DIR)
+	rm -rf $(OUT_DIR)
+	rm -f $(BIN_DIR)/gg.exe

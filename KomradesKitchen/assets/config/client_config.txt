@@ -1,0 +1,192 @@
+////////////////////////////////////////////////////////////////////////////
+
+/// This is the client config. Expect variables related to
+/// graphics, audio, and other aspects that will only affect a single player's client.
+
+////////////////////////////////////////////////////////////////////////////
+
+// // // // // // // // 
+// PATHS
+// // //
+
+// Ingredient model paths
+Bun_Model=graphics/models/ingredients/Bun2.obj
+Cheese_Model=graphics/models/ingredients/Cheese2.obj
+Lettuce_Model=graphics/models/ingredients/Lettuce3.obj
+Meat_Model=graphics/models/ingredients/meat_3.obj
+Onion_Model=graphics/models/ingredients/Onion.obj
+Tomato_Model=graphics/models/ingredients/tomato2.obj
+Burger_Model=graphics/models/ingredients/Burger2.obj
+Vodka_Model=graphics/models/ingredients/Vodka.obj
+
+// SMOOTH individual burger part paths
+Burger_Top_Bun_Model=graphics/models/smoothpieces/TopBun.obj
+Burger_Bottom_Bun_Model=graphics/models/smoothpieces/BotBum.obj
+Burger_Bun_Model=graphics/models/smoothpieces/BotBum.obj
+Burger_Cheese_Model=graphics/models/smoothpieces/Cheese.obj
+Burger_Lettuce_Model=graphics/models/smoothpieces/Lettuce.obj
+Burger_Meat_Model=graphics/models/smoothpieces/Meat.obj
+Burger_Onion_Model=graphics/models/smoothpieces/Onion.obj
+Burger_Tomato_Model=graphics/models/smoothpieces/Tomato.obj
+
+// Cookware model paths
+Pot_Model=graphics/models/cookware/Pot.obj
+Water_Pot_Model=graphics/models/cookware/WaterPot.obj
+Cutting_Board_Model=graphics/models/cookware/Knife.obj
+Tomato_Cutting_Board_Model=graphics/models/cookware/knife_tomato.obj
+Pan_Model=graphics/models/cookware/Pan.obj
+Oil_Pan_Model=graphics/models/cookware/OilPan.obj
+Plate_Model=graphics/models/cookware/plate2.obj
+Plate_0_Model=graphics/models/cookware/plateblue.obj
+Plate_1_Model=graphics/models/cookware/plategreen.obj
+Plate_2_Model=graphics/models/cookware/platepurple.obj
+Plate_3_Model=graphics/models/cookware/platered.obj
+
+// Terrain model paths
+Wall_Model=graphics/models/terrain/wall.obj
+Table_Model=graphics/models/terrain/wall.obj
+Dirty_Pillar_Model=graphics/models/terrain/dirtypillar.obj
+Dirty_Wall_Model=graphics/models/terrain/dirtywall.obj
+Tile_Model=graphics/models/terrain/tile.obj
+Tile4_Model=graphics/models/terrain/tile4.obj
+Tile9_Model=graphics/models/terrain/tile9.obj
+Floor_Model=graphics/models/terrain/floor.obj
+Cage_Bar_Model=graphics/models/terrain/rustycage_bars.obj
+Cage_Topbot_Model=graphics/models/terrain/rustycage_topbot.obj
+
+// Character model paths
+Player_0=graphics/models/characters/Blue.obj
+Player_1=graphics/models/characters/Green.obj
+Player_2=graphics/models/characters/Purple.obj
+Player_3=graphics/models/characters/Red.obj
+Winner=graphics/models/ingredients/Winner.obj
+
+// Etc model paths
+Player_Model=graphics/models/old/Basic_Character_Model.obj
+Grid_Square_Model=graphics/models/old/grid_square.obj
+Grid_Wire_Model=graphics/models/old/grid_wire.obj
+Maze_Model=graphics/models/old/Basic_Dungeon_Map.obj
+
+// Shaders
+Vertex_Shader=graphics/shaders/vert_shader.glsl
+Fragment_Shader=graphics/shaders/frag_shader.glsl
+UI_Vertex_Shader=graphics/shaders/ui_vert_shader.glsl
+UI_Fragment_Shader=graphics/shaders/ui_frag_shader.glsl
+
+// Images
+Dungeon_Waiting_Screen=graphics/images/DungeonWaitingScreen.png
+Kitchen_Waiting_Screen=graphics/images/KitchenWaitingScreen.png
+Lobby_Screen=graphics/images/LobbyScreen.png
+Sickle_And_Star=graphics/images/communismicon.png
+
+// Audio
+8bit_Paradise=audio/8Bit_Paradise.ogg
+Soviet_Anthem=audio/SovietAnthem.ogg
+Inventory_Pickup=audio/Inventory_Pickup.wav
+Cutting_Sound=audio/Cutting.wav
+Frying_Sound=audio/Frying.wav
+Pot_Boiling_Sound=audio/PotBoiling.wav
+Dish_Sound=audio/Dish.wav
+Nyet1=audio/nyet1.wav
+Nyet2=audio/nyet1.wav
+Nyet3=audio/nyet1.wav
+Nyet4=audio/nyet1.wav
+Nyet5=audio/nyet1.wav
+Nyet6=audio/nyet1.wav
+Cooking_Theme=audio/Cook.ogg
+The_Dusty_Attic=audio/TheDustyAttic.ogg
+
+////////////////////////////////////////////////////////////////////////////
+
+// // // // // // // // 
+// MODEL SCALING
+// // //
+
+// Cookware
+Table_Scaling=1,1,1
+Cookware_Scaling=2.5,2.5,2.5
+Plate_Scaling=2.5,2.5,2.5
+
+// Terrain
+Wall_Scaling=1,1,1
+
+// Ingredients
+Ingredient_Scaling=1,1,1
+
+// Burger piece scaling
+Burger_Piece_Scaling=2,2,2
+
+// Burger piece offset
+Burger_Piece_Offset=0.2
+
+// Burger piece size (on the plate)
+Burger_Piece_Scaling=1,1,1
+
+////////////////////////////////////////////////////////////////////////////
+
+// // // // // // // // 
+// GRAPHICS VARIABLES
+// // //
+
+// Lighting options
+ambientStrength=1.1
+specularStrength=0.1
+defaultObjColor=0.2,0.4,0.7
+lightPos=1.2,1.0,2.0
+colorScale=0.5,0.5,0.5,1
+
+// Camera properties
+Camera_FOV=60.0
+Camera_Location=0,15,24
+
+// Camera rotations (yaw = rotation about y-axis, pitch = rotation about x-axis)
+Camera_Yaw=-90.0
+Camera_Pitch=-35.0
+
+// Indicate that there is no color when color values are less than...
+noColorPrecision=0.01
+
+// Ingredient rotation speed
+Ingredient_Rotation_Speed=0.05
+
+////////////////////////////////////////////////////////////////////////////
+
+// // // // // // // // 
+// SOUND VARIABLES
+// // //
+
+Background_Music_Volume=20
+Sound_Effect_Volume=40
+Nyet_Effect_Volume=100
+Beep_Sound_Effect_Volume=20
+
+////////////////////////////////////////////////////////////////////////////
+
+// // // // // // // // 
+// UI VARIABLES
+// // //
+
+// Etc
+Window_Title=Komrade's Kitchen
+Window_Width=1920
+Window_Height=1080
+
+Score_Window_Height=80
+Score_Window_Width=100
+
+Game_Info_Window_Width=150
+Game_Info_Window_Height=100
+
+End_Screen_Window_Width=700
+End_Screen_Window_Height=300
+
+Font_Scale=1
+Score_Font_Scale=1.4
+End_Screen_Font_Scale=2
+
+Cooking_Event_Min_Distance=3.2
+Plate_Event_Min_Distance=4
+
+Font_Size_Pixels=15
+
+////////////////////////////////////////////////////////////////////////////

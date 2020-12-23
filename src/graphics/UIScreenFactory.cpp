@@ -50,19 +50,19 @@ void UIScreenFactory::loadImages() {
 	this->dungeon_waiting_width = 0;
 	this->dungeon_waiting_height = 0;
 	this->dungeon_waiting_texture = 0;
-	bool ret = LoadTextureFromFile("assets/images/DungeonWaitingScreen.png", &dungeon_waiting_texture, &dungeon_waiting_width, &dungeon_waiting_height);
+	bool ret = LoadTextureFromFile(Config::get("Dungeon_Waiting_Screen").c_str(), &dungeon_waiting_texture, &dungeon_waiting_width, &dungeon_waiting_height);
 	IM_ASSERT(ret);
 
 	this->kitchen_waiting_width = 0;
 	this->kitchen_waiting_height = 0;
 	this->kitchen_waiting_texture = 0;
-	ret = LoadTextureFromFile("assets/images/KitchenWaitingScreen.png", &kitchen_waiting_texture, &kitchen_waiting_width, &kitchen_waiting_height);
+	ret = LoadTextureFromFile(Config::get("Kitchen_Waiting_Screen").c_str(), &kitchen_waiting_texture, &kitchen_waiting_width, &kitchen_waiting_height);
 	IM_ASSERT(ret);
 
 	this->lobby_width = 0;
 	this->lobby_height = 0;
 	this->lobby_texture = 0;
-	ret = LoadTextureFromFile("assets/images/LobbyScreen.png", &lobby_texture, &lobby_width, &lobby_height);
+	ret = LoadTextureFromFile(Config::get("Lobby_Screen").c_str(), &lobby_texture, &lobby_width, &lobby_height);
 	IM_ASSERT(ret);
 }
 

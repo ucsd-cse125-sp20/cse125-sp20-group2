@@ -19,12 +19,12 @@ DungeonMap* MapBuilder::getBasicDungeonMap() {
         std::string rotString = Config::get("Dungeon_Wall_Rot_" + std::to_string(i));
 
         // Apply scale and rotation, if applicable
-        if (scaleVecString.compare(std::string("NOT FOUND")) != 0)
+        if (scaleVecString.size() != 0)
         {
             glm::vec3 scaleVec = Config::getVec3("Dungeon_Wall_Scale_" + std::to_string(i));
             wall->applyScale(scaleVec);
         }
-        if (rotString.compare(std::string("NOT FOUND")) != 0)
+        if (rotString.size() != 0)
         {
             float rot = Config::getFloat("Dungeon_Wall_Rot_" + std::to_string(i));
             wall->setRotation(rot);
