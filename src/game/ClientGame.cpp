@@ -6,7 +6,9 @@
 #define CLIENT_DELAY 1000
 
 ClientGame::ClientGame(std::string IP, int port) : client(IP, port)
-{}
+{
+    setupAndRun();
+}
 
 void ClientGame::setupAndRun() {
     window = new Window(Config::getFloat("Window_Width"), Config::getFloat("Window_Height"));

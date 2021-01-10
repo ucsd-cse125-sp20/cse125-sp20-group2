@@ -5,6 +5,7 @@
 # 	When modifying header files, be sure to make clean
 # 	SOIL Must be before opengl32
 #	-mwindows will hide the console when the program is run
+#TODO: clean up lobby compilation to be more modular
 
 OUT = gg
 SRC_DIR = src
@@ -21,7 +22,7 @@ OBJ := $(SRC:$(SRC_DIR)/%.cpp=$(OUT_DIR)/%.o) # Replace variables src/%.cpp to o
 
 BINARY := $(BIN_DIR)/$(OUT)
 
-default: PROTO $(BINARY)
+default: PROTO $(BINARY) LOBBY
 
 PROTO:
 	cd src/schema/ && $(MAKE)
@@ -34,6 +35,9 @@ $(BINARY): $(OBJ)
 $(OUT_DIR)/%.o: $(SRC_DIR)/%.cpp
 	mkdir -p $(shell dirname $@)
 	$(CC) $(FLAG) -c $< -o $@
+
+LOBBY:
+	g++ -ggdb -Wall -mwindows -pthread -Isrc -g LobbySetup.cpp -o KomradesKitchen/Assets/LobbySetup.exe -luser32 -lgdi32
 
 clean:
 	rm -rf $(OUT_DIR)

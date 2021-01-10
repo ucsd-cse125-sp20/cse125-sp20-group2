@@ -1,14 +1,12 @@
-#include <game/ClientGame.h>
-#include <game/ServerGame.h>
 #include <string>
-#include <util/Config.h>
-#include <stdlib.h>     /* srand, rand */
-#include <time.h>       /* time */
 #include <windows.h>
 #include <windowsx.h>
+#include <process.h>
 #include <tchar.h>
 #include <iostream>
-#include <thread>
+
+// Filepath
+const char* EXEC_FILE = "gg.exe"; 
 
 // BG color
 const COLORREF BG_COLOR = RGB(215, 55, 55);
@@ -21,6 +19,8 @@ const int JOIN_BTN_ID = 102;
 const int HOST_BTN_ID = 103;
 const int IP_BOX_ID = 104;
 const int STATUS_TEXT_ID = 105;
+const int PORT_TEXT_ID = 106;
+const int IP_TEXT_ID = 106;
 
 // Controls
 HWND hInfo = NULL;      // Lets players know what to do
@@ -29,14 +29,8 @@ HWND hHost = NULL;      // Host button
 HWND hJoin = NULL;      // Join button
 HWND hIP = NULL;        // Text box to enter IP
 HWND hPort = NULL;      // Text box to enter port
-
-// Host/Client objects
-ServerGame* hostGame = nullptr;
-ClientGame* clientGame = nullptr;
-
-// Thread related
-std::thread hostThread;
-std::thread clientThread;
+HWND hPortText = NULL;  // Text to indicate where to type the port
+HWND hIPText = NULL;    // Text to indicate where to type the IP
 
 // Port/IP
 int port;
@@ -46,58 +40,59 @@ std::string hostIP;
 static TCHAR szWindowClass[] = _T("DesktopApp");
 static TCHAR szTitle[] = _T("Lobby Setup");
 
-// Config loader variables
-// Declared here because static variables need to be declared outside of class
-std::unordered_map<std::string, std::string>* Config::client_vars;
-std::unordered_map<std::string, std::string>* Config::server_vars;
-std::unordered_map<std::string, std::string>* Config::updated_client_vars;
-std::unordered_map<std::string, std::string>* Config::updated_server_vars;
+// Error strings
+const char* ERR_E2BIG = "The space required for the arguments and environment settings exceeds 32 KB.";
+const char* ERR_EACCES = "The specified file has a locking or sharing violation.";
+const char* ERR_EINVAL = "Invalid parameter";
+const char* ERR_EMFILE = "Too many files open (the specified file must be opened to determine whether it is executable).";
+const char* ERR_ENOENT = "The file or path not found.";
+const char* ERR_ENOEXEC = "The specified file is not executable or has an invalid executable-file format.";
+const char* ERR_ENOMEM = "Not enough memory is available to execute the new process; the available memory has been corrupted; or an invalid block exists, indicating that the calling process was not allocated properly.";
 
 /**
- * Any and all setup not specifically related to the window setup
- * (that is, pertaining to game-related properties) should be placed here.
+ * Used for debugging when a process fails to spawn.
  */
-void gameSetup() {
-
-    // Set random seed based on time
-    srand(time(NULL));
-
-    // Load config variables
-	Config::load();
-}
-
-/**
- * As with above, any and all cleanup not specifically related to window setup
- * should be placed here.
- */
-void GameCleanup() {
-
-    // Unload config data
-	Config::unload();
-    if (hostGame) delete hostGame;
-    if (clientGame) delete clientGame;
+void errorSpawningProcess() {
+    std::cerr << "Error has occurred." << std::endl;
+    switch(errno) {
+        case E2BIG:
+            std::cerr << ERR_E2BIG << std::endl;
+            break;
+        case EACCES:
+            std::cerr << ERR_EACCES << std::endl;
+            break;
+        case EINVAL:
+            std::cerr << ERR_EINVAL << std::endl;
+            break;
+        case EMFILE:
+            std::cerr << ERR_EMFILE << std::endl;
+            break;
+        case ENOENT:
+            std::cerr << ERR_ENOENT << std::endl;
+            break;
+        case ENOEXEC:
+            std::cerr << ERR_ENOEXEC << std::endl;
+            break;
+        case ENOMEM:
+            std::cerr << ERR_ENOMEM << std::endl;
+            break;
+    }
 }
 
 /**
  * Creates a thread to host a server and detaches the thread from this one.
  */
-void createHostThread(int port) {
-    hostGame = new ServerGame(port);
-    hostThread = std::thread(&ServerGame::run, std::ref(hostGame));
-    hostThread.detach();
-    SetWindowText(hStatus, "Running host...");
-    Button_Enable(hHost, false);
+void spawnHost(int port) {
+    const char* const argv[] = {EXEC_FILE, "server", std::to_string(port).c_str()};
+    _execv(EXEC_FILE, argv);
 }
 
 /**
  * Creates a thread to join a server and detaches the thread from this one.
  */
-void createClientThread(std::string host, int port) {
-    clientGame = new ClientGame(host, port);
-    clientThread = std::thread(&ClientGame::setupAndRun, std::ref(clientGame));
-    clientThread.detach();
-    SetWindowText(hStatus, "Running client...");
-    Button_Enable(hJoin, false);
+void spawnClient(std::string host, int port) {
+    const char* const argv[] = {EXEC_FILE, "client", host.c_str()};
+    _execv(EXEC_FILE, argv);
 }
 
 void clearStatusWarning() {
@@ -201,8 +196,10 @@ LRESULT CALLBACK WndProc(
 
             // Create child windows
             hInfo =     CreateWindowEx(0, "STATIC", "Enter port to host a lobby. Enter an IP AND port to join a lobby.", WS_CHILD | WS_VISIBLE | SS_CENTER, 10, 10, 210, 40, hWnd, (HMENU) INFO_TEXT_ID, GetModuleHandle(NULL), NULL);
-            hPort =     CreateWindowEx(WS_EX_CLIENTEDGE, "EDIT", "Enter Port Here (i.e. 9000)", WS_CHILD | WS_VISIBLE, 10, 55, 210, 30, hWnd, (HMENU) PORT_BOX_ID, GetModuleHandle(NULL), NULL);
-            hIP =       CreateWindowEx(WS_EX_CLIENTEDGE, "EDIT", "Enter IP Here", WS_CHILD | WS_VISIBLE, 10, 90, 210, 30, hWnd, (HMENU) IP_BOX_ID, GetModuleHandle(NULL), NULL);
+            hPortText = CreateWindowEx(0, "STATIC", "Port:", WS_CHILD | WS_VISIBLE | SS_CENTER, 10, 60, 50, 30, hWnd, (HMENU) PORT_TEXT_ID, GetModuleHandle(NULL), NULL);
+            hPort =     CreateWindowEx(WS_EX_CLIENTEDGE, "EDIT", "9000", WS_CHILD | WS_VISIBLE, 65, 55, 155, 30, hWnd, (HMENU) PORT_BOX_ID, GetModuleHandle(NULL), NULL);
+            hIPText = CreateWindowEx(0, "STATIC", "IP:", WS_CHILD | WS_VISIBLE | SS_CENTER, 10, 95, 50, 30, hWnd, (HMENU) IP_TEXT_ID, GetModuleHandle(NULL), NULL);
+            hIP =       CreateWindowEx(WS_EX_CLIENTEDGE, "EDIT", "localhost", WS_CHILD | WS_VISIBLE, 65, 90, 155, 30, hWnd, (HMENU) IP_BOX_ID, GetModuleHandle(NULL), NULL);
             hHost =     CreateWindowEx(0, "BUTTON", "Host", WS_CHILD | WS_VISIBLE, 65, 125, 100, 30, hWnd, (HMENU) HOST_BTN_ID, GetModuleHandle(NULL), NULL);
             hJoin =     CreateWindowEx(0, "BUTTON", "Join", WS_CHILD | WS_VISIBLE, 65, 160, 100, 30, hWnd, (HMENU) JOIN_BTN_ID, GetModuleHandle(NULL), NULL);
             hStatus =   CreateWindowEx(0, "STATIC", "", WS_CHILD | WS_VISIBLE | SS_CENTER, 10, 195, 210, 40, hWnd, (HMENU) STATUS_TEXT_ID, GetModuleHandle(NULL), NULL);
@@ -214,9 +211,9 @@ LRESULT CALLBACK WndProc(
             // Handle if host button is clicked
             ///TODO: Check to make sure port/IP is valid - send response otherwise
             if (LOWORD(wParam) == HOST_BTN_ID) {
-                if (getPort())  createHostThread(port);
+                if (getPort()) spawnHost(0);
             } else if (LOWORD(wParam) == JOIN_BTN_ID) {
-                if (getPort() && getHostIP()) createClientThread(hostIP, port);
+                if (getPort() && getHostIP()) spawnClient(hostIP, port);
             }
             break;
 
@@ -240,7 +237,6 @@ LRESULT CALLBACK WndProc(
         case WM_DESTROY:
             PostQuitMessage(0);
             DeleteObject(hbrBkgnd);     // Cleaning up unneeded brush
-            GameCleanup();
             break;
         
         // Default window processing
@@ -324,9 +320,6 @@ int CALLBACK WinMain(
     // Display the window
     ShowWindow(hWnd, nCmdShow);     // Window object + command line args as parameters
     UpdateWindow(hWnd);
-
-    // Pre-game setup
-    gameSetup();
 
     // Main message loop
     // Loop will terminate when WM_QUIT is received and GetMessage returns false.
