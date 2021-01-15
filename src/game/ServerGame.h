@@ -28,13 +28,16 @@ class ServerGame
         // These are messages sent to specific clients
         std::unordered_map<unsigned int, std::deque<Game::ServerMessage*>> specificMessages;
 
+        /**
+         * Runs the server.
+         */
+        void run();
+
     private:
 
         const int TICK = 30;
 
         ServerNetwork server;
-
-        void run();
 
         /**
          * Cleans the messages before using them
@@ -61,7 +64,12 @@ class ServerGame
         /**
         * Called from server network when it accepts a new client
         * */
-        void onClientConnect(int);
+        void onClientConnect(unsigned int clientId);
+
+        /**
+        * Called from server network when it detects that a client has disconnected
+        * */ 
+       void onClientDisconnect(unsigned int clientId);
 
         /**
         * Called when there is a change of round.

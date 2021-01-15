@@ -5,12 +5,16 @@
 
 ServerGame::ServerGame(int port) : server(port)
 {
-    // Initialize the gamestate
+    // Initialize the gamestate 
     this->onRoundChange();
     
     // Set up function to initialize players
     std::function<void(int)> notifyClients = std::bind(&ServerGame::onClientConnect, this, std::placeholders::_1);
     this->server.setOnClientConnect(notifyClients);
+
+    // Set up a function to remove players
+    std::function<void(int)> removeClients = std::bind(&ServerGame::onClientDisconnect, this, std::placeholders::_1);
+    this->server.setOnClientDisconnect(removeClients);
     run();
 }
 
@@ -338,7 +342,7 @@ void ServerGame::sendPendingMessages()
     this->specificMessages.clear();
 }
 
-void ServerGame::onClientConnect(int clientId) 
+void ServerGame::onClientConnect(unsigned int clientId) 
 {
     // Send lobby state to the client
     Game::ServerMessage* gameStatus = MessageBuilder::toRoundUpdate(this->gameState.getRound());
@@ -389,6 +393,26 @@ void ServerGame::onClientConnect(int clientId)
     delete clientInfoMsg;
 }
 
+void ServerGame::onClientDisconnect(unsigned int clientId)
+{
+    std::cout << "servergame -> on client disconnect method is called" << std::endl;
+
+    // Remove client from ready map
+    this->gameState.readyStatus.erase(clientId);
+
+    // Render player invisible
+    Player* currPlayer = this->gameState.getPlayerObject(clientId);
+    currPlayer->renderInvisible();
+
+    //Send updated player to everyone else
+    Game::ServerMessage* playerMessage = MessageBuilder::toServerMessage(currPlayer);
+    this->server.sendToAll(*playerMessage);
+    delete playerMessage;
+    
+    // Remove player from game state
+    this->gameState.removePlayer(clientId);
+}
+
 void ServerGame::onRoundChange()
 {
     // Send updated state to the client
@@ -404,7 +428,7 @@ void ServerGame::onRoundChange()
     {
         case Game::RoundInfo::LOBBY:
         {
-            std::cout << "initializing lobby" << std::endl;
+            std::cout << "Initializing Lobby\n";
             break;
         }
         case Game::RoundInfo::DUNGEON_WAITING:

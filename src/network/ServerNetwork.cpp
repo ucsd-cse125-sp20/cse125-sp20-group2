@@ -4,13 +4,16 @@
 #include <string>
 #include <network/ServerNetwork.h>
 
-/// TODO:
-//  Handle clientSocket disconnection
-
 ServerNetwork::ServerNetwork(int port)
 {
     this->listenSocket = NetworkService::createServerSocket(port);
     this->threadAccept = std::thread (&ServerNetwork::startAccepting, this);
+
+    // Get max players from config, add ids to queue
+    int playerCount = std::stoi(Config::get("Max_Players"));
+    for (int i = 0; i < playerCount; i++) {
+        clientIdQueue.push(i);
+    }
 }
 
 ServerNetwork::~ServerNetwork()
@@ -29,31 +32,43 @@ ServerNetwork::~ServerNetwork()
 
 unsigned int ServerNetwork::getNextId()
 {
-    return nextId++;
+    unsigned int clientId = clientIdQueue.front();
+    clientIdQueue.pop();
+    return clientId;
 }
 
 void ServerNetwork::startAccepting()
 {
-    std::cout << "Accepting Clients" << std::endl;
+    std::cout << "Accepting Clients\n";
     while (1) {
-        SOCKET ClientSocket = accept(listenSocket, NULL, NULL);
+        SOCKET clientSocket = accept(listenSocket, NULL, NULL);
         if (WSAGetLastError() == WSAEWOULDBLOCK) {
             continue;
         }
 
-        if (ClientSocket == INVALID_SOCKET) {
+        if (clientSocket == INVALID_SOCKET) {
             std::cout << "Accept failed with error:" << WSAGetLastError() << std::endl;
             closesocket(listenSocket);
             WSACleanup();
             return;
         }
 
-        int id = getNextId();
-        std::cout << "Accepted Client #" << id << std::endl;
-        sessions.insert(std::pair<unsigned int, SOCKET>(id, ClientSocket));
-
-        if (this->onClientConnect) {
-            this->onClientConnect(id);
+        // Empty, force disconnect client
+        if (clientIdQueue.empty())
+        {
+            std::cout << "no more player slots available, closing the connection" << std::endl;
+            Game::ServerMessage* msg = MessageBuilder::toServerDisconnectMsg(Config::get("Max_Player_Disconnect_Msg"));
+            sendToSocket(clientSocket, *msg);
+            delete msg;
+            closesocket(clientSocket);
+        }
+        // Slot available, continue
+        else
+        {
+            std::cout << "slot available, continuing" << std::endl;
+            unsigned int clientId = getNextId();
+            std::cout << "Accepted Client #" << clientId << std::endl;
+            this->addClient(clientId, clientSocket);
         }
     }
 }
@@ -70,15 +85,26 @@ std::unordered_map<unsigned int, std::vector<Game::ClientMessage>> ServerNetwork
     for (iter = sessions.begin(); iter != sessions.end(); iter++) {
         unsigned int clientId = iter->first;
         SOCKET socket = iter->second;
-        int bytesReceived = 1;
+        int bytesReceived;
 
         // Read message into a queue to parse
-        while (bytesReceived > 0) {
+        do {
             bytesReceived = NetworkService::receiveMessage(socket, network_data, DEFAULT_BUFLEN);
+
+            // Client disconnect case
+            if (bytesReceived == 0)
+            {
+                if (this->onClientDisconnect) {
+                    this->removeClient(clientId);
+                }
+            }
+
+            // Received data case
             if (bytesReceived > 0) {
                 for (int i = 0; i < bytesReceived; i++) buffers[clientId].push_back(network_data[i]);
             }
         }
+        while (bytesReceived > 0);
 
         // First, need to figure out the vector<char> size
         std::vector<char> & buffer = buffers[clientId];
@@ -141,6 +167,17 @@ void ServerNetwork::send(unsigned int clientId, Game::ServerMessage message)
     NetworkService::sendMessage(this->sessions[clientId], buf, bufSize);
 }
 
+void ServerNetwork::sendToSocket(SOCKET socket, Game::ServerMessage message)
+{
+    size_t msgSize = message.ByteSizeLong();
+    size_t bufSize = msgSize + sizeof(size_t);
+    char buf[bufSize];
+    memcpy(buf, &msgSize, sizeof(size_t));
+    message.SerializeToArray(buf + sizeof(size_t), msgSize);
+
+    NetworkService::sendMessage(socket, buf, bufSize);
+}
+
 void ServerNetwork::sendToAll(Game::ServerMessage message) 
 {
     for (auto pair: this->sessions) {
@@ -152,4 +189,35 @@ void ServerNetwork::sendToAll(Game::ServerMessage message)
 void ServerNetwork::setOnClientConnect(std::function<void(int)> func) 
 {
     this->onClientConnect = func;
+}
+
+void ServerNetwork::setOnClientDisconnect(std::function<void(int)> func)
+{
+    this->onClientDisconnect = func;
+}
+
+
+void ServerNetwork::removeClient(unsigned int clientId)
+{
+    std::cout << "servernetwork -> remove client method is called" << std::endl;
+    
+    SOCKET clientSocket = sessions[clientId];
+    closesocket(clientSocket);
+
+    sessions.erase(clientId);
+
+    if(this->onClientDisconnect) {
+        this->onClientDisconnect(clientId);
+    }
+
+    clientIdQueue.push(clientId);
+}
+
+void ServerNetwork::addClient(unsigned int clientId, SOCKET clientSocket)
+{
+    sessions.insert(std::pair<unsigned int, SOCKET>(clientId, clientSocket));
+
+    if (this->onClientConnect) {
+        this->onClientConnect(clientId);
+    }
 }

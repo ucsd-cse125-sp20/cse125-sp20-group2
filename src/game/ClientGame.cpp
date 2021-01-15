@@ -5,18 +5,24 @@
 
 #define CLIENT_DELAY 1000
 
-ClientGame::ClientGame(std::string IP, int port) : client(IP, port), window(Config::getFloat("Window_Width"), Config::getFloat("Window_Height"))
+ClientGame::ClientGame(std::string IP, int port) : client(IP, port)
 {
+    setupAndRun();
+}
+
+void ClientGame::setupAndRun() {
+    window = new Window(Config::getFloat("Window_Width"), Config::getFloat("Window_Height"));
+
     // Configure keybinds
-    glfwSetWindowUserPointer(this->window.glfwViewport, reinterpret_cast<void*> (this));
-    glfwSetKeyCallback(this->window.glfwViewport, key_callback_wrapper);
+    glfwSetWindowUserPointer(this->window->glfwViewport, reinterpret_cast<void*> (this));
+    glfwSetKeyCallback(this->window->glfwViewport, key_callback_wrapper);
 
     // Create floor lol
     GameObject* floor = new GameObject(-1);
     floor->setModel(Config::get("Floor_Model"));
     floor->setPosition(glm::vec3(0,-0.5,0));
     floor->applyScale(glm::vec3(2));
-    window.addObject(-1, floor);
+    window->addObject(-1, floor);
 
     // Winner model invisible
     winner = new GameObject(-2);
@@ -26,14 +32,15 @@ ClientGame::ClientGame(std::string IP, int port) : client(IP, port), window(Conf
     winner->setPosition(prisonLocation);
     winner->applyScale(glm::vec3(1));
     winner->setRender(false);
-    window.addObject(-2, winner);
+    window->addObject(-2, winner);
 
     runGame();
 }
 
 ClientGame::~ClientGame()
 {
-
+    delete window;
+    delete winner;
 }
 
 void ClientGame::keyBindsHandler(GLFWwindow* glfwWindow, int key, int scancode, int action, int mods)
@@ -51,32 +58,32 @@ void ClientGame::keyBindsHandler(GLFWwindow* glfwWindow, int key, int scancode, 
     if (key == GLFW_KEY_F && action == GLFW_PRESS)
     {
         std::cout << "locking / unlocking the camera" << std::endl;
-        this->window.camera->toggleFreeCam();
-        this->window.toggleCursor();
+        this->window->camera->toggleFreeCam();
+        this->window->toggleCursor();
     }
 
     // Handles interact event
-    if (key == GLFW_KEY_E && action == GLFW_PRESS && this->window.getSelectedIngredient() != NULL && this->window.getRound() == KITCHEN_NUM )
+    if (key == GLFW_KEY_E && action == GLFW_PRESS && this->window->getSelectedIngredient() != NULL && this->window->getRound() == KITCHEN_NUM )
     {
         std::cout << "pressed interact key" << std::endl;
-        Game::ClientMessage* cookMsg = MessageBuilder::toCookMessage(this->window.getSelectedIngredient());
+        Game::ClientMessage* cookMsg = MessageBuilder::toCookMessage(this->window->getSelectedIngredient());
         this->client.send(*cookMsg);
         delete cookMsg;
 
         // Prevent spamming the event key, have to select ingredient again
-        this->window.selectedIngredient = NULL;
+        this->window->selectedIngredient = NULL;
     }
 }
 
 void ClientGame::runGame() 
 {
     // Background music
-    music.openFromFile("assets/audio/8Bit_Paradise.ogg");
+    music.openFromFile(Config::get("8bit_Paradise"));
     music.setVolume(Config::getInt("Background_Music_Volume"));
     music.setLoop(true);
     music.play();
 
-    while(!window.isClosed) 
+    while(!window->isClosed) 
     {
         // Take local input
         // Send to the server
@@ -89,7 +96,7 @@ void ClientGame::runGame()
         updateGameState();
 
         // Render world
-        window.render();
+        window->render();
     }
 }
 
@@ -118,9 +125,9 @@ void ClientGame::updateGameState()
                 GameObject* obj = NULL;
 
                 // Update existing object state
-                if (window.objectsToRender.count(id) > 0) 
+                if (window->objectsToRender.count(id) > 0) 
                 {
-                    obj = window.objectsToRender[id];
+                    obj = window->objectsToRender[id];
                 }
 
                 // Instantiate new object 
@@ -153,7 +160,7 @@ void ClientGame::updateGameState()
                         default: obj = new GameObject(id); break;
                     }
                     // Add object to window
-                    window.addObject(id, obj);
+                    window->addObject(id, obj);
                 }
 
                 /// Set model based on the model path provided by the server
@@ -182,42 +189,42 @@ void ClientGame::updateGameState()
                     if (originalScale.x < newScale.x) {
                         // Play soviet national anthem
                         music.stop();
-                        music.openFromFile("assets/audio/SovietAnthem.ogg");
+                        music.openFromFile(Config::get("Soviet_Anthem"));
                         music.setVolume(Config::getInt("Background_Music_Volume"));
                         music.setLoop(true);
                         music.play();
 
                         // Turn screen red
-                        this->window.vodkaActive = true;
+                        this->window->vodkaActive = true;
                     }
 
                     // Smaller player
                     else if (originalScale.x > newScale.x)
                     {
-                        if (this->window.getRound() == DUNGEON_NUM) 
+                        if (this->window->getRound() == DUNGEON_NUM) 
                         {
                             // Background music
                             music.stop();
-                            music.openFromFile("assets/audio/8Bit_Paradise.ogg");
+                            music.openFromFile(Config::get("8bit_Paradise"));
                             music.setVolume(Config::getInt("Background_Music_Volume"));
                             music.setLoop(true);
                             music.play();
                         }
                         // Revert screen color
-                        this->window.vodkaActive = false; 
+                        this->window->vodkaActive = false; 
                     }
                 }
 
                 if (currMessage.object().has_scale()) obj->applyScale(glm::vec3(scale.x(), scale.y(), scale.z()));
                 obj->setRender(render);
                 obj->setPosition(glm::vec3(location.x(), location.y(), location.z()));
-                window.removeCookingEventMessage();
+                window->removeCookingEventMessage();
                 break;
             }
 
             case Game::ServerMessage::EventCase::kScore:
             {
-                window.setScore(currMessage.score().currscore());
+                window->setScore(currMessage.score().currscore());
                 break;
             }
 
@@ -225,11 +232,11 @@ void ClientGame::updateGameState()
             case Game::ServerMessage::EventCase::kInventory: 
             {
                 // Get player associated with this client
-                Player* player = (Player*)window.objectsToRender[objectId];
+                Player* player = (Player*)window->objectsToRender[objectId];
                 auto currInventory = player->getInventory();
 
                 // Get id of the object to be picked up, set the conditions
-                Ingredient* pickup = (Ingredient*)window.objectsToRender[currMessage.inventory().id()];
+                Ingredient* pickup = (Ingredient*)window->objectsToRender[currMessage.inventory().id()];
                 pickup->setName(currMessage.inventory().name());
                 pickup->setQualityIndex(currMessage.inventory().qualityindex());
                 pickup->setStatus(Ingredient::stringToIngredientStatus[currMessage.inventory().ingredientstatus()]);
@@ -238,7 +245,7 @@ void ClientGame::updateGameState()
                     soundEffect.stop();
                 }
 
-                if (soundBuffer.loadFromFile("assets/audio/Inventory_Pickup.wav")) {
+                if (soundBuffer.loadFromFile(Config::get("Inventory_Pickup"))) {
                     soundEffect.setBuffer(soundBuffer);
                     soundEffect.setVolume(Config::getFloat("Sound_Effect_Volume"));
                     soundEffect.play();
@@ -266,37 +273,37 @@ void ClientGame::updateGameState()
                 std::cout<<currMessage.validcook().message().at(0)<<std::endl;
                 switch(currMessage.validcook().message().at(0)) {
                     case 'C': { 
-                        soundBuffer.loadFromFile("assets/audio/Cutting.wav"); 
+                        soundBuffer.loadFromFile(Config::get("Cutting_Sound")); 
                         soundEffect.setBuffer(soundBuffer);
                         soundEffect.setVolume(Config::getFloat("Sound_Effect_Volume"));
                         break;
                     }
                     case 'F': {
-                        soundBuffer.loadFromFile("assets/audio/Frying.wav"); 
+                        soundBuffer.loadFromFile(Config::get("Frying_Sound")); 
                         soundEffect.setBuffer(soundBuffer);
                         soundEffect.setVolume(Config::getFloat("Sound_Effect_Volume"));
                         break;
                     }
                     case 'B': {
-                        soundBuffer.loadFromFile("assets/audio/PotBoiling.wav"); 
+                        soundBuffer.loadFromFile(Config::get("Pot_Boiling_Sound")); 
                         soundEffect.setBuffer(soundBuffer);
                         soundEffect.setVolume(Config::getFloat("Sound_Effect_Volume"));
                         break; 
                     }
                     case 'P': {
-                        soundBuffer.loadFromFile("assets/audio/Dish.wav"); 
+                        soundBuffer.loadFromFile(Config::get("Dish_Sound")); 
                         soundEffect.setBuffer(soundBuffer);
                         soundEffect.setVolume(Config::getFloat("Sound_Effect_Volume"));
                         break; 
                     }
                     default: {
                         switch(rand()%6) {
-                            case 0: soundBuffer.loadFromFile("assets/audio/nyet1.wav"); break;
-                            case 1: soundBuffer.loadFromFile("assets/audio/nyet2.wav"); break;
-                            case 2: soundBuffer.loadFromFile("assets/audio/nyet3.wav"); break;
-                            case 3: soundBuffer.loadFromFile("assets/audio/nyet4.wav"); break;
-                            case 4: soundBuffer.loadFromFile("assets/audio/nyet5.wav"); break;
-                            case 5: soundBuffer.loadFromFile("assets/audio/nyet6.wav"); break;
+                            case 0: soundBuffer.loadFromFile(Config::get("Nyet1")); break;
+                            case 1: soundBuffer.loadFromFile(Config::get("Nyet2")); break;
+                            case 2: soundBuffer.loadFromFile(Config::get("Nyet3")); break;
+                            case 3: soundBuffer.loadFromFile(Config::get("Nyet4")); break;
+                            case 4: soundBuffer.loadFromFile(Config::get("Nyet5")); break;
+                            case 5: soundBuffer.loadFromFile(Config::get("Nyet6")); break;
                         }
                         soundEffect.setBuffer(soundBuffer);
                         soundEffect.setVolume(Config::getFloat("Nyet_Effect_Volume"));
@@ -317,9 +324,9 @@ void ClientGame::updateGameState()
                 this->objectId = currMessage.clientinfo().objectid();
 
                 // Set camera target
-                window.camera->setTarget(window.objectsToRender[this->objectId]);
-                Player* p = (Player*) window.objectsToRender[this->objectId];
-                window.addInventory(p->getInventory());
+                window->camera->setTarget(window->objectsToRender[this->objectId]);
+                Player* p = (Player*) window->objectsToRender[this->objectId];
+                window->addInventory(p->getInventory());
                 break;
             }
 
@@ -328,24 +335,24 @@ void ClientGame::updateGameState()
                 int index = currMessage.instruction().index();
                 std::string msg = currMessage.instruction().instructionmsg();
                 if(currMessage.instruction().has_recipename() )
-                    window.recipeName = currMessage.instruction().recipename();
-                window.instructionStrings.insert(window.instructionStrings.begin()+index, msg);
+                    window->recipeName = currMessage.instruction().recipename();
+                window->instructionStrings.insert(window->instructionStrings.begin()+index, msg);
                 break;
             }
 
             case Game::ServerMessage::EventCase::kTime:
             {
                 uint32_t seconds = currMessage.time().seconds();
-                window.setTimer(seconds);
+                window->setTimer(seconds);
                 break;
             }
 
             case Game::ServerMessage::EventCase::kRound:
             {
-                window.updateRound(currMessage.round().type());         
+                window->updateRound(currMessage.round().type());         
                 if (currMessage.round().type() == Game::RoundInfo_RoundState_KITCHEN_WAITING) {
                     music.stop();
-                    music.openFromFile("assets/audio/Cook.ogg");
+                    music.openFromFile(Config::get("Cooking_Theme"));
                     music.setVolume(Config::getInt("Background_Music_Volume"));
                     music.setLoop(true);
                     music.play();
@@ -358,26 +365,36 @@ void ClientGame::updateGameState()
             case Game::ServerMessage::EventCase::kWin:
             {
                 std::cout << " received win event " << std::endl;
-                window.gameOver = true;
+                window->gameOver = true;
                 winner->setRender(true);
 
                 // Win or lose
                 if (currMessage.win().clientid() == clientId) {
-                    window.gameWin = true;
+                    window->gameWin = true;
                     music.stop();
-                    music.openFromFile("assets/audio/SovietAnthem.ogg");
+                    music.openFromFile(Config::get("Soviet_Anthem"));
                     music.setLoop(true);
                     music.setVolume(Config::getInt("Background_Music_Volume"));
                     music.play();
                 }
                 else {
-                    window.gameWin = false;
+                    window->gameWin = false;
                     music.stop();
-                    music.openFromFile("assets/audio/TheDustyAttic.ogg");
+                    music.openFromFile(Config::get("The_Dusty_Attic"));
                     music.setLoop(true);
                     music.setVolume(Config::getInt("Background_Music_Volume"));
                     music.play();
                 }
+
+                break;
+            }
+
+            case Game::ServerMessage::EventCase::kDisconnect:
+            {
+                /// TODO:
+                // Put actions taken by client during a force disconnect
+                std::cout << " got a disconnect message " << std::endl;
+                std::cout << "reason: " + currMessage.disconnect().message() << std::endl;
 
                 break;
             }
@@ -394,13 +411,13 @@ void ClientGame::updateGameState()
 }
 
 /**
- * Take in input from the viewport window.
+ * Take in input from the viewport window->
  * */
 void ClientGame::processInput()
 {
 	// Exit application.
-	if (glfwGetKey(window.glfwViewport, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-		glfwSetWindowShouldClose(window.glfwViewport, true);
+	if (glfwGetKey(window->glfwViewport, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+		glfwSetWindowShouldClose(window->glfwViewport, true);
 	}
 
     // Message to send
@@ -408,29 +425,29 @@ void ClientGame::processInput()
     Game::ClientMessage rotationMessage;
 
     // Get key inputs and set direction of message
-    if (glfwGetKey(window.glfwViewport, GLFW_KEY_W) == GLFW_PRESS &&
-    glfwGetKey(window.glfwViewport, GLFW_KEY_S) == GLFW_PRESS) {
+    if (glfwGetKey(window->glfwViewport, GLFW_KEY_W) == GLFW_PRESS &&
+    glfwGetKey(window->glfwViewport, GLFW_KEY_S) == GLFW_PRESS) {
         // Do nothing: The movements should cancel each other out.
     }
-    else if (glfwGetKey(window.glfwViewport, GLFW_KEY_W) == GLFW_PRESS)
+    else if (glfwGetKey(window->glfwViewport, GLFW_KEY_W) == GLFW_PRESS)
     {
         movementMessage.set_direction(Game::Direction::UP);  
     }
-	else if (glfwGetKey(window.glfwViewport, GLFW_KEY_S) == GLFW_PRESS) 
+	else if (glfwGetKey(window->glfwViewport, GLFW_KEY_S) == GLFW_PRESS) 
     {
         movementMessage.set_direction(Game::Direction::DOWN); 
     }
 
     
-    if (glfwGetKey(window.glfwViewport, GLFW_KEY_A) == GLFW_PRESS &&
-    glfwGetKey(window.glfwViewport, GLFW_KEY_D) == GLFW_PRESS) {
+    if (glfwGetKey(window->glfwViewport, GLFW_KEY_A) == GLFW_PRESS &&
+    glfwGetKey(window->glfwViewport, GLFW_KEY_D) == GLFW_PRESS) {
         // Do nothing: The movements should cancel each other out.
     }
-	else if (glfwGetKey(window.glfwViewport, GLFW_KEY_A) == GLFW_PRESS)
+	else if (glfwGetKey(window->glfwViewport, GLFW_KEY_A) == GLFW_PRESS)
     {
         rotationMessage.set_direction(Game::Direction::LEFT); 
     }
-	else if (glfwGetKey(window.glfwViewport, GLFW_KEY_D) == GLFW_PRESS)
+	else if (glfwGetKey(window->glfwViewport, GLFW_KEY_D) == GLFW_PRESS)
     {
         rotationMessage.set_direction(Game::Direction::RIGHT); 
     }
@@ -443,12 +460,12 @@ void ClientGame::processInput()
     }
 
     // Camera movement options (client-side only)
-    if (glfwGetKey(window.glfwViewport, GLFW_KEY_UP) == GLFW_PRESS)
-		window.camera->processKeyMovement(FORWARD);
-    if (glfwGetKey(window.glfwViewport, GLFW_KEY_DOWN) == GLFW_PRESS)
-		window.camera->processKeyMovement(BACKWARD);
-    if (glfwGetKey(window.glfwViewport, GLFW_KEY_LEFT) == GLFW_PRESS)
-		window.camera->processKeyMovement(LEFT);
-    if (glfwGetKey(window.glfwViewport, GLFW_KEY_RIGHT) == GLFW_PRESS)
-		window.camera->processKeyMovement(RIGHT);
+    if (glfwGetKey(window->glfwViewport, GLFW_KEY_UP) == GLFW_PRESS)
+		window->camera->processKeyMovement(FORWARD);
+    if (glfwGetKey(window->glfwViewport, GLFW_KEY_DOWN) == GLFW_PRESS)
+		window->camera->processKeyMovement(BACKWARD);
+    if (glfwGetKey(window->glfwViewport, GLFW_KEY_LEFT) == GLFW_PRESS)
+		window->camera->processKeyMovement(LEFT);
+    if (glfwGetKey(window->glfwViewport, GLFW_KEY_RIGHT) == GLFW_PRESS)
+		window->camera->processKeyMovement(RIGHT);
 }
